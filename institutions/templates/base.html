@@ -1,0 +1,38 @@
+{% load render_table from django_tables2 %}
+{% load staticfiles %}
+
+{% load static %}
+ <html> <head> 
+ <title>{% block title %}{% endblock %}</title>  
+ <link href="{% static "css/base.css" %}" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'django_tables2/themes/paleblue/css/screen.css' %}" />
+ </head> <body>
+ 
+ <div id="header"> 
+ <span class="logo">SwapLE</span>
+ {% if request.user.is_authenticated %} 
+ 
+
+
+ <ul class="menu">     
+ <li {% if section == "dashboard" %}class="selected"{% endif %}>        <a href="{% url "institutions:dashboard" %}">My dashboard</a>      </li>
+ <li> <a href ={% url "institutions:edit" %}> Edit Profile</a> </li>
+    <li> <a href ={% url "institutions:password_change" %}> Change Password</a> </li>
+    <li> <a href ={% url "institutions:manage_staff" %}> Manage Staff</a> </li>
+    <li> <a href ={% url "institutions:create_institution_staff" %}> Add Staff</a> </li>
+ </ul>
+ {% endif %}  
+ <span class="user">
+ {% if request.user.is_authenticated %} 
+ Hello {{ request.user.first_name }},      <a href="{% url "institutions:logout" %}">Logout</a>    {% else %}      <a href="{% url "institutions:login"  %}">Log-in</a>    
+ {% endif %}  
+ </span>
+ </div>
+ {% block menu %}{% endblock %}
+
+ {% if messages %}  <ul class="messages">    {% for message in messages %}      <li class="{{ message.tags }}">        {{ message|safe }}          <a href="#" class="close">✖</a>      </li>    {% endfor %}  </ul> {% endif %}
+
+
+ <div id="content">    {% block content %}    {% endblock %}  </div>
+ </body> </html> 
+ 

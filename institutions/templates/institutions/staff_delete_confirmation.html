@@ -1,0 +1,14 @@
+
+{% extends "base.html" %}
+{% block title %}   Delete Staff account  {% endblock %}
+
+
+{% block content %} 
+ <h1>Delete Staff account</h1>
+ <p>
+
+ {% if information %}  <ul class="information">    {% for message in information %}      <li class="warning">        {{ message|safe }}          <a href="#" class="close">✖</a>      </li>    {% endfor %}  </ul> {% endif %}
+
+
+ </p>
+{% endblock %}
