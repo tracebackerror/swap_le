@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'institutions',
     'staff',
     'django_tables2',
+   
 ]
 
 MIDDLEWARE = [
@@ -122,3 +123,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+

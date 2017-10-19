@@ -15,3 +15,4 @@ class LicenseAdmin(admin.ModelAdmin):
     ordering = ['li_expiration_date', ]
 
 admin.site.register(License, LicenseAdmin)
+
