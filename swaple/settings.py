@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'institutions',
     'staff',
     'django_tables2',
-   
+
 ]
 
 MIDDLEWARE = [
