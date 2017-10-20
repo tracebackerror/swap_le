@@ -36,4 +36,4 @@ class Staff(models.Model):
         ordering = ('created',)
         
     def __str__(self):
-        return 'Staff - {} Of Institute - {}'.format(self.staffuser.first_name, self.institute.institute_name)
+        return 'Staff - {} Of Institute - {}'.format(self.staffuser.username, self.institute.institute_name)

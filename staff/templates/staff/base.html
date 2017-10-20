@@ -16,10 +16,12 @@
 
  <ul class="menu">     
  <li {% if section == "dashboard" %}class="selected"{% endif %}>        <a href="{% url "staff:dashboard" %}">My dashboard</a>      </li>
- <li> <a href ={% url "institutions:edit" %}> Edit Profile</a> </li>
-    <li> <a href ={% url "institutions:password_change" %}> Change Password</a> </li>
-    <li> <a href ={% url "institutions:manage_staff" %}> Manage Staff</a> </li>
-    <li> <a href ={% url "institutions:create_institution_staff" %}> Add Staff</a> </li>
+ <li> <a href ={% url "staff:edit" %}> Edit Profile</a> </li>
+    <li> <a href ={% url "staff:password_change" %}> Change Password</a> </li>
+    <li> <a href ={% url "staff:manage_student" %}> Manage Students</a> </li>
+    <li> <a href ={% url "institutions:manage_staff" %}> Manage Assessments</a> </li>
+    <li> <a href ={% url "institutions:manage_staff" %}> Create Assessments</a> </li>
+    
  </ul>
  {% endif %}
  <span class="user">

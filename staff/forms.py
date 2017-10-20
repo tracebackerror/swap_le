@@ -9,3 +9,10 @@ class StaffEditForm(forms.ModelForm):
         model = Staff
         fields = ('__all__')
         # exclude= ['institute_status','user']
+        
+        
+class EnrollStudentsForm(forms.ModelForm):
+    class Meta:
+        model = Staff
+        fields = ['allowregistration',]
+        # exclude= ['institute_status','user']
