@@ -27,9 +27,16 @@ class StaffTable(tables.Table):
         sequence = ('row_number', 'staffuser', 'institute', 'allowregistration', 'created', 'updated', 'user_type', 'deleted')
 
 
-
+from django_tables2 import A
 class StudentTable(tables.Table):
     row_number = tables.Column(empty_values=())
+    first_name = tables.Column(accessor='studentuser.first_name',
+                               verbose_name='First Name')
+    last_name = tables.Column(accessor='studentuser.last_name',
+                              verbose_name='Last Name')
+    email = tables.Column(accessor='studentuser.email',
+                          verbose_name='Mail Address')
+    
     edit_student = tables.TemplateColumn('<a href=" ">Edit</a>')
     delete_student = tables.TemplateColumn('<a href=" {% url "staff:delete_institution_staff_student" username=record.studentuser  %} ">Delete</a>')
 
@@ -40,11 +47,17 @@ class StudentTable(tables.Table):
     def render_row_number(self):
         return 'Row %d' % next(self.counter)
 
-
-
+    def render_first_name(self,value):
+        return value
+    
+    def render_last_name(self,value):
+        return value
+    
+    def render_email(self,value):
+        return value
     class Meta:
         model = Student
-        sequence = ('row_number', 'studentuser', 'staffuser', 'created', 'updated', 'user_type', 'deleted')
+        sequence = ('row_number', 'studentuser','first_name','last_name','email', 'staffuser', 'created', 'updated', 'user_type', 'deleted')
         # add class="paleblue" to <table> tag 
         attrs = {'class': 'paleblue'}
         # fields = ('row_number', 'institute',)
