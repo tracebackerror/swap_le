@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'licenses',
     'institutions',
     'staff',
+    'students',
     'django_tables2',
 
 ]

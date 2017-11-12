@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from django.contrib.auth.views import LoginView, LogoutView, logout_then_login, PasswordChangeDoneView
-from .views import InstitutionStaffLoginView, dashboard, edit, PasswordChangeViewForStaff, PasswordChangeDoneViewForStaff, ManageStudentView
+from .views import InstitutionStaffLoginView, dashboard, edit, delete_institution_staff_student, PasswordChangeViewForStaff, PasswordChangeDoneViewForStaff, ManageStudentView
 
 
 
@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^password-change/$',PasswordChangeViewForStaff.as_view(), name='password_change'),
     url(r'^password-change/done/$',PasswordChangeDoneViewForStaff.as_view(), name='password_change_done'),
     url(r'^manage/student/$', ManageStudentView.as_view(), name='manage_student'),
+    url(r'^manage/student/(?P<username>\w{0,15})/delete/$', delete_institution_staff_student, name='delete_institution_staff_student'),
     ]
 '''
 from .views import edit, institute_staff_edit, dashboard, PasswordChangeViewForInstitutions,\

@@ -87,17 +87,18 @@ class PasswordChangeDoneViewForStaff(PasswordChangeDoneView):
 
 from django_tables2 import SingleTableView
 from django.utils.decorators import method_decorator
-from staff.models import Staff
-from staff.tables import StaffTable
+from students.models import Student
+from staff.tables import StudentTable
 from staff.forms import EnrollStudentsForm
-
+from staff.models import Staff
+from students.models import Student
 
 class ManageStudentView(SingleTableView, ListView):
-    model = Staff
+    model = Student
     context_object_name = 'table'
     paginate_by = 3
     template_name = 'staff/manage_student.html'
-    table_class = StaffTable
+    table_class = StudentTable
     
     #table_data = Staff.active.filter(institute__user__exact=request.user)
 
@@ -105,7 +106,8 @@ class ManageStudentView(SingleTableView, ListView):
 
 
     def get_queryset(self):
-        self.queryset = Staff.active.filter(institute__user__exact=self.request.user)
+        get_associated_staff = Staff.active.filter(staffuser=self.request.user)
+        self.queryset = Student.active.filter(staffuser = get_associated_staff)#active.filter(institute__user__exact=self.request.user)
         return super(ManageStudentView, self).get_queryset()
 
     @method_decorator(login_decorator)
@@ -115,11 +117,30 @@ class ManageStudentView(SingleTableView, ListView):
 
     
     def get_context_data(self, **kwargs):
-       
         context = super(ManageStudentView, self).get_context_data(**kwargs)
        
         return context
     
+    
+@login_required(login_url="/staff/login/")
+def delete_institution_staff_student(request, username):
+    information = ''
+    
+    if hasattr(request.user, 'staff'):
+        if request.method == 'GET' and request.user.staff.user_type in ['staff','institution']:
+            information = 'Are you sure you want to delete user {} ?'.format(str(username))
+        elif request.method == 'POST' and request.user.staff.user_type == 'staff':
+            staff_obj = Staff.objects.get(staffuser__username=request.user)
+            student_obj = Student.active.get(studentuser__username__exact=username)
+            #student_obj = Student.objects.get(staffuser = staff_obj)
+            if student_obj in staff_obj.student_set.all():
+                student_obj.deleted = 'Y'
+                student_obj.save()
+                information = 'Student Deleted Successfully. '
+        return render(request, 'staff/student_delete.html', {'information': [information]})
+    else:
+        #latter implementation of this bug
+        pass
 
    
     

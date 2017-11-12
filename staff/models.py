@@ -21,8 +21,11 @@ class Staff(models.Model):
     objects = models.Manager()  # The Default Manager
     active = StaffManager()  # Our custom manager
 
-    staffuser = models.OneToOneField(settings.AUTH_USER_MODEL)
-    institute = models.ForeignKey(Institutions, related_name='staffinstitute',on_delete=models.CASCADE)
+    staffuser = models.OneToOneField(settings.AUTH_USER_MODEL,
+                                      on_delete=models.CASCADE
+                                      )
+    institute = models.ForeignKey(Institutions, related_name='staffinstitute',
+                                  on_delete=models.CASCADE)
     allowregistration = models.BooleanField(default=True)
     
     created = models.DateTimeField(auto_now_add=True)

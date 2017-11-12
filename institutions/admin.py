@@ -6,7 +6,7 @@ admin.site.register(Permission)
 #admin.site.unregister(Institutions)
 
 class InstitutionsAdmin(admin.ModelAdmin):
-
+    search_fields = ('user',)
     readonly_fields = ('deleted', 'user_type'   )
 
 
