@@ -35,14 +35,15 @@ class Assesment(MetaInformationMixin, SoftDeletionModelMixin):
                             unique=True,
                             blank=True)
     brief = models.TextField()
-    start_time = models.DateTimeField(default=timezone.now())
-    end_time = models.DateTimeField(default=timezone.now())
+    start_time = models.DateTimeField(default=timezone.now)
+    end_time = models.DateTimeField(default=timezone.now)
     exam_start_type = models.CharField(max_length=14,
                                        choices=ASSESMENT_START_TYPE_CHOICES,
                                        default='auto')
     
 
     total_exam_duration = models.TimeField(null=True)
+    total_question = models.IntegerField(default=10)
     
     privilege = models.CharField(max_length=14,
                                        choices=ASSESMENT_PRIVILEGE_CHOICES,
@@ -78,7 +79,7 @@ class Assesment(MetaInformationMixin, SoftDeletionModelMixin):
             self.slug = self._get_unique_slug()
         
         if self.pk is None and self.created_by is None:
-            created_by = user
+            self.created_by = user
         elif self.updated_by is None:
-            updated_by = user
+            self.updated_by = user
         super().save()
