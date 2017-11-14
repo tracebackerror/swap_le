@@ -3,6 +3,7 @@ from .models import Staff
 import itertools
 from django.utils.html import format_html
 from students.models import Student
+from django_tables2 import A
 
 
 class StaffTable(tables.Table):
@@ -27,7 +28,7 @@ class StaffTable(tables.Table):
         sequence = ('row_number', 'staffuser', 'institute', 'allowregistration', 'created', 'updated', 'user_type', 'deleted')
 
 
-from django_tables2 import A
+
 class StudentTable(tables.Table):
     row_number = tables.Column(empty_values=())
     first_name = tables.Column(accessor='studentuser.first_name',

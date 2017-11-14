@@ -26,7 +26,7 @@ class Assesment(MetaInformationMixin, SoftDeletionModelMixin):
         ('protected', 'Protected'),
         )
     
-    #objects = models.Manager()  # The Default Manager
+    objects = models.Manager()  # The Default Manager
     #active = AssesmentManager()  # Our custom manager
 
 
