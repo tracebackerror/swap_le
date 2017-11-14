@@ -4,8 +4,12 @@ from django.utils import timezone
 from django.db import models
 from django.db.models.query import QuerySet
 
+from polymorphic.models import PolymorphicModel
+from polymorphic.manager import PolymorphicManager
+from polymorphic.query import PolymorphicQuerySet
 
-class MetaInformationMixin(models.Model):
+
+class MetaInformationMixin(PolymorphicModel):
     created = models.DateTimeField(auto_now_add=True,
                                    blank=True)
     updated = models.DateTimeField(auto_now=True,
@@ -23,7 +27,7 @@ class MetaInformationMixin(models.Model):
         abstract = True
         
         
-class SoftDeletionManager(models.Manager):
+class SoftDeletionManager(PolymorphicManager):
     def __init__(self, *args, **kwargs):
         self.alive_only = kwargs.pop('alive_only', True)
         super(SoftDeletionManager, self).__init__(*args, **kwargs)
@@ -36,7 +40,7 @@ class SoftDeletionManager(models.Manager):
     def hard_delete(self):
         return self.get_queryset().hard_delete()
             
-class SoftDeletionQuerySet(QuerySet):
+class SoftDeletionQuerySet(PolymorphicQuerySet):
     def delete(self,user):
         return super(SoftDeletionQuerySet, self).update(deleted_at=timezone.now(),deleted_by=user)
 
@@ -50,7 +54,7 @@ class SoftDeletionQuerySet(QuerySet):
         return self.exclude(deleted_at=None)
     
         
-class SoftDeletionModelMixin(models.Model):
+class SoftDeletionModelMixin(PolymorphicModel):
     deleted_at = models.DateTimeField(blank=True,
                                         null=True
                                         )
@@ -60,7 +64,7 @@ class SoftDeletionModelMixin(models.Model):
                                       blank=True,
                                       null=True
                                       )
-    #objects = models.Manager()
+    objects = PolymorphicManager()
     soft_objects = SoftDeletionManager()
     all_objects = SoftDeletionManager(alive_only=False)
 

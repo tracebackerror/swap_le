@@ -37,13 +37,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'polymorphic',
+    'django_tables2',
     'licenses',
     'institutions',
     'staff',
     'students',
     'assesments',
-    'django_tables2',
-
 ]
 
 MIDDLEWARE = [
