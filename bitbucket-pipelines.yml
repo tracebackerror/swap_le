@@ -14,5 +14,3 @@ pipelines:
           - pip install django
           - pip install django_tables2
           - pip install django_polymorphic
-          - python --version
-          - python manage.py runserver
