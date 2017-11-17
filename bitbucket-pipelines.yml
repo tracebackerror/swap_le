@@ -11,4 +11,6 @@ pipelines:
         caches:
           - pip
         script: # Modify the commands below to build your repository.
-          - pip install -r /requirements/requirements.txt
+          - pip install -r /requirements/requirements.txthttps://bitbucket.org/tracebackerror/demo1/src/7879efd3a16d77b689751537d0cd6ba9e06dacda/requirements/requirements.txt
+          - python --version
+          - python manage.py runserver
