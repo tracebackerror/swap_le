@@ -7,7 +7,6 @@ from utility.mixin import MetaInformationMixin, SoftDeletionModelMixin
 
 
 
-
 class AssesmentManager(models.Manager):
     def get_queryset(self):
         return super(AssesmentManager, self).get_queryset()\
@@ -59,6 +58,8 @@ class Assesment(MetaInformationMixin, SoftDeletionModelMixin):
     #deleted = models.CharField(max_length=1, default="N")
 
     
+    
+        
     class Meta:
         ordering = ('created',)
         
@@ -83,3 +84,49 @@ class Assesment(MetaInformationMixin, SoftDeletionModelMixin):
         elif self.updated_by is None:
             self.updated_by = user
         super().save()
+
+
+
+
+
+class Question(MetaInformationMixin, SoftDeletionModelMixin):
+    QUESTION_TYPE_CHOICES = (
+        ('mcq', 'Multiple Choice'),
+        ('scq', 'Single Choice'),
+        ('sqa', 'Text Answer'),
+        )
+    
+    #objects = models.Manager()  # The Default Manager
+    #active = AssesmentManager()  # Our custom manager
+
+
+
+    question_text = models.TextField()
+
+    length_size = 250    
+    option_one = models.TextField(max_length=length_size)
+    option_two = models.TextField(max_length=length_size)
+    option_three = models.TextField(max_length=length_size)
+    option_four = models.TextField(max_length=length_size)
+    option_five = models.TextField(max_length=length_size)
+
+    question_slug = models.SlugField(max_length=140,
+                            unique=True,
+                            blank=True)
+    
+    
+    
+   
+    question_type = models.CharField(max_length=14,
+                                       choices=QUESTION_TYPE_CHOICES,
+                                       default='scq')
+    
+    
+    brief_answer = models.TextField()
+    
+    max_marks = models.IntegerField()
+    correct_options = models.CharField(max_length = 150)
+    
+    
+    assesment_linked = models.ForeignKey(Assesment,
+                                                null=True)
