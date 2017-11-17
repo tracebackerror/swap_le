@@ -16,11 +16,11 @@ class MetaInformationMixin(PolymorphicModel):
                                    blank=True)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL,
                                       on_delete=models.CASCADE,
-                                      related_name='created_by',
+                                      related_name='%(app_label)s_%(class)s_created_by',
                                       blank=True)
     updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,
                                       on_delete=models.CASCADE,
-                                      related_name='updated_by',
+                                      related_name='%(app_label)s_%(class)s_updated_by',
                                       blank=True)
 
     class Meta:
