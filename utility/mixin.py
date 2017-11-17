@@ -60,7 +60,7 @@ class SoftDeletionModelMixin(PolymorphicModel):
                                         )
     deleted_by = models.ForeignKey(settings.AUTH_USER_MODEL,
                                       on_delete=models.CASCADE,
-                                      related_name='deleted_by',
+                                      related_name='%(app_label)s_%(class)s_deleted_by',
                                       blank=True,
                                       null=True
                                       )
