@@ -5,6 +5,7 @@ from django.utils import timezone
 from utility.mixin import MetaInformationMixin, SoftDeletionModelMixin
 # Create your models here.
 
+from students.models import Student
 
 
 class AssesmentManager(models.Manager):
@@ -57,6 +58,7 @@ class Assesment(MetaInformationMixin, SoftDeletionModelMixin):
     type = models.CharField(max_length=10, default="assessment", editable=False)
     #deleted = models.CharField(max_length=1, default="N")
 
+    subscriber_users = models.ManyToManyField(Student)
     
     
         
