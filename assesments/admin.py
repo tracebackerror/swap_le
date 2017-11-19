@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Assesment, Question
+from .models import Assesment, Question, Result, Answer
 # Register your models here.
 
 class QuestionInline(admin.StackedInline):
@@ -17,3 +17,5 @@ class AssesmentAdmin(admin.ModelAdmin):
 
 #admin.site.unregister(Assesment)
 admin.site.register(Assesment, AssesmentAdmin)
+admin.site.register(Result)
+admin.site.register(Answer)
