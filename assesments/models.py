@@ -91,6 +91,7 @@ class Assesment(MetaInformationMixin, SoftDeletionModelMixin):
 
 
 
+
 class Question(MetaInformationMixin, SoftDeletionModelMixin):
     QUESTION_TYPE_CHOICES = (
         ('mcq', 'Multiple Choice'),
@@ -132,3 +133,87 @@ class Question(MetaInformationMixin, SoftDeletionModelMixin):
     
     assesment_linked = models.ForeignKey(Assesment,
                                                 null=True)
+    
+    
+    
+    
+class Result(MetaInformationMixin, SoftDeletionModelMixin):
+   
+    #objects = models.Manager()  # The Default Manager
+    #active = AssesmentManager()  # Our custom manager
+
+    assesment = models.ForeignKey(Assesment)
+    registered_user = models.ForeignKey(Student)
+    attempt_number = models.IntegerField(default=10)
+    
+    exam_taken_date_time = models.DateTimeField(default=timezone.now)
+    
+
+    total_time_taken = models.TimeField(null=True)
+    total_marks = models.IntegerField(default=0)
+    obtained_marks = models.IntegerField(default=0)
+    
+    
+   
+    result_passed = models.BooleanField(default=False)
+    expired_on = models.DateTimeField()
+    
+    
+    
+    type = models.CharField(max_length=10, default="result", editable=False)
+    #deleted = models.CharField(max_length=1, default="N")
+
+   
+    def __str__(self):
+        return 'Result : {}-{}-{}'.format(self.assesment,self.registered_user,self.attempt_number)
+    
+   
+ 
+   
+
+class Answer(MetaInformationMixin, SoftDeletionModelMixin):
+    QUESTION_TYPE_CHOICES = (
+        ('mcq', 'Multiple Choice'),
+        ('scq', 'Single Choice'),
+        ('sqa', 'Text Answer'),
+        )
+    
+    #objects = models.Manager()  # The Default Manager
+    #active = AssesmentManager()  # Our custom manager
+
+
+    for_result = models.ForeignKey(Result)
+    question_text = models.TextField()
+
+    length_size = 250    
+    option_one = models.TextField(max_length=length_size)
+    option_two = models.TextField(max_length=length_size)
+    option_three = models.TextField(max_length=length_size)
+    option_four = models.TextField(max_length=length_size)
+    option_five = models.TextField(max_length=length_size)
+    
+    opted_choice =  models.TextField(max_length=length_size)
+    written_answer = models.TextField(max_length=length_size)
+    alloted_marks = models.FloatField(max_length=length_size)
+     
+    question_slug = models.SlugField(max_length=140,
+                            unique=True,
+                            blank=True)
+    
+    
+    
+   
+    question_type = models.CharField(max_length=14,
+                                       choices=QUESTION_TYPE_CHOICES,
+                                       default='scq')
+    
+    
+    brief_answer = models.TextField()
+    
+    max_marks = models.IntegerField()
+    correct_options = models.CharField(max_length = 250)
+    
+    
+    
+    
+    
