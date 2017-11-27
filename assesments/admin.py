@@ -19,3 +19,4 @@ class AssesmentAdmin(admin.ModelAdmin):
 admin.site.register(Assesment, AssesmentAdmin)
 admin.site.register(Result)
 admin.site.register(Answer)
+admin.site.register(Question)

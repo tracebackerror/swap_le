@@ -85,7 +85,7 @@ class Assesment(MetaInformationMixin, SoftDeletionModelMixin):
             self.created_by = user
         elif self.updated_by is None:
             self.updated_by = user
-        super().save()
+        super(Assesment, self).save()
 
 
 
