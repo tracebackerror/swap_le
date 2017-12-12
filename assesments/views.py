@@ -26,7 +26,7 @@ class ManageAllAssesmentView(SingleTableView, ListView):
     def get_queryset(self):
         #get_associated_staff = Staff.active.filter(staffuser=self.request.user)
         #self.queryset = Student.active.filter(staffuser = get_associated_staff)#active.filter(institute__user__exact=self.request.user)
-        self.queryset = Assesment.soft_objects.filter(created_by=self.request.user).instance_of(Assesment)
+        self.queryset = Assesment.soft_objects.filter(created_by=self.request.user)
         return super(ManageAllAssesmentView, self).get_queryset()
 
     @method_decorator(login_decorator)
@@ -58,7 +58,7 @@ class ManageStudentAssesmentView(SingleTableView, ListView):
         #get_associated_staff = Staff.active.filter(staffuser=self.request.user)
         #self.queryset = Student.active.filter(staffuser = get_associated_staff)#active.filter(institute__user__exact=self.request.user)
         student_obj = Student.objects.get(studentuser = self.request.user)
-        self.queryset = Assesment.soft_objects.filter(subscriber_users = student_obj).instance_of(Assesment)
+        self.queryset = Assesment.soft_objects.filter(subscriber_users = student_obj)
         return super(ManageStudentAssesmentView, self).get_queryset()
 
     @method_decorator(login_decorator)

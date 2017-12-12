@@ -18,7 +18,7 @@ class License(models.Model):
     li_max_students = models.IntegerField(default=0)
     li_max_assesments = models.IntegerField(default=0)
 	
-    li_institute = models.ForeignKey(Institutions, related_name='licensed_institute', null= True)
+    li_institute = models.ForeignKey(Institutions, related_name='licensed_institute', null= True,on_delete=models.CASCADE)
 
     li_current_staff = models.IntegerField(default=0)
     li_current_students = models.IntegerField(default=0)

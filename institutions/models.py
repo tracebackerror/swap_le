@@ -21,7 +21,7 @@ class Institutions(models.Model):
         ('dele', 'Deleted'),
         ) 
     
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, editable=True,verbose_name='Institute User Name')
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, editable=True,verbose_name='Institute User Name',on_delete=models.CASCADE)
     institute_name = models.CharField(max_length=45, null=False)
     institute_contact_mobile = models.CharField( max_length=13, null = False)
     institute_contact_landline = models.CharField( max_length=13, null = True)
