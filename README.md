@@ -1,7 +1,7 @@
 # SwapLE #
 
 Swapping the traditional paperbased examination with digital solution.
-.
+
 ### What is this repository for? ###
 
 * Quick summary
