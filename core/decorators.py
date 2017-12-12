@@ -13,7 +13,7 @@ def user_passes_test(test_func, login_url=None, redirect_field_name=REDIRECT_FIE
     """
     Decorator for views that checks that the user passes the given test,
     redirecting to the log-in page if necessary. The test should be a callable
-    that takes the user object and returns True if the user passes.
+    that takes the user object and returns True if the user passes..
     """
 
     def decorator(view_func):
