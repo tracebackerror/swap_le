@@ -12,7 +12,7 @@ from institutions.forms import UserEditForm
 from django.views.generic import ListView
 from django.contrib.auth import login as auth_login
 
-from core.decorators import student_login_required
+
 from .models import Student
 
 class InstitutionStudentLoginView(LoginView):

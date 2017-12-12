@@ -25,7 +25,9 @@ SECRET_KEY = '(!&6*!a9x(g#2tba@125a^$t_s+*1882+jd3$@k3=er)q!2id$'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+  'swaple-shivam9172873031.codeanyapp.com',
+]
 
 
 # Application definition
