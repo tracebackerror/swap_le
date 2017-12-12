@@ -48,6 +48,7 @@ class Student(models.Model):
                                default="N",
                                verbose_name='Deactive')
 
+    last_login =  models.DateTimeField(auto_now=True)
     
     class Meta:
         ordering = ('created',)

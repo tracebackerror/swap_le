@@ -3,8 +3,6 @@ from django.utils.text import slugify
 from django.utils import timezone
 
 from utility.mixin import MetaInformationMixin, SoftDeletionModelMixin
-# Create your models here.
-
 from students.models import Student
 
 
@@ -35,7 +33,8 @@ class Assesment(MetaInformationMixin, SoftDeletionModelMixin):
                             unique=True,
                             blank=True)
     brief = models.TextField()
-    start_time = models.DateTimeField(default=timezone.now)
+    start_time = models.DateTimeField(default=timezone.now,
+                                       verbose_name="Start Timing")
     end_time = models.DateTimeField(default=timezone.now)
     exam_start_type = models.CharField(max_length=14,
                                        choices=ASSESMENT_START_TYPE_CHOICES,

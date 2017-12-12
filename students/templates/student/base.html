@@ -1,0 +1,26 @@
+ {% extends "master_base.html" %}
+ 
+ {% block menu %}
+ 
+	 <div id="header"> 
+		 <span class="logo">SwapLE</span>
+		 <ul class="menu">
+		 {% if request.user.is_authenticated %}      
+		 <li {% if section == "dashboard" %}class="selected"{% endif %}> <a href="{% url "staff:dashboard" %}">My dashboard</a>      </li>
+		 <li> <a href ={% url "staff:edit" %}> Edit Profile</a> </li>
+		 <li> <a href ={% url "staff:password_change" %}> Change Password</a> </li>
+		 <li> <a href ={% url "student:assesments:manage_student_assesment" %}> Assesments </a> </li>
+		 <li> <a href="{% url "student:logout" %}">Logout</a> </li> 
+		 {% else %}
+		 <li><span class="user"> Hello {% if request.user.is_authenticated %}    {{ request.user.first_name }} {% else %} Student {% endif %} </span></li> 
+		 {% endif %}
+		 </ul>
+	</div>
+		 
+		 
+		
+
+
+{% endblock %}
+ 
+ 
