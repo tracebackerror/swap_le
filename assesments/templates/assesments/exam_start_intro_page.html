@@ -1,7 +1,44 @@
-{% extends "student/base.html" %}
-{% block title %}DashBoard Student{% endblock %}
-{% block content %}
-	<h3> Please Read the Below Assesment Instruction Carefully:</h3>  
+{% extends "student/base.html" %} {% block title %}DashBoard Student{% endblock %} {% block content %}
+
+<h3>Please Read the Below Assesment Instruction Carefully:</h3>
+
+{% if user.is_authenticated and request.user.student in assesment_object.subscriber_users.all %}
+<table  class="table borderless">
+	<tr>
+		<th colspan=2>Assesment Detail Information</th>
+	</tr>
+	<tr>
+		<td>Header:</td>
+		<td>{{ assesment_object.header }}</td>
+	</tr>
+	<tr>
+		<td>Brief Details:</td>
+		<td>{{assesment_object.brief|wordwrap:150|linebreaksbr}}</td>
+	</tr>
+	<tr>
+		<td>Start Timing:</td>
+		<td>{{assesment_object.start_time}}</td>
+	</tr>
+	<tr>
+		<td>Duration (Hours:Minutes):</td>
+		<td>{{assesment_object.total_exam_duration|time:"H:i T" }} </td>
+	</tr>
 	
-{{ assesment_object }}
-{% endblock %} 
+	<tr>
+		<td>Note:</td>
+		<td>Please Click on the below button to start the assesments.</td>
+	<tr>
+	<tr>
+	<form action="." method="POST">
+	<input type="hidden" name="assesment_obj" value={{ assesment_object.pk }}>
+	<input type="hidden" name="start_assesment_boolean" value="True">
+	{%csrf_token%}
+		<td> Start:</td>
+		<td><input type="submit" value="Start Now"></td>
+	</form>
+	<tr>
+</table>
+{% endif %}
+
+{% endblock %}
+

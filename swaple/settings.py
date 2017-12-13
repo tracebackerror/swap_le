@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
   'swaple-shivam9172873031.codeanyapp.com',
+  '127.0.0.1',
+  'localhost',
+  
 ]
 
 

@@ -7,9 +7,11 @@ from django.views.generic import ListView
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 
-from .models import Assesment
+from .models import Assesment, Question
 from .tables import AssesmentTable, StudentAssesmentTable
 from students.models import Student
+
+import logging
 
 class ManageAllAssesmentView(SingleTableView, ListView):
     model = Assesment
@@ -68,13 +70,28 @@ class ManageStudentAssesmentView(SingleTableView, ListView):
 
     @method_decorator(login_decorator)
     def post(self, *args, **kwargs):
-        examid = self.request.POST.get('examid', None)
-        assesment_to_undertake = Assesment.soft_objects.get(id = int(examid))
-        
-        return render(self.request, 'assesments/exam_start_intro_page.html', {
-        'assesment_object': assesment_to_undertake,
-        })#, content_type='application/xhtml+xml')
-        pass
+        assesment_initiate_flag = self.request.POST.get('start_assesment_boolean', None)
+        if assesment_initiate_flag and eval(assesment_initiate_flag):
+            asses_unfiltered = self.request.POST.get('assesment_obj', None)
+            if asses_unfiltered and eval(asses_unfiltered):
+                assesment_to_undertake = Assesment.soft_objects.get(id = eval(asses_unfiltered))
+                
+                if self.request.user.student in assesment_to_undertake.subscriber_users.all():
+                    fetch_all_linked_question = Question.soft_objects.filter(assesment_linked = assesment_to_undertake)
+                    logging.info("Can Proceed For Assesment")
+                    
+                    
+                    return render(self.request, 'assesments/exam_start_main_page.html', {
+                        'assesment_object': assesment_to_undertake,
+                        })
+        else:
+            examid = self.request.POST.get('examid', None)
+            assesment_to_undertake = Assesment.soft_objects.get(id = int(examid))
+            
+            return render(self.request, 'assesments/exam_start_intro_page.html', {
+            'assesment_object': assesment_to_undertake,
+            })#, content_type='application/xhtml+xml')
+            
     
     
     def get_context_data(self, **kwargs):

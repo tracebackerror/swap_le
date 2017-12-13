@@ -106,11 +106,21 @@ class Question(MetaInformationMixin, SoftDeletionModelMixin):
     question_text = models.TextField()
 
     length_size = 250    
-    option_one = models.TextField(max_length=length_size)
-    option_two = models.TextField(max_length=length_size)
-    option_three = models.TextField(max_length=length_size)
-    option_four = models.TextField(max_length=length_size)
-    option_five = models.TextField(max_length=length_size)
+    option_one = models.TextField(max_length=length_size,
+                                    blank=True,
+                                    null=True)
+    option_two = models.TextField(max_length=length_size,
+                                    blank=True,
+                                    null=True)
+    option_three = models.TextField(max_length=length_size,
+                                        blank=True,
+                                        null=True)
+    option_four = models.TextField(max_length=length_size,
+                                    blank=True,
+                                    null=True)
+    option_five = models.TextField(max_length=length_size,
+                                    blank=True,
+                                    null=True)
 
     question_slug = models.SlugField(max_length=140,
                             unique=True,
@@ -124,10 +134,13 @@ class Question(MetaInformationMixin, SoftDeletionModelMixin):
                                        default='scq')
     
     
-    brief_answer = models.TextField()
+    brief_answer = models.TextField(blank=True,
+                                    null=True)
     
     max_marks = models.IntegerField()
-    correct_options = models.CharField(max_length = 150)
+    correct_options = models.CharField(max_length = 150,
+                                       blank=True,
+                                       null=True)
     
     
     assesment_linked = models.ForeignKey(Assesment,
