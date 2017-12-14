@@ -169,7 +169,6 @@ class ProcesStudentAssesmentView(DetailView):
                         'assesment_object': assesment_to_undertake,
                         'all_question_to_answer':page_question_obj,
                         })
-                    
         else:
             examid = self.request.POST.get('examid', None)
             assesment_to_undertake = Assesment.soft_objects.get(id = int(examid))
