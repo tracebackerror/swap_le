@@ -21,5 +21,5 @@ urlpatterns = [
     url(r'^institutions/', include('institutions.urls', namespace='institutions', app_name='institutions')),
     url(r'^staff/', include('staff.urls', namespace='staff', app_name='staff')),
     url(r'^student/', include('students.urls', namespace='student', app_name='student')),
-
+    
 ]
