@@ -10,7 +10,7 @@ from polymorphic.manager import PolymorphicManager
 from polymorphic.query import PolymorphicQuerySet
 
 
-class MetaInformationMixin(PolymorphicModel):
+class MetaInformationMixin(models.Model):
     created = models.DateTimeField(auto_now_add=True,
                                    blank=True)
     updated = models.DateTimeField(auto_now=True,
