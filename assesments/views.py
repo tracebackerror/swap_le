@@ -228,17 +228,19 @@ def assessment_delete_by_staff(request, assesmentid):
     
 @login_required(login_url="/staff/login/")
 def assessment_edit_by_staff(request, assesmentid):
+    messages.get_messages(request).used = True
     if request.method == 'POST':
         assesment_form = AssessmentForm(instance=Assesment.objects.get(id=assesmentid),
                                  data=request.POST)
         if assesment_form.is_valid():
             assesment_form.save()
-            messages.success(request, 'Assessment Updated Successfully')
-            #messages.add_message(request, messages.SUCCESS, 'Assessment Updated Successfully')
-            return HttpResponseRedirect('/staff/manage/{}/edit/'.format(assesmentid))
+            #messages.success(request, 'Assessment Updated Successfully')
+            messages.add_message(request, messages.SUCCESS, 'Assessment Updated Successfully')
+            
     else:
         assesment_form = AssessmentForm(instance=Assesment.objects.get(id=assesmentid)) 
-        return render(request, 'assesments/assessment_edit_by_staff.html', {'assessment_form': assesment_form})
+        
+    return render(request, 'assesments/assessment_edit_by_staff.html', {'assessment_form': assesment_form})
     
 
     

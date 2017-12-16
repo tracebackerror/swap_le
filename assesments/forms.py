@@ -19,6 +19,8 @@ class AssessmentForm(forms.ModelForm):
     ), required=True)
     """
     
+    
     class Meta:
         model = Assesment
-        fields = ['header', 'slug', 'brief']
+        fields = ('__all__')
+        exclude= ['deleted_by','deleted_at', 'created_by', 'updated_by']
