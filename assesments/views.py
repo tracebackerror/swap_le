@@ -10,8 +10,16 @@ from django.urls import reverse_lazy
 from .models import Assesment, Question
 from .tables import AssesmentTable, StudentAssesmentTable
 from students.models import Student
+from staff.models import Staff
+
+from .models import Assesment
+from .forms import AssessmentForm
+from django.contrib import messages
+from django.shortcuts import *
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+
 
 import logging
 
@@ -193,3 +201,45 @@ class ProcesStudentAssesmentView(DetailView):
         context = super(ProcesStudentAssesmentView, self).get_context_data(**kwargs)
        
         return context 
+    
+    
+    
+@login_required(login_url="/staff/login/")
+def assessment_delete_by_staff(request, assesmentid):
+    information = ''
+    
+    if hasattr(request.user, 'staff'):
+        if request.method == 'GET' and request.user.staff.user_type in ['staff','institution']:
+            information = 'Are you sure you want to delete assessmentid {} ?'.format(str(assesmentid))
+        elif request.method == 'POST' and request.user.staff.user_type == 'staff':
+            staff_obj = Staff.objects.get(staffuser__username=request.user)
+            assesment_obj = Assesment.soft_objects.get(id__exact=assesmentid)
+            if Assesment.created_by == request.user:
+                assesment_obj.delete(request.user)
+                assesment_obj.save()
+                information = 'Assessment Deleted Successfully. '
+            else:
+                information = 'You don\'t have authorized permission to delete this record '
+                
+                
+        return render(request, 'assesments/assesment_delete_by_staff.html', {'information': [information]})
+    
+
+    
+    
+@login_required(login_url="/staff/login/")
+def assessment_edit_by_staff(request, assesmentid):
+    if request.method == 'POST':
+        assesment_form = AssessmentForm(instance=Assesment.objects.get(id=assesmentid),
+                                 data=request.POST)
+        if assesment_form.is_valid():
+            assesment_form.save()
+            messages.success(request, 'Assessment Updated Successfully')
+            #messages.add_message(request, messages.SUCCESS, 'Assessment Updated Successfully')
+            return HttpResponseRedirect('/staff/manage/{}/edit/'.format(assesmentid))
+    else:
+        assesment_form = AssessmentForm(instance=Assesment.objects.get(id=assesmentid)) 
+        return render(request, 'assesments/assessment_edit_by_staff.html', {'assessment_form': assesment_form})
+    
+
+    

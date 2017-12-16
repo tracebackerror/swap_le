@@ -11,8 +11,8 @@ class AssesmentTable(tables.Table):
     row_number = tables.Column(empty_values=(),
                                 verbose_name='Row')
     
-    edit_assesment = tables.TemplateColumn('<a href=" ">Edit</a>')
-    delete_assesment = tables.TemplateColumn('<a href=" ">Delete</a>')
+    edit_assesment = tables.TemplateColumn('<a href=" {% url "staff:assesments:assessment_edit_by_staff" assesmentid=record.id  %} ">Edit</a>')
+    delete_assesment = tables.TemplateColumn('<a href=" {% url "staff:assesments:assessment_delete_by_staff" assesmentid=record.id  %} ">Delete</a>')
     manage_assesment = tables.TemplateColumn('<a href=" ">Manage</a>')
     
     def __init__(self, *args, **kwargs):
