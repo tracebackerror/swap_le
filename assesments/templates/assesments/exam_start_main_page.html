@@ -6,22 +6,71 @@
 
 <form action="{% url 'student:assesments:process_assesment' %}" method="POST">
 <table class="table table-bordered">
-  <thead>
-    <tr>
-      <th>Username</th>
-      <th>First name</th>
-      <th>Email</th>
-    </tr>
-  </thead>
+
+
   <tbody>
     {% for question in all_question_to_answer %}
-      <tr>
-        <td>{{ question.question_text }}</td>
-        <td>{{ question.question_type }}</td>
+	<tr>
+      <th class="col-md-1">Question :</th>
+      <th>{{ question.question_text }}</th>
+    </tr>
+	{% if question.question_type|lower == 'scq'%}
+	  <tr>
+        <td><input type="radio" name="answer" id="option1"></td>
         <td>{{ question.option_one }}</td>
       </tr>
+      <tr>
+        <td><input type="radio" name="answer" id="option2"></td>
+        <td>{{ question.option_two }}</td>
+      </tr>
+      <tr>
+        <td><input type="radio" name="answer" id="option3"></td>
+        <td>{{ question.option_three }}</td>
+      </tr>
+      <tr>
+        <td><input type="radio" name="answer" id="option4"></td>
+        <td>{{ question.option_four }}</td>
+      </tr>
+      <tr>
+        <td><input type="radio" name="answer" id="option5"></td>
+        <td>{{ question.option_five }}</td>
+      </tr>
+      {% elif question.question_type|lower == 'mcq' %}
+	  <tr>
+        <td class="col-md-1"><input type="checkbox" name="answer" id="option1"></td>
+        <td>{{ question.option_one }}</td>
+      </tr>
+      <tr>
+        <td><input type="checkbox" name="answer"  id="option2"></td>
+        <td>{{ question.option_two }}</td>
+      </tr>
+      <tr>
+        <td><input type="checkbox" name="answer"  id="option3"></td>
+        <td>{{ question.option_three }}</td>
+      </tr>
+      <tr>
+        <td><input type="checkbox" name="answer"  id="option4"></td>
+        <td>{{ question.option_four }}</td>
+      </tr>
+      <tr>
+        <td><input type="checkbox" name="answer"  id="option5"></td>
+        <td>{{ question.option_five }}</td>
+      </tr>
+    {% elif question.question_type|lower == 'sqa' %}
+      <tr>
+        <td colspan="2" >
+        	<textarea rows="20" name="answer" id="brief_answer" ></textarea>
+        </td>
+      </tr>
+    {% endif %}
     {% endfor %}
   </tbody>
+  <tfoot>
+  <tr>
+      <th class="col-md-1"><input type="button" class="" name="saveonly" id="saveonly" value="Save"/></th>
+      <th><input type="button" class="" name="saveandnext" id="saveandnext" value="Save And Next"/></th>
+    </tr>
+  </tfoot>
 </table>
 
 
