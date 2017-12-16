@@ -141,6 +141,11 @@ def delete_institution_staff_student(request, username):
     else:
         #latter implementation of this bug
         pass
+    
+#implementing edit functionality     
+@login_required(login_url="/staff/login/")
+def edit_institution_staff_student(request, username):
+    pass
 
    
     
