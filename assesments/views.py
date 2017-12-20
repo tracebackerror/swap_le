@@ -265,9 +265,8 @@ def assessment_delete_by_staff(request, assesmentid):
         elif request.method == 'POST' and request.user.staff.user_type == 'staff':
             staff_obj = Staff.objects.get(staffuser__username=request.user)
             assesment_obj = Assesment.soft_objects.get(id__exact=assesmentid)
-            if Assesment.created_by == request.user:
+            if assesment_obj.created_by == request.user:
                 assesment_obj.delete(request.user)
-                assesment_obj.save()
                 information = 'Assessment Deleted Successfully. '
             else:
                 information = 'You don\'t have authorized permission to delete this record '

@@ -38,7 +38,7 @@ class StudentTable(tables.Table):
     email = tables.Column(accessor='studentuser.email',
                           verbose_name='Mail Address')
     
-    edit_student = tables.TemplateColumn('<a href=" ">Edit</a>')
+    edit_student = tables.TemplateColumn('<a href=" {% url "staff:student_edit_by_staff" upk=record.pk  %} ">Edit</a>')
     delete_student = tables.TemplateColumn('<a href=" {% url "staff:delete_institution_staff_student" username=record.studentuser  %} ">Delete</a>')
 
     def __init__(self, *args, **kwargs):
