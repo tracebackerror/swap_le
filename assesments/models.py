@@ -147,6 +147,8 @@ class Question(MetaInformationMixin, SoftDeletionModelMixin):
                                                 null=True)
     
     
+    def __str__(self):
+        return 'Question - {}'.format(self.question_text)
     
     
 class Result(MetaInformationMixin, SoftDeletionModelMixin):
@@ -167,13 +169,7 @@ class Result(MetaInformationMixin, SoftDeletionModelMixin):
     total_marks = models.IntegerField(default=0)
     obtained_marks = models.IntegerField(default=0)
     
-    
-   
     result_passed = models.BooleanField(default=False)
-    expired_on = models.DateTimeField()
-    
-    
-    
     type = models.CharField(max_length=10, default="result", editable=False)
     #deleted = models.CharField(max_length=1, default="N")
 

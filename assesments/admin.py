@@ -15,8 +15,18 @@ class AssesmentAdmin(admin.ModelAdmin):
     inlines = [ QuestionInline ]
     
 
+class AnswerInline(admin.TabularInline):
+    model = Answer
+    extra = 1
+    
+    
+class ResultAdmin(admin.ModelAdmin):
+    #fieldsets = [ (None, {'fields': ['title'}) ]
+    inlines = [ AnswerInline ]
+    
+    
 #admin.site.unregister(Assesment)
 admin.site.register(Assesment, AssesmentAdmin)
-admin.site.register(Result)
+admin.site.register(Result, ResultAdmin)
 admin.site.register(Answer)
 admin.site.register(Question)

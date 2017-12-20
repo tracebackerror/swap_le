@@ -12,7 +12,7 @@ from .tables import AssesmentTable, StudentAssesmentTable
 from students.models import Student
 from staff.models import Staff
 
-from .models import Assesment
+from .models import Assesment, Answer, Result
 from .forms import AssessmentForm
 from django.contrib import messages
 from django.shortcuts import *
@@ -20,6 +20,8 @@ from django.shortcuts import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
+from utility.swaple_constants import all_question_types
+from utility import swaple_constants
 
 import logging
 
@@ -84,39 +86,11 @@ class ManageStudentAssesmentView(SingleTableView, ListView):
     @method_decorator(login_decorator)
     def post(self, *args, **kwargs):
         assesment_initiate_flag = self.request.POST.get('start_assesment_boolean', None)
-        if assesment_initiate_flag and eval(assesment_initiate_flag):
-            asses_unfiltered = self.request.POST.get('assesment_obj', None)
-            page_of_question = int(self.request.POST.get('page', 1))
-            
-            if asses_unfiltered and eval(asses_unfiltered):
-                assesment_to_undertake = Assesment.soft_objects.get(id = eval(asses_unfiltered))
-                
-                if self.request.user.student in assesment_to_undertake.subscriber_users.all():
-                    fetch_all_linked_question = Question.soft_objects.filter(assesment_linked = assesment_to_undertake)
-                    paginator = Paginator(fetch_all_linked_question, 3)
-                    
-                    logging.info("Can Proceed For Assesment")
-                    
-                    try:
-                        page_question_obj = paginator.page(page_of_question)
-                    except PageNotAnInteger:
-                        page_question_obj = paginator.page(1)
-                    except EmptyPage:
-                        page_question_obj = paginator.page(paginator.num_pages)
-                    
-                    # Check whether user has answered any question
-                    
-                    
-                    return render(self.request, 'assesments/exam_start_main_page.html', {
-                        'assesment_object': assesment_to_undertake,
-                        'all_question_to_answer':page_question_obj,
-                        })
-                    
-        else:
-            examid = self.request.POST.get('examid', None)
-            assesment_to_undertake = Assesment.soft_objects.get(id = int(examid))
-            
-            return render(self.request, 'assesments/exam_start_intro_page.html', {
+        
+        examid = self.request.POST.get('examid', None)
+        assesment_to_undertake = Assesment.soft_objects.get(id = int(examid))
+        self.request.session['_assesment_to_undertake'] = examid    
+        return render(self.request, 'assesments/exam_start_intro_page.html', {
             'assesment_object': assesment_to_undertake,
             })#, content_type='application/xhtml+xml')
             
@@ -150,18 +124,28 @@ class ProcesStudentAssesmentView(DetailView):
         return super(ProcesStudentAssesmentView, self).dispatch(*args, **kwargs)
 
     def _process_assesment(self, *args, **kwargs):
-        assesment_initiate_flag = self.request.POST.get('start_assesment_boolean', None)
-        if assesment_initiate_flag and eval(assesment_initiate_flag):
-            asses_unfiltered = self.request.POST.get('assesment_obj', None)
-            page_of_question = int(self.request.POST.get('page', 1))
+        get_the_answer_obj = None
+        page_question_obj = None
+        
+        if 'start_assesment_boolean' in self.request.POST.keys():
+            assesment_initiate_flag = eval(self.request.POST.get('start_assesment_boolean', None))
+        elif '_assesment_initiate_flag' in self.request.session.keys():
+            assesment_initiate_flag = self.request.session.get('_assesment_initiate_flag')
+             
+        if assesment_initiate_flag:
+            self.request.session['_assesment_initiate_flag'] = assesment_initiate_flag
+            asses_unfiltered = self.request.session.get('_assesment_to_undertake', None)
+            page_of_question = int(self.request.POST.get('nextpage', 1))
             
             if asses_unfiltered and eval(asses_unfiltered):
                 assesment_to_undertake = Assesment.soft_objects.get(id = eval(asses_unfiltered))
                 
                 if self.request.user.student in assesment_to_undertake.subscriber_users.all():
+                    ''' Getting Next Question'''
                     fetch_all_linked_question = Question.soft_objects.filter(assesment_linked = assesment_to_undertake).order_by('pk')
-
-                    paginator = Paginator(fetch_all_linked_question, 1)
+                    total_question_on_single_page = 1
+                    
+                    paginator = Paginator(fetch_all_linked_question, total_question_on_single_page)
                     
                     logging.info("Can Proceed For Assesment")
                     
@@ -171,20 +155,88 @@ class ProcesStudentAssesmentView(DetailView):
                         page_question_obj = paginator.page(1)
                     except EmptyPage:
                         page_question_obj = paginator.page(paginator.num_pages)
+                        
                     
+                    ''' Log the Answer in Database '''
+                    question_type = self.request.POST.get('question_type', None)
+                    
+                    result_of_assesment = Result.soft_objects.filter(assesment = assesment_to_undertake, registered_user = self.request.user.student
+                    )
+                    
+                    if len(result_of_assesment)  == 0:
+                        self.create_result_instance = Result()
+                        self.create_result_instance.assesment = assesment_to_undertake
+                        self.create_result_instance.registered_user = self.request.user.student
+                        self.create_result_instance.created_by = self.request.user
+                        self.create_result_instance.updated_by = self.request.user
+                        self.create_result_instance.save()
+                    else:
+                        self.create_result_instance = result_of_assesment[0]
+                        
+                    if question_type and question_type in all_question_types:
+                        pk_of_question = self.request.POST.get('question_id')
+                        question_obj = Question.soft_objects.filter(assesment_linked = assesment_to_undertake, pk = pk_of_question)
+                        get_the_answer_obj = Answer.soft_objects.filter(for_result = self.create_result_instance, for_question = question_obj)
+                        
+                        if len(get_the_answer_obj) == 0:
+                            get_the_answer_obj = Answer()
+                            get_the_answer_obj.created_by = self.request.user
+                            get_the_answer_obj.updated_by = self.request.user
+                            get_the_answer_obj.for_result = self.create_result_instance
+                            get_the_answer_obj.for_question = question_obj[0]
+                            #get_the_answer_obj.save()
+                        else:
+                            get_the_answer_obj = get_the_answer_obj[0]
+                            
+                        
+                        if question_type == swaple_constants.SCQ or question_type == swaple_constants.MCQ:
+                            selected_answer = self.request.POST.getlist('answer')
+                            get_the_answer_obj.opted_choice = selected_answer
+                            # Here we need to add code for checking and setting the marks from question_obj
+                            get_the_answer_obj.alloted_marks = 0
+                            get_the_answer_obj.save()
+                        elif question_type == swaple_constants.SQA:
+                            written_answer= self.request.POST.get('answer')
+                            get_the_answer_obj.opted_choice = ''
+                            get_the_answer_obj.written_answer = written_answer
+                            # Here we need to add code for checking and setting the marks from question_obj
+                            get_the_answer_obj.alloted_marks = 0
+                            get_the_answer_obj.save()
+                        
+                    else:
+                        pass
+                    
+                        
+                    get_the_current_answer_obj = Answer.soft_objects.filter(for_result = self.create_result_instance, for_question = page_question_obj[0])
+                        
+                    if len(get_the_current_answer_obj) == 0:
+                            get_the_current_answer_obj = Answer()
+                            get_the_current_answer_obj.created_by = self.request.user
+                            get_the_current_answer_obj.updated_by = self.request.user
+                            get_the_current_answer_obj.for_result = self.create_result_instance
+                            get_the_current_answer_obj.for_question = page_question_obj[0]
+                            #get_the_answer_obj.save()
+                    else:
+                            get_the_current_answer_obj = get_the_current_answer_obj[0]
+                            
+                    get_the_current_answer_obj.save()
+                        
                     # Check whether user has answered any question
                     return render(self.request, 'assesments/exam_start_main_page.html', {
                         'assesment_object': assesment_to_undertake,
                         'all_question_to_answer':page_question_obj,
+                        'get_the_answer_obj':get_the_current_answer_obj,
                         })
         else:
+            '''
             examid = self.request.POST.get('examid', None)
             assesment_to_undertake = Assesment.soft_objects.get(id = int(examid))
             
             return render(self.request, 'assesments/exam_start_intro_page.html', {
             'assesment_object': assesment_to_undertake,
             })#, content_type='application/xhtml+xml')
-            
+            '''
+            pass
     
     @method_decorator(login_decorator)
     def get(self, *args, **kwargs):

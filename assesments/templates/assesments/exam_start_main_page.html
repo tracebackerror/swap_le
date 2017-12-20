@@ -1,65 +1,124 @@
-{% extends "student/base.html" %} {% block title %}DashBoard Student{% endblock %} {% block content %}
+{% extends "student/base.html" %}
+{% load literal_eval %}
+
+
+{% block title %}Assesment In Progress {% endblock %} {% block content %}
 
 <h3>Assesment In Progres:</h3>
 
+
+
+
+
+
+
+
 {% if user.is_authenticated and request.user.student in assesment_object.subscriber_users.all %}
 
-<form action="{% url 'student:assesments:process_assesment' %}" method="POST">
+<form action="{% url 'student:assesments:process_assesment' %}" method="POST" id="questionProcessingForm">
+
+
+{% if get_the_answer_obj %} 
+	{% if get_the_answer_obj.for_question.question_type|lower == "scq"  or get_the_answer_obj.for_question.question_type|lower == "mcq" %}
+		<input type="hidden" value = '{{get_the_answer_obj.opted_choice|replace:"/['\"]/_"  }}' name="selected_answer" id="selected_answer">		
+	{% endif %}
+		
+{% endif %}
+
 <table class="table table-bordered">
 
 
   <tbody>
     {% for question in all_question_to_answer %}
+    <input type="hidden" value={{question.pk}} name="question_id">
 	<tr>
       <th class="col-md-1">Question :</th>
       <th>{{ question.question_text }}</th>
     </tr>
 	{% if question.question_type|lower == 'scq'%}
+	<input type="hidden" name="question_type" value="scq" />
 	  <tr>
-        <td><input type="radio" name="answer" id="option1"></td>
+        <td>
+        <div class="form-group">
+        <input class="form-control" type="radio" name="answer" id="option1" value=1 {% if get_the_answer_obj.opted_choice.2 == 1 %} checked="checked" {% endif %}>
+        </div>
+        </td>
         <td>{{ question.option_one }}</td>
       </tr>
       <tr>
-        <td><input type="radio" name="answer" id="option2"></td>
+        <td>
+        <div class="form-group">
+        <input class="form-control" type="radio" name="answer" id="option2" value=2 {% if  get_the_answer_obj.opted_choice.2 == 2 %} checked="checked" {% endif %}></td>
+        </div>
         <td>{{ question.option_two }}</td>
       </tr>
       <tr>
-        <td><input type="radio" name="answer" id="option3"></td>
+        <td>
+        <div class="form-group">
+        <input class="form-control" type="radio" name="answer" id="option3" value=3 {% if get_the_answer_obj.opted_choice.2 == 3 %} checked="checked" {% endif %} ></td>
+        </div>
         <td>{{ question.option_three }}</td>
       </tr>
       <tr>
-        <td><input type="radio" name="answer" id="option4"></td>
+        <td>
+        <div class="form-group">
+        <input class="form-control" type="radio" name="answer" id="option4" value=4 {% if get_the_answer_obj.opted_choice.2 == 4 %} checked="checked" {% endif %} ></td>
+        </div>
         <td>{{ question.option_four }}</td>
       </tr>
       <tr>
-        <td><input type="radio" name="answer" id="option5"></td>
+        <td>
+        <div class="form-group">
+        <input class="form-control" type="radio" name="answer" id="option5" value=5 {% if get_the_answer_obj.opted_choice.2 == 5 %} checked="checked" {% endif %}></td>
+        </div>
         <td>{{ question.option_five }}</td>
       </tr>
       {% elif question.question_type|lower == 'mcq' %}
+      <input type="hidden" name="question_type" value="mcq" />
 	  <tr>
-        <td class="col-md-1"><input type="checkbox" name="answer" id="option1"></td>
+        <td class="col-md-1">
+        <div class="form-group">
+        <input class="form-control" type="checkbox" name="answer" id="option1" value=1></td>
+        </div>
         <td>{{ question.option_one }}</td>
       </tr>
       <tr>
-        <td><input type="checkbox" name="answer"  id="option2"></td>
+        <td>
+        <div class="form-group">
+        <input class="form-control" type="checkbox" name="answer"  id="option2" value=2></td>
+        </div>
         <td>{{ question.option_two }}</td>
       </tr>
       <tr>
-        <td><input type="checkbox" name="answer"  id="option3"></td>
+        <td>
+        <div class="form-group">
+        <input class="form-control" type="checkbox" name="answer"  id="option3" value=3></td>
+        </div>
         <td>{{ question.option_three }}</td>
       </tr>
       <tr>
-        <td><input type="checkbox" name="answer"  id="option4"></td>
+        <td>
+        <div class="form-group">
+        <input class="form-control" type="checkbox" name="answer"  id="option4" value=4 class="form-control" >
+        </div>
+        </td>
         <td>{{ question.option_four }}</td>
       </tr>
       <tr>
-        <td><input type="checkbox" name="answer"  id="option5"></td>
+        <td>
+        <div class="form-group">
+        <input class="form-control" type="checkbox" name="answer" class="form-control"  value=5 id="option5">
+        </div>
+        </td>
         <td>{{ question.option_five }}</td>
       </tr>
     {% elif question.question_type|lower == 'sqa' %}
+    <input type="hidden" name="question_type" value="sqa" />
       <tr>
         <td colspan="2" >
-        	<textarea rows="20" name="answer" id="brief_answer" ></textarea>
+        <div class="form-group">
+        	<textarea class="form-control" rows="20" name="answer" id="brief_answer" ></textarea>
+        	</div>
         </td>
       </tr>
     {% endif %}
@@ -67,8 +126,8 @@
   </tbody>
   <tfoot>
   <tr>
-      <th class="col-md-1"><input type="button" class="" name="saveonly" id="saveonly" value="Save"/></th>
-      <th><input type="button" class="" name="saveandnext" id="saveandnext" value="Save And Next"/></th>
+      <th class="col-md-1"><input type="button" class="form-control" name="saveonly" id="saveonly" value="Save"/></th>
+      <th><input type="button" class="form-control" name="saveandnext" id="saveandnext" value="Save And Next"/></th>
     </tr>
   </tfoot>
 </table>
@@ -81,27 +140,31 @@
     {% if all_question_to_answer.has_previous %}
       
       <li class="nav-item">
-      <button type="button" class=" btn" name="page" value={{all_question_to_answer.previous_page_number }}>
+      <button type="button" class="btn btn-default consequetive_question"  name="page" value={{all_question_to_answer.previous_page_number }}>
 				&laquo;</button>
 		</li>
     {% else %}
-      <li class="nav-item disabled"><span>&laquo;</span></li>
+      <li class="nav-item">
+      <button type="button" class=" btn btn-default disabled" disabled> &laquo; </button>
+      </li>
     {% endif %}
     {% for i in all_question_to_answer.paginator.page_range %}
       {% if all_question_to_answer.number == i %}
-        <li class="nav-item   active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+        <li class="nav-item   active "><span>{{ i }} <span class="sr-only">(current)</span></span></li>
       {% else %}
         <li class="nav-item">
-        <button type="button" class="btn btn-default" name="page" value={{ i }}> {{ i }} </button>
+        <button type="button" class="btn btn-default consequetive_question" name="page" value={{ i }}> {{ i }} </button>
         </li>
       {% endif %}
     {% endfor %}
     {% if all_question_to_answer.has_next %}
       <li class="nav-item">
-      <button type="button" class=" btn btn-default" name="page" value={{ all_question_to_answer.next_page_number }}> &raquo; </button>
+      <button type="button" class=" btn btn-default" id="nextquestion" name="page" value={{ all_question_to_answer.next_page_number }}> &raquo; </button>
       </li>
     {% else %}
-      <li class="nav-item btn disabled btn-default"><span>&raquo;</span></li>
+      <li class="nav-item">
+      <button type="button" class=" btn btn-default disabled" disabled> &raquo; </button>
+      </li>
     {% endif %}
   </ul>
 {% endif %}
@@ -109,7 +172,75 @@
 
 
 {% endif %}
+{%csrf_token%}
 
-{% endblock %}
 
 </form>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+	 $("#nextquestion, .consequetive_question").click(function () {
+	 	input = jQuery('<input type="hidden" name="nextpage" id="next_page_to_asses" value='+ $(this).val() +'>');
+	 	$('#questionProcessingForm').append(input);
+	 	 $( "#questionProcessingForm" ).submit();
+	 	});
+	 	
+	 if ($("#selected_answer").length > 0 ){
+	 	var numberPattern = /\d+/g;
+		 selected_answers = $("#selected_answer").val();
+		 arr_of_selected_answer=selected_answers.match(numberPattern);
+		 
+		 if (arr_of_selected_answer.length > 0){
+		 	if (arr_of_selected_answer.length == 1){
+		 		val_to_test = parseInt(arr_of_selected_answer[0]);
+		 		
+		 		switch(val_to_test){
+		 			case 1:
+		 				$("#option1").prop("checked", true);
+		 				break;
+		 			case 2:
+		 				$("#option2").prop("checked", true);
+		 				break;
+		 			case 3:
+		 				$("#option3").prop("checked", true);
+		 				break;
+		 			case 4:
+		 				$("#option4").prop("checked", true);
+		 				break;
+		 			case 5:
+		 				$("#option5").prop("checked", true);
+		 				break;
+		 		}
+		 			
+		 	} else if(arr_of_selected_answer.length > 1) {
+		 			
+		 			
+		 			for (i = 0; i < arr_of_selected_answer.length; i++) { 
+	    				val_to_test = parseInt(arr_of_selected_answer[i])
+	
+		    			switch(val_to_test){
+			 			case 1:
+			 				$("#option1").prop("checked", true);
+			 				break;
+			 			case 2:
+			 				$("#option2").prop("checked", true);
+			 				break;
+			 			case 3:
+			 				$("#option3").prop("checked", true);
+			 				break;
+			 			case 4:
+			 				$("#option4").prop("checked", true);
+			 				break;
+			 			case 5:
+			 				$("#option5").prop("checked", true);
+			 				break;		
+						}		
+		 			}	
+	 		}
+	 	}	
+	 }
+	 	
+});
+</script>
+{% endblock %}

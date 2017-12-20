@@ -24,6 +24,7 @@ class MetaInformationMixin(models.Model):
                                       related_name='%(app_label)s_%(class)s_updated_by',
                                       blank=True)
 
+    
     class Meta:
         abstract = True
         
