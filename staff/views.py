@@ -11,6 +11,9 @@ from django.contrib import messages
 from institutions.forms import UserEditForm
 from django.views.generic import ListView
 
+from staff.forms import StudentEditForm
+from students.models import Student
+
 class InstitutionStaffLoginView(LoginView):
     template_name = 'staff/login.html'
 
@@ -141,6 +144,22 @@ def delete_institution_staff_student(request, username):
     else:
         #latter implementation of this bug
         pass
+
+
+#implementing edit functionality     
+@login_required(login_url="/staff/login/")
+def student_edit_by_staff(request,upk):
+    if request.method == 'POST':
+        student_form = StudentEditForm(instance=Student.objects.get(pk=upk),
+                                 data=request.POST)
+        if student_form.is_valid():
+            student_form.save()
+            messages.add_message(request, messages.SUCCESS, 'Student Record Updated Successfully')
+            
+    else:
+        student_form = StudentEditForm(instance=Student.objects.get(pk=upk)) 
+        
+    return render(request, 'staff/student_edit_by_staff.html', {'student_form': student_form})
 
    
     
