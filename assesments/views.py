@@ -13,7 +13,7 @@ from students.models import Student
 from staff.models import Staff
 
 from .models import Assesment, Answer, Result
-from .forms import AssessmentForm
+from .forms import AssessmentForm, AssessmentCreationForm
 from django.contrib import messages
 from django.shortcuts import *
 
@@ -294,4 +294,24 @@ def assessment_edit_by_staff(request, assesmentid):
     return render(request, 'assesments/assessment_edit_by_staff.html', {'assessment_form': assesment_form})
     
 
+
+
+@login_required(login_url="/staff/login/")
+def assessment_create_by_staff(request):
+    if request.method == 'POST':
+        assesment_creation_form = AssessmentCreationForm(request.POST, request=request)
+        if assesment_creation_form.is_valid():
+            
+            saved_new_assesment = assesment_creation_form.save(commit=False)
+            saved_new_assesment.created_by = request.user
+            saved_new_assesment.updated_by = request.user
+            saved_new_assesment.save()
+            assesment_creation_form.save_m2m()
+            #messages.success(request, 'Assessment Updated Successfully')
+            messages.add_message(request, messages.SUCCESS, 'Assessment Created Successfully')
+            
+    else:
+        assesment_creation_form = AssessmentCreationForm(request= request)
+        
+    return render(request, 'assesments/assessment_create_by_staff.html', {'assessment_c_form': assesment_creation_form})
     

@@ -1,0 +1,13 @@
+{% extends "staff/base.html" %}
+{% block title %}   Create Assessment   {% endblock %}
+
+{% block content %} 
+ <h1>Create Assessment</h1>
+ <p>You can Create your Assessment using the following form:</p>
+ 
+ <form action="." method="post" enctype="multipart/form-data">
+     {{ assessment_c_form.as_p}}
+     {% csrf_token %}
+ <p><input type="submit" value="Save"></p>
+ </form>
+{% endblock %}
