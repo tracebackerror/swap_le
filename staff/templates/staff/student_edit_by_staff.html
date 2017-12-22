@@ -8,6 +8,7 @@
  
  <form action="." method="post" enctype="multipart/form-data">
      {{ student_form.as_p}}
+     {{ student_user_form.as_p}}
      {% csrf_token %}
  <p><input type="submit" value="Save changes"></p>
  </form>

@@ -22,7 +22,14 @@ class EnrollStudentsForm(forms.ModelForm):
         
 
 class StudentEditForm(forms.ModelForm):
-    
+    #studentuser = forms.CharField()
+    #staffuser = forms.CharField() 
     class Meta:
         model = Student
         fields = ['studentuser','staffuser']
+        
+
+class StudentUserEditForm(forms.ModelForm):    
+     class Meta:
+        model = User
+        fields = ['first_name','last_name','email']

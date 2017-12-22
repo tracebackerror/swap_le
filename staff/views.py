@@ -11,8 +11,10 @@ from django.contrib import messages
 from institutions.forms import UserEditForm
 from django.views.generic import ListView
 
-from staff.forms import StudentEditForm
+from staff.forms import StudentEditForm, StudentUserEditForm 
 from students.models import Student
+from django.contrib.auth.models import User
+#from jedi.evaluate.context import instance
 
 class InstitutionStaffLoginView(LoginView):
     template_name = 'staff/login.html'
@@ -160,6 +162,27 @@ def student_edit_by_staff(request,upk):
         student_form = StudentEditForm(instance=Student.objects.get(pk=upk)) 
         
     return render(request, 'staff/student_edit_by_staff.html', {'student_form': student_form})
+
+
+#implementing edit functionality     
+@login_required(login_url="/staff/login/")
+def student_edit_by_staff(request,upk):
+    if request.method == 'POST':
+        student_form = StudentEditForm(instance=Student.objects.get(pk=upk),
+                                 data=request.POST)
+        student_user_form = StudentUserEditForm(instance=User.objects.get(id=student_form.instance.studentuser.id),
+                                 data=request.POST)
+        if student_form.is_valid() and student_user_form.is_valid():
+            student_form.save()
+            student_user_form.save()
+            messages.add_message(request, messages.SUCCESS, 'Student Record Updated Successfully')
+            
+    else:
+        student_data=Student.objects.get(pk=upk)
+        student_form = StudentEditForm(instance=student_data)
+        student_user_form = StudentUserEditForm(instance=User.objects.get(pk=student_form.instance.studentuser.id))
+        
+    return render(request, 'staff/student_edit_by_staff.html', {'student_form': student_form,'student_user_form': student_user_form})
 
    
     
