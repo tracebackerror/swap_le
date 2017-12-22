@@ -26,6 +26,12 @@ class AssessmentForm(forms.ModelForm):
         model = Assesment
         fields = ('__all__')
         exclude= ['deleted_by','deleted_at', 'created_by', 'updated_by']
+    
+    
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop("request")
+        super(AssessmentForm, self).__init__(*args, **kwargs)
+        self.fields["subscriber_users"].queryset = Student.active.filter(staffuser = self.request.user.staff)   
         
 
 class AssessmentCreationForm(forms.ModelForm):
@@ -37,6 +43,7 @@ class AssessmentCreationForm(forms.ModelForm):
         widgets = {
             'start_time': forms.DateTimeInput(attrs={'class': 'datetime-input'})
         }
+    
     
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop("request")

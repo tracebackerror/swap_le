@@ -281,7 +281,7 @@ def assessment_delete_by_staff(request, assesmentid):
 def assessment_edit_by_staff(request, assesmentid):
     messages.get_messages(request).used = True
     if request.method == 'POST':
-        assesment_form = AssessmentForm(instance=Assesment.objects.get(id=assesmentid),
+        assesment_form = AssessmentForm(instance=Assesment.objects.get(id=assesmentid,request=request),
                                  data=request.POST)
         if assesment_form.is_valid():
             assesment_form.save()
@@ -289,7 +289,7 @@ def assessment_edit_by_staff(request, assesmentid):
             messages.add_message(request, messages.SUCCESS, 'Assessment Updated Successfully')
             
     else:
-        assesment_form = AssessmentForm(instance=Assesment.objects.get(id=assesmentid)) 
+        assesment_form = AssessmentForm(request=request,instance=Assesment.objects.get(id=assesmentid)) 
         
     return render(request, 'assesments/assessment_edit_by_staff.html', {'assessment_form': assesment_form})
     
