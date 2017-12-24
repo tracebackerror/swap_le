@@ -32,7 +32,7 @@ class AssessmentForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop("request")
         super(AssessmentForm, self).__init__(*args, **kwargs)
-        self.fields["subscriber_users"].queryset = Student.active.filter(staffuser = self.request.user.staff)   
+        self.fields["subscriber_users"].queryset = Student.active.filter(staffuser__institute = self.request.user.staff.institute)   
         
 
 class AssessmentCreationForm(forms.ModelForm):
@@ -49,7 +49,7 @@ class AssessmentCreationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop("request")
         super(AssessmentCreationForm, self).__init__(*args, **kwargs)
-        self.fields["subscriber_users"].queryset = Student.active.filter(staffuser = self.request.user.staff)    
+        self.fields["subscriber_users"].queryset = Student.active.filter(staffuser__institute = self.request.user.staff.institute)    
     
     
     
