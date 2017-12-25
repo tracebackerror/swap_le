@@ -1,0 +1,45 @@
+
+{% extends "staff/base.html" %}
+{% load render_table from django_tables2 %}
+
+{% block title %}   Manage Single Assesment  {% endblock %}
+
+
+{% block content %} 
+<div class="container">
+ <h1>Manage Single Assesment</h1>
+
+ 
+ <div class="row">
+ 
+
+    <form class="form-inline my-2 my-lg-0">
+     
+      <button class="btn btn-default " type="submit">Add Question</button>
+    </form>
+ 
+
+
+ </div>
+ 
+ <div class="row">
+ 
+ <p> Linked Question</p>
+  {% render_table table  %}
+  
+ </div>
+ 
+ <div class="row">
+ 
+  <p> Linked Results</p>
+  {% render_table table_result  %}
+  
+ </div>
+ 
+ </div>
+ 
+{% endblock %}
+
+
+
+

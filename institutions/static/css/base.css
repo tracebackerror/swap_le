@@ -166,7 +166,7 @@ select {
     width:324px;
 }
 
-input[type=submit], a.button {
+a.button {
     border-radius:5px;
     background:#4dcc43;
     color:#fff;

@@ -1,11 +1,43 @@
 import django_tables2 as tables
 import itertools
 from django.utils.html import format_html
-from .models import Assesment
+from .models import Assesment, Question, Result
 from django_tables2 import A
 
 
+class ResultTable(tables.Table):
+    row_number = tables.Column(empty_values=(),
+                                verbose_name='No.')
+    
+    def __init__(self, *args, **kwargs):
+        super(ResultTable, self).__init__(*args, **kwargs)
+        self.counter = itertools.count()
+    
+    def render_row_number(self):
+        return '%d' % next(self.counter)
+    
+    class Meta:
+        model = Result
+        attrs = {'class': 'paleblue'}
+        sequence = ('row_number',)
+        exclude = ('id', 'deleted_at','deleted_by','created_by','updated_by',)
 
+class QuestionTable(tables.Table):
+    row_number = tables.Column(empty_values=(),
+                                verbose_name='No.')
+    
+    def __init__(self, *args, **kwargs):
+        super(QuestionTable, self).__init__(*args, **kwargs)
+        self.counter = itertools.count()
+    
+    def render_row_number(self):
+        return '%d' % next(self.counter)
+    
+    class Meta:
+        model = Question
+        attrs = {'class': 'paleblue'}
+        sequence = ('row_number',)
+        exclude = ('id', 'deleted_at','deleted_by','created_by','updated_by',)
 
 class AssesmentTable(tables.Table):
     row_number = tables.Column(empty_values=(),
@@ -13,7 +45,9 @@ class AssesmentTable(tables.Table):
     
     edit_assesment = tables.TemplateColumn('<a href=" {% url "staff:assesments:assessment_edit_by_staff" assesmentid=record.id  %} ">Edit</a>')
     delete_assesment = tables.TemplateColumn('<a href=" {% url "staff:assesments:assessment_delete_by_staff" assesmentid=record.id  %} ">Delete</a>')
-    manage_assesment = tables.TemplateColumn('<a href=" ">Manage</a>')
+    manage_assesment = tables.TemplateColumn('<a href=" {% url "staff:assesments:assessment_manage_by_staff" assesmentid=record.id  %} ">Manage</a>')
+    
+    #manage_assesment = tables.TemplateColumn('<form method="GET"  action="{%  url "staff:assesments:assessment_manage_by_staff" %}">  {% csrf_token %} <input type="hidden" name="examid" value={{record.id }}> <input class="btn btn-dark" type="submit" value="Manage"> </form>')
     
     def __init__(self, *args, **kwargs):
         super(AssesmentTable, self).__init__(*args, **kwargs)

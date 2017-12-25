@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 
 from .models import Assesment, Question
-from .tables import AssesmentTable, StudentAssesmentTable
+from .tables import AssesmentTable, StudentAssesmentTable, QuestionTable, ResultTable
 from students.models import Student
 from staff.models import Staff
 
@@ -80,7 +80,7 @@ class ManageStudentAssesmentView(SingleTableView, ListView):
         return super(ManageStudentAssesmentView, self).dispatch(*args, **kwargs)
 
 
-  
+    
     
         
     @method_decorator(login_decorator)
@@ -101,6 +101,38 @@ class ManageStudentAssesmentView(SingleTableView, ListView):
        
         return context 
     
+    
+class ManageSingleAsessment(SingleTableView):
+    model = Question
+    context_object_name = 'table'
+    paginate_by = 10
+    template_name = 'assesments/manage_single_assesment.html'
+    table_class = QuestionTable
+    http_method_names = ['get', 'POST']
+
+    login_decorator = login_required(login_url=reverse_lazy('student:login'))
+    
+    @method_decorator(login_decorator)
+    def dispatch(self, *args, **kwargs):
+        
+        return super(ManageSingleAsessment, self).dispatch(*args, **kwargs)
+    
+    def get_queryset(self):
+        #get_associated_staff = Staff.active.filter(staffuser=self.request.user)
+        #self.queryset = Student.active.filter(staffuser = get_associated_staff)#active.filter(institute__user__exact=self.request.user)
+        queryset = super(ManageSingleAsessment, self).get_queryset()
+        assesment_number_to_retrieve = self.kwargs.get('assesmentid', None)
+        self.queryset = Question.soft_objects.filter(assesment_linked__exact = assesment_number_to_retrieve)
+        return self.queryset
+    
+    @method_decorator(login_decorator)
+    def post(self, *args, **kwargs):
+        return self._process_assesment(self, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        context = super(ManageSingleAsessment, self).get_context_data(**kwargs)
+        context['table_result'] =  ResultTable(Result.soft_objects.all(), prefix="1-")
+        return context
     
 
 class ProcesStudentAssesmentView(DetailView):
