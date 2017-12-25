@@ -23,6 +23,7 @@ class StaffTable(tables.Table):
     class Meta:
         model = Staff
         # add class="paleblue" to <table> tag
+        exclude = ('id', 'deleted', 'user_type')
         attrs = {'class': 'paleblue'}
         # fields = ('row_number', 'institute',)
         sequence = ('row_number', 'staffuser', 'institute', 'allowregistration', 'created', 'updated', 'user_type', 'deleted')
@@ -58,9 +59,9 @@ class StudentTable(tables.Table):
         return value
     class Meta:
         model = Student
-        sequence = ('row_number', 'studentuser','first_name','last_name','email', 'staffuser', 'created', 'updated', 'user_type', 'deleted')
+        sequence = ('row_number', 'studentuser','first_name','last_name','email', 'staffuser', 'created', 'updated', 'user_type', )
         # add class="paleblue" to <table> tag 
         attrs = {'class': 'paleblue'}
         # fields = ('row_number', 'institute',)
-        exclude = ('id', )
+        exclude = ('id', 'deleted')
 
