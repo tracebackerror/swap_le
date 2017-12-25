@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import Assesment, Question, Result, Answer
 # Register your models here.
 
-class QuestionInline(admin.StackedInline):
+class QuestionInline(admin.TabularInline):
     model = Question
     extra = 1
     #readonly_fields = ['user', 'transaction_type', 'transaction_date']
