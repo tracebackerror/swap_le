@@ -247,7 +247,9 @@ class ProcesStudentAssesmentView(DetailView):
                             get_the_current_answer_obj.created_by = self.request.user
                             get_the_current_answer_obj.updated_by = self.request.user
                             get_the_current_answer_obj.for_result = self.create_result_instance
+                            
                             get_the_current_answer_obj.for_question = page_question_obj[0]
+                            get_the_current_answer_obj.alloted_marks = 0
                             #get_the_answer_obj.save()
                     else:
                             get_the_current_answer_obj = get_the_current_answer_obj[0]
