@@ -121,8 +121,8 @@ class ManageSingleAsessment(SingleTableView):
         #get_associated_staff = Staff.active.filter(staffuser=self.request.user)
         #self.queryset = Student.active.filter(staffuser = get_associated_staff)#active.filter(institute__user__exact=self.request.user)
         queryset = super(ManageSingleAsessment, self).get_queryset()
-        assesment_number_to_retrieve = self.kwargs.get('assesmentid', None)
-        self.queryset = Question.soft_objects.filter(assesment_linked__exact = assesment_number_to_retrieve)
+        self.assesment_number_to_retrieve = self.kwargs.get('assesmentid', None)
+        self.queryset = Question.soft_objects.filter(assesment_linked__exact = self.assesment_number_to_retrieve).order_by('pk')
         return self.queryset
     
     @method_decorator(login_decorator)
@@ -131,7 +131,8 @@ class ManageSingleAsessment(SingleTableView):
     
     def get_context_data(self, **kwargs):
         context = super(ManageSingleAsessment, self).get_context_data(**kwargs)
-        context['table_result'] =  ResultTable(Result.soft_objects.all(), prefix="1-")
+        self.result_queryset = Result.soft_objects.filter(assesment__exact = self.assesment_number_to_retrieve).order_by('pk')
+        context['table_result'] =  ResultTable(self.result_queryset)
         return context
     
 
