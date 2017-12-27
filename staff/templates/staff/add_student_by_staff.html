@@ -1,0 +1,15 @@
+
+{% extends "staff/base.html" %}
+{% block title %}   Add Student   {% endblock %}
+
+{% block content %} 
+ <h1>Add Student </h1>
+ <p>You can Add your Student Record using the following form:</p>
+ 
+ <form action="." method="post" enctype="multipart/form-data">
+     {{ add_s_form.as_p}}
+     {% csrf_token %}
+ <p><input type="submit" value="Save changes"></p>
+ </form>
+{% endblock %}
+

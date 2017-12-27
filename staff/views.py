@@ -1,4 +1,4 @@
-from django.http.response import HttpResponse
+from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required  #permission_required, resolve_url, settings, six,urlparse,user_passes_test, wraps
 from django.contrib.auth.views import PasswordChangeDoneView, PasswordChangeView, LoginView
@@ -13,8 +13,12 @@ from django.views.generic import ListView
 
 from staff.forms import StudentEditForm, StudentUserEditForm 
 from students.models import Student
+from .models import Staff
+from licenses.models import License
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 #from jedi.evaluate.context import instance
+
 
 class InstitutionStaffLoginView(LoginView):
     template_name = 'staff/login.html'
@@ -130,7 +134,8 @@ class ManageStudentView(SingleTableView, ListView):
 @login_required(login_url="/staff/login/")
 def delete_institution_staff_student(request, username):
     information = ''
-    
+    current_staff = Staff.objects.get(staffuser = request.user)
+    license_institute = License.objects.get(li_institute = current_staff.institute)
     if hasattr(request.user, 'staff'):
         if request.method == 'GET' and request.user.staff.user_type in ['staff','institution']:
             information = 'Are you sure you want to delete user {} ?'.format(str(username))
@@ -140,6 +145,8 @@ def delete_institution_staff_student(request, username):
             #student_obj = Student.objects.get(staffuser = staff_obj)
             if student_obj in staff_obj.student_set.all():
                 student_obj.deleted = 'Y'
+                license_institute.li_current_students -= 1
+                license_institute.save()
                 student_obj.save()
                 information = 'Student Deleted Successfully. '
         return render(request, 'staff/student_delete.html', {'information': [information]})
@@ -164,7 +171,7 @@ def student_edit_by_staff(request,upk):
     return render(request, 'staff/student_edit_by_staff.html', {'student_form': student_form})
 
 
-#implementing edit functionality     
+#implementing edit student functionality     
 @login_required(login_url="/staff/login/")
 def student_edit_by_staff(request,upk):
     if request.method == 'POST':
@@ -184,5 +191,33 @@ def student_edit_by_staff(request,upk):
         
     return render(request, 'staff/student_edit_by_staff.html', {'student_form': student_form,'student_user_form': student_user_form})
 
-   
+
+#implementing add student functionality
+@login_required(login_url="/staff/login/")
+def add_student_by_staff(request):
+    current_staff = Staff.objects.get(staffuser = request.user)
+    if current_staff.allowregistration==True:
+        if request.method == 'POST':
+            add_student_form = UserCreationForm(request.POST)
+    
+            #current_staff = Staff.objects.get(staffuser = request.user)
+            license_institute = License.objects.get(li_institute = current_staff.institute)
+    
+            is_allowed =   int(license_institute.li_current_students) < int(license_institute.li_max_students)
+    
+            if is_allowed and add_student_form.is_valid():
+                user=add_student_form.save()
+                student_profile=Student.objects.create(studentuser=user,staffuser=request.user.staff,deleted='N')
+                license_institute.li_current_students += 1
+                student_profile.save()
+                license_institute.save()
+                messages.add_message(request, messages.SUCCESS, 'Student Profile Added Successfully')
+            else:
+                messages.add_message(request, messages.INFO, 'Staff Limit Reached. Kindly Reach to Admin for Upgrade.')
+        else:
+            add_student_form = UserCreationForm()
+        return render(request, 'staff/add_student_by_staff.html', {'add_s_form': add_student_form})
+    else:
+        return render(request, 'staff/display_messege_staff.html')
+
     
