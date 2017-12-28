@@ -26,6 +26,8 @@ class QuestionTable(tables.Table):
     row_number = tables.Column(empty_values=(),
                                 verbose_name='No.')
     
+    delete_question = tables.TemplateColumn('<a href="{% url "staff:assesments:assessment_question_delete" questionid=record.pk %}">Delete</a>')
+    
     def __init__(self, *args, **kwargs):
         super(QuestionTable, self).__init__(*args, **kwargs)
         self.counter = itertools.count()
