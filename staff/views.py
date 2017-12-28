@@ -12,11 +12,8 @@ from institutions.forms import UserEditForm
 from django.views.generic import ListView
 
 from staff.forms import StudentEditForm, StudentUserEditForm 
-from students.models import Student
-from .models import Staff
 from licenses.models import License
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
 #from jedi.evaluate.context import instance
 
 
@@ -96,9 +93,8 @@ class PasswordChangeDoneViewForStaff(PasswordChangeDoneView):
 
 from django_tables2 import SingleTableView
 from django.utils.decorators import method_decorator
-from students.models import Student
 from staff.tables import StudentTable
-from staff.forms import EnrollStudentsForm
+from staff.forms import EnrollStudentsForm,StudentAddForm
 from staff.models import Staff
 from students.models import Student
 
@@ -198,7 +194,7 @@ def add_student_by_staff(request):
     current_staff = Staff.objects.get(staffuser = request.user)
     if current_staff.allowregistration==True:
         if request.method == 'POST':
-            add_student_form = UserCreationForm(request.POST)
+            add_student_form = StudentAddForm(request.POST)
     
             #current_staff = Staff.objects.get(staffuser = request.user)
             license_institute = License.objects.get(li_institute = current_staff.institute)
@@ -215,7 +211,7 @@ def add_student_by_staff(request):
             else:
                 messages.add_message(request, messages.INFO, 'Staff Limit Reached. Kindly Reach to Admin for Upgrade.')
         else:
-            add_student_form = UserCreationForm()
+            add_student_form = StudentAddForm()
         return render(request, 'staff/add_student_by_staff.html', {'add_s_form': add_student_form})
     else:
         return render(request, 'staff/display_messege_staff.html')
