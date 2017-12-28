@@ -2,7 +2,7 @@
 from django.shortcuts import render
 from .models import Institutions
 # Create your views here.
-from .forms import InstitutionsEditForm, UserEditForm, InstitutionLoginForm
+from .forms import InstitutionsEditForm, UserEditForm, InstitutionLoginForm,StaffCreateForm
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login     
 from django.contrib.auth.decorators import login_required  #permission_required, resolve_url, settings, six,urlparse,user_passes_test, wraps
@@ -93,7 +93,7 @@ def institute_staff_edit(request, username):
 @login_required(login_url="/institutions/login/")
 def institute_staff_create(request):
     if request.method == 'POST':
-        user_form = UserCreationForm(request.POST)
+        user_form = StaffCreateForm(request.POST)
 
         current_institute = Institutions.objects.get(user__username = request.user)
         license_institute = License.objects.get(li_institute = current_institute)
@@ -116,7 +116,7 @@ def institute_staff_create(request):
         else:
             messages.add_message(request, messages.INFO, 'Staff Limit Reached. Kindly Reach to Admin for Upgrade.')
     else:
-        user_form = UserCreationForm()
+        user_form = StaffCreateForm()
         # profile_form = StaffProfileForm()
     return render(request, 'institutions/staff_create.html', {
         'user_form': user_form

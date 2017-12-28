@@ -5,6 +5,7 @@ from staff.models import Staff
 from students.models import Student
 from tkinter import Widget
 from django.forms import widgets
+from django.contrib.auth.forms import UserCreationForm
 
 
 class StaffEditForm(forms.ModelForm):
@@ -29,7 +30,19 @@ class StudentEditForm(forms.ModelForm):
         fields = ['studentuser','staffuser']
         
 
-class StudentUserEditForm(forms.ModelForm):    
+class StudentUserEditForm(forms.ModelForm):
      class Meta:
         model = User
         fields = ['first_name','last_name','email']
+        
+        
+class StudentAddForm(UserCreationForm):
+    first_name = forms.CharField(widget=forms.TextInput,required=True)
+    last_name = forms.CharField(widget=forms.TextInput,required=True)
+    email = forms.EmailField(widget=forms.EmailInput,required=True)
+    
+    class Meta:
+        model=User
+        fields = ['username','first_name','last_name','email','password1','password2']
+        
+        
