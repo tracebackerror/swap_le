@@ -349,4 +349,21 @@ def assessment_create_by_staff(request):
         assesment_creation_form = AssessmentCreationForm(request= request)
         
     return render(request, 'assesments/assessment_create_by_staff.html', {'assessment_c_form': assesment_creation_form})
+
+
+@login_required(login_url="/staff/login/")
+def assessment_question_delete(request,questionid):
+    information = ''
+    if request.method == 'GET':
+        information = 'Are you sure you want to delete question set which id is  {} ?'.format(str(questionid))
+        
+    elif request.method == 'POST':
+        question_obj = Question.objects.get(pk=questionid)
+        if question_obj.created_by == request.user:
+            question_obj.delete(request.user)
+            information = 'Question Deleted Successfully. '
+        else:
+            information = 'You don\'t have authorized permission to delete this Question. '
+   
+    return render(request, 'assesments/assesment_question_delete.html', {'information': [information]})
     
