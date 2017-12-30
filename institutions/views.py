@@ -23,6 +23,8 @@ from django.db import transaction
 from institutions.forms import StaffProfileForm
 from django.contrib.auth.forms import UserCreationForm
 from licenses.models import License
+from django.contrib.auth.views import (PasswordResetView,PasswordResetDoneView, PasswordResetConfirmView ,PasswordResetCompleteView)
+from django.urls import reverse_lazy
 
 def institute_login(request):
     if request.method == 'POST':
@@ -226,4 +228,24 @@ class InstitutionStaffView(SingleTableView, ListView):
         return context
     '''
 
+#password reset through class based
+class InstitutionPasswordResetView(PasswordResetView):
+    template_name = 'institutions/password_reset_form.html'
+    email_template_name= 'institutions/password_reset_email.html'
+    success_url = reverse_lazy('institutions:password_reset_done')
 
+
+class InstitutionPasswordResetDoneView(PasswordResetDoneView):
+    template_name = 'institutions/password_reset_done.html'
+
+
+class InstitutionPasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = 'institutions/password_reset_confirm.html'
+    success_url = reverse_lazy('institutions:password_reset_complete')
+
+
+class InstitutionPasswordResetCompleteView(PasswordResetCompleteView):
+    template_name = 'institutions/password_reset_complete.html'
+    
+    
+    
