@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 from django.contrib.auth.views import LoginView, LogoutView, logout_then_login, PasswordChangeDoneView
-from .views import InstitutionStaffLoginView, dashboard, edit, PasswordChangeViewForStaff, PasswordChangeDoneViewForStaff, ManageStudentView, delete_institution_staff_student, student_edit_by_staff,add_student_by_staff
-
+#from .views import InstitutionStaffLoginView, dashboard, edit, PasswordChangeViewForStaff, PasswordChangeDoneViewForStaff, ManageStudentView, delete_institution_staff_student, student_edit_by_staff,add_student_by_staff
+from .views import *
 
 
 urlpatterns = [
@@ -16,4 +16,12 @@ urlpatterns = [
     url(r'^manage/student/(?P<username>\w{0,15})/delete/$', delete_institution_staff_student, name='delete_institution_staff_student'),
     url(r'^manage/', include('assesments.urls', namespace='assesments', app_name='assesments')),
     url(r'^manage/student/(?P<upk>\w{0,15})/edit/$', student_edit_by_staff, name='student_edit_by_staff'),
-    ]
+    
+#password reset through email
+    url(r'^password_reset/$',StaffPasswordResetView.as_view(),name='password_reset'),
+    url(r'^password_reset/done/$',StaffPasswordResetDoneView.as_view(),name='password_reset_done'),
+    url(r'^reset/done/$',StaffPasswordResetCompleteView.as_view(),name='password_reset_complete'),
+    url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+        StaffPasswordResetConfirmView.as_view(),name='password_reset_confirm'),    
+    
+]

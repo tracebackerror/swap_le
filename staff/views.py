@@ -14,6 +14,8 @@ from django.views.generic import ListView
 from staff.forms import StudentEditForm, StudentUserEditForm 
 from licenses.models import License
 from django.contrib.auth.models import User
+from django.contrib.auth.views import (PasswordResetView,PasswordResetDoneView, PasswordResetConfirmView ,PasswordResetCompleteView)
+from django.urls import reverse_lazy
 #from jedi.evaluate.context import instance
 
 
@@ -215,5 +217,25 @@ def add_student_by_staff(request):
         return render(request, 'staff/add_student_by_staff.html', {'add_s_form': add_student_form})
     else:
         return render(request, 'staff/display_messege_staff.html')
+    
+
+#password reset through class based
+class StaffPasswordResetView(PasswordResetView):
+    template_name = 'staff/password_reset_form.html'
+    email_template_name= 'staff/password_reset_email.html'
+    success_url = reverse_lazy('staff:password_reset_done')
+
+
+class StaffPasswordResetDoneView(PasswordResetDoneView):
+    template_name = 'staff/password_reset_done.html'
+
+
+class StaffPasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = 'staff/password_reset_confirm.html'
+    success_url = reverse_lazy('staff:password_reset_complete')
+
+
+class StaffPasswordResetCompleteView(PasswordResetCompleteView):
+    template_name = 'staff/password_reset_complete.html'
 
     

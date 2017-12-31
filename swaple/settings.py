@@ -135,17 +135,17 @@ STATIC_URL = '/static/'
 
 #password reset settings---------------------
 #for sending link to run console,only for testing
-#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
 #for sending link to the mail
-
+"""
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'myvirusking@gmail.com'
 EMAIL_HOST_PASSWORD = '74482674644'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-
+"""
 
 
