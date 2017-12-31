@@ -129,12 +129,16 @@ def institute_staff_create(request):
 @login_required(login_url="/institutions/login/")
 def institute_staff_delete(request, username):
     information = ''
+    current_staff = Staff.objects.get(staffuser = request.user)
+    license_institute = License.objects.get(li_institute = current_staff.institute)
     if request.method == 'GET' and request.user.institutions.user_type == 'institution':
 
         information = 'Are you sure you want to delete {} ?'.format(str(username))
     elif request.method == 'POST' and request.user.institutions.user_type == 'institution':
         staff_obj = Staff.objects.get(staffuser__username=username)
         staff_obj.deleted = 'Y'
+        license_institute.li_current_staff -= 1
+        license_institute.save()
         staff_obj.save()
         information = 'Staff Deleted Successfully. '
 
