@@ -9,11 +9,12 @@ from django.urls import reverse_lazy
 
 from .models import Assesment, Question
 from .tables import AssesmentTable, StudentAssesmentTable, QuestionTable, ResultTable
+from .filter import AssesmentFilter
 from students.models import Student
 from staff.models import Staff
 
 from .models import Assesment, Answer, Result
-from .forms import AssessmentForm, AssessmentCreationForm
+from .forms import AssessmentForm, AssessmentCreationForm, QuestionForm
 from django.contrib import messages
 from django.shortcuts import *
 
@@ -24,13 +25,105 @@ from utility.swaple_constants import all_question_types
 from utility import swaple_constants
 
 import logging
+from django_tables2 import SingleTableView
+from django.views.generic import ListView, DetailView, TemplateView
 
-class ManageAllAssesmentView(SingleTableView, ListView):
+from .models import Assesment, Question, Answer, Result
+from django.views import View
+from django.views.generic.detail import SingleObjectMixin
+
+from django_filters.views import   FilterView
+
+from django_tables2.views import SingleTableMixin
+from django_tables2 import SingleTableView
+from django.views.generic.base import TemplateResponseMixin
+
+
+
+
+class ManageSingleQuestionAddView(TemplateView):
+    model = Question
+    template_name = 'assesments/manage_add_single_question2.html'
+   
+    #table_data = Staff.active.filter(institute__user__exact=request.user)
+    '''
+    def get_success_url(self):
+        if 'assesmentid' in self.kwargs:
+            self.__assesmentid = self.kwargs['assesmentid']
+        else:
+            return HttpResponseForbidden()
+        return reverse_lazy('staff:assesments:assesment_manage_add_question', kwargs={'assesmentid': self.__assesmentid})
+    
+    '''
+    login_decorator = login_required(login_url=reverse_lazy('staff:login'))
+    
+
+    def get_queryset(self):
+        self.queryset = super(ManageSingleQuestionAddView, self).get_queryset()
+        return self.queryset
+
+    @method_decorator(login_decorator)
+    def dispatch(self, *args, **kwargs):
+        
+        return super(ManageSingleQuestionAddView, self).dispatch(*args, **kwargs)
+
+
+    @method_decorator(login_decorator)
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data()
+        #return render(request, self.template_name) #, content_type, status, using)("jkj") 
+        #messages.get_messages(request).used = True
+        
+        question_form = QuestionForm() 
+        context['question_form'] = question_form
+        
+        return self.render_to_response(context)
+    
+        
+    @method_decorator(login_decorator)
+    def post(self, request, *args, **kwargs):
+        if 'assesmentid' in self.kwargs:
+            assesment_to_add_question= Assesment.soft_objects.get(id = self.kwargs['assesmentid'])
+        
+        
+        question_form = QuestionForm(data = request.POST or None,
+                                     instance= Question(
+                                         created_by = request.user,
+                                         updated_by = request.user,
+                                         assesment_linked = assesment_to_add_question
+                                         ))
+        redirect_url = request.POST.get('next', None)
+        
+        
+        if not request.user.is_authenticated:
+            return HttpResponseForbidden()
+        
+        if question_form and question_form.is_valid():
+            question_form.save()
+        else:
+            question_form = QuestionForm(data = request.POST)
+            
+            
+            context = self.get_context_data()
+            context['question_form'] = question_form
+            return self.render_to_response(context)
+            
+    
+        
+    def get_context_data(self, **kwargs):
+        context = super(ManageSingleQuestionAddView, self).get_context_data(**kwargs)
+        if 'assesmentid' in self.kwargs:
+            context['assesmentid'] = self.kwargs['assesmentid']
+        return context 
+    
+    
+class ManageAllAssesmentView(SingleTableMixin, FilterView):
     model = Assesment
     context_object_name = 'table'
     paginate_by = 3
     template_name = 'assesments/manage_all_assesment.html'
     table_class = AssesmentTable
+    filterset_class = AssesmentFilter
     
     #table_data = Staff.active.filter(institute__user__exact=request.user)
 

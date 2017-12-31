@@ -1,0 +1,151 @@
+{% extends "staff/base.html" %}
+{% load literal_eval %}
+
+
+{% block title %}Add a Question{% endblock %} {% block content %}
+
+<h3>Add a Question:</h3>
+
+
+<form action="" method="POST" id="questionProcessingForm">
+
+
+
+<!-- Select Basic -->
+<div class="form-group">
+  <label class="col-md-4 " for="question_type">Question Type</label>
+  <div class="col-md-8">
+    <select id="question_type" name="question_type" class="form-control form-control-lg">
+      <option value="scq">Single Choice Question</option>
+      <option value="mcq">Multiple Choice Question</option>
+      <option value="sqa">Descriptive Question Answer</option>
+    </select>
+    <span class="help-block">Select the type of question</span>  
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="question_text">Question :</label>  
+  <div class="col-md-8">
+  <input id="question_text" name="question_text" type="text" placeholder="Assesment Question Here" class="form-control input-md" required="">
+  <span class="help-block">Add the question for the assesment in the input box</span>  
+  </div>
+</div>
+
+
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="optionone">Option One</label>  
+  <div class="col-md-8">
+  <input id="optionone" name="optionone" type="text" placeholder="Enter option one text here" class="form-control input-md">
+  <span class="help-block">Enter option one text here</span>  
+  </div>
+</div>
+
+<!-- Password input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="optiontwo">Option Two</label>
+  <div class="col-md-8">
+    <input id="optiontwo" name="optiontwo" type="text" placeholder="Enter option two text here" class="form-control input-md">
+    <span class="help-block">Enter option two text here</span>
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="optionthree">Option Three</label>  
+  <div class="col-md-8">
+  <input id="optionthree" name="optionthree" type="text" placeholder="Enter Option Three here" class="form-control input-md">
+  <span class="help-block">Enter Option Three here</span>  
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="optionfour">Option Four</label>  
+  <div class="col-md-8">
+  <input id="optionfour" name="optionfour" type="text" placeholder="Enter Option Four" class="form-control input-md">
+  <span class="help-block">Enter Option Four Text Here</span>  
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="optionfive">Option Five</label>  
+  <div class="col-md-8">
+  <input id="optionfive" name="optionfive" type="text" placeholder="Enter Option Five" class="form-control input-md">
+  <span class="help-block">Enter Option Five Text Here</span>  
+  </div>
+</div>
+
+
+<!-- Multiple Checkboxes (inline) -->
+<div class="form-group">
+	<label class="col-md-4 control-label" for="correct_option_radios">Choose Correct Option</label>
+  	<div class="col-md-8">
+		<label class="checkbox inline">
+  <input type="checkbox" id="inlineCheckbox1" value="option1" name="checkboxOption">
+  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> 
+   Option One
+</label>
+<label class="checkbox inline">
+  <input type="checkbox" id="inlineCheckbox2" value="option2" name="checkboxOption">
+  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option2"> 
+   Option Two
+</label>
+<label class="checkbox inline">
+  <input type="checkbox" id="inlineCheckbox3" value="option3" name="checkboxOption">
+  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option3"> 
+  Option Three
+</label>
+<label class="checkbox inline">  
+    <input type="checkbox" id="inlineCheckbox1" value="option1" name="checkboxOption">
+    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option4"> 
+     Option Four
+</label>
+<label class="checkbox inline">
+  <input type="checkbox" id="inlineCheckbox2" value="option2" name="checkboxOption"> 
+  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option5"> 
+  Option Five
+</label>
+
+	</div>
+</div>
+
+
+
+<!-- Textarea -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="reference_answer">Enter Reference Descriptive Answer for staff</label>
+  <div class="col-md-4">                     
+    <textarea class="form-control" id="reference_answer" name="reference_answer">This text will not be visible to student taking the assesment.</textarea>
+  </div>
+</div>
+
+<!-- Button (Double) -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="Submit"></label>
+  <div class="col-md-8">
+    <button id="Submit" name="Submit" class="btn btn-success">Submit</button>
+    <button id="reset" name="reset" class="btn btn-danger">Reset</button>
+  </div>
+</div>
+
+
+
+
+{%csrf_token%}
+
+
+</form>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+	 
+	 	
+});
+</script>
+{% endblock %}

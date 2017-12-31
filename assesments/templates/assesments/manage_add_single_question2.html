@@ -1,0 +1,24 @@
+{% extends "staff/base.html" %}
+{% load literal_eval %}
+{% load crispy_forms_tags %}
+
+{% block title %}Add a Question{% endblock %} {% block content %}
+
+<h3>Add a Question:</h3>
+
+
+{% crispy question_form question_form.helper %}
+
+{% for i in question_form.errors %}
+
+<div id='form-errors'>{{ i }}</div>
+
+{% endfor %}
+
+<script type="text/javascript">
+$(document).ready(function(){
+	 
+	 	
+});
+</script>
+{% endblock %}

@@ -6,14 +6,16 @@
 
 
 {% block content %} 
-<div class="container">
  <h1>Manage Single Assesment</h1>
+<div class="container">
+
 
  
  <div class="row">
+
  
 
-    <form class="form-inline my-2 my-lg-0">
+    <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'staff:assesments:assesment_manage_add_question' request.resolver_match.kwargs.assesmentid %}">
      
       <button class="btn btn-default " type="submit">Add Question</button>
     </form>

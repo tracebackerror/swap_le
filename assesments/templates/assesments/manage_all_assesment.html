@@ -1,14 +1,24 @@
 
 {% extends "staff/base.html" %}
 {% load render_table from django_tables2 %}
+{% load bootstrap3 %}
+
 
 {% block title %}   Manage All Assesments   {% endblock %}
+
+
 
 
 {% block content %} 
 
  <h1>Manage all the Assesments</h1>
 <div class="container-fluid"> 
+{% if filter %}
+    <form action="" method="get" class="form form-inline">
+        {% bootstrap_form filter.form layout='inline' %}
+        {% bootstrap_button 'filter' %}
+    </form>
+{% endif %}
 
  <div class="row">
   {% render_table table  %}
