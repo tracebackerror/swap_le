@@ -165,7 +165,7 @@ class ManageStudentAssesmentView(SingleTableView, ListView):
         #get_associated_staff = Staff.active.filter(staffuser=self.request.user)
         #self.queryset = Student.active.filter(staffuser = get_associated_staff)#active.filter(institute__user__exact=self.request.user)
         student_obj = Student.objects.get(studentuser = self.request.user)
-        self.queryset = Assesment.soft_objects.filter(subscriber_users = student_obj)
+        self.queryset = Assesment.soft_objects.filter(subscriber_users = student_obj, privilege='public')
         return super(ManageStudentAssesmentView, self).get_queryset()
 
     @method_decorator(login_decorator)
