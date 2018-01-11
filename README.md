@@ -1,5 +1,5 @@
 # SwapLE #
-![](https://bitbucket.org/tracebackerror/swaple/src/e8140f19e2de894d652399e4b54d4b4c06f7b1b0/swaple_logo.jpg?at=master=250x)
+![](https://bitbucket.org/tracebackerror/swaple/src/e8140f19e2de894d652399e4b54d4b4c06f7b1b0/swaple_logo.jpg)
 Swapping the traditional paperbased examination with digital solution.
 
 ### What is this repository for? ###
