@@ -143,6 +143,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
+
 #for sending link to the mail
 """
 EMAIL_USE_TLS = True

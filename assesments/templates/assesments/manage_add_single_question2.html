@@ -7,18 +7,47 @@
 <h3>Add a Question:</h3>
 
 
+{% if form_errors %}
+<div id='form-errors' >
+{{form_errors}}
+{% comment %}
+		{% for key, value in form_errors.items %} 
+  			<li>{{value}}</li>
+ 		{% endfor %}	
+{% endcomment %}
+</div>
+{% endif %}
+
 {% crispy question_form question_form.helper %}
 
-{% for i in question_form.errors %}
 
-<div id='form-errors'>{{ i }}</div>
-
-{% endfor %}
 
 <script type="text/javascript">
 $(document).ready(function(){
+	console.log("-- DOM Ready --");
+
+	setup_valid_answer_fields();
+	$("#id_question_type").change(function(){
+    	console.log("-- On Change Start- id_question_type --");
+    	setup_valid_answer_fields();
+    	console.log("-- On Change End- id_question_type --");
+    	
+	});
+
+		
 	 
-	 	
+	 function setup_valid_answer_fields() {
+	 	console.log("--Start setup_valid_answer_fields --");
+    	if( ($("#id_question_type").val() == 'scq') || ($("#id_question_type").val() == 'mcq') ) {
+	 		$("#div_id_brief_answer").hide();
+	 		$("#option-fields").show();
+	 	}else if($("#id_question_type").val() == 'sqa') {
+	 		$("#div_id_brief_answer").show();
+	 		$("#option-fields").hide();
+	 	}
+	 	console.log("--End setup_valid_answer_fields --")
+	 }
+	 console.log("-- DOM Ended --");
 });
 </script>
 {% endblock %}

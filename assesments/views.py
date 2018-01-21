@@ -101,11 +101,14 @@ class ManageSingleQuestionAddView(TemplateView):
         if question_form and question_form.is_valid():
             question_form.save()
         else:
+            context = self.get_context_data()
+            context['form_errors'] = question_form.errors
             question_form = QuestionForm(data = request.POST)
             
             
-            context = self.get_context_data()
+           
             context['question_form'] = question_form
+            
             return self.render_to_response(context)
             
     

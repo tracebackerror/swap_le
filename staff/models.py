@@ -37,6 +37,8 @@ class Staff(models.Model):
     
     class Meta:
         ordering = ('created',)
-        
+        permissions = (
+            ("is_staff", "Friendly permission description"),
+        )
     def __str__(self):
         return 'Staff - {} Of Institute - {}'.format(self.staffuser.username, self.institute.institute_name)
