@@ -121,13 +121,13 @@ class Question(MetaInformationMixin, SoftDeletionModelMixin):
     option_five = models.TextField(max_length=length_size,
                                     blank=True,
                                     null=True)
-
+    '''
     question_slug = models.SlugField(max_length=140,
                             unique=True,
                             blank=True)
     
     
-    
+    '''
    
     question_type = models.CharField(max_length=14,
                                        choices=QUESTION_TYPE_CHOICES,

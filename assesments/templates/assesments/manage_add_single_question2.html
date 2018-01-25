@@ -29,24 +29,125 @@ $(document).ready(function(){
 	setup_valid_answer_fields();
 	$("#id_question_type").change(function(){
     	console.log("-- On Change Start- id_question_type --");
-    	setup_valid_answer_fields();
+    	show_valid_answer_fields();
     	console.log("-- On Change End- id_question_type --");
     	
 	});
 
 		
-	 
 	 function setup_valid_answer_fields() {
 	 	console.log("--Start setup_valid_answer_fields --");
     	if( ($("#id_question_type").val() == 'scq') || ($("#id_question_type").val() == 'mcq') ) {
 	 		$("#div_id_brief_answer").hide();
 	 		$("#option-fields").show();
+	 		var options = ["Option One", "Option Two", "Option Three", "Option Four", "Option Five"];
+	 		
+	 		var container = $('#option-fields');
+	 		$('<div/>', {
+					    id: 'option_elements',
+					   	class: 'col-md-12 form-group'
+					}).appendTo(container);
+					
+			var val = 1;
+	 		$.each(options, function( i, name ) {
+				  	var container = $('#option_elements');
+				  	
+			   		var inputs = container.find('input');
+			   		var id = inputs.length+1;
+			
+			   		$('<input />', { type: 'checkbox', id: 'cb'+val, value: val, class:"correct_answer_options_raw col-md-2",name:"correct_answer_options_raw" }).appendTo(container);
+			   		val++;
+			   		$('<label />', { 'for': 'cb'+id, text: name , class:"col-md-2" }).appendTo(container);
+				});
+				
+			if($("#id_question_type").val() == 'scq'){
+	 			var checkbox = $("#cb1");
+	 			checkbox.replaceWith('<input type="radio" name="'+checkbox.attr('name')+'" value="'+checkbox.attr('value')+'" id="'+checkbox.attr('id')+'" class=" correct_answer_options_raw col-md-2" />');
+
+				var checkbox = $("#cb2");
+				checkbox.replaceWith('<input type="radio" name="'+checkbox.attr('name')+'" value="'+checkbox.attr('value')+'" id="'+checkbox.attr('id')+'" class="correct_answer_options_raw col-md-2" />');
+
+				var checkbox = $("#cb3");
+				checkbox.replaceWith('<input type="radio" name="'+checkbox.attr('name')+'" value="'+checkbox.attr('value')+'" id="'+checkbox.attr('id')+'" class="correct_answer_options_raw col-md-2" />');
+
+				var checkbox = $("#cb4");
+				checkbox.replaceWith('<input type="radio" name="'+checkbox.attr('name')+'" value="'+checkbox.attr('value')+'" id="'+checkbox.attr('id')+'" class="correct_answer_options_raw col-md-2" />');
+
+				var checkbox = $("#cb5");
+				checkbox.replaceWith('<input type="radio" name="'+checkbox.attr('name')+'" value="'+checkbox.attr('value')+'" id="'+checkbox.attr('id')+'" class="correct_answer_options_raw col-md-2" />');
+
+				
+	 		}
 	 	}else if($("#id_question_type").val() == 'sqa') {
 	 		$("#div_id_brief_answer").show();
 	 		$("#option-fields").hide();
 	 	}
 	 	console.log("--End setup_valid_answer_fields --")
 	 }
+	 
+	 function show_valid_answer_fields() {
+	 	console.log("--Start setup_valid_answer_fields --");
+    	if( ($("#id_question_type").val() == 'scq') || ($("#id_question_type").val() == 'mcq') ) {
+	 		$("#div_id_brief_answer").hide();
+	 		$("#option-fields").show();
+	 		
+	 		if($("#id_question_type").val() == 'scq'){
+	 			var checkbox = $("#cb1");
+	 			checkbox.replaceWith('<input type="radio" name="'+checkbox.attr('name')+'" value="'+checkbox.attr('value')+'" id="'+checkbox.attr('id')+'" class="correct_answer_options_raw col-md-2" />');
+
+				var checkbox = $("#cb2");
+				checkbox.replaceWith('<input type="radio" name="'+checkbox.attr('name')+'" value="'+checkbox.attr('value')+'" id="'+checkbox.attr('id')+'" class="correct_answer_options_raw col-md-2" />');
+
+				var checkbox = $("#cb3");
+				checkbox.replaceWith('<input type="radio" name="'+checkbox.attr('name')+'" value="'+checkbox.attr('value')+'" id="'+checkbox.attr('id')+'" class="correct_answer_options_raw col-md-2" />');
+
+				var checkbox = $("#cb4");
+				checkbox.replaceWith('<input type="radio" name="'+checkbox.attr('name')+'" value="'+checkbox.attr('value')+'" id="'+checkbox.attr('id')+'" class="correct_answer_options_raw col-md-2" />');
+
+				var checkbox = $("#cb5");
+				checkbox.replaceWith('<input type="radio" name="'+checkbox.attr('name')+'" value="'+checkbox.attr('value')+'" id="'+checkbox.attr('id')+'" class="correct_answer_options_raw col-md-2" />');
+
+				
+	 		}else if ($("#id_question_type").val() == 'mcq'){
+	 			var radio = $("#cb1");
+				radio.replaceWith('<input type="checkbox" name="'+radio.attr('name')+'" value="'+radio.attr('value')+'" id="'+radio.attr('id')+'" class="correct_answer_options_raw col-md-2" />');
+				
+				var radio = $("#cb2");
+				radio.replaceWith('<input type="checkbox" name="'+radio.attr('name')+'" value="'+radio.attr('value')+'" id="'+radio.attr('id')+'" class="correct_answer_options_raw col-md-2" />');
+				
+				var radio = $("#cb3");
+				radio.replaceWith('<input type="checkbox" name="'+radio.attr('name')+'" value="'+radio.attr('value')+'" id="'+radio.attr('id')+'" class="correct_answer_options_raw col-md-2" />');
+				
+				var radio = $("#cb4");
+				radio.replaceWith('<input type="checkbox" name="'+radio.attr('name')+'" value="'+radio.attr('value')+'" id="'+radio.attr('id')+'" class="correct_answer_options_raw col-md-2" />');
+				
+				var radio = $("#cb5");
+				radio.replaceWith('<input type="checkbox" name="'+radio.attr('name')+'" value="'+radio.attr('value')+'" id="'+radio.attr('id')+'" class="correct_answer_options_raw col-md-2" />');
+				
+	 		}
+	 	}else if($("#id_question_type").val() == 'sqa') {
+	 		$("#div_id_brief_answer").show();
+	 		$("#option-fields").hide();
+	 	}
+	 	console.log("--End setup_valid_answer_fields --")
+	 }
+	 
+	 function addCheckbox(name) {
+   		var container = $('#option-fields');
+   		var inputs = container.find('input');
+   		var id = inputs.length+1;
+
+   		$('<input />', { type: 'checkbox', id: 'cb'+id, value: name }).appendTo(container);
+   		$('<label />', { 'for': 'cb'+id, text: name }).appendTo(container);
+	}
+
+	$('#action_question_add').on('submit', function() {
+        var checkedVals = $('.correct_answer_options_raw:checked').map(function() {
+                            return this.value;
+                            }).get();
+        var finalOptedVal = checkedVals.join("-");
+        $("#id_correct_options").val(finalOptedVal);
+	});
 	 console.log("-- DOM Ended --");
 });
 </script>

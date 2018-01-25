@@ -9,6 +9,10 @@ class ResultTable(tables.Table):
     row_number = tables.Column(empty_values=(),
                                 verbose_name='No.')
     
+    review_sqa = tables.TemplateColumn('<a href="{% url "staff:assesments:assessment_question_delete" questionid=record.pk %}">Review Descriptive Answer</a>')
+    result_report = tables.TemplateColumn('<a href="{% url "staff:assesments:assessment_question_delete" questionid=record.pk %}">Result Report</a>')
+    
+    
     def __init__(self, *args, **kwargs):
         super(ResultTable, self).__init__(*args, **kwargs)
         self.counter = itertools.count()

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django_tables2 import SingleTableView
 from django.utils.decorators import method_decorator
 from students.models import Student
@@ -100,6 +100,8 @@ class ManageSingleQuestionAddView(TemplateView):
         
         if question_form and question_form.is_valid():
             question_form.save()
+            messages.success(request, 'Question Has Been Added to Assesment.')
+            return redirect('staff:assesments:assessment_manage_by_staff', self.kwargs['assesmentid'])
         else:
             context = self.get_context_data()
             context['form_errors'] = question_form.errors
@@ -109,7 +111,7 @@ class ManageSingleQuestionAddView(TemplateView):
            
             context['question_form'] = question_form
             
-            return self.render_to_response(context)
+        return self.render_to_response(context)
             
     
         
