@@ -324,7 +324,11 @@ class ProcesStudentAssesmentView(DetailView):
                             selected_answer = self.request.POST.getlist('answer')
                             get_the_answer_obj.opted_choice = selected_answer
                             # Here we need to add code for checking and setting the marks from question_obj
-                            get_the_answer_obj.alloted_marks = 0
+                            option_selected = "-".join(selected_answer)
+                            if option_selected == question_obj[0].correct_options:
+                                get_the_answer_obj.alloted_marks = question_obj[0].max_marks
+                            else:
+                                get_the_answer_obj.alloted_marks = 0
                             get_the_answer_obj.save()
                         elif question_type == swaple_constants.SQA:
                             written_answer= self.request.POST.get('answer')
