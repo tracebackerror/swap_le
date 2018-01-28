@@ -1,0 +1,37 @@
+{% extends "staff/base.html" %}
+{% load literal_eval %}
+{% load crispy_forms_tags %}
+
+
+
+{% block title %}  Review Descriptive Question {% endblock %}
+
+
+{% block content %} 
+ <h1>Review Descriptive Question</h1>
+ <p>
+
+ {% if information %}  <ul class="information">    {% for message in information %}      <li class="warning">        {{ message|safe }}          <a href="#" class="close"></a>      </li>    {% endfor %}  </ul> {% endif %}
+
+
+ </p>
+
+
+{% if form_errors %}
+<div id='form-errors' >
+{{form_errors}}
+{% comment %}
+		{% for key, value in form_errors.items %} 
+  			<li>{{value}}</li>
+ 		{% endfor %}	
+{% endcomment %}
+</div>
+{% endif %}
+
+
+{% crispy answer_formset %}
+
+
+
+
+{% endblock %}

@@ -182,12 +182,13 @@ class Result(MetaInformationMixin, SoftDeletionModelMixin):
    
 
 class Answer(MetaInformationMixin, SoftDeletionModelMixin):
+    '''
     QUESTION_TYPE_CHOICES = (
         ('mcq', 'Multiple Choice'),
         ('scq', 'Single Choice'),
         ('sqa', 'Text Answer'),
         )
-    
+    '''
     #objects = models.Manager()  # The Default Manager
     #active = AssesmentManager()  # Our custom manager
 

@@ -14,7 +14,7 @@ from students.models import Student
 from staff.models import Staff
 
 from .models import Assesment, Answer, Result
-from .forms import AssessmentForm, AssessmentCreationForm, QuestionForm
+from .forms import AssessmentForm, AssessmentCreationForm, QuestionForm, ReviewSqaAnswerForm, ReviewSqaFormSet
 from django.contrib import messages
 from django.shortcuts import *
 
@@ -39,6 +39,81 @@ from django_tables2 import SingleTableView
 from django.views.generic.base import TemplateResponseMixin
 
 
+
+class ReviewAllSqaView(TemplateView):
+    model = Answer
+    template_name = 'assesments/review_all_sqa.html'
+    login_decorator = login_required(login_url=reverse_lazy('staff:login'))
+    
+
+    def get_queryset(self):
+        self.queryset = super(ReviewAllSqaView, self).get_queryset()
+        return self.queryset
+
+    @method_decorator(login_decorator)
+    def dispatch(self, *args, **kwargs):
+        return super(ReviewAllSqaView, self).dispatch(*args, **kwargs)
+
+
+    @method_decorator(login_decorator)
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data()
+        #return render(request, self.template_name) #, content_type, status, using)("jkj") 
+        #messages.get_messages(request).used = True
+        
+        
+        associated_answer_obj = Answer.objects.filter(for_result__assesment__id = self.kwargs['assesmentid'], for_question__question_type = 'sqa')
+        answer_formset = ReviewSqaFormSet(queryset=associated_answer_obj)
+        '''
+        answer_forms = []
+        for i in associated_answer_obj:
+            answer_forms.append(ReviewSqaAnswerForm(instance = i) )
+        
+        
+        context['answer_forms'] = answer_forms
+        '''
+        context['answer_formset'] = answer_formset
+        
+        return self.render_to_response(context)
+    
+        
+    @method_decorator(login_decorator)
+    def post(self, request, *args, **kwargs):
+        if 'assesmentid' in self.kwargs:
+            assesment_to_add_question= Assesment.soft_objects.get(id = self.kwargs['assesmentid'])
+        
+        
+        question_form = QuestionForm(data = request.POST or None,
+                                     instance= Question(
+                                         created_by = request.user,
+                                         updated_by = request.user,
+                                         assesment_linked = assesment_to_add_question
+                                         ))
+        redirect_url = request.POST.get('next', None)
+        
+        
+        if not request.user.is_authenticated:
+            return HttpResponseForbidden()
+        
+        if question_form and question_form.is_valid():
+            question_form.save()
+            messages.success(request, 'Question Has Been Added to Assesment.')
+            return redirect('staff:assesments:assessment_manage_by_staff', self.kwargs['assesmentid'])
+        else:
+            context = self.get_context_data()
+            context['form_errors'] = question_form.errors
+            question_form = QuestionForm(data = request.POST)
+            context['question_form'] = question_form
+        return self.render_to_response(context)
+
+    def get_context_data(self, **kwargs):
+        context = super(ReviewAllSqaView, self).get_context_data(**kwargs)
+        if 'assesmentid' in self.kwargs:
+            context['assesmentid'] = self.kwargs['assesmentid']
+        return context 
+    
+    
+    
 
 
 class ManageSingleQuestionAddView(TemplateView):
@@ -230,7 +305,7 @@ class ManageSingleAsessment(SingleTableView):
     def get_context_data(self, **kwargs):
         context = super(ManageSingleAsessment, self).get_context_data(**kwargs)
         self.result_queryset = Result.soft_objects.filter(assesment__exact = self.assesment_number_to_retrieve).order_by('pk')
-        context['table_result'] =  ResultTable(self.result_queryset)
+        context['table_result'] =  ResultTable(self.result_queryset, assesmentid=self.kwargs['assesmentid'])
         return context
     
 

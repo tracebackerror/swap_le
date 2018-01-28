@@ -1,8 +1,9 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Assesment, Question
+from .models import Assesment, Question, Answer
 
 from students.models import Student
+from django.forms.models import modelformset_factory
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field, Fieldset, Reset
@@ -18,7 +19,7 @@ class QuestionForm(forms.ModelForm):
         self.helper.form_method = 'post'
         self.helper.form_action = '.'
         self.helper.form_id = 'action_question_add'
-        self.helper.label_class = 'col-lg-2'
+        self.helper.label_class = 'col-lg-4'
         self.helper.field_class = 'col-lg-8'
         self.helper.form_show_errors = True
         self.helper.form_error_title = "error of form"
@@ -58,8 +59,35 @@ class QuestionForm(forms.ModelForm):
         exclude = ['deleted_by','deleted_at', 'created_by', 'updated_by', 'assesment_linked']
     
     
+
     
-        
+    
+
+
+class ReviewSqaAnswerForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ReviewSqaAnswerForm, self).__init__(*args, **kwargs)
+        self.fields['question_text']=forms.ModelChoiceField(queryset=Question.objects.filter(question_text="sdf"))
+        '''
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.form_action = '.'
+        '''
+    class Meta:
+        model   = Answer
+        fields  = ['for_question',]
+        exclude = ['deleted_by','deleted_at', 'created_by', 'updated_by','opted_choice','for_result']
+
+
+ReviewSqaFormSetBase = modelformset_factory(Answer,extra=0,form=ReviewSqaAnswerForm)
+
+class ReviewSqaFormSet(ReviewSqaFormSetBase):
+  
+  def add_fields(self, form, index):
+    super(ReviewSqaFormSet, self).add_fields(form, index)
+    #form.fields['is_checked'] = forms.BooleanField(required=False)
+    #form.fields['somefield'].widget.attrs['class'] = 'somefieldclass'
+            
 class AssessmentForm(forms.ModelForm):
     """
     header = forms.CharField(widget=forms.TextInput(
