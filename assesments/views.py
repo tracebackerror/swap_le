@@ -14,7 +14,7 @@ from students.models import Student
 from staff.models import Staff
 
 from .models import Assesment, Answer, Result
-from .forms import AssessmentForm, AssessmentCreationForm, QuestionForm, ReviewSqaAnswerForm, ReviewSqaFormSet
+from .forms import AssessmentForm, AssessmentCreationForm, QuestionForm, ReviewSqaAnswerForm, ReviewSqaFormSet, ReviewSqaFormSetHelper
 from django.contrib import messages
 from django.shortcuts import *
 
@@ -64,6 +64,8 @@ class ReviewAllSqaView(TemplateView):
         
         associated_answer_obj = Answer.objects.filter(for_result__assesment__id = self.kwargs['assesmentid'], for_question__question_type = 'sqa')
         answer_formset = ReviewSqaFormSet(queryset=associated_answer_obj)
+        answer_formset_helper = ReviewSqaFormSetHelper()
+        
         '''
         answer_forms = []
         for i in associated_answer_obj:
@@ -73,37 +75,31 @@ class ReviewAllSqaView(TemplateView):
         context['answer_forms'] = answer_forms
         '''
         context['answer_formset'] = answer_formset
+        context['answer_formset_helper'] = answer_formset_helper
         
         return self.render_to_response(context)
     
         
     @method_decorator(login_decorator)
     def post(self, request, *args, **kwargs):
-        if 'assesmentid' in self.kwargs:
-            assesment_to_add_question= Assesment.soft_objects.get(id = self.kwargs['assesmentid'])
-        
-        
-        question_form = QuestionForm(data = request.POST or None,
-                                     instance= Question(
-                                         created_by = request.user,
-                                         updated_by = request.user,
-                                         assesment_linked = assesment_to_add_question
-                                         ))
-        redirect_url = request.POST.get('next', None)
-        
-        
         if not request.user.is_authenticated:
             return HttpResponseForbidden()
         
-        if question_form and question_form.is_valid():
-            question_form.save()
-            messages.success(request, 'Question Has Been Added to Assesment.')
-            return redirect('staff:assesments:assessment_manage_by_staff', self.kwargs['assesmentid'])
-        else:
-            context = self.get_context_data()
-            context['form_errors'] = question_form.errors
-            question_form = QuestionForm(data = request.POST)
-            context['question_form'] = question_form
+        answer_formset = ReviewSqaFormSet(request.POST or None)
+        answer_formset.save()
+        
+        associated_answer_obj = Answer.objects.filter(for_result__assesment__id = self.kwargs['assesmentid'], for_question__question_type = 'sqa')
+        answer_formset = ReviewSqaFormSet(initial = request.POST, queryset=associated_answer_obj)
+        answer_formset_helper = ReviewSqaFormSetHelper()
+        messages.success(request,"Upated")
+        
+        redirect_url = request.POST.get('next', None)
+        
+        
+        context = self.get_context_data()
+        context['answer_formset'] = answer_formset
+        context['answer_formset_helper'] = answer_formset_helper
+        
         return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
