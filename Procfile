@@ -1,1 +1,1 @@
-web: gunicorn testproject.wsgi --log-file -
+web: gunicorn swaple.wsgi --log-file -
