@@ -3,7 +3,7 @@ from django import forms
 from django.contrib.auth.models import User
 from staff.models import Staff
 from students.models import Student
-from tkinter import Widget
+
 from django.forms import widgets
 from django.contrib.auth.forms import UserCreationForm
 
