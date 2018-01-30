@@ -4,6 +4,9 @@
 # -----
 # You can specify a custom docker image from Docker Hub as your build environment.
 image: python:3.5.1
+clone:
+  depth: 5       # include the last five commits
+ 
 
 pipelines:
   default:
@@ -14,3 +17,4 @@ pipelines:
           - pip install django
           - pip install django_tables2
           - pip install django_polymorphic
+          - pip install -r requirements/requirements.txt
