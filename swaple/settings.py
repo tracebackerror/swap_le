@@ -27,6 +27,7 @@ DEBUG = False
 
 ALLOWED_HOSTS = [
   'swaple-shivam9172873031.codeanyapp.com',
+  'swaple.herokuapp.com',
   '127.0.0.1',
   'localhost',
   
