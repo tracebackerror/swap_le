@@ -12,6 +12,9 @@ from institutions.forms import UserEditForm
 from django.views.generic import ListView
 from django.contrib.auth import login as auth_login
 
+from django.contrib.auth.views import (PasswordResetView,PasswordResetDoneView, PasswordResetConfirmView ,PasswordResetCompleteView)
+from django.urls import reverse_lazy
+
 
 from .models import Student
 
@@ -51,3 +54,25 @@ def dashboard(request):
     from django.http.response import HttpResponse
     return HttpResponse('sddf')
     '''
+
+
+
+#password reset through class based
+class StudentPasswordResetView(PasswordResetView):
+    template_name = 'student/password_reset_form.html'
+    email_template_name= 'student/password_reset_email.html'
+    success_url = reverse_lazy('student:password_reset_done')
+
+
+class StudentPasswordResetDoneView(PasswordResetDoneView):
+    template_name = 'student/password_reset_done.html'
+
+
+class StudentPasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = 'student/password_reset_confirm.html'
+    success_url = reverse_lazy('student:password_reset_complete')
+
+
+class StudentPasswordResetCompleteView(PasswordResetCompleteView):
+    template_name = 'student/password_reset_complete.html'
+
