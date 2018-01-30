@@ -5,3 +5,8 @@ django-bootstrap3==9.1.0
 django-filter
 django-crispy-forms==1.7.0
 whitenoise==3.3.1
+python-decouple
+dj-database-url
+dj_database_url
+gunicorn
+psycopg2
