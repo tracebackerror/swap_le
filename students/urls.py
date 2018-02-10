@@ -1,6 +1,6 @@
 from django.conf.urls import url, include
 from django.contrib.auth.views import LoginView, LogoutView, logout_then_login, PasswordChangeDoneView
-from .views import InstitutionStudentLoginView, dashboard
+from .views import InstitutionStudentLoginView, dashboard, edit, PasswordChangeViewForStudent, PasswordChangeDoneViewForStudent
 from .views import *
 
 #, dashboard, edit, delete_institution_staff_student, PasswordChangeViewForStaff, PasswordChangeDoneViewForStaff, ManageStudentView
@@ -12,7 +12,10 @@ from .views import *
 urlpatterns = [
     url(r'^login/',  InstitutionStudentLoginView.as_view(), name='login'),
     url(r'^$', dashboard, name='dashboard'),
+    url(r'^edit/$', edit, name="edit"),
     url(r'^logout/$',  LogoutView.as_view(template_name='student/logged_out.html'), name='logout'),
+    url(r'^password-change/$',PasswordChangeViewForStudent.as_view(), name='password_change'),
+    url(r'^password-change/done/$',PasswordChangeDoneViewForStudent.as_view(), name='password_change_done'),
     url(r'^', include('assesments.urls', namespace='assesments', app_name='assesments')),
     
     #password reset through email
