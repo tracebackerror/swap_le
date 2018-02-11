@@ -76,3 +76,39 @@ class StudentPasswordResetConfirmView(PasswordResetConfirmView):
 class StudentPasswordResetCompleteView(PasswordResetCompleteView):
     template_name = 'student/password_reset_complete.html'
 
+
+@login_required(login_url="student:login")
+def edit(request):
+    if request.method == 'POST':
+        user_form = UserEditForm(instance = request.user, data=request.POST)
+
+        if user_form.is_valid():
+            user_form.save()
+            messages.add_message(request, messages.SUCCESS, 'Profile Updated Successfully')
+        else:
+            messages.add_message(request, messages.ERROR, 'Profile Failed To Update')
+    else:
+        user_form = UserEditForm(instance=request.user)
+
+    return render(request, 'student/edit.html',{  'user_form': user_form})
+
+
+
+class PasswordChangeViewForStudent(PasswordChangeView):
+    template_name = 'student/password_change.html'
+    success_url = reverse_lazy('student:password_change_done')
+    
+    @method_decorator(sensitive_post_parameters())
+    @method_decorator(csrf_protect)
+    @method_decorator(login_required(login_url=reverse_lazy('student:login')))
+    def dispatch(self, *args, **kwargs):
+        return super(PasswordChangeView, self).dispatch(*args, **kwargs)
+        
+        
+class PasswordChangeDoneViewForStudent(PasswordChangeDoneView):
+    template_name='student/password_change_done.html'
+
+    @method_decorator(login_required(login_url=reverse_lazy('student:login')))
+    def dispatch(self, *args, **kwargs):
+        return super(PasswordChangeDoneView, self).dispatch(*args, **kwargs)
+
