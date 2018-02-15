@@ -126,7 +126,17 @@
   </tbody>
   <tfoot>
   <tr>
-      <th class="col-md-1"><input type="button" class="form-control" name="saveonly" id="saveonly" value="Save"/></th>
+      <th class="col-md-1">
+							{% if all_question_to_answer.has_next %}
+								<li class="nav-item">
+								<button type="button" class=" btn btn-default" id="nextquestion" name="page" value={{ all_question_to_answer.next_page_number }}> &raquo; </button>
+								</li>
+							{% else %}
+								<li class="nav-item">
+								<button type="button" class=" btn btn-default disabled" disabled> &raquo; </button>
+								</li>
+							{% endif %}
+			</th>
       <th><input type="button" class="form-control" name="saveandnext" id="saveandnext" value="Save And Next"/></th>
     </tr>
   </tfoot>
@@ -157,15 +167,7 @@
         </li>
       {% endif %}
     {% endfor %}
-    {% if all_question_to_answer.has_next %}
-      <li class="nav-item">
-      <button type="button" class=" btn btn-default" id="nextquestion" name="page" value={{ all_question_to_answer.next_page_number }}> &raquo; </button>
-      </li>
-    {% else %}
-      <li class="nav-item">
-      <button type="button" class=" btn btn-default disabled" disabled> &raquo; </button>
-      </li>
-    {% endif %}
+    
   </ul>
 {% endif %}
 
