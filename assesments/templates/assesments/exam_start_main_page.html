@@ -40,7 +40,9 @@
 	  <tr>
         <td>
         <div class="form-group">
+				{% if question.option_one|length > 0 %}
         <input class="form-control" type="radio" name="answer" id="option1" value=1 {% if get_the_answer_obj.opted_choice.2 == 1 %} checked="checked" {% endif %}>
+				({% endif %}
         </div>
         </td>
         <td>{{ question.option_one }}</td>
@@ -48,29 +50,37 @@
       <tr>
         <td>
         <div class="form-group">
+				{% if question.option_two|length > 0 %}
         <input class="form-control" type="radio" name="answer" id="option2" value=2 {% if  get_the_answer_obj.opted_choice.2 == 2 %} checked="checked" {% endif %}></td>
-        </div>
+        {% endif %}
+				</div>
         <td>{{ question.option_two }}</td>
       </tr>
       <tr>
         <td>
         <div class="form-group">
+				{% if question.option_three|length > 0 %}
         <input class="form-control" type="radio" name="answer" id="option3" value=3 {% if get_the_answer_obj.opted_choice.2 == 3 %} checked="checked" {% endif %} ></td>
-        </div>
+        {% endif %}
+				</div>
         <td>{{ question.option_three }}</td>
       </tr>
       <tr>
         <td>
         <div class="form-group">
+				{% if question.option_four|length > 0 %}
         <input class="form-control" type="radio" name="answer" id="option4" value=4 {% if get_the_answer_obj.opted_choice.2 == 4 %} checked="checked" {% endif %} ></td>
-        </div>
+        {% endif %}
+				</div>
         <td>{{ question.option_four }}</td>
       </tr>
       <tr>
         <td>
         <div class="form-group">
+				{% if question.option_five|length > 0 %}
         <input class="form-control" type="radio" name="answer" id="option5" value=5 {% if get_the_answer_obj.opted_choice.2 == 5 %} checked="checked" {% endif %}></td>
-        </div>
+        {% endif %}
+				</div>
         <td>{{ question.option_five }}</td>
       </tr>
       {% elif question.question_type|lower == 'mcq' %}
