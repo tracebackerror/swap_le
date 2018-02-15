@@ -151,29 +151,31 @@
 							{% endif %}
 							</ul>
 			</th>
-      <th><input type="button" class="form-control" name="saveandnext" id="saveandnext" value="Save And Next"/></th>
+      <th>
+				{% if all_question_to_answer.has_other_pages %}
+					<ulclass="pagination-centered btn-toolbar" role="toolbar" aria-label="pagination_toolbar">
+
+
+						{% for i in all_question_to_answer.paginator.page_range %}
+							{% if all_question_to_answer.number == i %}
+								<li class="nav-item   active "><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+							{% else %}
+								<li class="nav-item">
+								<button type="button" class="btn btn-default consequetive_question" name="page" value={{ i }}> {{ i }} </button>
+								</li>
+							{% endif %}
+						{% endfor %}
+
+					</ul>
+				{% endif %}																					 
+			</th>
     </tr>
   </tfoot>
 </table>
 
 
 
-{% if all_question_to_answer.has_other_pages %}
-  <ul class="pagination btn-toolbar" role="toolbar" aria-label="pagination_toolbar">
-  	
-   
-    {% for i in all_question_to_answer.paginator.page_range %}
-      {% if all_question_to_answer.number == i %}
-        <li class="nav-item   active "><span>{{ i }} <span class="sr-only">(current)</span></span></li>
-      {% else %}
-        <li class="nav-item">
-        <button type="button" class="btn btn-default consequetive_question" name="page" value={{ i }}> {{ i }} </button>
-        </li>
-      {% endif %}
-    {% endfor %}
-    
-  </ul>
-{% endif %}
+
 
 
 
