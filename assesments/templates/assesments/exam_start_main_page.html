@@ -42,7 +42,7 @@
         <div class="form-group">
 				{% if question.option_one|length > 0 %}
         <input class="form-control" type="radio" name="answer" id="option1" value=1 {% if get_the_answer_obj.opted_choice.2 == 1 %} checked="checked" {% endif %}>
-				({% endif %}
+				{% endif %}
         </div>
         </td>
         <td>{{ question.option_one }}</td>
