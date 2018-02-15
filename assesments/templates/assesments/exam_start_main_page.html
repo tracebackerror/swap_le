@@ -78,37 +78,48 @@
 	  <tr>
         <td class="col-md-1">
         <div class="form-group">
+				{% if question.option_one %}
         <input class="form-control" type="checkbox" name="answer" id="option1" value=1></td>
-        </div>
+        {% endif %}
+				</div>
         <td>{{ question.option_one }}</td>
       </tr>
       <tr>
         <td>
         <div class="form-group">
+				{% if question.option_two %}
         <input class="form-control" type="checkbox" name="answer"  id="option2" value=2></td>
+				{% endif %}
         </div>
         <td>{{ question.option_two }}</td>
       </tr>
       <tr>
         <td>
         <div class="form-group">
-        <input class="form-control" type="checkbox" name="answer"  id="option3" value=3></td>
+				{% if question.option_three %}
+        <input class="form-control" type="checkbox" name="answer"  id="option3" value=3>
+				{% endif %}																					 
+				</td>
         </div>
         <td>{{ question.option_three }}</td>
       </tr>
       <tr>
         <td>
         <div class="form-group">
+				{% if question.option_four %}
         <input class="form-control" type="checkbox" name="answer"  id="option4" value=4 class="form-control" >
-        </div>
+        {% endif %}
+				</div>
         </td>
         <td>{{ question.option_four }}</td>
       </tr>
       <tr>
         <td>
         <div class="form-group">
+				{% if question.option_five %}
         <input class="form-control" type="checkbox" name="answer" class="form-control"  value=5 id="option5">
-        </div>
+        {% endif %}
+				</div>
         </td>
         <td>{{ question.option_five }}</td>
       </tr>
