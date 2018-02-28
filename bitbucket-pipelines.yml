@@ -26,7 +26,6 @@ pipelines:
           - virtualenv swapleenv
           - source swapleenv/bin/activate
           - pip install -r requirements.txt
-          - python manage.py runserver
     - step:
         name: Deploy to Production
         deployment: production
