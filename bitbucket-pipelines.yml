@@ -22,13 +22,12 @@ pipelines:
         name: Deploy to Test
         deployment: test
         script:
-          - pip install virtualenv
-          - virtualenv swapleenv
-          - source swapleenv/bin/activate
-          - pip install -r requirements.txt
+          - echo "Unit Test Checking"
+          - echo "Code Coverage Test"
     - step:
         name: Deploy to Production
         deployment: production
+        trigger: manual
         script:
           - git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git HEAD
  
