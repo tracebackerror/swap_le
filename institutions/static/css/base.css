@@ -166,7 +166,7 @@ select {
     width:324px;
 }
 
-input[type=submit], a.button {
+ a.button {
     border-radius:5px;
     background:#4dcc43;
     color:#fff;
@@ -256,4 +256,15 @@ ul#course-modules li:hover {
 .helptext {
     color:#ccc;
     padding-left:20px;
+}
+
+
+
+/* Set the fixed height of the footer here */
+#footer {
+  height: 60px;
+  background-color: #f5f5f5;
+  margin-top:50px;
+  padding-top:20px;
+  padding-bottom:20px;
 }

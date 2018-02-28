@@ -42,7 +42,7 @@ class Assesment(MetaInformationMixin, SoftDeletionModelMixin):
     
 
     total_exam_duration = models.TimeField(null=True)
-    total_question = models.IntegerField(default=10)
+    passing_marks = models.IntegerField(default=0)
     
     privilege = models.CharField(max_length=14,
                                        choices=ASSESMENT_PRIVILEGE_CHOICES,
@@ -158,19 +158,22 @@ class Result(MetaInformationMixin, SoftDeletionModelMixin):
 
     assesment = models.ForeignKey(Assesment)
     registered_user = models.ForeignKey(Student)
-    attempt_number = models.IntegerField(default=10)
+    #attempt_number = models.IntegerField(default=10) --FUTURE IMPL
     
     exam_taken_date_time = models.DateTimeField(default=timezone.now)
     
     total_question = models.IntegerField(default=0)
     total_attempted = models.IntegerField(default=0)
     
-    total_time_taken = models.TimeField(null=True)
+    #total_time_taken = models.TimeField(null=True)
     total_marks = models.IntegerField(default=0)
     obtained_marks = models.IntegerField(default=0)
     
+    publish_result = models.BooleanField(default=False)
     result_passed = models.BooleanField(default=False)
     type = models.CharField(max_length=10, default="result", editable=False)
+    
+    assesment_submitted = models.BooleanField(default=False)
     #deleted = models.CharField(max_length=1, default="N")
 
    

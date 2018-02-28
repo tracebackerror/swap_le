@@ -72,7 +72,7 @@ class AssesmentTable(tables.Table):
    
     class Meta:
         model = Assesment
-        sequence = ('row_number', 'header','brief','start_time','end_time','exam_start_type', 'total_exam_duration','total_question','privilege','is_exam_active','expired_on')
+        sequence = ('row_number', 'header','brief','start_time','end_time','exam_start_type', 'total_exam_duration','passing_marks','privilege','is_exam_active','expired_on')
         # add class="paleblue" to <table> tag 
         attrs = {'class': 'paleblue'}
         # fields = ('row_number', 'institute',)
@@ -107,7 +107,7 @@ class StudentAssesmentTable(tables.Table):
    
     class Meta:
         model = Assesment
-        sequence = ('row_number', 'header','start_time','end_time','total_exam_duration','completed','total_question','privilege','expired_on')
+        sequence = ('row_number', 'header','start_time','end_time','total_exam_duration','completed','passing_marks','privilege','expired_on')
         # add class="paleblue" to <table> tag 
         attrs = {'class': 'paleblue'}
         # fields = ('row_number', 'institute',)

@@ -4,27 +4,70 @@
 
 {% block title %}Assesment In Progress {% endblock %} {% block content %}
 
+
+
+<div class="container">
 <h3>Assesment In Progres:</h3>
 
 
-
-
-
-
-
-
 {% if user.is_authenticated and request.user.student in assesment_object.subscriber_users.all %}
+
+
+
+<table class="table table-bordered">
+	<thead>
+	<tr>
+		<td class="col-md-2">Remaining Time:</td>
+		<td class="col-md-3">Remaining Time Script</td>
+		<td class="col-md-3">
+		
+		
+		 <input type="button" name="final_submit" value="Final Submit" class="btn btn-danger" data-toggle="modal" data-target="#modalForFinalExit"/>
+
+		</td>
+	</tr>
+	</thead>
+</table>
+
+<!-- Modal -->
+
+		<div id="modalForFinalExit" class="modal fade" role="dialog">
+		  <div class="modal-dialog">
+		
+		    <!-- Modal content-->
+		    <div class="modal-content">
+		      <div class="modal-header">
+		      <h4 class="modal-title">Confirm Examination Submission</h4>
+		        <button type="button" class="close" data-dismiss="modal">&times;</button>
+		      </div>
+		      
+		      
+		      <div class="modal-body">
+		        <p>Please Click on <b><i>"Confirm Submission"</i></b> button to exit the examination.</p>
+		      </div>
+		      <div class="modal-footer">
+		      	
+			  		<form  method="post" id="assesment_submission_form" action= {% url 'student:assesments:assesment_finished_by_student' assesmentid=request.session.assesment_to_undertake %}>
+				 		{% csrf_token %}
+				      	<input type="submit" name="final_confirmed_submit" value="Confirm Submission" class="btn btn-danger" />
+				        <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+		        	</form>
+		      </div>
+		    </div>
+		
+		  </div>
+		</div>
+		
 
 <form action="{% url 'student:assesments:process_assesment' %}" method="POST" id="questionProcessingForm">
 
 
 {% if get_the_answer_obj %} 
 	{% if get_the_answer_obj.for_question.question_type|lower == "scq"  or get_the_answer_obj.for_question.question_type|lower == "mcq" %}
-		<input type="hidden" value = '{{get_the_answer_obj.opted_choice|replace:"/['\"]/_"  }}' name="selected_answer" id="selected_answer">		
+		<input type="hidden" value = '{{get_the_answer_obj.opted_choice|replace:"/['\"]/_"  }}' name="selected_answer" id="selected_answer" />		
 	{% endif %}
 		
 {% endif %}
-
 <table class="table table-bordered">
 
 
@@ -32,7 +75,7 @@
     {% for question in all_question_to_answer %}
     <input type="hidden" value={{question.pk}} name="question_id">
 	<tr>
-      <th class="col-md-1">Question :</th>
+      <th class="col-md-1">Question</th>
       <th>{{ question.question_text }}</th>
     </tr>
 	{% if question.question_type|lower == 'scq'%}
@@ -270,11 +313,9 @@ $(document).ready(function(){
 	 	}	
 	 }
 	 
-	 
-	 $('.datetime-input').datetimepicker({
-            format:'YYYY-MM-DD HH:mm:ss'
-        });
+	
 	 	
 });
 </script>
 {% endblock %}
+</div>

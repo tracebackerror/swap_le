@@ -36,8 +36,9 @@ from django_filters.views import   FilterView
 
 from django_tables2.views import SingleTableMixin
 from django_tables2 import SingleTableView
-from django.views.generic.base import TemplateResponseMixin
+from django.views.generic.base import TemplateResponseMixin, RedirectView
 
+from django.db.models import Sum
 
 
 class ReviewAllSqaView(TemplateView):
@@ -111,6 +112,64 @@ class ReviewAllSqaView(TemplateView):
     
     
 
+class GenerateAssesmentResultView(TemplateView):
+    http_method_names = [ 'post',]
+    template_name = 'assesments/review_all_sqa.html'
+    login_decorator = login_required(login_url=reverse_lazy('student:login'))
+    
+
+    def get_queryset(self):
+        self.queryset = super(GenerateAssesmentResultView, self).get_queryset()
+        return self.queryset
+
+    @method_decorator(login_decorator)
+    def dispatch(self, *args, **kwargs):
+        return super(GenerateAssesmentResultView, self).dispatch(*args, **kwargs)
+
+            
+    @method_decorator(login_decorator)
+    def post(self, request, *args, **kwargs):
+        '''
+        1. Before Submission Check Whether resultid is in loggedinuser == usersubmission
+        2. Only once submission allowed
+        3. Not allow other user exams to be submitted
+        4. Calculate Result
+        5. And pop out the assesement from student view
+        
+        
+        '''
+        assesment_to_submit = self.request.session.get('assesment_to_undertake')
+        fetch_appropriate_result = Result.soft_objects.filter(assesment__id = assesment_to_submit, registered_user = self.request.user.student)
+        
+        if fetch_appropriate_result.exists():
+            get_assesment_obj_to_update = fetch_appropriate_result[0]
+            get_assesment_obj_to_update.assesment_submitted = True
+            get_assesment_obj_to_update.total_question =  get_assesment_obj_to_update.assesment.question_set.count()
+            get_assesment_obj_to_update.total_attempted = get_assesment_obj_to_update.answer_set.all().count()
+            
+            sum_of_marks = get_assesment_obj_to_update.assesment.question_set.aggregate(sum_of_marks = Sum('max_marks'))
+            get_assesment_obj_to_update.total_marks  = sum_of_marks['sum_of_marks']
+            
+            obtained_marks_calculate = get_assesment_obj_to_update.answer_set.aggregate(answer_obtained_marks = Sum('alloted_marks'))
+            get_assesment_obj_to_update.obtained_marks = obtained_marks_calculate.get('answer_obtained_marks')
+            get_assesment_obj_to_update.result_passed = obtained_marks_calculate.get('answer_obtained_marks') > get_assesment_obj_to_update.assesment.passing_marks  
+            get_assesment_obj_to_update.save()
+            messages.success(request, 'Assesment Has Been Completed')
+            return redirect('student:dashboard')
+        else:
+            raise NotImplementedError("Implementation Is Stale")
+        
+        
+       
+        
+    def get_context_data(self, **kwargs):
+        context = super(GenerateAssesmentResultView, self).get_context_data(**kwargs)
+        if 'assesmentid' in self.kwargs:
+            context['assesmentid'] = self.kwargs['assesmentid']
+        return context 
+    
+    
+    
 
 class ManageSingleQuestionAddView(TemplateView):
     model = Question
@@ -258,7 +317,7 @@ class ManageStudentAssesmentView(SingleTableView, ListView):
         
         examid = self.request.POST.get('examid', None)
         assesment_to_undertake = Assesment.soft_objects.get(id = int(examid))
-        self.request.session['_assesment_to_undertake'] = examid    
+        self.request.session['assesment_to_undertake'] = examid    
         return render(self.request, 'assesments/exam_start_intro_page.html', {
             'assesment_object': assesment_to_undertake,
             })#, content_type='application/xhtml+xml')
@@ -336,7 +395,7 @@ class ProcesStudentAssesmentView(DetailView):
              
         if assesment_initiate_flag:
             self.request.session['_assesment_initiate_flag'] = assesment_initiate_flag
-            asses_unfiltered = self.request.session.get('_assesment_to_undertake', None)
+            asses_unfiltered = self.request.session.get('assesment_to_undertake', None)
             page_of_question = int(self.request.POST.get('nextpage', 1))
             
             if asses_unfiltered and eval(asses_unfiltered):

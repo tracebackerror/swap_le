@@ -13,7 +13,7 @@
  {{ form.as_p }}     
  {% csrf_token %}    
  <input type="hidden" name="next" value="/student/" />   
-<p><input type="submit" value="Log-in"></p>&nbsp;
+<p><input type="submit" value="Log-in" class="btn btn-danger"></p>&nbsp;
 <a href="{% url 'student:password_reset' %}">Forgot Password?</a> 
  </form>  </div> 
  {% endblock %} 
