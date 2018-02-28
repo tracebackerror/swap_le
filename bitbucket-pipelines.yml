@@ -10,10 +10,10 @@ clone:
 pipelines:
   default:
     - step:
-    	name: Build The Application
+        name: Build The Application
         caches:
           - pip
-        script: # Modify the commands below to build your repository.
+        script: 
           - pip install virtualenv
           - virtualenv swapleenv
           - source swapleenv/bin/activate
@@ -23,7 +23,6 @@ pipelines:
         deployment: test
         script:
           - python manage.py runserver
-          
      - step:
         name: Deploy to Production
         deployment: production
