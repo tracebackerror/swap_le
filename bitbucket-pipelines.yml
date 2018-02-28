@@ -18,12 +18,12 @@ pipelines:
           - virtualenv swapleenv
           - source swapleenv/bin/activate
           - pip install -r requirements.txt
-     - step:
+    - step:
         name: Deploy to Test
         deployment: test
         script:
           - python manage.py runserver
-     - step:
+    - step:
         name: Deploy to Production
         deployment: production
         script:
