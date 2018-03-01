@@ -38,8 +38,7 @@ from django_tables2.views import SingleTableMixin
 from django_tables2 import SingleTableView
 from django.views.generic.base import TemplateResponseMixin, RedirectView
 
-from django.db.models import Sum
-
+from django.db.models import Sum, Q
 
 class ReviewAllSqaView(TemplateView):
     model = Answer
@@ -236,9 +235,6 @@ class ManageSingleQuestionAddView(TemplateView):
             context = self.get_context_data()
             context['form_errors'] = question_form.errors
             question_form = QuestionForm(data = request.POST)
-            
-            
-           
             context['question_form'] = question_form
             
         return self.render_to_response(context)
@@ -300,7 +296,8 @@ class ManageStudentAssesmentView(SingleTableView, ListView):
         #get_associated_staff = Staff.active.filter(staffuser=self.request.user)
         #self.queryset = Student.active.filter(staffuser = get_associated_staff)#active.filter(institute__user__exact=self.request.user)
         student_obj = Student.objects.get(studentuser = self.request.user)
-        self.queryset = Assesment.soft_objects.filter(subscriber_users = student_obj, privilege='public', result__assesment_submitted=False)
+        
+        self.queryset = Assesment.soft_objects.filter(subscriber_users = student_obj, privilege='public').filter(Q(result__assesment_submitted=False) |  Q(result__isnull=True))
         return super(ManageStudentAssesmentView, self).get_queryset()
 
     @method_decorator(login_decorator)
