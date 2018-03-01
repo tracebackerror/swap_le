@@ -109,30 +109,14 @@ class ReviewSqaFormSetHelper(FormHelper):
         
         
 class AssessmentForm(forms.ModelForm):
-    """
-    header = forms.CharField(widget=forms.TextInput(
-        attrs={'class': 'form-control', 'placeholder': 'Header'}
-    ), required=True)
-
-    slug = forms.CharField(widget=forms.TextInput(
-        attrs={'class': 'form-control', 'placeholder': 'Slug'}
-    ), required=True)
-
-    brief = forms.CharField(widget=forms.TextInput(
-        attrs={'class': 'form-control', 'placeholder': 'Brief'}
-    ), required=True)
-    """
-    
-    start_time=forms.DateTimeField(widget=forms.DateTimeInput)
-    
-    
-    
+    start_time = forms.TimeField(widget=forms.TimeInput(format='%H:%M'), help_text="HH:MM")
+    end_time   = forms.TimeField(widget=forms.TimeInput(format='%H:%M'), help_text="HH:MM")
+    exam_date  = forms.DateField(input_formats='%Y-%m-%d',help_text="2006-10-25")
     
     class Meta:
         model = Assesment
         fields = ('__all__')
         exclude= ['deleted_by','deleted_at', 'created_by', 'updated_by']
-    
     
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop("request")
@@ -145,14 +129,23 @@ class AssessmentForm(forms.ModelForm):
         
 
 class AssessmentCreationForm(forms.ModelForm):
+    start_time = forms.TimeField(widget=forms.TimeInput(format='%H:%M'), help_text="HH:MM")
+    end_time   = forms.TimeField(widget=forms.TimeInput(format='%H:%M'), help_text="HH:MM")
+    #exam_date  = forms.DateField(widget=forms.DateInput(attrs={'id': 'myCustomId',}), input_formats='%Y-%m-%d',help_text="YYYY-MM-DD")
+    
     
     class Meta:
         model = Assesment
         fields = ('__all__')
         exclude= ['deleted_by','deleted_at', 'created_by', 'updated_by']
         widgets = {
-            'start_time': forms.DateTimeInput(attrs={'class': 'datetime-input'})
+            'exam_date': forms.DateInput(format=('%d-%m-%Y'), 
+                                             attrs={'class':'myDateClass', 
+                                            'placeholder':'Select a date'},
+                                        )
         }
+        
+       
     
     
     def __init__(self, *args, **kwargs):

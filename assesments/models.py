@@ -29,13 +29,16 @@ class Assesment(MetaInformationMixin, SoftDeletionModelMixin):
 
 
     header = models.CharField(max_length=150)
+    '''
     slug = models.SlugField(max_length=140,
                             unique=True,
                             blank=True)
+    '''
     brief = models.TextField()
-    start_time = models.DateTimeField(default=timezone.now,
-                                       verbose_name="Start Timing")
-    end_time = models.DateTimeField(default=timezone.now)
+    exam_date = models.DateField(default=timezone.now, verbose_name="Exam Date")
+    start_time = models.TimeField(default=timezone.now,
+                                    verbose_name="Start Timing")
+    end_time = models.TimeField(default=timezone.now)
     exam_start_type = models.CharField(max_length=14,
                                        choices=ASSESMENT_START_TYPE_CHOICES,
                                        default='auto')
