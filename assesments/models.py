@@ -178,7 +178,7 @@ class Result(MetaInformationMixin, SoftDeletionModelMixin):
 
    
     def __str__(self):
-        return 'Result : {}-{}-{}'.format(self.assesment,self.registered_user,self.attempt_number)
+        return 'Result : {}-{}-{}'.format(self.assesment,self.registered_user)
     
    
  
