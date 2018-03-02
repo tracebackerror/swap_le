@@ -19,16 +19,22 @@ class QuestionForm(forms.ModelForm):
         self.helper.form_method = 'post'
         self.helper.form_action = '.'
         self.helper.form_id = 'action_question_add'
-        self.helper.label_class = 'col-lg-4'
-        self.helper.field_class = 'col-lg-8'
+        self.helper.label_class = 'col-md-4'
+        self.helper.field_class = 'col-md-8'
         self.helper.form_show_errors = True
         self.helper.form_error_title = "error of form"
         self.helper.formset_error_title ="E formset"
         self.helper.layout = Layout(
+                                HTML("""
+                                        <div class="container">
+                                        <div class="col-md-12">
+                                """),
+                                    
                                 Fieldset(
                                     'Please Use the below form for adding a Question to Assesment',
                                    'question_text',
                                    'max_marks',
+                                   
                                    
                                    Field('question_type',style="height: 34px;", title="What kind of question you want to create ?", css_class="select", css_id="which_question"),
                                    
@@ -41,14 +47,28 @@ class QuestionForm(forms.ModelForm):
                                    Field('option_five',style="", title="Please Enter Option For Answer", css_class="", css_id="option_five"),
                                    
                                    Field('correct_options', type='hidden', style="", title="", css_class=""),
-                                   css_id = 'option-fields'
+                                   HTML("""
+                                        <p class="col-md-12">Please Choose The correct options</p>
+                                        """),
+                                   css_id = 'option-fields',
+                                   css_class="form-group"
                                    ),
+                                         
+                                 
                                    
                                 ),
                                  HTML("""
-                                        <p>Please click on submit, <strong>for creating the question</strong></p>
+                                        <p class="col-md-12">Please click on submit, <strong>for creating the question</strong></p>
                                 """),
-                                    FormActions(Submit('submit', 'Submit'), Reset('name', 'Reset') )
+                                
+                                Div(
+                                         Submit('submit', 'Submit', css_class='btn-primary col-md-5'),
+                                         Div(
+                                             css_class="col-md-1"
+                                             ),
+                                         Reset('name', 'Reset', css_class='btn btn-danger col-md-5'),
+                                      css_class="col-md-12 row"),
+                                HTML("""</div> </div>""")
                             )
         #self.helper.add_input()
         
@@ -109,14 +129,26 @@ class ReviewSqaFormSetHelper(FormHelper):
         
         
 class AssessmentForm(forms.ModelForm):
-    start_time = forms.TimeField(widget=forms.TimeInput(format='%H:%M'), help_text="HH:MM")
-    end_time   = forms.TimeField(widget=forms.TimeInput(format='%H:%M'), help_text="HH:MM")
-    exam_date  = forms.DateField(input_formats='%Y-%m-%d',help_text="2006-10-25")
-    
+
     class Meta:
         model = Assesment
         fields = ('__all__')
         exclude= ['deleted_by','deleted_at', 'created_by', 'updated_by']
+        widgets = {
+            'exam_date': forms.DateInput(format='%Y-%m-%d', 
+                                             attrs={'class':'myDateClass', 
+                                            'placeholder':'Select a date'},
+                                        ),
+            'start_time': forms.TimeInput(format='%H:%M', 
+                                             attrs={'class':'customTimeClass', 
+                                            'placeholder':'Select a start timing'},
+                                        ),
+            'end_time': forms.DateInput(format='%H:%M', 
+                                             attrs={'class':'customTimeClass', 
+                                            'placeholder':'Select a end timing'},
+                                        )
+                   
+        }
     
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop("request")
@@ -124,25 +156,32 @@ class AssessmentForm(forms.ModelForm):
         
         # If you pass FormHelper constructor a form instance
         # It builds a default layout with all its fields
-        self.helper = FormHelper(self)
+        #self.helper = FormHelper(self)
         self.fields["subscriber_users"].queryset = Student.active.filter(staffuser__institute = self.request.user.staff.institute)   
         
 
 class AssessmentCreationForm(forms.ModelForm):
-    start_time = forms.TimeField(widget=forms.TimeInput(format='%H:%M'), help_text="HH:MM")
-    end_time   = forms.TimeField(widget=forms.TimeInput(format='%H:%M'), help_text="HH:MM")
-    #exam_date  = forms.DateField(widget=forms.DateInput(attrs={'id': 'myCustomId',}), input_formats='%Y-%m-%d',help_text="YYYY-MM-DD")
-    
-    
+
     class Meta:
         model = Assesment
         fields = ('__all__')
         exclude= ['deleted_by','deleted_at', 'created_by', 'updated_by']
         widgets = {
-            'exam_date': forms.DateInput(format=('%d-%m-%Y'), 
+            'exam_date': forms.DateInput(format='%Y-%m-%d',
                                              attrs={'class':'myDateClass', 
                                             'placeholder':'Select a date'},
+                                         
+                                        ),
+                   
+            'start_time': forms.TimeInput(format='%H:%M', 
+                                             attrs={'class':'customTimeClass', 
+                                            'placeholder':'Select a start timing'},
+                                        ),
+            'end_time': forms.DateInput(format='%H:%M', 
+                                             attrs={'class':'customTimeClass', 
+                                            'placeholder':'Select a end timing'},
                                         )
+                   
         }
         
        

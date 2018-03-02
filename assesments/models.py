@@ -35,7 +35,7 @@ class Assesment(MetaInformationMixin, SoftDeletionModelMixin):
                             blank=True)
     '''
     brief = models.TextField()
-    exam_date = models.DateField(default=timezone.now, verbose_name="Exam Date")
+    exam_date = models.DateField( default=timezone.now, verbose_name="Exam Date")
     start_time = models.TimeField(default=timezone.now,
                                     verbose_name="Start Timing")
     end_time = models.TimeField(default=timezone.now)
@@ -80,9 +80,10 @@ class Assesment(MetaInformationMixin, SoftDeletionModelMixin):
         return unique_slug
  
     def save(self, *args, **kwargs):
+        '''
         if not self.slug:
             self.slug = self._get_unique_slug()
-        
+        ''' 
         if self.pk is None and self.created_by is None:
             self.created_by = user
         elif self.updated_by is None:

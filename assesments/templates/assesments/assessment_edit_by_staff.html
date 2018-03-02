@@ -10,21 +10,18 @@
  <p>You can Edit your Assessment using the following form:</p>
  
  <form action="." method="post" enctype="multipart/form-data">
-     {{ assessment_form|crispy}}
+     {{ assessment_form}}
      {% csrf_token %}
  <input type="submit" value="Save changes">
  </form>
  
  
 <script type="text/javascript">
-$(function () {
-    $('.datetimeinput ').datetimepicker(
-    {
-        format: 'YYYY-MM-DD HH:mm:ss',
-        sideBySide: true
-    }
-    );
-});
-</script>
+ $(document).ready(function(){	
+ 	$('.myDateClass').datetimepicker( {timepicker:false, format:"Y-m-d"});
+ 	$('.customTimeClass').datetimepicker( {datepicker:false,timepicker:true,format:"H:i"});
+ });
+ </script>
+
 
 {% endblock %}
