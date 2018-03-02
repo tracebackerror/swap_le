@@ -7,18 +7,24 @@
 
 {% block content %} 
  <h1>Edit Assessment</h1>
- <p>You can Edit your Assessment using the following form:</p>
  
+ 
+ <div class="container">
+ <p class="col-md-12">You can Edit your Assessment using the following form:</p>
  <form action="." method="post" enctype="multipart/form-data">
      {{ assessment_form}}
      {% csrf_token %}
- <input type="submit" value="Save changes">
+ <div class="col-md-12 row">
+ 	<input type="submit" class="btn btn-danger"value="Save changes">
+ 	
+ </div>
  </form>
+ </div>
  
  
 <script type="text/javascript">
  $(document).ready(function(){	
- 	$('.myDateClass').datetimepicker( {timepicker:false, format:"Y-m-d"});
+ 	$('.myDateClass, #id_expired_on_0').datetimepicker( {timepicker:false, format:"Y-m-d"});
  	$('.customTimeClass').datetimepicker( {datepicker:false,timepicker:true,format:"H:i"});
  });
  </script>

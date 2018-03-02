@@ -72,11 +72,11 @@ class AssesmentTable(tables.Table):
    
     class Meta:
         model = Assesment
-        sequence = ('row_number', 'header','brief','start_time','end_time','exam_start_type', 'total_exam_duration','passing_marks','privilege','is_exam_active','expired_on')
+        sequence = ('row_number', 'header','brief','start_time','end_time', 'total_exam_duration','passing_marks','privilege')
         # add class="paleblue" to <table> tag 
         attrs = {'class': 'paleblue'}
         # fields = ('row_number', 'institute',)
-        exclude = ('id', 'deleted_at','deleted_by','created_by','updated_by','type')
+        exclude = ('id', 'deleted_at','deleted_by','created_by','updated_by','type','exam_start_type','expired_on','is_exam_active')
 
 
 

@@ -40,6 +40,8 @@ from django.views.generic.base import TemplateResponseMixin, RedirectView
 
 from django.db.models import Sum, Q
 
+from datetime import datetime
+
 class ReviewAllSqaView(TemplateView):
     model = Answer
     template_name = 'assesments/review_all_sqa.html'
@@ -545,7 +547,9 @@ def assessment_delete_by_staff(request, assesmentid):
 def assessment_edit_by_staff(request, assesmentid):
     messages.get_messages(request).used = True
     if request.method == 'POST':
-        assesment_form = AssessmentForm(instance=Assesment.objects.get(id=assesmentid),request=request,
+        expired_on = datetime.strptime(request.POST['expired_on_0']+"/"+request.POST['expired_on_1'],'%Y-%m-%d/%H:%M:%S')
+        
+        assesment_form = AssessmentForm( instance=Assesment.objects.get(id=assesmentid),request=request,
                                  data=request.POST)
         if assesment_form.is_valid():
             assesment_form.save()
