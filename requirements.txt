@@ -10,3 +10,4 @@ dj-database-url
 dj_database_url
 gunicorn
 psycopg2
+django-suit-ckeditor==0.0.2

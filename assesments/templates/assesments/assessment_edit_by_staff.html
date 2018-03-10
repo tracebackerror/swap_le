@@ -12,20 +12,51 @@
  <div class="container">
  <p class="col-md-12">You can Edit your Assessment using the following form:</p>
  <form action="." method="post" enctype="multipart/form-data">
+ {% csrf_token %}
      {{ assessment_form}}
-     {% csrf_token %}
+     
  <div class="col-md-12 row">
  	<input type="submit" class="btn btn-danger"value="Save changes">
  	
  </div>
  </form>
  </div>
+
  
+
+  
  
 <script type="text/javascript">
  $(document).ready(function(){	
+ 	$("#id_total_exam_duration").prop("readonly", true);
+ 	
+ 	
  	$('.myDateClass, #id_expired_on_0').datetimepicker( {timepicker:false, format:"Y-m-d"});
  	$('.customTimeClass').datetimepicker( {datepicker:false,timepicker:true,format:"H:i"});
+ 	
+ 	$( "#id_start_time, #id_end_time" ).focusout(function() {
+		    start = $("#id_start_time").val();
+		    end  = $("#id_end_time").val();
+		    $( "#id_total_exam_duration" ).val( diff(start, end) );
+		    $( "#id_total_exam_duration" ).text( diff(start, end) );
+  	});
+ 	
+ 	function diff(start, end) {
+	    start = start.split(":");
+	    end = end.split(":");
+	    var startDate = new Date(0, 0, 0, start[0], start[1], 0);
+	    var endDate = new Date(0, 0, 0, end[0], end[1], 0);
+	    var diff = endDate.getTime() - startDate.getTime();
+	    var hours = Math.floor(diff / 1000 / 60 / 60);
+	    diff -= hours * 1000 * 60 * 60;
+	    var minutes = Math.floor(diff / 1000 / 60);
+	
+	    // If using time pickers with 24 hours format, add the below line get exact hours
+	    if (hours < 0)
+	       hours = hours + 24;
+	
+	    return (hours <= 9 ? "0" : "") + hours + ":" + (minutes <= 9 ? "0" : "") + minutes;
+	}
  });
  </script>
 

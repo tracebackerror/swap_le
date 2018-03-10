@@ -47,7 +47,7 @@ class StudentTable(tables.Table):
         self.counter = itertools.count()
 
     def render_row_number(self):
-        return 'Row %d' % next(self.counter)
+        return ' %d' % next(self.counter)
 
     def render_first_name(self,value):
         return value
@@ -63,5 +63,5 @@ class StudentTable(tables.Table):
         # add class="paleblue" to <table> tag 
         attrs = {'class': 'paleblue'}
         # fields = ('row_number', 'institute',)
-        exclude = ('id', 'deleted')
+        exclude = ('id', 'deleted', 'last_login')
 

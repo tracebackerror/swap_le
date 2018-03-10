@@ -556,7 +556,7 @@ def assessment_edit_by_staff(request, assesmentid):
             #messages.success(request, 'Assessment Updated Successfully')
             messages.add_message(request, messages.SUCCESS, 'Assessment Updated Successfully')
             
-    else:
+    else:   
         assesment_form = AssessmentForm(request=request,instance=Assesment.objects.get(id=assesmentid)) 
         
     return render(request, 'assesments/assessment_edit_by_staff.html', {'assessment_form': assesment_form})

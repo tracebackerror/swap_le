@@ -14,14 +14,17 @@
 		    <li> <a href ={% url "staff:add_student" %}> Add Students</a> </li>
 		    <li> <a href ={% url "staff:assesments:manage_all_assesment" %}> Manage Assessments</a> </li>
 		    <li> <a href ={% url "staff:assesments:assessment_create_by_staff" %}> Create Assessments</a> </li>
+		    {% if request.user.is_authenticated %}
+		 	<li> <a href="{% url "staff:logout" %}">Logout</a> </li>
+		 	{% endif %}    
 		 </ul>
-		 {% endif %}
+		 {% else %}
 		 
 		 <span class="user">
-		 {% if request.user.is_authenticated %}
-		 Hello {{ request.user.first_name }},      <a href="{% url "staff:logout" %}">Logout</a>    {% else %}      <a href="{% url "staff:login"  %}">Log-in</a>
+    		<a href="{% url "staff:login"  %}">Log-in</a>
+    	 </span>
 		 {% endif %}
-		 </span>
+		 
 	 </div>
  
  {% endblock %}

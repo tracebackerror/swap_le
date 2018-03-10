@@ -13,11 +13,13 @@
  
  
  {% if messages %}
- 	<ul class="messages">    
+ <div id="userDisplayMessage">
+ 	<ul class="messages" >    
  		{% for message in messages %}
- 		      <li class="{{ message.tags }}">        {{ message|safe }}          <a href="#" class="close">✖</a>      </li>
+ 		      <li class="{{ message.tags }}">        {{ message|safe }}          </li>
  		{% endfor %}
    </ul>
+ </div>
  {% endif %}
 
 
@@ -39,3 +41,21 @@
  </body>
  </html> 
  
+ 
+ <script type="text/javascript">
+ 
+ $(document).ready(function(){
+ 	var checkWhetherMessageExists = 0;
+ 	checkWhetherMessageExists = $("#userDisplayMessage").length > 0;
+ 	
+ 	if (checkWhetherMessageExists) {
+	 	$( function() {
+	    $( "#userDisplayMessage" ).dialog({
+	    	modal: true
+	    	});
+	  	} );
+  	}
+});
+
+
+ </script>
