@@ -299,7 +299,18 @@ class ManageStudentAssesmentView(SingleTableView, ListView):
         #self.queryset = Student.active.filter(staffuser = get_associated_staff)#active.filter(institute__user__exact=self.request.user)
         student_obj = Student.objects.get(studentuser = self.request.user)
         
-        self.queryset = Assesment.soft_objects.filter(subscriber_users = student_obj, privilege='public').filter(Q(result__assesment_submitted=False) |  Q(result__isnull=True))
+        #self.queryset = Assesment.soft_objects.filter(subscriber_users = student_obj, privilege='public').filter(Q(result__assesment_submitted=False) |  Q(result__isnull=True))
+        all_user_linked_assesment = Assesment.soft_objects.filter(subscriber_users = student_obj, privilege='public')
+
+        if all_user_linked_assesment.exists():
+            all_user_linked_result = Result.soft_objects.filter(registered_user=student_obj).filter(assesment_submitted=True)
+            if all_user_linked_result.exists():
+                self.queryset = all_user_linked_assesment.exclude(result = all_user_linked_result )
+            else:
+                self.queryset = all_user_linked_assesment
+        else:
+            self.queryset = all_user_linked_assesment
+    
         return super(ManageStudentAssesmentView, self).get_queryset()
 
     @method_decorator(login_decorator)
