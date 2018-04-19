@@ -191,6 +191,8 @@
   <tfoot>
   <tr>
       <th class="col-md-1">
+      
+     
 								<ul class="pagination btn-toolbar" role="toolbar" aria-label="pagination_toolbar">
 							 {% if all_question_to_answer.has_previous %}
       
@@ -200,7 +202,8 @@
 								</li>
 								{% else %}
 									<li class="nav-item">
-									<button type="button" class=" btn btn-default disabled" disabled> &laquo; </button>
+									<button type="button" class="btn btn-default consequetive_question"  name="page" value={{all_question_to_answer.paginator.num_pages }}>
+										&laquo;</button>
 									</li>
     					{% endif %}
 																								 
@@ -210,12 +213,15 @@
 								</li>
 							{% else %}
 								<li class="nav-item">
-								<button type="button" class=" btn btn-default disabled" disabled> &raquo; </button>
+								<button type="button" class=" btn btn-default" id="nextquestion" name="page" value={{ all_question_to_answer.paginator.page_range.0 }}> &raquo; </button>
+								
 								</li>
 							{% endif %}
 							</ul>
 			</th>
       <th>
+     
+      
 				{% if all_question_to_answer.has_other_pages %}
 					<ul class="pagination  btn-toolbar" role="toolbar" aria-label="pagination_toolbar">
 
@@ -233,6 +239,13 @@
 					</ul>
 				{% endif %}																					 
 			</th>
+    </tr>
+    <tr>
+    <th colspan=2>
+     <p><small>Do Not Forget To Click on <button type="button" class="btn btn-default" disabled>&laquo; </button> OR
+      <button type="button" class="btn btn-default" disabled>&raquo; </button>
+								buttons after answering each question</small></p>
+    </th>
     </tr>
   </tfoot>
 </table>
