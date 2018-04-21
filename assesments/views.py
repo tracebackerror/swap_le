@@ -281,6 +281,15 @@ class ManageAllAssesmentView(SingleTableMixin, FilterView):
         return context
 
 
+class AssessmentResultByStaff(DetailView):
+    model = Result
+    template_name = 'assesments/display_single_result.html'
+    login_decorator = login_required(login_url=reverse_lazy('staff:login'))
+    
+    @method_decorator(login_decorator)
+    def dispatch(self, *args, **kwargs):
+        return super(AssessmentResultByStaff, self).dispatch(*args, **kwargs)
+
 
 class ManageStudentAssesmentView(SingleTableView, ListView):
     model = Assesment

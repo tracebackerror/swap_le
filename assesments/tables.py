@@ -11,7 +11,7 @@ class ResultTable(tables.Table):
     
     review_sqa = tables.LinkColumn('reviewsqa', text='Review Descriptive Answer')
     #review_sqa = tables.TemplateColumn('<a href="{% url "staff:assesments:assesment_manage_review_sqa_question" assesmentid=self.request.GET.assesmentid %}">Review Descriptive Answer</a>')
-    result_report = tables.TemplateColumn('<a href="{% url "staff:assesments:assessment_question_delete" questionid=record.pk %}">Result Report</a>')
+    result_report = tables.TemplateColumn('<a href="{% url "staff:assesments:assessment_result_by_staff" pk=record.pk %}">View</a>')
     
     def render_review_sqa(self, record):
         url = reverse('staff:assesments:assesment_manage_review_sqa_question',kwargs={'assesmentid': self.assesmentid})
@@ -29,7 +29,7 @@ class ResultTable(tables.Table):
         model = Result
         attrs = {'class': 'paleblue'}
         sequence = ('row_number',)
-        exclude = ('id', 'deleted_at','deleted_by','created_by','updated_by',)
+        exclude = ('id', 'deleted_at','deleted_by','created_by','updated_by','type','assesment')
 
 class QuestionTable(tables.Table):
     row_number = tables.Column(empty_values=(),
@@ -99,6 +99,9 @@ class StudentAssesmentTable(tables.Table):
     
     def render_completed(self,value):
        return '%s' % 'True'
+   
+    def render_total_exam_duration(self,value):
+        return '%s' % value
         
     
     def render_brief(self,value):
