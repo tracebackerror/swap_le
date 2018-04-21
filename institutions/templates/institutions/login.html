@@ -1,18 +1,25 @@
 {% extends "base.html" %}
 {% block title %}Log-in{% endblock %}
 {% block content %}
-  <h1>Log-in[Institution]</h1> 
+  <h1><center>Log-in[Institution]</center></h1> 
+  <div class=" container centeredForm">
+
   {% if form.errors %} 
   <p>      Your username and password didn't match.       Please try again.    </p> 
   {% else %}    
   <p>Please, use the following form to log-in:</p> 
   {% endif %}
  <div class="login-form"> 
- <form action="{% url 'institutions:login' %}" method="post"> 
- {{ form.as_p }}     
- {% csrf_token %}    
+ <form class="login-form" action="{% url 'institutions:login' %}" method="post"> 
+ 
+ 	{{ form.as_p }}     
+ 	{% csrf_token %}
+     
  <input type="hidden" name="next" value="/institutions/" />   
  <p><input type="submit" value="Log-in" class="btn btn-danger"></p>&nbsp;
 <a href="{% url 'institutions:password_reset' %}">Forgot Password?</a> 
- </form>  </div> 
+ </form>  </div>
+ 
+ </div>
  {% endblock %} 
+ 

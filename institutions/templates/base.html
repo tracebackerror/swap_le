@@ -8,10 +8,22 @@
  <title>{% block title %}{% endblock %}</title>  
  <link href="{% static "css/base.css" %}" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'django_tables2/themes/paleblue/css/screen.css' %}" />
+  
+  <style type="text/css">
+	.centeredForm {
+	  margin: 0 auto;
+    	width:80% /* value of your choice which suits your alignment */
+	}
+	@media (max-width: 500px) {
+	  .myForm {
+	    min-width: 90%;
+	  }
+	}
+  </style>
  </head> <body>
  
  <div id="header"> 
- <span class="logo">SwapLE</span>
+ <span class="logo"><a href={% url "home:homeview"%}>SwapLE</a> </span>
  {% if request.user.is_authenticated %} 
  
 
@@ -22,19 +34,58 @@
     <li> <a href ={% url "institutions:password_change" %}> Change Password</a> </li>
     <li> <a href ={% url "institutions:manage_staff" %}> Manage Staff</a> </li>
     <li> <a href ={% url "institutions:create_institution_staff" %}> Add Staff</a> </li>
+    <li> <a href="{% url "institutions:logout" %}">Logout</a> </li>
+    
  </ul>
+ {% else %}  
+ <ul class="menu">   
+     <li> <a href="{% url "institutions:login"  %}">Log-in</a></li>
+ </ul> 
  {% endif %}  
- <span class="user">
- {% if request.user.is_authenticated %} 
- Hello {{ request.user.first_name }},      <a href="{% url "institutions:logout" %}">Logout</a>    {% else %}      <a href="{% url "institutions:login"  %}">Log-in</a>    
- {% endif %}  
- </span>
+ 
  </div>
  {% block menu %}{% endblock %}
-
- {% if messages %}  <ul class="messages">    {% for message in messages %}      <li class="{{ message.tags }}">        {{ message|safe }}          <a href="#" class="close">✖</a>      </li>    {% endfor %}  </ul> {% endif %}
+ 
+  {% if messages %}
+ <div id="userDisplayMessage">
+ 	<ul class="messages" >    
+ 		{% for message in messages %}
+ 		      <li class="{{ message.tags }}">        {{ message|safe }}          </li>
+ 		{% endfor %}
+   </ul>
+ </div>
+ {% endif %}
 
 
  <div id="content">    {% block content %}    {% endblock %}  </div>
+ 
+
+ <div id="footer">
+     {% block footer %} 
+		
+
+	  <div class="container">
+	    <p class="text-muted">Handcrafted in INDIA <a href="http://">swaple.com</a></p>
+	  </div>
+    
+     {% endblock %}
+ </div>
  </body> </html> 
  
+ <script type="text/javascript">
+ 
+ $(document).ready(function(){
+ 	var checkWhetherMessageExists = 0;
+ 	checkWhetherMessageExists = $("#userDisplayMessage").length > 0;
+ 	
+ 	if (checkWhetherMessageExists) {
+	 	$( function() {
+	    $( "#userDisplayMessage" ).dialog({
+	    	modal: true
+	    	});
+	  	} );
+  	}
+});
+
+
+ </script>
