@@ -1,26 +1,49 @@
  {% extends "master_base.html" %}
  
  {% block menu %}
- 
 	 <div id="header"> 
-		 <span class="logo">SwapLE</span>
+		 <span class="logo"><a href="{% url "home:homeview" %}">SwapLE</a></span>
 		 <ul class="menu">
+		 
 		 {% if request.user.is_authenticated %}      
+		 <li><a href="#">   Namaste, {{ request.user.first_name }}</a></li> 
 		 <li {% if section == "dashboard" %}class="selected"{% endif %}> <a href="{% url "student:dashboard" %}">My dashboard</a>      </li>
 		 <li> <a href ={% url "student:edit" %}> Edit Profile</a> </li>
 		 <li> <a href ={% url "student:password_change" %}> Change Password</a> </li>
 		 <li> <a href ={% url "student:assesments:manage_student_assesment" %}> Assesments </a> </li>
 		 <li> <a href="{% url "student:logout" %}">Logout</a> </li> 
-		 {% else %}
-		 <li><span class="user"> Hello {% if request.user.is_authenticated %}    {{ request.user.first_name }} {% else %} Student {% endif %} </span></li> 
-		 {% endif %}
+		 {% else %}   
+     		<li> <a href="{% url "student:login"  %}">Log-in</a></li> 
+ 		 {% endif %}  
 		 </ul>
 	</div>
-		 
-		 
-		
-
-
 {% endblock %}
+
+<div id="footer">
+     {% block footer %} 
+	  <div class="container">
+	    <p class="text-muted">Handcrafted in INDIA <a href="http://">swaple.com</a></p>
+	  </div>
+     {% endblock %}
+ </div>
+ </body> </html> 
+ 
+ <script type="text/javascript">
+ 
+ $(document).ready(function(){
+ 	var checkWhetherMessageExists = 0;
+ 	checkWhetherMessageExists = $("#userDisplayMessage").length > 0;
+ 	
+ 	if (checkWhetherMessageExists) {
+	 	$( function() {
+	    $( "#userDisplayMessage" ).dialog({
+	    	modal: true
+	    	});
+	  	} );
+  	}
+});
+
+
+ </script>
  
  

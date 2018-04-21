@@ -84,7 +84,7 @@ class StudentAssesmentTable(tables.Table):
     row_number = tables.Column(empty_values=(),
                                 verbose_name='No.')
     
-    take_assesment = tables.TemplateColumn('<form method="POST"  action=".">  {% csrf_token %} <input type="hidden" name="examid" value={{record.id }}> <input type="submit" value="Take Exam"> </form>')
+    take_assesment = tables.TemplateColumn('<form method="POST"  action=".">  {% csrf_token %} <input type="hidden" name="examid" value={{record.id }}> <input type="submit" class="btn btn-dark" value="Take Exam"> </form>')
     
     completed = tables.BooleanColumn(empty_values=(),
                                 verbose_name='Completed')
