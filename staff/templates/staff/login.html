@@ -2,6 +2,7 @@
 {% block title %}Log-in{% endblock %}
 {% block content %}
   <h1>Log-in[Staff]</h1> 
+  <div class="container" style="min-height:60%">
   {% if form.errors %} 
   <p>      Your username and password didn't match.       Please try again.    </p> 
   {% else %}    
@@ -15,4 +16,6 @@
  <p><input type="submit" value="Log-in" class="btn btn-danger"></p>&nbsp;
  <a href="{% url 'staff:password_reset' %}">Forgot Password?</a> 
  </form>  </div> 
+ 
+ </div>
  {% endblock %} 

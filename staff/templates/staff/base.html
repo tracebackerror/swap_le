@@ -3,7 +3,7 @@
  {% block menu %}
  
 	 <div id="header"> 
-		 <span class="logo">SwapLE</span>
+		 <span class="logo"><a href="{% url "home:homeview" %}">SwapLE</a></span>
 		 
 		 {% if request.user.is_authenticated %} 
 		 <ul class="menu">     
@@ -20,9 +20,9 @@
 		 </ul>
 		 {% else %}
 		 
-		 <span class="user">
-    		<a href="{% url "staff:login"  %}">Log-in</a>
-    	 </span>
+		 <ul class="menu">
+    		<li> <a href="{% url "staff:login"  %}">Log-in</a> </li>
+    	 </ul>
 		 {% endif %}
 		 
 	 </div>

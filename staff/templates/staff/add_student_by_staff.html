@@ -4,12 +4,15 @@
 
 {% block content %} 
  <h1>Add Student </h1>
+ 
+ <div class="container" style="min-height:60%">
  <p>You can Add your Student Record using the following form:</p>
  
  <form action="." method="post" enctype="multipart/form-data">
      {{ add_s_form.as_p}}
      {% csrf_token %}
- <p><input type="submit" value="Save changes"></p>
+ <p><input type="submit" class="btn btn-success" value="Save changes"></p>
  </form>
+ </div>
 {% endblock %}
 

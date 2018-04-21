@@ -7,13 +7,14 @@
 
 {% block content %} 
  <h1>Manage all the Students</h1>
+ <div class="container" style="min-height:60%">
  <form action="." method="post" enctype="multipart/form-data">
      {{ student_enroll_form.as_p}}
      {% csrf_token %}
  </form>
  
   {% render_table table  %}
- 
+ </div>
 {% endblock %}
 
 

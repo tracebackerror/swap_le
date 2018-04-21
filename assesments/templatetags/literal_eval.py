@@ -10,6 +10,12 @@ from django import template
 register = template.Library()
 
 @register.filter
+def replace_literals(string):
+    string =  re.sub('[u \]\'\[]',  '',string)
+    return string
+
+
+@register.filter
 def replace ( string, args ): 
     search  = args.split(args[0])[1]
     replace = args.split(args[0])[2]
