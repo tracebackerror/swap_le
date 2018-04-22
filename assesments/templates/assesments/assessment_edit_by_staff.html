@@ -25,11 +25,16 @@
  
 
   
- 
+<style type="text/css">
+	ul {
+	  list-style-type: none;
+	}
+</style>  
 <script type="text/javascript">
  $(document).ready(function(){	
  	$("#id_total_exam_duration").prop("readonly", true);
- 	
+ 	$("#id_expired_on_0").attr("placeholder", "YYYY:MM:DD");
+ 	$("#id_expired_on_1").attr("placeholder", "HH:MM:SS");
  	
  	$('.myDateClass, #id_expired_on_0').datetimepicker( {timepicker:false, format:"Y-m-d"});
  	$('.customTimeClass').datetimepicker( {datepicker:false,timepicker:true,format:"H:i"});

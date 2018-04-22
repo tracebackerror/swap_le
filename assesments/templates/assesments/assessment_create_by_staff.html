@@ -3,18 +3,57 @@
 
 {% block content %} 
  <h1>Create Assessment</h1>
- <p>You can Create your Assessment using the following form:</p>
+<div class="container" style="min-height:60%;">
+	 <p>You can Create your Assessment using the following form:</p>
+	 
+	 <form action="." method="post" enctype="multipart/form-data">
+	     {{ assessment_c_form.as_p}}
+	     {% csrf_token %}
+	 <input type="submit" class="btn btn-success" value="Save">
+	 </form>
+ </div>
  
- <form action="." method="post" enctype="multipart/form-data">
-     {{ assessment_c_form.as_p}}
-     {% csrf_token %}
- <p><input type="submit" value="Save"></p>
- </form>
  
- <script type="text/javascript">
+  
+<style type="text/css">
+	ul {
+	  list-style-type: none;
+	}
+</style> 
+<script type="text/javascript">
  $(document).ready(function(){	
- 	$('.myDateClass').datetimepicker( {timepicker:false, format:"Y-m-d"});
+ 	$("#id_total_exam_duration").prop("readonly", true);
+ 	$("#id_expired_on_0").attr("placeholder", "YYYY:MM:DD");
+ 	$("#id_expired_on_1").attr("placeholder", "HH:MM:SS");
+ 	
+ 	$('.myDateClass, #id_expired_on_0').datetimepicker( {timepicker:false, format:"Y-m-d"});
  	$('.customTimeClass').datetimepicker( {datepicker:false,timepicker:true,format:"H:i"});
+	$('#id_expired_on_1').datetimepicker( {datepicker:false,timepicker:true,format:"H:i:s"});
+	 	
+ 	$( "#id_start_time, #id_end_time" ).focusout(function() {
+		    start = $("#id_start_time").val();
+		    end  = $("#id_end_time").val();
+		    $( "#id_total_exam_duration" ).val( diff(start, end) );
+		    $( "#id_total_exam_duration" ).text( diff(start, end) );
+  	});
+ 	
+ 	function diff(start, end) {
+	    start = start.split(":");
+	    end = end.split(":");
+	    var startDate = new Date(0, 0, 0, start[0], start[1], 0);
+	    var endDate = new Date(0, 0, 0, end[0], end[1], 0);
+	    var diff = endDate.getTime() - startDate.getTime();
+	    var hours = Math.floor(diff / 1000 / 60 / 60);
+	    diff -= hours * 1000 * 60 * 60;
+	    var minutes = Math.floor(diff / 1000 / 60);
+	
+	    // If using time pickers with 24 hours format, add the below line get exact hours
+	    if (hours < 0)
+	       hours = hours + 24;
+	
+	    return (hours <= 9 ? "0" : "") + hours + ":" + (minutes <= 9 ? "0" : "") + minutes;
+	}
  });
  </script>
+ 
 {% endblock %}

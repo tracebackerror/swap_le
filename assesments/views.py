@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django_tables2 import SingleTableView
 from django.utils.decorators import method_decorator
+from django.utils import timezone
 from students.models import Student
 
 from django.views.generic import ListView, DetailView
@@ -77,6 +78,7 @@ class ReviewAllSqaView(TemplateView):
         context['answer_forms'] = answer_forms
         '''
         context['answer_formset'] = answer_formset
+        context['answer__required_review_count'] = len(associated_answer_obj)
         context['answer_formset_helper'] = answer_formset_helper
         
         return self.render_to_response(context)
@@ -310,15 +312,16 @@ class ManageStudentAssesmentView(SingleTableView, ListView):
         
         #self.queryset = Assesment.soft_objects.filter(subscriber_users = student_obj, privilege='public').filter(Q(result__assesment_submitted=False) |  Q(result__isnull=True))
         all_user_linked_assesment = Assesment.soft_objects.filter(subscriber_users = student_obj, privilege='public')
+        all_user_linked_assesment_filter_exam_date = all_user_linked_assesment.filter(exam_date__gte= timezone.datetime.now())
 
-        if all_user_linked_assesment.exists():
+        if all_user_linked_assesment_filter_exam_date.exists():
             all_user_linked_result = Result.soft_objects.filter(registered_user=student_obj).filter(assesment_submitted=True)
             if all_user_linked_result.exists():
-                self.queryset = all_user_linked_assesment.exclude(result = all_user_linked_result )
+                self.queryset = all_user_linked_assesment_filter_exam_date.exclude(result = all_user_linked_result )
             else:
-                self.queryset = all_user_linked_assesment
+                self.queryset = all_user_linked_assesment_filter_exam_date
         else:
-            self.queryset = all_user_linked_assesment
+            self.queryset = all_user_linked_assesment_filter_exam_date
     
         return super(ManageStudentAssesmentView, self).get_queryset()
 
@@ -587,6 +590,8 @@ def assessment_edit_by_staff(request, assesmentid):
 @login_required(login_url="/staff/login/")
 def assessment_create_by_staff(request):
     if request.method == 'POST':
+        expired_on = datetime.strptime(request.POST['expired_on_0']+"/"+request.POST['expired_on_1'],'%Y-%m-%d/%H:%M:%S')
+        
         assesment_creation_form = AssessmentCreationForm(request.POST, request=request)
         if assesment_creation_form.is_valid():
             

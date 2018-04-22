@@ -29,12 +29,14 @@
 {% endif %}
 
 
-
+{% if answer__required_review_count > 0%}
 
 
 {% crispy answer_formset answer_formset_helper %}
 
-
+{% else%}
+ <p class="text-center	"> {{ "The Asssesment do not contain any descriptive text for Review."|title }}  </p>
+{% endif%}
 
 
 {% endblock %}
