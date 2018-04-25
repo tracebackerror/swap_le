@@ -13,7 +13,6 @@ class Institutions(models.Model):
 	
     objects = models.Manager() # The Default Manager
     active = InstitutionsManager() # Our custom manager
-	
     INSTITUTION_STATUS_CHOICES = (
         ('inac', 'Inactive'),
         ('acti', 'Active'),
@@ -40,6 +39,9 @@ class Institutions(models.Model):
 
     class Meta:
         ordering = ('-institute_last_updated','-institute_created')
+        permissions  = (
+          ('is_institute','Its an Institute'),
+        )
     
     def __str__(self):
         detailed = "%s - %s - %s - %s" % (str(self.institute_name),str(self.institute_city),str(self.institute_state),str(self.institute_country)) 

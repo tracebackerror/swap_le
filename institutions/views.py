@@ -25,6 +25,7 @@ from django.contrib.auth.forms import UserCreationForm
 from licenses.models import License
 from django.contrib.auth.views import (PasswordResetView,PasswordResetDoneView, PasswordResetConfirmView ,PasswordResetCompleteView)
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 def institute_login(request):
     if request.method == 'POST':
@@ -176,8 +177,9 @@ class PasswordChangeDoneViewForInstitutions(PasswordChangeDoneView):
         return super(PasswordChangeDoneView, self).dispatch(*args, **kwargs)
 
 
-class InstitutionLoginView(LoginView):
+class InstitutionLoginView(PermissionRequiredMixin, LoginView):
     template_name = 'institutions/login.html'
+    permission_required = 'institutions.is_institute'
 
     def form_valid(self, form):
         """Security check complete. Log the user in."""
