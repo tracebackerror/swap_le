@@ -177,9 +177,8 @@ class PasswordChangeDoneViewForInstitutions(PasswordChangeDoneView):
         return super(PasswordChangeDoneView, self).dispatch(*args, **kwargs)
 
 
-class InstitutionLoginView(PermissionRequiredMixin, LoginView):
+class InstitutionLoginView(LoginView):
     template_name = 'institutions/login.html'
-    permission_required = 'institutions.is_institute'
 
     def form_valid(self, form):
         """Security check complete. Log the user in."""
@@ -205,12 +204,14 @@ from django_tables2 import SingleTableView
 from django.utils.decorators import method_decorator
 
 
-class InstitutionStaffView(SingleTableView, ListView):
+class InstitutionStaffView(PermissionRequiredMixin, SingleTableView, ListView):
     model = Staff
     context_object_name = 'table'
     paginate_by = 3
     template_name = 'institutions/staff.html'
     table_class = StaffTable
+    permission_required = 'institutions.is_institute'
+
     #table_data = Staff.active.filter(institute__user__exact=request.user)
 
     login_decorator = login_required(login_url="/institutions/login/")
