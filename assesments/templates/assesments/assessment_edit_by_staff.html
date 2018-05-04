@@ -33,18 +33,13 @@
 <script type="text/javascript">
  $(document).ready(function(){	
  	$("#id_total_exam_duration").prop("readonly", true);
- 	$("#id_expired_on_0").attr("placeholder", "YYYY:MM:DD");
- 	$("#id_expired_on_1").attr("placeholder", "HH:MM:SS");
+ 	$("#id_expired_on_0,#id_exam_start_date_time_0").attr("placeholder", "YYYY:MM:DD");
+ 	$("#id_expired_on_1, #id_exam_start_date_time_1").attr("placeholder", "HH:MM:SS");
  	
- 	$('.myDateClass, #id_expired_on_0').datetimepicker( {timepicker:false, format:"Y-m-d"});
+ 	$('.myDateClass, #id_expired_on_0, #id_exam_start_date_time_0').datetimepicker( {timepicker:false, format:"Y-m-d"});
  	$('.customTimeClass').datetimepicker( {datepicker:false,timepicker:true,format:"H:i"});
  	
- 	$( "#id_start_time, #id_end_time" ).focusout(function() {
-		    start = $("#id_start_time").val();
-		    end  = $("#id_end_time").val();
-		    $( "#id_total_exam_duration" ).val( diff(start, end) );
-		    $( "#id_total_exam_duration" ).text( diff(start, end) );
-  	});
+ 	
  	
  	function diff(start, end) {
 	    start = start.split(":");

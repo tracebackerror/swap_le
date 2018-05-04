@@ -23,25 +23,30 @@
 <script type="text/javascript">
  $(document).ready(function(){	
  	$("#id_total_exam_duration").prop("readonly", true);
- 	$("#id_expired_on_0").attr("placeholder", "YYYY:MM:DD");
- 	$("#id_expired_on_1").attr("placeholder", "HH:MM:SS");
+ 	$("#id_expired_on_0, #id_exam_start_date_time_0").attr("placeholder", "YYYY:MM:DD");
+ 	$("#id_expired_on_1, #id_exam_start_date_time_1").attr("placeholder", "HH:MM:SS");
  	
- 	$('.myDateClass, #id_expired_on_0').datetimepicker( {timepicker:false, format:"Y-m-d"});
+ 	$('.myDateClass, #id_expired_on_0, #id_exam_start_date_time_0').datetimepicker( {timepicker:false, format:"Y-m-d"});
  	$('.customTimeClass').datetimepicker( {datepicker:false,timepicker:true,format:"H:i"});
 	$('#id_expired_on_1').datetimepicker( {datepicker:false,timepicker:true,format:"H:i:s"});
 	 	
- 	$( "#id_start_time, #id_end_time" ).focusout(function() {
-		    start = $("#id_start_time").val();
-		    end  = $("#id_end_time").val();
-		    $( "#id_total_exam_duration" ).val( diff(start, end) );
-		    $( "#id_total_exam_duration" ).text( diff(start, end) );
+ 	$( "#id_exam_start_date_time_1, #id_expired_on_1, #id_expired_on_0, #id_exam_start_date_time_0" ).focusout(function() {
+		    start = $("#id_exam_start_date_time_1").val();
+		    end  = $("#id_expired_on_1").val();
+            start_date = $("#id_exam_start_date_time_0").val();
+            end_date = $("#id_expired_on_0").val();
+		    $( "#id_total_exam_duration" ).val( diff(start, end, start_date, end_date) );
+		    $( "#id_total_exam_duration" ).text( diff(start, end, start_date, end_date) );
   	});
  	
- 	function diff(start, end) {
+ 	function diff(start, end, start_date, end_date) {
 	    start = start.split(":");
 	    end = end.split(":");
-	    var startDate = new Date(0, 0, 0, start[0], start[1], 0);
-	    var endDate = new Date(0, 0, 0, end[0], end[1], 0);
+        start_date = start_date.split("-");
+	    end_date = end_date.split("-");
+        
+	    var startDate = new Date(start_date[0], start_date[1], start_date[2], start[0], start[1], 0);
+	    var endDate = new Date(end_date[0], end_date[1], end_date[2], end[0], end[1], 0);
 	    var diff = endDate.getTime() - startDate.getTime();
 	    var hours = Math.floor(diff / 1000 / 60 / 60);
 	    diff -= hours * 1000 * 60 * 60;

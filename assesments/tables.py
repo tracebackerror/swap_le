@@ -72,7 +72,7 @@ class AssesmentTable(tables.Table):
    
     class Meta:
         model = Assesment
-        sequence = ('row_number', 'header','brief','start_time','end_time', 'total_exam_duration','passing_marks','privilege')
+        sequence = ('row_number', 'header','brief','exam_start_date_time', 'passing_marks','privilege')
         # add class="paleblue" to <table> tag 
         attrs = {'class': 'paleblue'}
         # fields = ('row_number', 'institute',)
@@ -99,10 +99,10 @@ class StudentAssesmentTable(tables.Table):
     
     def render_completed(self,value):
        return '%s' % 'True'
-   
+    '''
     def render_total_exam_duration(self,value):
         return '%s' % value
-        
+    '''    
     
     def render_brief(self,value):
         return (value[:75] + '..') if len(value) > 75 else value
@@ -110,7 +110,7 @@ class StudentAssesmentTable(tables.Table):
    
     class Meta:
         model = Assesment
-        sequence = ('row_number', 'header','start_time','end_time','total_exam_duration','completed','passing_marks','privilege','expired_on')
+        sequence = ('row_number', 'header','exam_start_date_time','completed','passing_marks','privilege','expired_on')
         # add class="paleblue" to <table> tag 
         attrs = {'class': 'paleblue'}
         # fields = ('row_number', 'institute',)

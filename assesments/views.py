@@ -315,7 +315,7 @@ class ManageStudentAssesmentView(SingleTableView, ListView):
         
         #self.queryset = Assesment.soft_objects.filter(subscriber_users = student_obj, privilege='public').filter(Q(result__assesment_submitted=False) |  Q(result__isnull=True))
         all_user_linked_assesment = Assesment.soft_objects.filter(subscriber_users = student_obj, privilege='public')
-        all_user_linked_assesment_filter_exam_date = all_user_linked_assesment.filter(exam_date__gte= timezone.datetime.now())
+        all_user_linked_assesment_filter_exam_date = all_user_linked_assesment.filter(exam_start_date_time__gte= timezone.datetime.now())
 
         if all_user_linked_assesment_filter_exam_date.exists():
             all_user_linked_result = Result.soft_objects.filter(registered_user=student_obj).filter(assesment_submitted=True)
@@ -574,11 +574,19 @@ def assessment_edit_by_staff(request, assesmentid):
     messages.get_messages(request).used = True
     if request.method == 'POST':
         expired_on = datetime.strptime(request.POST['expired_on_0']+"/"+request.POST['expired_on_1'],'%Y-%m-%d/%H:%M:%S')
+        exam_start_date_time = datetime.strptime(request.POST['exam_start_date_time_0']+"/"+request.POST['exam_start_date_time_1'],'%Y-%m-%d/%H:%M:%S')
+        total_exam_duration_val = str(expired_on - exam_start_date_time)
         
-        assesment_form = AssessmentForm( instance=Assesment.objects.get(id=assesmentid),request=request,
+        asses_obj = Assesment.objects.get(id=assesmentid)
+        
+        
+        assesment_form = AssessmentForm( instance=asses_obj, request=request,
                                  data=request.POST)
+        
+        
         if assesment_form.is_valid():
             assesment_form.save()
+            
             #messages.success(request, 'Assessment Updated Successfully')
             messages.add_message(request, messages.SUCCESS, 'Assessment Updated Successfully')
             
@@ -595,11 +603,14 @@ def assessment_edit_by_staff(request, assesmentid):
 def assessment_create_by_staff(request):
     if request.method == 'POST':
         expired_on = datetime.strptime(request.POST['expired_on_0']+"/"+request.POST['expired_on_1'],'%Y-%m-%d/%H:%M:%S')
+        exam_start_date_time = datetime.strptime(request.POST['exam_start_date_time_0']+"/"+request.POST['exam_start_date_time_1'],'%Y-%m-%d/%H:%M:%S')
+        total_exam_duration = expired_on - exam_start_date_time
         
         assesment_creation_form = AssessmentCreationForm(request.POST, request=request)
         if assesment_creation_form.is_valid():
             
             saved_new_assesment = assesment_creation_form.save(commit=False)
+            #saved_new_assesment.total_exam_duration = str(total_exam_duration)#.strftime('%Y-%m-%d/%H:%M:%S')
             saved_new_assesment.created_by = request.user
             saved_new_assesment.updated_by = request.user
             saved_new_assesment.save()

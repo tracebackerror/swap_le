@@ -4,6 +4,8 @@ from django.utils import timezone
 
 from utility.mixin import MetaInformationMixin, SoftDeletionModelMixin
 from students.models import Student
+from datetime import datetime, timedelta
+
 
 
 class AssesmentManager(models.Manager):
@@ -35,16 +37,14 @@ class Assesment(MetaInformationMixin, SoftDeletionModelMixin):
                             blank=True)
     '''
     brief = models.TextField()
-    exam_date = models.DateField( default=timezone.now, verbose_name="Exam Date")
-    start_time = models.TimeField(default=timezone.now,
-                                    verbose_name="Start Timing")
-    end_time = models.TimeField(default=timezone.now)
+    exam_start_date_time = models.DateTimeField(default=datetime.now)
+    
     exam_start_type = models.CharField(max_length=14,
                                        choices=ASSESMENT_START_TYPE_CHOICES,
                                        default='auto')
     
 
-    total_exam_duration = models.TimeField(null=True)
+    
     passing_marks = models.IntegerField(default=0)
     
     privilege = models.CharField(max_length=14,
@@ -53,7 +53,7 @@ class Assesment(MetaInformationMixin, SoftDeletionModelMixin):
     
    
     is_exam_active = models.BooleanField(default=True)
-    expired_on = models.DateTimeField()
+    expired_on = models.DateTimeField(default=datetime.now)
     
     
     

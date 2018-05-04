@@ -136,10 +136,19 @@ class AssessmentForm(forms.ModelForm):
                                                           attrs={'class':'form-control'}),
                                                           
                                )
+                               
+    exam_start_date_time = forms.SplitDateTimeField(input_date_formats=['%Y-%m-%d'],
+                               input_time_formats=['%H:%M:%S'], 
+                               widget=forms.SplitDateTimeWidget(date_format='%Y-%m-%d',
+                                                          time_format='%H:%M:%S',
+                                                          attrs={'class':'form-control'}),
+                                                          
+                               )
     
     
     subscriber_users = forms.ModelMultipleChoiceField(queryset = Student.objects.filter(id=1),
                                                       widget=forms.CheckboxSelectMultiple())
+    
     
     class Meta:
         model = Assesment
@@ -156,22 +165,7 @@ class AssessmentForm(forms.ModelForm):
             'brief': forms.Textarea(
                                        attrs={'class':'form-control'}
                                     ),
-            'exam_date': forms.DateInput(format='%Y-%m-%d', 
-                                             attrs={'class':'myDateClass form-control', 
-                                            'placeholder':'Select a date',
-                                            },
-                                        ),
-            'start_time': forms.TimeInput(format='%H:%M', 
-                                             attrs={'class':'customTimeClass form-control', 
-                                            'placeholder':'Enter a start timing in HH:MM'},
-                                        ),
             
-            'end_time': forms.DateInput(format='%H:%M', 
-                                             attrs={'class':'customTimeClass form-control', 
-                                            'placeholder':'Enter a end timing in HH:MM'},
-                                        ),
-            
-
             'passing_marks'         : forms.NumberInput(attrs={'class':'form-control',}),
             'privilege'             : forms.Select(attrs={'class':'custom-select custom-select-md mb-3'}),
 
@@ -195,6 +189,13 @@ class AssessmentCreationForm(forms.ModelForm):
                                                           attrs={'class':'form-control'}),
                                                           
                                )
+    exam_start_date_time = forms.SplitDateTimeField(input_date_formats=['%Y-%m-%d'],
+                               input_time_formats=['%H:%M:%S'], 
+                               widget=forms.SplitDateTimeWidget(date_format='%Y-%m-%d',
+                                                          time_format='%H:%M:%S',
+                                                          attrs={'class':'form-control'}),
+                                                          
+                               )
 
     subscriber_users = forms.ModelMultipleChoiceField(queryset = Student.objects.filter(id=1),
                                                       widget=forms.CheckboxSelectMultiple())
@@ -202,7 +203,7 @@ class AssessmentCreationForm(forms.ModelForm):
     class Meta:
         model = Assesment
         fields = ('__all__')
-        exclude= ['deleted_by','deleted_at', 'created_by', 'updated_by', 'exam_start_type']
+        exclude= ['deleted_by','deleted_at', 'created_by', 'updated_by', 'exam_start_type','total_exam_duration']
         
         labels = {
         "header": "Short Heading",
@@ -215,22 +216,7 @@ class AssessmentCreationForm(forms.ModelForm):
             'brief': forms.Textarea(
                                        attrs={'class':'form-control'}
                                     ),
-            'exam_date': forms.DateInput(format='%Y-%m-%d', 
-                                             attrs={'class':'myDateClass form-control', 
-                                            'placeholder':'Select a date',
-                                            },
-                                        ),
-            'start_time': forms.TimeInput(format='%H:%M', 
-                                             attrs={'class':'customTimeClass form-control', 
-                                            'placeholder':'Enter a start timing in HH:MM'},
-                                        ),
             
-            'end_time': forms.DateInput(format='%H:%M', 
-                                             attrs={'class':'customTimeClass form-control', 
-                                            'placeholder':'Enter a end timing in HH:MM'},
-                                        ),
-            
-
             'passing_marks'         : forms.NumberInput(attrs={'class':'form-control',}),
             'privilege'             : forms.Select(attrs={'class':'custom-select custom-select-md mb-3'}),
             
