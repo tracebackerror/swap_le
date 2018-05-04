@@ -5,7 +5,7 @@
 	 <div id="header"> 
 		 <span class="logo"><a href="{% url "home:homeview" %}">SwapLE</a></span>
 		 
-		 {% if request.user.is_authenticated %} 
+		 {% if request.user.is_authenticated and perms.staff.is_staff %} 
 		 <ul class="menu">     
 		 <li {% if section == "dashboard" %}class="selected"{% endif %}> <a href="{% url "staff:dashboard" %}">My dashboard</a>      </li>
 		 <li> <a href ={% url "staff:edit" %}> Edit Profile</a> </li>

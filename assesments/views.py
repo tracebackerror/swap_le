@@ -41,6 +41,8 @@ from django.views.generic.base import TemplateResponseMixin, RedirectView
 
 from django.db.models import Sum, Q
 
+from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from datetime import datetime
 
 class ReviewAllSqaView(TemplateView):
@@ -252,13 +254,14 @@ class ManageSingleQuestionAddView(TemplateView):
         return context 
     
     
-class ManageAllAssesmentView(SingleTableMixin, FilterView):
+class ManageAllAssesmentView(PermissionRequiredMixin, SingleTableMixin, FilterView):
     model = Assesment
     context_object_name = 'table'
     paginate_by = 3
     template_name = 'assesments/manage_all_assesment.html'
     table_class = AssesmentTable
     filterset_class = AssesmentFilter
+    permission_required = 'staff.is_staff'
     
     #table_data = Staff.active.filter(institute__user__exact=request.user)
 
@@ -587,7 +590,8 @@ def assessment_edit_by_staff(request, assesmentid):
 
 
 
-@login_required(login_url="/staff/login/")
+@permission_required('staff.is_staff',login_url=reverse_lazy('staff:login'))
+@login_required(login_url=reverse_lazy('staff:login'))
 def assessment_create_by_staff(request):
     if request.method == 'POST':
         expired_on = datetime.strptime(request.POST['expired_on_0']+"/"+request.POST['expired_on_1'],'%Y-%m-%d/%H:%M:%S')

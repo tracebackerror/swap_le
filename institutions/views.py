@@ -26,6 +26,12 @@ from licenses.models import License
 from django.contrib.auth.views import (PasswordResetView,PasswordResetDoneView, PasswordResetConfirmView ,PasswordResetCompleteView)
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from guardian.shortcuts import assign_perm
+from django.contrib.auth.decorators import permission_required
+
+from django_tables2 import SingleTableView
+from django.utils.decorators import method_decorator
+
 
 def institute_login(request):
     if request.method == 'POST':
@@ -48,7 +54,7 @@ def institute_login(request):
         return render(request, 'institutions/login.html', {'form': institute_form})
     pass
     
-    
+@permission_required('institutions.is_institute',login_url="/institutions/login/")
 @login_required
 def edit(request):
     if request.method == 'POST':
@@ -69,7 +75,7 @@ def edit(request):
 
     return render(request, 'institutions/edit.html',{ 'institution_form' : institution_form, 'user_form': user_form})
 
-
+@permission_required('institutions.is_institute',login_url="/institutions/login/")
 @login_required(login_url="/institutions/login/")
 def institute_staff_edit(request, username):
     if request.method == 'POST':
@@ -93,6 +99,7 @@ def institute_staff_edit(request, username):
 
 
 @transaction.atomic
+@permission_required('institutions.is_institute',login_url="/institutions/login/")
 @login_required(login_url="/institutions/login/")
 def institute_staff_create(request):
     if request.method == 'POST':
@@ -106,6 +113,7 @@ def institute_staff_create(request):
         if is_allowed and user_form.is_valid():
             user = user_form.save()
             user.refresh_from_db()  # This will load the Profile created by the Signal
+            assign_perm('staff.is_staff', user)
             profile_form = Staff()  # Reload the profile form with the profile instance
 
             profile_form.institute = request.user.institutions
@@ -126,7 +134,7 @@ def institute_staff_create(request):
 
     })
 
-
+@permission_required('institutions.is_institute',login_url="/institutions/login/")
 @login_required(login_url="/institutions/login/")
 def institute_staff_delete(request, username):
     information = ''
@@ -146,6 +154,8 @@ def institute_staff_delete(request, username):
     return render(request, 'institutions/staff_delete.html', {'information': [information]})
 
 from licenses.forms import LicenseViewForm
+
+@permission_required('institutions.is_institute',login_url="/institutions/login/")
 @login_required(login_url="login/")
 def dashboard(request):
     current_institute = Institutions.objects.get(user__username=request.user)
@@ -158,9 +168,10 @@ def dashboard(request):
 
 
 
-class PasswordChangeViewForInstitutions(PasswordChangeView):
+class PasswordChangeViewForInstitutions(PermissionRequiredMixin, PasswordChangeView):
     template_name = 'institutions/password_change.html'
     success_url = 'done/'
+    permission_required = 'institutions.is_institute'
     
     @method_decorator(sensitive_post_parameters())
     @method_decorator(csrf_protect)
@@ -169,9 +180,10 @@ class PasswordChangeViewForInstitutions(PasswordChangeView):
         return super(PasswordChangeView, self).dispatch(*args, **kwargs)
         
         
-class PasswordChangeDoneViewForInstitutions(PasswordChangeDoneView):
+class PasswordChangeDoneViewForInstitutions(PermissionRequiredMixin, PasswordChangeDoneView):
     template_name='institutions/password_change_done2.html'
-
+    permission_required = 'institutions.is_institute'
+    
     @method_decorator(login_required(login_url="/institutions/login/"))
     def dispatch(self, *args, **kwargs):
         return super(PasswordChangeDoneView, self).dispatch(*args, **kwargs)
@@ -179,7 +191,7 @@ class PasswordChangeDoneViewForInstitutions(PasswordChangeDoneView):
 
 class InstitutionLoginView(LoginView):
     template_name = 'institutions/login.html'
-
+    
     def form_valid(self, form):
         """Security check complete. Log the user in."""
 
@@ -199,9 +211,6 @@ def people(request):
     table = StaffTable(Staff.objects.all())
     RequestConfig(request).configure(table)
     return render(request, 'institutions/staff.html', {'table': table})
-
-from django_tables2 import SingleTableView
-from django.utils.decorators import method_decorator
 
 
 class InstitutionStaffView(PermissionRequiredMixin, SingleTableView, ListView):
@@ -223,6 +232,7 @@ class InstitutionStaffView(PermissionRequiredMixin, SingleTableView, ListView):
 
     @method_decorator(login_decorator)
     def dispatch(self, *args, **kwargs):
+        #assign_perm('institutions.is_institute',self.request.user)
         return super(InstitutionStaffView, self).dispatch(*args, **kwargs)
 
 

@@ -1,6 +1,6 @@
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required  #permission_required, resolve_url, settings, six,urlparse,user_passes_test, wraps
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import PasswordChangeDoneView, PasswordChangeView, LoginView
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
@@ -10,12 +10,20 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from institutions.forms import UserEditForm
 from django.views.generic import ListView
-
+from django.contrib.auth.decorators import permission_required
 from staff.forms import StudentEditForm, StudentUserEditForm 
 from licenses.models import License
 from django.contrib.auth.models import User
 from django.contrib.auth.views import (PasswordResetView,PasswordResetDoneView, PasswordResetConfirmView ,PasswordResetCompleteView)
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from guardian.shortcuts import assign_perm
+from django_tables2 import SingleTableView
+from django.utils.decorators import method_decorator
+from staff.tables import StudentTable
+from staff.forms import EnrollStudentsForm,StudentAddForm
+from staff.models import Staff
+from students.models import Student
 #from jedi.evaluate.context import instance
 
 
@@ -36,8 +44,9 @@ class InstitutionStaffLoginView(LoginView):
             form.add_error(None, invalidInstitution)
             return super(InstitutionStaffLoginView, self).form_invalid(form)
 
-
-@login_required(login_url="login/")
+            
+@permission_required('staff.is_staff',login_url=reverse_lazy('staff:login'))
+@login_required(login_url=reverse_lazy('staff:login'))
 def dashboard(request):
     #current_institute = Institutions.objects.get(user__username=request.user)
     #license_institute = License.objects.get(li_institute=current_institute)
@@ -50,6 +59,7 @@ def dashboard(request):
     return HttpResponse('sddf')
     '''
 
+@permission_required('staff.is_staff',login_url=reverse_lazy('staff:login'))
 @login_required(login_url=reverse_lazy('staff:login'))
 def edit(request):
     if request.method == 'POST':
@@ -93,19 +103,15 @@ class PasswordChangeDoneViewForStaff(PasswordChangeDoneView):
 
 
 
-from django_tables2 import SingleTableView
-from django.utils.decorators import method_decorator
-from staff.tables import StudentTable
-from staff.forms import EnrollStudentsForm,StudentAddForm
-from staff.models import Staff
-from students.models import Student
 
-class ManageStudentView(SingleTableView, ListView):
+
+class ManageStudentView(PermissionRequiredMixin, SingleTableView, ListView):
     model = Student
     context_object_name = 'table'
     paginate_by = 3
     template_name = 'staff/manage_student.html'
     table_class = StudentTable
+    permission_required = 'staff.is_staff'
     
     #table_data = Staff.active.filter(institute__user__exact=request.user)
 
@@ -129,7 +135,8 @@ class ManageStudentView(SingleTableView, ListView):
         return context
     
     
-@login_required(login_url="/staff/login/")
+@permission_required('staff.is_staff',login_url=reverse_lazy('staff:login'))
+@login_required(login_url=reverse_lazy('staff:login'))
 def delete_institution_staff_student(request, username):
     information = ''
     current_staff = Staff.objects.get(staffuser = request.user)
@@ -153,8 +160,8 @@ def delete_institution_staff_student(request, username):
         pass
 
 
-#implementing edit student functionality     
-@login_required(login_url="/staff/login/")
+@permission_required('staff.is_staff',login_url=reverse_lazy('staff:login'))
+@login_required(login_url=reverse_lazy('staff:login'))
 def student_edit_by_staff(request,upk):
     if request.method == 'POST':
         student_form = StudentEditForm(instance=Student.objects.get(pk=upk),
@@ -174,8 +181,8 @@ def student_edit_by_staff(request,upk):
     return render(request, 'staff/student_edit_by_staff.html', {'student_form': student_form,'student_user_form': student_user_form})
 
 
-#implementing add student functionality
-@login_required(login_url="/staff/login/")
+@permission_required('staff.is_staff',login_url=reverse_lazy('staff:login'))
+@login_required(login_url=reverse_lazy('staff:login'))
 def add_student_by_staff(request):
     current_staff = Staff.objects.get(staffuser = request.user)
     if current_staff.allowregistration==True:

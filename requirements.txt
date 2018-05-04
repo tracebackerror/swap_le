@@ -12,3 +12,4 @@ gunicorn
 psycopg2
 django-suit-ckeditor==0.0.2
 django-markdown
+django-guardian==1.4.9
