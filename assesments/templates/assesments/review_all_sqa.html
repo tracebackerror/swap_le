@@ -9,34 +9,33 @@
 
 {% block content %} 
  <h1>Review Descriptive Question</h1>
+ 
  <p>
-
  {% if information %}  <ul class="information">    {% for message in information %}      <li class="warning">        {{ message|safe }}          <a href="#" class="close"></a>      </li>    {% endfor %}  </ul> {% endif %}
-
-
  </p>
 
-
-{% if form_errors %}
-<div id='form-errors' >
-{{form_errors}}
-{% comment %}
-		{% for key, value in form_errors.items %} 
-  			<li>{{value}}</li>
- 		{% endfor %}	
-{% endcomment %}
+<div class="container">
+	
+	{% if form_errors %}
+	<div id='form-errors' >
+	{{form_errors}}
+	{% comment %}
+			{% for key, value in form_errors.items %} 
+	  			<li>{{value}}</li>
+	 		{% endfor %}	
+	{% endcomment %}
+	</div>
+	{% endif %}
+	
+	
+	{% if answer__required_review_count > 0%}
+	
+	
+	{% crispy answer_formset answer_formset_helper %}
+	
+	{% else%}
+	 <p class="text-center	"> {{ "The Asssesment do not contain any descriptive text for Review."|title }}  </p>
+	{% endif%}
+	
 </div>
-{% endif %}
-
-
-{% if answer__required_review_count > 0%}
-
-
-{% crispy answer_formset answer_formset_helper %}
-
-{% else%}
- <p class="text-center	"> {{ "The Asssesment do not contain any descriptive text for Review."|title }}  </p>
-{% endif%}
-
-
 {% endblock %}

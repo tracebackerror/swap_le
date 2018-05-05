@@ -42,10 +42,10 @@ from django.views.generic.base import TemplateResponseMixin, RedirectView
 from django.db.models import Sum, Q
 
 from django.contrib.auth.decorators import permission_required
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from datetime import datetime
 
-class ReviewAllSqaView(TemplateView):
+class ReviewAllSqaView(LoginRequiredMixin, TemplateView):
     model = Answer
     template_name = 'assesments/review_all_sqa.html'
     login_decorator = login_required(login_url=reverse_lazy('staff:login'))
@@ -117,7 +117,7 @@ class ReviewAllSqaView(TemplateView):
     
     
 
-class GenerateAssesmentResultView(TemplateView):
+class GenerateAssesmentResultView(LoginRequiredMixin, TemplateView):
     http_method_names = [ 'post',]
     template_name = 'assesments/review_all_sqa.html'
     login_decorator = login_required(login_url=reverse_lazy('student:login'))
@@ -176,7 +176,7 @@ class GenerateAssesmentResultView(TemplateView):
     
     
 
-class ManageSingleQuestionAddView(TemplateView):
+class ManageSingleQuestionAddView(LoginRequiredMixin, TemplateView):
     model = Question
     template_name = 'assesments/manage_add_single_question2.html'
    
@@ -254,7 +254,7 @@ class ManageSingleQuestionAddView(TemplateView):
         return context 
     
     
-class ManageAllAssesmentView(PermissionRequiredMixin, SingleTableMixin, FilterView):
+class ManageAllAssesmentView(LoginRequiredMixin, PermissionRequiredMixin, SingleTableMixin, FilterView):
     model = Assesment
     context_object_name = 'table'
     paginate_by = 3
@@ -286,7 +286,7 @@ class ManageAllAssesmentView(PermissionRequiredMixin, SingleTableMixin, FilterVi
         return context
 
 
-class AssessmentResultByStaff(DetailView):
+class AssessmentResultByStaff(LoginRequiredMixin, DetailView):
     model = Result
     template_name = 'assesments/display_single_result.html'
     login_decorator = login_required(login_url=reverse_lazy('staff:login'))
@@ -296,7 +296,7 @@ class AssessmentResultByStaff(DetailView):
         return super(AssessmentResultByStaff, self).dispatch(*args, **kwargs)
 
 
-class ManageStudentAssesmentView(SingleTableView, ListView):
+class ManageStudentAssesmentView(LoginRequiredMixin, SingleTableView, ListView):
     model = Assesment
     context_object_name = 'table'
     paginate_by = 3
@@ -355,7 +355,7 @@ class ManageStudentAssesmentView(SingleTableView, ListView):
         return context 
     
     
-class ManageSingleAsessment(SingleTableView):
+class ManageSingleAsessment(LoginRequiredMixin, SingleTableView):
     model = Question
     context_object_name = 'table'
     paginate_by = 10
@@ -389,7 +389,7 @@ class ManageSingleAsessment(SingleTableView):
         return context
     
 
-class ProcesStudentAssesmentView(DetailView):
+class ProcesStudentAssesmentView(LoginRequiredMixin, DetailView):
     model = Assesment
     context_object_name = 'table'
     paginate_by = 3
