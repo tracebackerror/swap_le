@@ -73,6 +73,7 @@ class SoftDeletionModelMixin(models.Model):
     class Meta:
         abstract = True
 
+    
     def delete(self,user):
         self.deleted_at = timezone.now()
         self.deleted_by= user

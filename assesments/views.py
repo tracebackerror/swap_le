@@ -45,7 +45,7 @@ from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from datetime import datetime
 
-class ReviewAllSqaView(LoginRequiredMixin, TemplateView):
+class ReviewAllSqaView(TemplateView):
     model = Answer
     template_name = 'assesments/review_all_sqa.html'
     login_decorator = login_required(login_url=reverse_lazy('staff:login'))
@@ -117,7 +117,7 @@ class ReviewAllSqaView(LoginRequiredMixin, TemplateView):
     
     
 
-class GenerateAssesmentResultView(LoginRequiredMixin, TemplateView):
+class GenerateAssesmentResultView(TemplateView):
     http_method_names = [ 'post',]
     template_name = 'assesments/review_all_sqa.html'
     login_decorator = login_required(login_url=reverse_lazy('student:login'))
@@ -176,7 +176,7 @@ class GenerateAssesmentResultView(LoginRequiredMixin, TemplateView):
     
     
 
-class ManageSingleQuestionAddView(LoginRequiredMixin, TemplateView):
+class ManageSingleQuestionAddView(TemplateView):
     model = Question
     template_name = 'assesments/manage_add_single_question2.html'
    
@@ -235,6 +235,24 @@ class ManageSingleQuestionAddView(LoginRequiredMixin, TemplateView):
         
         if question_form and question_form.is_valid():
             question_form.save()
+            
+            # Processing Existing Result Set to Update the Details
+            fetch_appropriate_result = Result.soft_objects.filter(assesment__id = int(self.kwargs['assesmentid']))
+        
+            if fetch_appropriate_result.exists():
+                for each_assesment_result in fetch_appropriate_result:
+                    get_assesment_obj_to_update = each_assesment_result
+                    
+                    get_assesment_obj_to_update.total_question =  get_assesment_obj_to_update.assesment.question_set.count()
+                    get_assesment_obj_to_update.total_attempted = get_assesment_obj_to_update.answer_set.all().count()
+                    
+                    sum_of_marks = get_assesment_obj_to_update.assesment.question_set.aggregate(sum_of_marks = Sum('max_marks'))
+                    get_assesment_obj_to_update.total_marks  = sum_of_marks['sum_of_marks']
+                    
+                    obtained_marks_calculate = get_assesment_obj_to_update.answer_set.aggregate(answer_obtained_marks = Sum('alloted_marks'))
+                    get_assesment_obj_to_update.obtained_marks = obtained_marks_calculate.get('answer_obtained_marks')
+                    get_assesment_obj_to_update.result_passed = obtained_marks_calculate.get('answer_obtained_marks') > get_assesment_obj_to_update.assesment.passing_marks  
+                    get_assesment_obj_to_update.save()
             messages.success(request, 'Question Has Been Added to Assesment.')
             return redirect('staff:assesments:assessment_manage_by_staff', self.kwargs['assesmentid'])
         else:
@@ -254,7 +272,7 @@ class ManageSingleQuestionAddView(LoginRequiredMixin, TemplateView):
         return context 
     
     
-class ManageAllAssesmentView(LoginRequiredMixin, PermissionRequiredMixin, SingleTableMixin, FilterView):
+class ManageAllAssesmentView(PermissionRequiredMixin, SingleTableMixin, FilterView):
     model = Assesment
     context_object_name = 'table'
     paginate_by = 3
@@ -286,7 +304,7 @@ class ManageAllAssesmentView(LoginRequiredMixin, PermissionRequiredMixin, Single
         return context
 
 
-class AssessmentResultByStaff(LoginRequiredMixin, DetailView):
+class AssessmentResultByStaff(DetailView):
     model = Result
     template_name = 'assesments/display_single_result.html'
     login_decorator = login_required(login_url=reverse_lazy('staff:login'))
@@ -296,7 +314,7 @@ class AssessmentResultByStaff(LoginRequiredMixin, DetailView):
         return super(AssessmentResultByStaff, self).dispatch(*args, **kwargs)
 
 
-class ManageStudentAssesmentView(LoginRequiredMixin, SingleTableView, ListView):
+class ManageStudentAssesmentView(SingleTableView, ListView):
     model = Assesment
     context_object_name = 'table'
     paginate_by = 3
@@ -355,7 +373,7 @@ class ManageStudentAssesmentView(LoginRequiredMixin, SingleTableView, ListView):
         return context 
     
     
-class ManageSingleAsessment(LoginRequiredMixin, SingleTableView):
+class ManageSingleAsessment(SingleTableView):
     model = Question
     context_object_name = 'table'
     paginate_by = 10
@@ -389,7 +407,7 @@ class ManageSingleAsessment(LoginRequiredMixin, SingleTableView):
         return context
     
 
-class ProcesStudentAssesmentView(LoginRequiredMixin, DetailView):
+class ProcesStudentAssesmentView(DetailView):
     model = Assesment
     context_object_name = 'table'
     paginate_by = 3
@@ -546,6 +564,12 @@ class ProcesStudentAssesmentView(LoginRequiredMixin, DetailView):
         return context 
     
     
+class RegenerateResult(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
+    login_url=reverse_lazy('home:homeview')
+    permission_required = 'staff.is_staff'
+    
+    def get(self, *args, **kwargs):
+        self._process_assesment(self, *args, **kwargs)
     
 @login_required(login_url="/staff/login/")
 def assessment_delete_by_staff(request, assesmentid):
@@ -567,6 +591,8 @@ def assessment_delete_by_staff(request, assesmentid):
         return render(request, 'assesments/assesment_delete_by_staff.html', {'information': [information]})
     
 
+def __recalculate_result(assesment_id = None, *args, **kwargs):
+    pass
     
     
 @login_required(login_url="/staff/login/")
@@ -587,6 +613,24 @@ def assessment_edit_by_staff(request, assesmentid):
         if assesment_form.is_valid():
             assesment_form.save()
             
+            fetch_appropriate_result = Result.soft_objects.filter(assesment__id = int(assesmentid))
+        
+            if fetch_appropriate_result.exists():
+                for each_assesment_result in fetch_appropriate_result:
+                    get_assesment_obj_to_update = each_assesment_result
+                    
+                    get_assesment_obj_to_update.total_question =  get_assesment_obj_to_update.assesment.question_set.count()
+                    get_assesment_obj_to_update.total_attempted = get_assesment_obj_to_update.answer_set.all().count()
+                    
+                    sum_of_marks = get_assesment_obj_to_update.assesment.question_set.aggregate(sum_of_marks = Sum('max_marks'))
+                    get_assesment_obj_to_update.total_marks  = sum_of_marks['sum_of_marks']
+                    
+                    obtained_marks_calculate = get_assesment_obj_to_update.answer_set.aggregate(answer_obtained_marks = Sum('alloted_marks'))
+                    get_assesment_obj_to_update.obtained_marks = obtained_marks_calculate.get('answer_obtained_marks')
+                    get_assesment_obj_to_update.result_passed = obtained_marks_calculate.get('answer_obtained_marks') > get_assesment_obj_to_update.assesment.passing_marks  
+                    get_assesment_obj_to_update.save()
+
+                
             #messages.success(request, 'Assessment Updated Successfully')
             messages.add_message(request, messages.SUCCESS, 'Assessment Updated Successfully')
             
@@ -633,7 +677,8 @@ def assessment_question_delete(request,questionid):
     elif request.method == 'POST':
         question_obj = Question.objects.get(pk=questionid)
         if question_obj.created_by == request.user:
-            question_obj.delete(request.user)
+            #question_obj.delete(request.user)
+            question_obj.hard_delete()
             information = 'Question Deleted Successfully. '
         else:
             information = 'You don\'t have authorized permission to delete this Question. '
