@@ -13,7 +13,7 @@
 {% if user.is_authenticated and request.user.student in assesment_object.subscriber_users.all %}
 
 
-
+<div class="table-responsive">
 <table class="table table-bordered">
 	<thead>
 	<tr>
@@ -28,6 +28,7 @@
 	</tr>
 	</thead>
 </table>
+</div>
 
 <!-- Modal -->
 
@@ -68,6 +69,7 @@
 	{% endif %}
 		
 {% endif %}
+
 <table class="table table-bordered">
 
 
@@ -81,7 +83,7 @@
 	{% if question.question_type|lower == 'scq'%}
 	<input type="hidden" name="question_type" value="scq" />
 	  <tr>
-        <td>
+        <td class="col-md-1 col-sm-2">
         <div class="form-group">
 				{% if question.option_one|length > 0 %}
         <input class="form-control" type="radio" name="answer" id="option1" value=1 {% if get_the_answer_obj.opted_choice.2 == 1 %} checked="checked" {% endif %}>

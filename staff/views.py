@@ -194,13 +194,14 @@ def add_student_by_staff(request):
     
             is_allowed =   int(license_institute.li_current_students) < int(license_institute.li_max_students)
     
-            if is_allowed and add_student_form.is_valid():
-                user=add_student_form.save()
-                student_profile=Student.objects.create(studentuser=user,staffuser=request.user.staff,deleted='N')
-                license_institute.li_current_students += 1
-                student_profile.save()
-                license_institute.save()
-                messages.add_message(request, messages.SUCCESS, 'Student Profile Added Successfully')
+            if is_allowed:
+                if add_student_form.is_valid():
+                    user=add_student_form.save()
+                    student_profile=Student.objects.create(studentuser=user,staffuser=request.user.staff,deleted='N')
+                    license_institute.li_current_students += 1
+                    student_profile.save()
+                    license_institute.save()
+                    messages.add_message(request, messages.SUCCESS, 'Student Profile Added Successfully')
             else:
                 messages.add_message(request, messages.INFO, 'Staff Limit Reached. Kindly Reach to Admin for Upgrade.')
         else:

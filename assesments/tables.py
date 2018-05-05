@@ -86,10 +86,11 @@ class StudentAssesmentTable(tables.Table):
     
     take_assesment = tables.TemplateColumn('<form method="POST"  action=".">  {% csrf_token %} <input type="hidden" name="examid" value={{record.id }}> <input type="submit" class="btn btn-dark" value="Take Exam"> </form>')
     
+    '''
     completed = tables.BooleanColumn(empty_values=(),
                                 verbose_name='Completed')
     
-    
+    '''
     def __init__(self, *args, **kwargs):
         super(StudentAssesmentTable, self).__init__(*args, **kwargs)
         self.counter = itertools.count()
@@ -97,9 +98,11 @@ class StudentAssesmentTable(tables.Table):
     def render_row_number(self):
         return '%d' % next(self.counter)
     
-    def render_completed(self,value):
-       return '%s' % 'True'
+    
     '''
+    def render_completed(self,value):
+       return '%s' % value
+    
     def render_total_exam_duration(self,value):
         return '%s' % value
     '''    
@@ -110,7 +113,7 @@ class StudentAssesmentTable(tables.Table):
    
     class Meta:
         model = Assesment
-        sequence = ('row_number', 'header','exam_start_date_time','completed','passing_marks','privilege','expired_on')
+        sequence = ('row_number', 'header','exam_start_date_time','passing_marks','privilege','expired_on')
         # add class="paleblue" to <table> tag 
         attrs = {'class': 'paleblue'}
         # fields = ('row_number', 'institute',)
