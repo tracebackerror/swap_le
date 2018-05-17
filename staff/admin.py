@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Staff
+from .models import Staff,StudentEnquiry
 # Register your models here.
 
 
@@ -17,3 +17,4 @@ class StaffAdmin(admin.ModelAdmin):
     readonly_fields = ('user_type',)
     
 admin.site.register(Staff, StaffAdmin)
+admin.site.register(StudentEnquiry)

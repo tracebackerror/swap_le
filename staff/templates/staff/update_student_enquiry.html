@@ -1,0 +1,25 @@
+{% extends "staff/base.html" %}
+{% block title %}   Edit Enquiry {% endblock %}
+
+{% if messages %}
+ <div id="userDisplayMessage">
+ 	<ul class="messages" >    
+ 		{% for message in messages %}
+ 		      <li class="{{ message.tags }}">        {{ message|safe }}          </li>
+ 		{% endfor %}
+   </ul>
+ </div>
+ {% endif %}
+
+{% block content %} 
+ <h1>Edit/Update Student Enquiry</h1>
+ <div class="container" style="min-height:60%">
+ <p>You can edit your enquiry records using the following form:</p>
+ <form action="." method="post" enctype="multipart/form-data">
+     {{ form.as_p}}
+     
+     {% csrf_token %}
+ <p><input type="submit" class="btn btn-success" value="Save changes"></p>
+ </form>
+ </div>
+{% endblock %}
