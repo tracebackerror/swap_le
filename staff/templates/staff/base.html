@@ -14,6 +14,8 @@
 		    <li> <a href ={% url "staff:add_student" %}> Add Students</a> </li>
 		    <li> <a href ={% url "staff:assesments:manage_all_assesment" %}> Manage Assessments</a> </li>
 		    <li> <a href ={% url "staff:assesments:assessment_create_by_staff" %}> Create Assessments</a> </li>
+		    <li> <a href ={% url "staff:create_student_enquiry" %}> Student Enquiry Form </a> </li>
+		    <li> <a href ={% url "staff:manage_student_enquiry" %}> Manage Student Enquiry </a> </li>
 		    {% if request.user.is_authenticated %}
 		 	<li> <a href="{% url "staff:logout" %}">Logout</a> </li>
 		 	{% endif %}    

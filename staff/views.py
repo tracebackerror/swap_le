@@ -9,22 +9,27 @@ from django.views.decorators.debug import sensitive_post_parameters
 from django.urls import reverse_lazy
 from django.contrib import messages
 from institutions.forms import UserEditForm
-from django.views.generic import ListView
+from django.views.generic import ListView,TemplateView,DeleteView,UpdateView
 from django.contrib.auth.decorators import permission_required
-from staff.forms import StudentEditForm, StudentUserEditForm 
+from staff.forms import StudentEditForm, StudentUserEditForm,CreateStudentEnquiryForm
 from licenses.models import License
 from django.contrib.auth.models import User
 from django.contrib.auth.views import (PasswordResetView,PasswordResetDoneView, PasswordResetConfirmView ,PasswordResetCompleteView)
 from django.urls import reverse_lazy
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin,LoginRequiredMixin
 from guardian.shortcuts import assign_perm
 from django_tables2 import SingleTableView
 from django.utils.decorators import method_decorator
 from staff.tables import StudentTable
 from staff.forms import EnrollStudentsForm,StudentAddForm
-from staff.models import Staff
+from staff.models import Staff,StudentEnquiry
 from students.models import Student
+from django.views.generic.edit import FormView
 #from jedi.evaluate.context import instance
+from .filters import StudentEnquiryFilter
+from django_filters.views import FilterView
+
+
 
 
 class InstitutionStaffLoginView(LoginView):
@@ -229,5 +234,72 @@ class StaffPasswordResetConfirmView(PasswordResetConfirmView):
 
 class StaffPasswordResetCompleteView(PasswordResetCompleteView):
     template_name = 'staff/password_reset_complete.html'
+    
 
+class CreateStudentEnquiryView(LoginRequiredMixin,FormView):
+    template_name="staff/create_student_enquiry.html"
+    form_class = CreateStudentEnquiryForm 
+    success_url = '/staff/'
+    http_method_names = ['post','get']
+    login_url=reverse_lazy('staff:login')
+    
+
+    def form_valid(self, form):
+        if super().form_valid(form):
+            obj=User.objects.get(username=self.request.user)            
+            created_by=Staff.objects.get(staffuser=obj)
+            full_name=form.cleaned_data['full_name']
+            parent_name=form.cleaned_data['parent_name']
+            scl_clg_name=form.cleaned_data['scl_clg_name']
+            std=form.cleaned_data['std']
+            academic_y=form.cleaned_data['academic_y']
+            contact=form.cleaned_data['contact']
+            
+            StudentEnquiry.objects.create(created_by=created_by,full_name=full_name,parent_name=parent_name,scl_clg_name=scl_clg_name,std=std,academic_y=academic_y,contact=contact)
+            
+            messages.add_message(self.request, messages.SUCCESS, 'Enquiry Record Successfully!')
+        return super().form_valid(form)
+    
+
+class ManageStudentEnquiryView(LoginRequiredMixin,FilterView,ListView):
+    model = StudentEnquiry
+    context_object_name = 'enquiry_model'
+    template_name="staff/manage_student_enquiry.html"
+    paginate_by = 10
+    login_url=reverse_lazy('staff:login')
+    filterset_class=StudentEnquiryFilter
+    
+class DeleteStudentEnquiryView(LoginRequiredMixin,DeleteView):
+    model = StudentEnquiry
+    pk_url_kwarg = 'pk'
+    template_name = "staff/delete_student_enquiry.html"
+    context_object_name = 'enquiry'
+    success_url=reverse_lazy('staff:manage_student_enquiry')
+    login_url=reverse_lazy('staff:login')
+    
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        self.object.delete()
+        messages.add_message(self.request, messages.SUCCESS, 'Deleted Student Enquiry Record Successfully!')
+        return HttpResponseRedirect(success_url)
+    
+class UpdateStudentEnquiryView(LoginRequiredMixin,UpdateView):
+    model = StudentEnquiry
+    form_class = CreateStudentEnquiryForm  
+    pk_url_kwarg = 'pk'
+    http_method_names = ['post','get']
+    template_name = "staff/update_student_enquiry.html"
+    context_object_name = 'form'
+    success_url=reverse_lazy('staff:manage_student_enquiry')
+    login_url=reverse_lazy('staff:login')
+    
+
+    def form_valid(self, form):
+        if super().form_valid(form):
+            form.save()
+            messages.add_message(self.request, messages.SUCCESS, 'Updated Student Enquiry Record Successfully!')
+        return HttpResponseRedirect(self.get_success_url())
+    
     

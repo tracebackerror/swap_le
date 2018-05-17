@@ -1,0 +1,25 @@
+{% extends "staff/base.html" %}
+{% block title %}  Delete Student Enquiry   {% endblock %}
+
+{% if messages %}
+ <div id="userDisplayMessage">
+ 	<ul class="messages" >    
+ 		{% for message in messages %}
+ 		      <li class="{{ message.tags }}">        {{ message|safe }}          </li>
+ 		{% endfor %}
+   </ul>
+ </div>
+ {% endif %}
+
+{% block content %} 
+ <h1>Delete Student Enquiry</h1>
+       
+  <form method="POST" action="."> {% csrf_token %}
+      <h3>Are you sure you want to delete: "{{ enquiry.full_name }}"?</h3>
+              
+     <input type='submit' value='Delete'  class='btn btn-success'>&nbsp;&nbsp;&nbsp
+     <a href='{% url 'staff:manage_student_enquiry' %}' class='btn btn-default'>Cancel</a>
+  </form>
+
+
+{% endblock %}

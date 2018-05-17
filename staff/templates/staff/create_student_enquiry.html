@@ -1,0 +1,45 @@
+{% extends "staff/base.html" %}
+{% block title %}   Add Student   {% endblock %}
+
+{% if messages %}
+<div class="alert alert-success">
+    {% for m in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ m }}</li>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% block content %}
+ <h1>Add Student Enquiry </h1>
+ 
+ <div class="container" style="min-height:60%">
+ <p>You can Manage Student Enquiry Record using the following form:</p>
+ 
+
+ <form action="." method="post" enctype="multipart/form-data">
+ {% csrf_token %}
+ 
+     {{ form.full_name.label}}<br>
+     {{ form.full_name}}<br><br><br>
+     
+     {{ form.parent_name.label}}<br>
+     {{ form.parent_name}}<br><br><br>
+     
+     {{ form.scl_clg_name.label}}<br>
+     {{ form.scl_clg_name}}<br><br><br>
+     
+     {{ form.std.label}}<br>
+     {{ form.std}}<br><br><br>
+     
+     {{ form.academic_y.label}}<br>
+     {{ form.academic_y}}<br><br><br>
+     
+     {{ form.contact.label}}<br>
+     {{ form.contact}}<br><br><br>
+
+     
+ <p><input type="submit" class="btn btn-success" value="Save changes"></p>
+ </form>
+ 
+ </div>
+{% endblock %}

@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from institutions.models import Institutions
 from django.conf import settings
+from pyexpat import model
 # Create your models here.
 
 
@@ -42,3 +43,21 @@ class Staff(models.Model):
         )
     def __str__(self):
         return 'Staff - {} Of Institute - {}'.format(self.staffuser.username, self.institute.institute_name)
+    
+
+
+class StudentEnquiry(models.Model):
+    created_by=models.ForeignKey(Staff,on_delete=models.CASCADE)
+    full_name=models.CharField(max_length=100)
+    parent_name=models.CharField(max_length=50)
+    scl_clg_name=models.CharField(max_length=50)
+    std=models.CharField(max_length=10)
+    academic_y=models.CharField(max_length=50)
+    contact=models.IntegerField()
+    
+
+    def __str__(self):
+        return "{0}({1})".format(self.full_name,self.created_by)
+    
+    
+    

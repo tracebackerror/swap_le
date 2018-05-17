@@ -1,0 +1,89 @@
+{% extends "staff/base.html" %}
+{% load bootstrap3 %}
+
+{% block title %}   Manage Student   {% endblock %}
+
+{% block content %}
+ <h1>Manage all Student Enquiry Record </h1>
+
+
+<div class="container"> 
+{% if filter %}
+    <form action="" method="get" class="form form-inline">
+        {% bootstrap_form filter.form layout='inline' %}
+        {% bootstrap_button 'filter' %}
+    </form>
+{% endif %}
+</div>
+
+
+<div class="container">        
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Student Full Name</th>
+        <th>Parent Name</th>
+        <th>SC Name / CLG Name</th>
+        <th>Standard</th>
+        <th>Academic Year</th>
+        <th>Contact Number</th>
+        <th>Delete</th>
+        <th>Update</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% if enquiry_model %}
+     {% for data in enquiry_model %}
+      <tr>
+        <td>{{ data.full_name }}</td>
+        <td>{{ data.parent_name }}</td>
+        <td>{{ data.scl_clg_name }}</td>
+        <td>{{ data.std }}</td>
+        <td>{{ data.academic_y }}</td>
+        <td>{{ data.contact }}</td>
+        <td><a href="{% url "staff:delete_student_enquiry" pk=data.id %}">Delete</a></td>
+        <td><a href="{% url "staff:update_student_enquiry" pk=data.id %}">Edit</a></td>
+      </tr>
+     {% endfor %}
+     
+    {% else %}
+       <tr>
+        <td>Null</td>
+        <td>Null</td>
+        <td>Null</td>
+        <td>Null</td>
+        <td>Null</td>
+        <td>Null</td>
+        <td>Null</td>
+        <td>Null</td>
+      </tr>
+      
+    {% endif %}
+     
+    </tbody>
+  </table>
+</div>
+
+
+
+<!--Pagination-->
+
+<div align="center">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; First</a>
+            <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+        
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+        {% endif %}
+</div>
+
+
+
+{% endblock %}
