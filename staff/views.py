@@ -11,7 +11,7 @@ from django.contrib import messages
 from institutions.forms import UserEditForm
 from django.views.generic import ListView,TemplateView,DeleteView,UpdateView
 from django.contrib.auth.decorators import permission_required
-from staff.forms import StudentEditForm, StudentUserEditForm,CreateStudentEnquiryForm
+from staff.forms import StudentEditForm,StudentUserEditForm,CreateStudentEnquiryForm
 from licenses.models import License
 from django.contrib.auth.models import User
 from django.contrib.auth.views import (PasswordResetView,PasswordResetDoneView, PasswordResetConfirmView ,PasswordResetCompleteView)
@@ -28,6 +28,7 @@ from django.views.generic.edit import FormView
 #from jedi.evaluate.context import instance
 from .filters import StudentEnquiryFilter
 from django_filters.views import FilterView
+from django.urls import reverse
 
 
 
@@ -168,22 +169,20 @@ def delete_institution_staff_student(request, username):
 @permission_required('staff.is_staff',login_url=reverse_lazy('staff:login'))
 @login_required(login_url=reverse_lazy('staff:login'))
 def student_edit_by_staff(request,upk):
+    student_data=Student.objects.get(pk=upk)
     if request.method == 'POST':
-        student_form = StudentEditForm(instance=Student.objects.get(pk=upk),
-                                 data=request.POST)
-        student_user_form = StudentUserEditForm(instance=User.objects.get(id=student_form.instance.studentuser.id),
-                                 data=request.POST)
+        student_form = StudentEditForm(instance=Student.objects.get(id=upk),data=request.POST)
+        student_user_form = StudentUserEditForm(instance=User.objects.get(id=student_data.studentuser.id),data=request.POST)
         if student_form.is_valid() and student_user_form.is_valid():
             student_form.save()
             student_user_form.save()
             messages.add_message(request, messages.SUCCESS, 'Student Record Updated Successfully')
+            return HttpResponseRedirect(reverse('staff:manage_student'))
             
     else:
-        student_data=Student.objects.get(pk=upk)
-        student_form = StudentEditForm(instance=student_data)
-        student_user_form = StudentUserEditForm(instance=User.objects.get(pk=student_form.instance.studentuser.id))
-        
-    return render(request, 'staff/student_edit_by_staff.html', {'student_form': student_form,'student_user_form': student_user_form})
+        student_form = StudentEditForm(instance=Student.objects.get(id=upk))
+        student_user_form = StudentUserEditForm(instance=User.objects.get(id=student_data.studentuser.id))
+    return render(request, 'staff/student_edit_by_staff.html', {'student_form':student_form,'student_user_form': student_user_form})
 
 
 @permission_required('staff.is_staff',login_url=reverse_lazy('staff:login'))
@@ -202,11 +201,18 @@ def add_student_by_staff(request):
             if is_allowed:
                 if add_student_form.is_valid():
                     user=add_student_form.save()
-                    student_profile=Student.objects.create(studentuser=user,staffuser=request.user.staff,deleted='N')
+                    standard=request.POST['standard']
+                    address=request.POST['address']
+                    student_contact_no=request.POST['student_contact_no']
+                    parent_contact_no=request.POST['parent_contact_no']
+                    
+                    student_profile=Student.objects.create(studentuser=user,staffuser=request.user.staff,deleted='N',standard=standard,address=address,student_contact_no=student_contact_no,parent_contact_no=parent_contact_no)
+                    
                     license_institute.li_current_students += 1
                     student_profile.save()
                     license_institute.save()
                     messages.add_message(request, messages.SUCCESS, 'Student Profile Added Successfully')
+                    return HttpResponseRedirect('/staff/')
             else:
                 messages.add_message(request, messages.INFO, 'Staff Limit Reached. Kindly Reach to Admin for Upgrade.')
         else:
