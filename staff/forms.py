@@ -20,26 +20,31 @@ class EnrollStudentsForm(forms.ModelForm):
         model = Staff
         fields = ['allowregistration',]
         # exclude= ['institute_status','user']
-        
 
 class StudentEditForm(forms.ModelForm):
-    #studentuser = forms.CharField()
-    #staffuser = forms.CharField() 
+    standard = forms.CharField(widget=forms.TextInput,required=True)
+    address = forms.CharField(widget=forms.Textarea,required=True)
+    student_contact_no = forms.IntegerField(widget=forms.NumberInput,required=True)
+    parent_contact_no = forms.IntegerField(widget=forms.NumberInput,required=True)
+    
     class Meta:
-        model = Student
-        fields = ['studentuser','staffuser']
-        
+        model=Student
+        fields=['standard','address','student_contact_no','parent_contact_no']     
 
-class StudentUserEditForm(forms.ModelForm):
-     class Meta:
+class StudentUserEditForm(forms.ModelForm):    
+    class Meta:
         model = User
-        fields = ['first_name','last_name','email']
+        fields = ['username','first_name','last_name','email']
         
         
 class StudentAddForm(UserCreationForm):
     first_name = forms.CharField(widget=forms.TextInput,required=True)
     last_name = forms.CharField(widget=forms.TextInput,required=True)
     email = forms.EmailField(widget=forms.EmailInput,required=True)
+    standard = forms.CharField(widget=forms.TextInput,required=True)
+    address = forms.CharField(widget=forms.Textarea,required=True)
+    student_contact_no = forms.IntegerField(widget=forms.NumberInput,required=True)
+    parent_contact_no = forms.IntegerField(widget=forms.NumberInput,required=True)
     
     class Meta:
         model=User

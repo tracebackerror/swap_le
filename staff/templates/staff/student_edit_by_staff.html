@@ -4,13 +4,41 @@
 
 {% block content %} 
  <h1>Edit Student </h1>
+ 
+ <div class="container" style="min-height:60%">
  <p>You can Edit your Student Record using the following form:</p>
  
  <form action="." method="post" enctype="multipart/form-data">
-     {{ student_form.as_p}}
-     {{ student_user_form.as_p}}
-     {% csrf_token %}
+ 	{% csrf_token %}
+ 	
+     {{ student_user_form.username.label}}<br>
+     {{ student_user_form.username}}<br><br><br>
+     {{ student_user_form.username.errors }}
+     
+     {{ student_user_form.first_name.label}}<br>
+     {{ student_user_form.first_name}}<br><br><br>
+     
+     {{ student_user_form.last_name.label}}<br>
+     {{ student_user_form.last_name}}<br><br><br>
+     
+     {{ student_user_form.email.label}}<br>
+     {{ student_user_form.email}}<br><br><br>
+     
+     {{ student_form.standard.label}}<br>
+     {{ student_form.standard}}<br><br><br>
+     
+     {{ student_form.address.label}}<br>
+     {{ student_form.address}}<br><br><br><br><br>
+     
+     {{ student_form.student_contact_no.label}}<br>
+     {{ student_form.student_contact_no}}<br><br><br>
+     
+     {{ student_form.parent_contact_no.label}}<br>
+     {{ student_form.parent_contact_no}}<br><br><br>
+     
+     
  <p><input type="submit" class="btn btn-success" value="Save changes"></p>
  </form>
+ </div>
 {% endblock %}
 

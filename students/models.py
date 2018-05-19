@@ -50,6 +50,12 @@ class Student(models.Model):
 
     last_login =  models.DateTimeField(auto_now=True)
     
+    standard = models.CharField(max_length=20,null=True)
+    address = models.TextField(null=True)
+    student_contact_no = models.IntegerField(null=True)
+    parent_contact_no = models.IntegerField(null=True)
+    
+    
     class Meta:
         ordering = ('created',)
         

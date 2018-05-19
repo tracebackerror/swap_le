@@ -9,8 +9,40 @@
  <p>You can Add your Student Record using the following form:</p>
  
  <form action="." method="post" enctype="multipart/form-data">
-     {{ add_s_form.as_p}}
-     {% csrf_token %}
+ 	 {% csrf_token %}
+ 	 
+     {{ add_s_form.username.label}}<br>
+     {{ add_s_form.username}}<br><br><br>
+     {{ add_s_form.username.errors }}
+     
+     {{ add_s_form.first_name.label}}<br>
+     {{ add_s_form.first_name}}<br><br><br>
+     
+     {{ add_s_form.last_name.label}}<br>
+     {{ add_s_form.last_name}}<br><br><br>
+     
+     {{ add_s_form.email.label}}<br>
+     {{ add_s_form.email}}<br><br><br>
+     
+     {{ add_s_form.standard.label}}<br>
+     {{ add_s_form.standard}}<br><br><br>
+     
+     {{ add_s_form.address.label}}<br>
+     {{ add_s_form.address}}<br><br><br><br><br>
+     
+     {{ add_s_form.student_contact_no.label}}<br>
+     {{ add_s_form.student_contact_no}}<br><br><br>
+     
+     {{ add_s_form.parent_contact_no.label}}<br>
+     {{ add_s_form.parent_contact_no}}<br><br><br>
+     
+     {{ add_s_form.password1.label}}<br>
+     {{ add_s_form.password1}}<br><br><br>
+     {{ add_s_form.password2.errors }}
+     
+     {{ add_s_form.password2.label}}<br>
+     {{ add_s_form.password2}}<br><br><br>
+     
  <p><input type="submit" class="btn btn-success" value="Save changes"></p>
  </form>
  </div>
