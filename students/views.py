@@ -15,8 +15,12 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth.views import (PasswordResetView,PasswordResetDoneView, PasswordResetConfirmView ,PasswordResetCompleteView)
 from django.urls import reverse_lazy
 
-
+from library.models import AssetHistory,LibraryAsset
+from django.contrib.auth.models import User
+from .filters import ViewLibraryAssetFilter
 from .models import Student
+from django_filters.views import FilterView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 class InstitutionStudentLoginView(LoginView):
     template_name = 'student/login.html'
@@ -105,10 +109,37 @@ class PasswordChangeViewForStudent(PasswordChangeView):
         return super(PasswordChangeView, self).dispatch(*args, **kwargs)
         
         
-class PasswordChangeDoneViewForStudent(PasswordChangeDoneView):
+class PasswordChangeDoneViewForStudent(LoginRequiredMixin,PasswordChangeDoneView):
     template_name='student/password_change_done.html'
 
     @method_decorator(login_required(login_url=reverse_lazy('student:login')))
     def dispatch(self, *args, **kwargs):
         return super(PasswordChangeDoneView, self).dispatch(*args, **kwargs)
-
+    
+    
+    
+class MyIssuedLibraryAsset(LoginRequiredMixin,ListView):
+    model = AssetHistory
+    template_name = 'student/my_issued_library_asset.html'
+    paginate_by = 10
+    context_object_name = 'my_issued_library_asset'
+    queryset = None
+    login_url=reverse_lazy('student:login')
+    
+    def get_queryset(self,**kwargs):
+        student_user = User.objects.get(username = self.request.user)
+        student_id = Student.objects.get(studentuser = student_user)
+        self.queryset = AssetHistory.objects.filter(student_id=student_id)
+        return super(MyIssuedLibraryAsset,self).get_queryset()
+    
+     
+class ViewLibraryAsset(LoginRequiredMixin,FilterView,ListView):
+    model = LibraryAsset
+    template_name = 'student/view_library_asset.html'
+    paginate_by = 10
+    context_object_name = 'library_asset'
+    queryset = LibraryAsset.objects.all()
+    filterset_class = ViewLibraryAssetFilter
+    login_url=reverse_lazy('student:login')
+    
+    

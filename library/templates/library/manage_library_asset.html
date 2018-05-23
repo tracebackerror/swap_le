@@ -1,10 +1,10 @@
 {% extends "staff/base.html" %}
 {% load bootstrap3 %}
 
-{% block title %}   Manage Student   {% endblock %}
+{% block title %}   Manage Library Assets  {% endblock %}
 
 {% block content %}
- <h1>Manage all Student Enquiry Record </h1>
+ <h1>Manage all Library Assets </h1>
 
 <!--Filter-->
 
@@ -17,35 +17,30 @@
 {% endif %}
 </div>
 
-
 <!--Data-->
 
 <div class="container">        
   <table class="table table-bordered">
     <thead>
       <tr>
-        <th>Student Full Name</th>
-        <th>Parent Name</th>
-        <th>SC Name / CLG Name</th>
-        <th>Standard</th>
-        <th>Academic Year</th>
-        <th>Contact Number</th>
+        <th>Asset UniqueCode</th>
+        <th>Asset Name</th>
+        <th>Asset Type</th>
+        <th>Asset Description</th>
         <th>Delete</th>
-        <th>Update</th>
+        <th>Edit</th>
       </tr>
     </thead>
     <tbody>
-    {% if enquiry_model %}
-     {% for data in enquiry_model %}
+    {% if library_asset %}
+     {% for data in library_asset %}
       <tr>
-        <td>{{ data.full_name }}</td>
-        <td>{{ data.parent_name }}</td>
-        <td>{{ data.scl_clg_name }}</td>
-        <td>{{ data.std }}</td>
-        <td>{{ data.academic_y }}</td>
-        <td>{{ data.contact }}</td>
-        <td><a href="{% url "staff:delete_student_enquiry" pk=data.id %}">Delete</a></td>
-        <td><a href="{% url "staff:update_student_enquiry" pk=data.id %}">Edit</a></td>
+        <td><a href="{% url "staff:library:manage_library_asset_history" pk=data.id %}">{{ data.asset_unique_code }}</a></td>
+        <td>{{ data.name }}</td>
+        <td>{{ data.asset_type }}</td>
+        <td>{{ data.asset_description }}</td>
+        <td><a href="{% url "staff:library:delete_library_asset" pk=data.id %}">Delete</a></td>
+        <td><a href="{% url "staff:library:edit_library_asset" pk=data.id %}">Edit</a></td>
       </tr>
      {% endfor %}
      
@@ -57,8 +52,7 @@
         <td>Null</td>
         <td>Null</td>
         <td>Null</td>
-        <td>Null</td>
-        <td>Null</td>
+
       </tr>
       
     {% endif %}

@@ -1,0 +1,92 @@
+{% extends "staff/base.html" %}
+{% load bootstrap3 %}
+
+{% block title %}   Manage Assets History   {% endblock %}
+
+{% block content %}
+ <h1>Manage all Assets History  </h1> 
+
+
+{% if messages %}
+<div class="alert alert-success">
+    {% for m in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ m }}</li>
+    {% endfor %}
+</div>
+{% endif %}
+
+
+<!--Data-->
+
+<div class="container">        
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Student Username</th>
+        <th>Student Standard</th>
+        <th>Checked-in User-ID</th>
+        <th>Checked-Out Time</th>
+        <th>Checked-in Time</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% if library_history %}
+     {% for data in library_history %}
+      <tr>
+        <td>{{ data.student_id.studentuser.username }}</td>
+        <td>{{ data.student_id.standard }}</td>
+        <td>{{ data.checked_in_user_id.staffuser.username }}</td>
+        <td>{{ data.checked_out }}</td>
+        <td>{{ data.checked_in }}</td>        
+        {% if data.checked_in is None %}
+        	<td><a href="{% url "staff:library:check_in" id=data.id pk=mypk %}">Check-In</a></td>
+        {% else %}
+        	<td><b><i>Completed</i></b></td>
+        {% endif %}
+          
+      </tr>
+     {% endfor %}
+     
+    {% else %}
+       <tr>
+        <td>Null</td>
+        <td>Null</td>
+        <td>Null</td>
+        <td>Null</td>
+        <td>Null</td>
+        <td>Null</td>
+      </tr>
+      
+    {% endif %}
+     
+    </tbody>
+  </table>
+
+<div align="right">
+<h3><a href="{% url "staff:library:add_library_asset_history" pk=mypk %}">ADD <span class="glyphicon glyphicon-plus"></span> </a></h3>
+</div>  
+
+</div>
+
+<!--Pagination-->
+
+<div align="center">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; First</a>
+            <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+        
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+        {% endif %}
+</div>
+
+
+
+{% endblock %}

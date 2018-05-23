@@ -1,0 +1,70 @@
+{% extends "student/base.html" %}
+
+{% block title %}   My Issued Library Assets  {% endblock %}
+
+{% block content %}
+ <h1> My Issued Library Assets </h1>
+
+<!--Data-->
+
+<div class="container">        
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Asset UniqueCode</th>
+        <th>Name</th>
+        <th>Asset Type</th>
+        <th>Asset Checked Out</th>
+        <th>Asset Checked In</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% if my_issued_library_asset %}
+     {% for data in my_issued_library_asset %}
+      <tr>
+        <td>{{ data.asset_id.asset_unique_code }}</td>
+        <td>{{ data.asset_id.name }}</td>
+        <td>{{ data.asset_id.asset_type }}</td>
+        <td>{{ data.checked_out }}</td>
+        <td>{{ data.checked_in }}</td>
+      </tr>
+     {% endfor %}
+     
+    {% else %}
+       <tr>
+        <td>Null</td>
+        <td>Null</td>
+        <td>Null</td>
+        <td>Null</td>
+        <td>Null</td>
+      </tr>
+      
+    {% endif %}
+     
+    </tbody>
+  </table>
+</div>
+
+
+
+<!--Pagination-->
+
+<div align="center">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; First</a>
+            <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+        
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+        {% endif %}
+</div>
+
+
+
+{% endblock %}

@@ -16,6 +16,8 @@
 		    <li> <a href ={% url "staff:assesments:assessment_create_by_staff" %}> Create Assessments</a> </li>
 		    <li> <a href ={% url "staff:create_student_enquiry" %}> Student Enquiry Form </a> </li>
 		    <li> <a href ={% url "staff:manage_student_enquiry" %}> Manage Student Enquiry </a> </li>
+		    <li> <a href ={% url "staff:library:create_library_asset" %}> Create Library Asset </a> </li>
+		    <li> <a href ={% url "staff:library:manage_library_asset" %}> Manage Library Asset </a> </li>
 		    {% if request.user.is_authenticated %}
 		 	<li> <a href="{% url "staff:logout" %}">Logout</a> </li>
 		 	{% endif %}    

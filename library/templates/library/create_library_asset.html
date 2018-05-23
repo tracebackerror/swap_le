@@ -1,0 +1,43 @@
+{% extends "staff/base.html" %}
+
+{% block title %}   Add Library Assets   {% endblock %}
+
+{% if messages %}
+<div class="alert alert-success">
+    {% for m in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ m }}</li>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% block content %}
+ <h1>Add Library Assets </h1>
+ 
+ <div class="container" style="min-height:60%">
+ <p>You can Add Library Assets using the following form:</p>
+ 
+ 
+  <form action="." method="post" enctype="multipart/form-data">
+ {% csrf_token %}
+
+     
+     {{ form.asset_unique_code.label}}<br>
+     {{ form.asset_unique_code}}<br><br><br>
+     
+     {{ form.name.label}}<br>
+     {{ form.name}}<br><br><br>
+ 
+     {{ form.asset_type.label}}<br>
+     {{ form.asset_type}}<br><br><br>
+
+     {{ form.asset_description.label}}<br>
+     {{ form.asset_description}}<br><br><br><br><br>
+
+     
+ <p><input type="submit" class="btn btn-success" value="Save changes"></p>
+ </form>
+ 
+  
+ </div>
+{% endblock %}
+ 

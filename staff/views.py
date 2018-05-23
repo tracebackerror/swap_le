@@ -242,12 +242,13 @@ class StaffPasswordResetCompleteView(PasswordResetCompleteView):
     template_name = 'staff/password_reset_complete.html'
     
 
-class CreateStudentEnquiryView(LoginRequiredMixin,FormView):
+class CreateStudentEnquiryView(PermissionRequiredMixin,LoginRequiredMixin,FormView):
     template_name="staff/create_student_enquiry.html"
     form_class = CreateStudentEnquiryForm 
     success_url = '/staff/'
     http_method_names = ['post','get']
     login_url=reverse_lazy('staff:login')
+    permission_required = 'staff.is_staff'
     
 
     def form_valid(self, form):
@@ -264,24 +265,26 @@ class CreateStudentEnquiryView(LoginRequiredMixin,FormView):
             StudentEnquiry.objects.create(created_by=created_by,full_name=full_name,parent_name=parent_name,scl_clg_name=scl_clg_name,std=std,academic_y=academic_y,contact=contact)
             
             messages.add_message(self.request, messages.SUCCESS, 'Enquiry Record Successfully!')
-        return super().form_valid(form)
+        return super(CreateStudentEnquiryView,self).form_valid(form)
     
 
-class ManageStudentEnquiryView(LoginRequiredMixin,FilterView,ListView):
+class ManageStudentEnquiryView(PermissionRequiredMixin,LoginRequiredMixin,FilterView,ListView):
     model = StudentEnquiry
     context_object_name = 'enquiry_model'
     template_name="staff/manage_student_enquiry.html"
     paginate_by = 10
     login_url=reverse_lazy('staff:login')
     filterset_class=StudentEnquiryFilter
+    permission_required = 'staff.is_staff'
     
-class DeleteStudentEnquiryView(LoginRequiredMixin,DeleteView):
+class DeleteStudentEnquiryView(PermissionRequiredMixin,LoginRequiredMixin,DeleteView):
     model = StudentEnquiry
     pk_url_kwarg = 'pk'
     template_name = "staff/delete_student_enquiry.html"
     context_object_name = 'enquiry'
     success_url=reverse_lazy('staff:manage_student_enquiry')
     login_url=reverse_lazy('staff:login')
+    permission_required = 'staff.is_staff'
     
 
     def delete(self, request, *args, **kwargs):
@@ -291,7 +294,7 @@ class DeleteStudentEnquiryView(LoginRequiredMixin,DeleteView):
         messages.add_message(self.request, messages.SUCCESS, 'Deleted Student Enquiry Record Successfully!')
         return HttpResponseRedirect(success_url)
     
-class UpdateStudentEnquiryView(LoginRequiredMixin,UpdateView):
+class UpdateStudentEnquiryView(PermissionRequiredMixin,LoginRequiredMixin,UpdateView):
     model = StudentEnquiry
     form_class = CreateStudentEnquiryForm  
     pk_url_kwarg = 'pk'
@@ -300,6 +303,7 @@ class UpdateStudentEnquiryView(LoginRequiredMixin,UpdateView):
     context_object_name = 'form'
     success_url=reverse_lazy('staff:manage_student_enquiry')
     login_url=reverse_lazy('staff:login')
+    permission_required = 'staff.is_staff'
     
 
     def form_valid(self, form):
