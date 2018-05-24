@@ -23,9 +23,15 @@ urlpatterns = [
     url(r'^reset/done/$',StaffPasswordResetCompleteView.as_view(),name='password_reset_complete'),
     url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         StaffPasswordResetConfirmView.as_view(),name='password_reset_confirm'),    
-    
+
+#  Studnet Enquiry     
     url(r'^enquiry/create/',CreateStudentEnquiryView.as_view(), name='create_student_enquiry'),
     url(r'^enquiry/manage/',ManageStudentEnquiryView.as_view(), name='manage_student_enquiry'),
     url(r'^enquiry/(?P<pk>\d+)/delete/$',DeleteStudentEnquiryView.as_view(), name='delete_student_enquiry'),
     url(r'^enquiry/(?P<pk>\d+)/update/$',UpdateStudentEnquiryView.as_view(), name='update_student_enquiry'),
+    
+    
+# Library
+    url(r'^library/', include('library.urls', namespace='library', app_name='library')),
+
 ]

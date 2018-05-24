@@ -24,6 +24,8 @@ urlpatterns = [
     url(r'^reset/done/$',StudentPasswordResetCompleteView.as_view(),name='password_reset_complete'),
     url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         StudentPasswordResetConfirmView.as_view(),name='password_reset_confirm'),
-    
+     
+    url(r'^library-asset/my-issued/$',MyIssuedLibraryAsset.as_view(),name='my_issued_library_asset'),
+    url(r'^library-asset/view/$',ViewLibraryAsset.as_view(),name='view_library_asset'),
     
 ]
