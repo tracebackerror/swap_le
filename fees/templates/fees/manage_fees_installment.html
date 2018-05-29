@@ -1,0 +1,107 @@
+{% extends "staff/base.html" %}
+{% load bootstrap3 %}
+
+{% block title %}   Manage Fees Installment   {% endblock %}
+
+{% block content %}
+ <h1>Manage all Fees Installment </h1>
+
+<!--Filter-->
+
+<div class="container"> 
+{% if filter %}
+    <form action="" method="get" class="form form-inline">
+        {% bootstrap_form filter.form layout='inline' %}
+        {% bootstrap_button 'filter' %}
+    </form>
+{% endif %}
+</div>
+
+
+<!--Data-->
+
+<div class="container">        
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Student Username</th>
+        <th>Student Full Name</th>
+        <th>Student Standard</th>
+        <th>Amount</th>
+        <th>Day</th>
+        <th>Month</th>
+        <th>Year</th>
+        <th>Paid</th>
+        <th>Edit</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% if fees_model %}
+     {% for data in fees_model %}
+      <tr>
+        <td>{{ data.student_id.studentuser.username }}</td>
+        <td>{{ data.student_id.studentuser.first_name}} &nbsp; {{data.student_id.studentuser.last_name }}</td>
+        <td>{{ data.student_id.standard }}</td>
+        <td>{{ data.amount }}</td>
+        <td>{{ data.day }}</td>
+        <td>{{ data.month }}</td>
+        <td>{{ data.year }}</td>
+        {% if data.paid %}
+        <td>Paid</td>
+        {% else %}
+        <td>Not Paid</td>
+        {% endif %}
+        <td><a href="{% url  "staff:fees:edit_fees_installment" id=mypk pk=data.id %}">Edit</a></td>
+        <td><a href="{% url  "staff:fees:delete_fees_installment" id=mypk pk=data.id %}">Delete</a></td>
+      </tr>
+     {% endfor %}
+     
+    {% else %}
+       <tr>
+        <td>Null</td>
+        <td>Null</td>
+        <td>Null</td>
+        <td>Null</td>
+        <td>Null</td>
+        <td>Null</td>
+        <td>Null</td>
+        <td>Null</td>
+        <td>Null</td>
+        <td>Null</td>
+      </tr>
+      
+    {% endif %}
+     
+    </tbody>
+  </table>
+  
+<div align="right">
+<h3><a href="{% url "staff:fees:create_fees_installment" pk=mypk %}">ADD <span class="glyphicon glyphicon-plus"></span> </a></h3>
+</div>  
+  
+</div>
+
+
+
+<!--Pagination-->
+
+<div align="center">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; First</a>
+            <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+        
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+        {% endif %}
+</div>
+
+
+
+{% endblock %}
