@@ -267,13 +267,14 @@ class InstitutionPasswordResetCompleteView(PasswordResetCompleteView):
     template_name = 'institutions/password_reset_complete.html'
     
 
-class StudentFeesInstallment(LoginRequiredMixin,FilterView,ListView):
+class StudentFeesInstallment(PermissionRequiredMixin,LoginRequiredMixin,FilterView,ListView):
     model = FeesInstallment
     context_object_name = 'fees_model'
     template_name="institutions/view_student_fees_installment.html"
     paginate_by = 10
     filterset_class = ViewFeesInstallmentFilter
     login_url = reverse_lazy('institutions:login')
+    permission_required = 'institutions.is_institute'
     
     
     
