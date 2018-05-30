@@ -37,9 +37,6 @@ class LibraryAssetEditForm(forms.ModelForm):
 class AddLibraryAssetHistoryForm(forms.Form):
     student_id = forms.ModelChoiceField(queryset=Student.objects.all(),label="Student ID",required=True)
     
-    def __init__(self, *args, **kwargs):
-        super(PlaceEventForm, self).__init__(*args, **kwargs)
-        self.fields['student_id'].queryset = Student.objects.filter(created_by=request.user)
     
     def __init__(self, *args, **kwargs):
         self.request_user = kwargs.pop("request_user")

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+
+{% block title %}   View Fees Installment   {% endblock %}
+
+{% block content %}
+ <h1>View all Student Fees Installment </h1>
+
+<!--Filter-->
+<br/>
+<div class="container"> 
+{% if filter %}
+    <form action="" method="get" class="form form-inline">
+        {% bootstrap_form filter.form layout='inline' %}
+        {% bootstrap_button 'filter' %}
+    </form>
+{% endif %}
+</div>
+
+
+<!--Data-->
+
+<div class="container">        
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Student Username</th>
+        <th>Student Full Name</th>
+        <th>Student Standard</th>
+        <th>Amount</th>
+        <th>Day</th>
+        <th>Month</th>
+        <th>Year</th>
+        <th>Paid</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% if fees_model %}
+     {% for data in fees_model %}
+      <tr>
+        <td>{{ data.student_id.studentuser.username }}</td>
+        <td>{{ data.student_id.studentuser.first_name}} &nbsp; {{data.student_id.studentuser.last_name }}</td>
+        <td>{{ data.student_id.standard }}</td>
+        <td>{{ data.amount }}</td>
+        <td>{{ data.day }}</td>
+        <td>{{ data.month }}</td>
+        <td>{{ data.year }}</td>
+        {% if data.paid %}
+        <td>Paid</td>
+        {% else %}
+        <td>Not Paid</td>
+        {% endif %}
+      </tr>
+     {% endfor %}
+     
+    {% endif %}
+     
+    </tbody>
+  </table>
+
+
+<!--Pagination-->
+
+<div align="center">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; First</a>
+            <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+        
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+        {% endif %}
+</div>
+
+
+
+{% endblock %}
