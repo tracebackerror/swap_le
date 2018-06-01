@@ -1,0 +1,78 @@
+
+<html>
+
+<head>
+<title>My Report</title>
+<h1 align="center"><font color="green" size=7>{{ student.staffuser.institute|upper }}</font><h1>
+<h1 align="center"><font color="blue">ASSESSMENT HEADER : {{ result.assesment.header|upper }}</font></h1>
+<hr/>
+
+</head>
+
+
+
+<body>
+
+<!--Student Details-->
+<div style="font-size: 15px;">
+<h1>Student Username : {{ student.studentuser.username|upper }}</h1>
+{% if student.studentuser.first_name %}
+<h1>Student Full Name : {{ student.studentuser.first_name|upper }} &nbsp; {{ student.studentuser.last_name|upper }}</h1>
+{% endif %}
+<h1>Standard : {{ student.standard|upper }}</h1>
+</div>
+
+<br><br>
+
+<!--Result Details-->
+
+<div class="card" style="font-size: 20px;">
+  <div class="card-body">
+    <table class="table">
+      <tbody>
+        <tr>
+          <th scope="row"  class="col-sm-2"><h5>Taken Date Time</h5></th>
+          <td><h5>{{result.assesment.exam_start_date_time}}</h5></td>
+        </tr>
+        <tr>
+          <th scope="row"  class="col-sm-2"><h5>End Date Time</h5></th>
+          <td><h5>{{ result.assesment.expired_on }}</h5></td>   
+        </tr>
+        <tr>
+          <th scope="row"  class="col-sm-2"><h5>Total Question </h5></th>
+          <td><h5>{{result.total_question}}</h5></td>
+        </tr>
+        <tr>
+          <th scope="row"  class="col-sm-2"><h5>Attempted Question</h5></th>
+          <td><h5>{{result.total_attempted}}</h5></td>
+        </tr>
+            <tr>
+          <th scope="row"  class="col-sm-2"><h5>Total Marks</h5></th>
+          <td><h5>{{result.total_marks}}</h5></td>
+        </tr>
+            <tr>
+          <th scope="row"  class="col-sm-2"><h5>Obtained Marks</h5></th>
+          <td><h5>{{result.obtained_marks}}</h5></td>
+        </tr>
+        <tr>
+          <th scope="row"  class="col-sm-2"><h5>Examination Status</h5></th>
+          <td><h5>{{result.assesment_submitted|yesno:"Student Has Completed The Assesment,Assesment is in Progress"}}</h5></td>
+        </tr>
+        <tr>
+          <th scope="row"  class="col-sm-2"><h5>Result</h5></th>
+          <td><h5>{{result.result_passed|yesno:"Pass,Fail"}}</h5></td>
+        </tr>
+      </tbody>
+    </table>
+    <br><br><br><br>
+     {% if result.result_passed %}
+     <h5 align="center"><font size=8 color="green">PASS </font></h5>
+     {% else %}
+      <h5 align="center"><font size=8 color="red">FAIL </font></h5>
+     {% endif %}
+   </div>
+ </div>
+
+
+</body>
+</html>

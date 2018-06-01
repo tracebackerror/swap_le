@@ -1,0 +1,85 @@
+{% extends "student/base.html" %}
+{% load bootstrap3 %}
+
+{% block title %}   View My Result  {% endblock %}
+
+{% block content %}
+ <h1>View All Your Result </h1>
+
+
+<!--Filter-->
+
+<div class="container"> 
+{% if filter %}
+    <form action="" method="get" class="form form-inline">
+        {% bootstrap_form filter.form layout='inline' %}
+        {% bootstrap_button 'filter' %}
+    </form>
+{% endif %}
+</div>
+
+
+<!--Data-->
+
+<div class="container">        
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Assessment Header</th>
+        <th>Exam Taken Date Time</th>
+        <th>Total Question</th>
+        <th>Total Attempted</th>
+        <th>Total Marks</th>
+        <th>Obtained Marks</th>
+        <th>Result Passed</th>
+        <th>Report</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% if result %}
+     {% for data in result %}
+      <tr>
+        <td>{{ data.assesment.header }}</td>
+        <td>{{ data.exam_taken_date_time }}</td>
+        <td>{{ data.total_question }}</td>
+        <td>{{ data.total_attempted }}</td>
+        <td>{{ data.total_marks }}</td>
+        <td>{{ data.obtained_marks }}</td>
+        {% if data.result_passed %}
+        	<td><font color="green">Pass</font></td>
+        {% else %}
+        	<td><font color="red">Fail</font></td>
+        {% endif %}
+        
+        <td><a href="{% url "student:result_report" pk=data.id %}">REPORT</td>
+      </tr>
+     {% endfor %}
+    {% endif %}
+     
+    </tbody>
+  </table>
+</div>
+
+
+
+<!--Pagination-->
+
+<div align="center">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; First</a>
+            <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+        
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+        {% endif %}
+</div>
+
+
+
+{% endblock %}
