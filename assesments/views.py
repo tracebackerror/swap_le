@@ -45,6 +45,9 @@ from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from datetime import datetime
 
+from section.tables import ManageSectionTable
+from section.models import Section
+
 class ReviewAllSqaView(TemplateView):
     model = Answer
     template_name = 'assesments/review_all_sqa.html'
@@ -376,7 +379,7 @@ class ManageStudentAssesmentView(SingleTableView, ListView):
 class ManageSingleAsessment(SingleTableView):
     model = Question
     context_object_name = 'table'
-    paginate_by = 10
+    paginate_by = 3
     template_name = 'assesments/manage_single_assesment.html'
     table_class = QuestionTable
     http_method_names = ['get', 'POST']
@@ -404,9 +407,14 @@ class ManageSingleAsessment(SingleTableView):
         context = super(ManageSingleAsessment, self).get_context_data(**kwargs)
         self.result_queryset = Result.soft_objects.filter(assesment__exact = self.assesment_number_to_retrieve).order_by('pk')
         context['table_result'] =  ResultTable(self.result_queryset, assesmentid=self.kwargs['assesmentid'])
+        
+        self.section_queryset = Section.objects.filter(linked_assessment__id = self.assesment_number_to_retrieve).order_by('pk')
+        table_section = ManageSectionTable(self.section_queryset)
+        #table_section.paginate(page=self.request.GET.get('page', 1), per_page=1)
+        context['table_section'] =  table_section
         return context
     
-
+    
 class ProcesStudentAssesmentView(DetailView):
     model = Assesment
     context_object_name = 'table'

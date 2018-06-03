@@ -1,0 +1,96 @@
+{% extends "staff/base.html" %}
+
+{% block title %}   Add Questions In Section  {% endblock %}
+
+{% block script %}
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script type="text/javascript">
+        $(function () {
+
+//===================== Drag code =====================
+
+            $("#draggable h4").draggable({
+                helper: 'clone',
+                opacity : '0.3',
+
+                
+            });
+            
+		    $( "#droppable" ).droppable({
+                drop: function (event, ui) {
+                $( this )
+          		.find( "p" )
+            	.html("");
+                $("#droppable").append(ui.draggable.clone());
+		      }
+		    });
+		    
+		
+       });
+       
+       function SendData () {
+       		var length = document.getElementById("droppable").getElementsByTagName("h4").length;
+	        var context = {};
+	        var i = 0;
+	        for(i=0;i<length;i++)
+	        {
+	        	context[i] = document.getElementById("droppable").getElementsByTagName("h4")[i].innerHTML;
+	        }
+	        alert(context)
+       }
+       
+</script>
+
+<style>
+    h4{cursor:move;}
+ </style>
+ 
+{% endblock %}
+
+{% if messages %}
+<div class="alert alert-success">
+    {% for m in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ m }}</li>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% block content %}
+ <h1>Add Questions With Drag And Drop Methon in Section  </h1>
+ 
+ <div class="container" style="min-height:60%">
+ <p>You can Add Questions in Section  using the following Drag and Drop method:</p>
+<br/> 
+
+ <form action="." method="post" enctype="multipart/form-data">
+ {% csrf_token %}
+ 
+ 
+ <!-- Drag And Drop Data  -->
+<h2>Questions(Draggable) <span style="float:right;margin-right: 205px;">Section(Droppable)<span></h2>
+
+
+<div id="draggable" class="col-md-5" style="border-style:solid">
+{% for data in model %}
+<h4>{{ data.question_text}}<h4>
+{% endfor %}
+</div>
+
+
+<div id="droppable" class="col-md-6 ui-droppable" style="border-style:solid;left: 50px;">
+<p align="center">Drop Here Questions.....</p>
+</div>
+
+ <br><br><br><br><br><br><br><br><br><br>
+<p><input type="submit" class="btn btn-success" value="Save changes"></p>
+ </form>
+ 
+  
+ </div>
+ 
+ 
+{% endblock %}
+ 

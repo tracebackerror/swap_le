@@ -1,10 +1,10 @@
-from django.conf.urls import url
+from django.conf.urls import url,include
 from .views import ManageAllAssesmentView, ManageStudentAssesmentView, \
  ProcesStudentAssesmentView, assessment_delete_by_staff,  assessment_edit_by_staff, \
  assessment_create_by_staff, ManageSingleAsessment,assessment_question_delete, ManageSingleQuestionAddView, ReviewAllSqaView, \
  GenerateAssesmentResultView, AssessmentResultByStaff
-
-
+ 
+from section.views import AddQuestionSection
 
 
 urlpatterns = [
@@ -21,4 +21,9 @@ urlpatterns = [
     url(r'^change/(?P<questionid>\w{0,15})/delete/$', assessment_question_delete, name='assessment_question_delete'),
     url(r'^(?P<assesmentid>\w{0,15})/change/question/add/$', ManageSingleQuestionAddView.as_view(), name='assesment_manage_add_question'),
     url(r'^(?P<assesmentid>\w{0,15})/change/question/review/$', ReviewAllSqaView.as_view(), name='assesment_manage_review_sqa_question'),
+    
+    #section
+    url(r'^(?P<assesmentid>\w{0,15})/question-section/add/$',AddQuestionSection.as_view(),name="add_question_section"),
+    url(r'^question-section/', include('section.urls', namespace='section', app_name='section')),
+    
    ]

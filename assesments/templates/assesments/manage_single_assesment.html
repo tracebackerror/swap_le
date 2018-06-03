@@ -18,20 +18,35 @@
      
       <button class="btn btn-default " type="submit">Add Question</button>
     </form>
- 
-
-
+    
  </div>
  
  <div class="row">
- 
  <p> Linked Question</p>
   {% render_table table  %}
-  
+ </div>
+ 
+ 
+  <div class="row">
+
+    <form class="form-inline my-2 my-lg-0" method="GET" action="{% url "staff:assesments:add_question_section" request.resolver_match.kwargs.assesmentid %}">
+     
+      <button class="btn btn-default " type="submit">Add Question Section</button>
+    </form>
+    
+ </div>
+ 
+ 
+ <div class="row">
+ <p> Linked Question Section</p><br>
  </div>
  
  <div class="row">
+ {% render_table table_section  %}
+ </div>
  
+ 
+ <div class="row">
   <p> Linked Results</p>
   {% render_table table_result  %}
   
