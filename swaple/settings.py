@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'assesments',
     'library',
     'fees',
+    'section',
 ]
 
 MIDDLEWARE = [
