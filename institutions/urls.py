@@ -33,4 +33,8 @@ urlpatterns = [
         InstitutionPasswordResetConfirmView.as_view(),name='password_reset_confirm'),
     
     
+    #fees installment
+    url(r'^fees-installment/view/$',StudentFeesInstallment.as_view(),name='view_student_fees_installment'),
+    
+    
 ]

@@ -25,13 +25,15 @@ from django.contrib.auth.forms import UserCreationForm
 from licenses.models import License
 from django.contrib.auth.views import (PasswordResetView,PasswordResetDoneView, PasswordResetConfirmView ,PasswordResetCompleteView)
 from django.urls import reverse_lazy
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin,LoginRequiredMixin
 from guardian.shortcuts import assign_perm
 from django.contrib.auth.decorators import permission_required
 
 from django_tables2 import SingleTableView
 from django.utils.decorators import method_decorator
-
+from fees.models import FeesInstallment
+from .filters import ViewFeesInstallmentFilter
+from django_filters.views import FilterView
 
 def institute_login(request):
     if request.method == 'POST':
@@ -263,6 +265,18 @@ class InstitutionPasswordResetConfirmView(PasswordResetConfirmView):
 
 class InstitutionPasswordResetCompleteView(PasswordResetCompleteView):
     template_name = 'institutions/password_reset_complete.html'
+    
+
+class StudentFeesInstallment(PermissionRequiredMixin,LoginRequiredMixin,FilterView,ListView):
+    model = FeesInstallment
+    context_object_name = 'fees_model'
+    template_name="institutions/view_student_fees_installment.html"
+    paginate_by = 10
+    filterset_class = ViewFeesInstallmentFilter
+    login_url = reverse_lazy('institutions:login')
+    permission_required = 'institutions.is_institute'
+    
+    
     
     
     

@@ -9,7 +9,7 @@ from django.views.decorators.debug import sensitive_post_parameters
 from django.urls import reverse_lazy
 from django.contrib import messages
 from institutions.forms import UserEditForm
-from django.views.generic import ListView
+from django.views.generic import ListView,View
 from django.contrib.auth import login as auth_login
 
 from django.contrib.auth.views import (PasswordResetView,PasswordResetDoneView, PasswordResetConfirmView ,PasswordResetCompleteView)
@@ -21,6 +21,9 @@ from .filters import ViewLibraryAssetFilter
 from .models import Student
 from django_filters.views import FilterView
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+from assesments.models import Result
+from easy_pdf.views import PDFTemplateView
 
 class InstitutionStudentLoginView(LoginView):
     template_name = 'student/login.html'
@@ -143,3 +146,31 @@ class ViewLibraryAsset(LoginRequiredMixin,FilterView,ListView):
     login_url=reverse_lazy('student:login')
     
     
+class StudentResult(LoginRequiredMixin,ListView):
+    model = Result
+    template_name = 'student/student_result.html'
+    paginate_by = 10
+    context_object_name = 'result'
+    #filterset_class = ViewLibraryAssetFilter
+    login_url=reverse_lazy('student:login')
+    
+    
+    def get_queryset(self,**kwargs):
+        student_obj = Student.objects.get(studentuser = self.request.user)
+        self.queryset = Result.objects.filter(publish_result = True, registered_user = student_obj)
+        return super(StudentResult,self).get_queryset()
+    
+ 
+class ResultReport(LoginRequiredMixin,PDFTemplateView):
+    template_name = 'student/student_result_report.html'
+    pdf_filename = None
+    login_url=reverse_lazy('student:login')
+    def get_context_data(self, **kwargs):
+        context = super(ResultReport, self).get_context_data(**kwargs)
+        pk = self.kwargs.get('pk')
+        result = Result.objects.get(id=pk)
+        student = Student.objects.get(studentuser = self.request.user)
+        self.pdf_filename = "Result of {0}({1}).pdf".format(result.assesment.header,student.studentuser.username)
+        context['result'] = result
+        context['student'] = student
+        return context

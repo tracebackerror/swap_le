@@ -1,0 +1,42 @@
+{% extends "staff/base.html" %}
+{% block title %}   Edit Fees Installment   {% endblock %}
+
+{% if messages %}
+<div class="alert alert-success">
+    {% for m in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ m }}</li>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% block content %}
+ <h1>Edit Fees Installment </h1>
+ 
+ <div class="container" style="min-height:60%">
+ <p>You can Edit Fees Installment using the following form:</p>
+ 
+
+ <form action="." method="post" enctype="multipart/form-data">
+ {% csrf_token %}
+ 
+     {{ form.amount.label}}<br>
+     {{ form.amount}}<br><br><br>
+     
+     {{ form.day.label}}<br>
+     {{ form.day}}<br><br><br>
+     
+     {{ form.month.label}}<br>
+     {{ form.month}}<br><br><br>
+     
+     {{ form.year.label}}<br>
+     {{ form.year}}<br><br><br>
+     
+     {{ form.paid.label}}<br>
+     {{ form.paid}}<br><br><br>
+
+     
+ <p><input type="submit" class="btn btn-success" value="Save changes"></p>
+ </form>
+ 
+ </div>
+{% endblock %}
