@@ -33,5 +33,8 @@ urlpatterns = [
     
 # Library
     url(r'^library/', include('library.urls', namespace='library', app_name='library')),
+    
+# Fees
+    url(r'^fees/', include('fees.urls', namespace='fees', app_name='fees')),  
 
 ]

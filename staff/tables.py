@@ -41,7 +41,8 @@ class StudentTable(tables.Table):
     
     edit_student = tables.TemplateColumn('<a href=" {% url "staff:student_edit_by_staff" upk=record.pk  %} ">Edit</a>')
     delete_student = tables.TemplateColumn('<a href=" {% url "staff:delete_institution_staff_student" username=record.studentuser  %} ">Delete</a>')
-
+    student_fees = tables.TemplateColumn('<a href=" {% url "staff:fees:manage_fees_installment" pk=record.id  %} ">Installment</a>')
+    
     def __init__(self, *args, **kwargs):
         super(StudentTable, self).__init__(*args, **kwargs)
         self.counter = itertools.count()

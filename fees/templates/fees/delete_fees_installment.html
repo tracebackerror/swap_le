@@ -1,0 +1,25 @@
+{% extends "staff/base.html" %}
+{% block title %}  Delete Fees Installment  {% endblock %}
+
+{% if messages %}
+ <div id="userDisplayMessage">
+ 	<ul class="messages" >    
+ 		{% for message in messages %}
+ 		      <li class="{{ message.tags }}">        {{ message|safe }}          </li>
+ 		{% endfor %}
+   </ul>
+ </div>
+ {% endif %}
+
+{% block content %} 
+ <h1>Delete Fees Installment </h1>
+       
+  <form method="POST" action="."> {% csrf_token %}
+      <h3>Are you sure you want to delete: "{{ form.student_id.studentuser.username }}" Fees Installment?</h3>
+              
+     <input type='submit' value='Delete'  class='btn btn-success'>&nbsp;&nbsp;&nbsp
+     <a href='{% url 'staff:manage_student' %}' class='btn btn-default'>Cancel</a>
+  </form>
+
+
+{% endblock %}
