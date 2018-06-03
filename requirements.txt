@@ -14,4 +14,4 @@ django-suit-ckeditor==0.0.2
 django-markdown
 django-guardian==1.4.9
 django-easy_pdf==0.1.1
-six=1.9.0
+six==1.9.0
