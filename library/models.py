@@ -15,7 +15,7 @@ class LibraryAsset(models.Model):
     for_institution = models.ForeignKey(Institutions,on_delete=models.CASCADE)
     name = models.CharField(max_length=50,null=True)
     asset_type = models.CharField(max_length=10,choices=ASSET_TYPE_CHOICES)
-    asset_unique_code = models.CharField(max_length=50)
+    asset_unique_code = models.CharField(max_length=50, unique=True)
     asset_description = models.TextField()
     availability = models.BooleanField(default = True)
     created_by = models.ForeignKey(Staff,on_delete=models.CASCADE)

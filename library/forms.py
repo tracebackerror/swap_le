@@ -14,6 +14,16 @@ class LibraryAssetForm(forms.Form):
     asset_type = forms.ChoiceField(choices=ASSET_TYPE_CHOICES, required=True,label="Asset Type")
     asset_description = forms.CharField(widget=forms.Textarea, required=True,label="Asset Description")
     
+    def clean_asset_unique_code(self):
+       cleaned_data = super().clean()
+       asset_unique_code = cleaned_data.get("asset_unique_code")
+       
+       if LibraryAsset.objects.filter(asset_unique_code=asset_unique_code).count() > 0:
+           del cleaned_data["asset_unique_code"]
+           raise forms.ValidationError("Asset Unique Code Already Exists!!!")
+    
+       return cleaned_data
+    
     
 
 class LibraryAssetEditForm(forms.ModelForm):
