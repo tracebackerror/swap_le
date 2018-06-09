@@ -1,5 +1,7 @@
 {% extends "staff/base.html" %}
 {%load literal_eval%}
+{% load static %}
+
 
 {% block title %}Student Result {% endblock %}
 
@@ -10,8 +12,6 @@
 	
 	
 	
-
-
 <div class="card">
   <div class="card-body">
   <h5 class="card-title">Examination Detailed Information: </h5>
@@ -134,7 +134,37 @@
       </div>
     </div>
 {% endfor %}
-	
+    
+<div align="center" class="card">
+	<div style="width:75%;">
+		<canvas id="canvas"></canvas>
+	</div>
+</div>
 	
 </div>
+<script>
+		section = [];
+		{% for data in section_name %}
+		section.push("{{data}}");
+		{% endfor %}
+		
+		total_questions = [];
+		{% for data in total_questions %}
+		total_questions.push({{data}});
+		{% endfor %}
+		
+		attempted_questions = [];
+		{% for data in attempted_questions %}
+		attempted_questions.push({{data}});
+		{% endfor %}
+		
+		corrected_questions = [];
+		{% for data in corrected_questions %}
+		corrected_questions.push({{data}});
+		{% endfor %}
+</script>
+
+<script src="{% static "js/script.js" %}"></script>
 {% endblock %}
+
+
