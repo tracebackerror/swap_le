@@ -46,7 +46,8 @@ from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMix
 from datetime import datetime
 
 from section.tables import ManageSectionTable
-from section.models import Section
+from section.models import Section,SectionQuestionMapping
+from django.db.models import Count
 
 class ReviewAllSqaView(TemplateView):
     model = Answer
@@ -315,7 +316,55 @@ class AssessmentResultByStaff(DetailView):
     @method_decorator(login_decorator)
     def dispatch(self, *args, **kwargs):
         return super(AssessmentResultByStaff, self).dispatch(*args, **kwargs)
-
+    
+    def render_to_response(self, context, **response_kwargs):
+        #data to required in graph result view =========================================================================
+        pk = self.kwargs.get('pk')
+        result_obj = Result.objects.get(id = pk)
+        curr_assessment = result_obj.assesment
+        #section_obj = SectionQuestionMapping.objects.filter(for_section__linked_assessment = curr_assessment).values('for_section__name').annotate(count_question = Count('for_question'))
+        ans_obj = Answer.objects.filter(for_result = result_obj)
+        data = [];
+        #print(ans_obj)
+        attempted , corrected,total = 0,0,0
+        for i in Section.objects.filter(linked_assessment  = curr_assessment).order_by('id'):
+            for j in SectionQuestionMapping.objects.filter(for_section = i):
+                total+=1
+                for k in ans_obj:
+                    if j.for_question == k.for_question:
+                        if k.alloted_marks > 0:
+                            attempted+=1
+                            corrected+=1
+                        else:
+                            attempted+=1
+            data.append({'section_name' : i.name,'total_question' : total,'attempted' : attempted,'corrected' : corrected})
+            attempted , corrected,total = 0,0,0
+        #print(data)
+        
+        section_name = []
+        total_questions = []
+        attempted_questions = []
+        corrected_questions = []
+        for i in data:
+            section_name.append(i['section_name'])
+            total_questions.append(i['total_question'])
+            attempted_questions.append(i['attempted'])
+            corrected_questions.append(i['corrected'])
+        #end==============================================================================================================
+        
+        
+        context['section_name'] = section_name
+        context['total_questions'] = total_questions
+        context['attempted_questions'] = attempted_questions
+        context['corrected_questions'] =  corrected_questions
+       
+        return self.response_class(
+            request = self.request,
+            template = self.get_template_names(),
+            context = context,
+            **response_kwargs
+        )
+    
 
 class ManageStudentAssesmentView(SingleTableView, ListView):
     model = Assesment
