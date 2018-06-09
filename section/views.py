@@ -1,6 +1,6 @@
 from django.shortcuts import *
 from .models import Section
-from django.views.generic import FormView,DeleteView,UpdateView,ListView
+from django.views.generic import FormView,DeleteView,UpdateView,ListView,View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import AddQuestionSectionForm
 from .models import Section,SectionQuestionMapping
@@ -64,11 +64,11 @@ class EditQuestionSection(LoginRequiredMixin,UpdateView):
     
     
 
-class ManageQuestionSection(LoginRequiredMixin,ListView):
-    model = Section
+class ManageQuestionSection(LoginRequiredMixin,View):
+    model = Question
     template_name="section/manage_question_section.html"
-    context_object_name = "model"
     success_url =  reverse_lazy('staff:assesments:manage_all_assesment')
+    context_object_name = "model"
     login_url=reverse_lazy('staff:login')
 
     def get_queryset(self,**kwargs):
@@ -77,4 +77,63 @@ class ManageQuestionSection(LoginRequiredMixin,ListView):
         assessment_obj = Assesment.objects.filter(id=section_obj.linked_assessment.id)
         queryset = Question.objects.filter(assesment_linked = assessment_obj)
         return queryset
+              
+    def post(self, request, *args, **kwargs):
+        question_id = self.request.POST['question_id']
+        pk = self.kwargs.get('pk')
+        for_section = Section.objects.get(id = pk)
+        
+        qsmapping = SectionQuestionMapping.objects.filter(for_section = for_section)
+        qsmapping_q_id = []
+        for i in qsmapping:
+            qsmapping_q_id.append(i.for_question.id)
+        print(qsmapping_q_id)
+        print(question_id.split(','))
+        
+        for i in question_id.split(','):
+            for_question = Question.objects.get(id = i)
+            already_mapping = SectionQuestionMapping.objects.filter(for_section = for_section,for_question = for_question)
+            #add data code
+            if already_mapping :
+                print("already exists")
+            else:
+                SectionQuestionMapping.objects.create(for_section = for_section,for_question = for_question)
+                
+        #delete data code start
+            if int(i) in qsmapping_q_id:
+                qsmapping_q_id.remove(int(i))
+        
+        for i in qsmapping_q_id:
+            SectionQuestionMapping.objects.get(for_question__id = i).delete()
+        #delete data code end
+            
+        messages.add_message(self.request, messages.SUCCESS, 'Questions Successfully Managed in Section!')
+        
+        return HttpResponseRedirect(self.success_url)
+        
+                
+    def get(self, request, *args, **kwargs):
+        self.object_list = self.get_queryset()
+        context = self.get_context_data(object_list=self.object_list)
+        return self.render_to_response(context)
     
+    def get_context_data(self, **kwargs):
+        queryset = kwargs.pop('object_list')
+        pk = self.kwargs.get('pk')
+        for_section = Section.objects.get(id = pk)
+        qsmapping = SectionQuestionMapping.objects.filter(for_section = for_section)
+        qsmapping_q_id = []
+        for i in qsmapping:
+            qsmapping_q_id.append(i.for_question.id)
+            
+        context_object_name = self.context_object_name
+        if context_object_name is not None:
+            context = {
+                context_object_name : queryset,
+                'qsmapping' : qsmapping,
+                'qsmapping_q_id' : qsmapping_q_id
+                }
+        return context
+    
+    def render_to_response(self, context):
+        return render(self.request,self.template_name,context)

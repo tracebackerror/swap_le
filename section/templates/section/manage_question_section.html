@@ -15,6 +15,7 @@
             $("#draggable h4").draggable({
                 helper: 'clone',
                 opacity : '0.3',
+                
 
                 
             });
@@ -24,23 +25,54 @@
                 $( this )
           		.find( "p" )
             	.html("");
-                $("#droppable").append(ui.draggable.clone());
+                $("#droppable").append(ui.draggable.draggable());
 		      }
 		    });
+		    
+		    $( "#draggable" ).droppable({
+                drop: function (event, ui) {
+                $("#draggable").append(ui.draggable.draggable());
+		      }
+		    });
+		    
+		    
+		     $("#droppable h4").draggable({
+                helper: 'clone',
+                opacity : '0.3',
+                
+
+                
+            })
 		    
 		
        });
        
        function SendData () {
-       		var length = document.getElementById("droppable").getElementsByTagName("h4").length;
-	        var context = {};
-	        var i = 0;
-	        for(i=0;i<length;i++)
-	        {
-	        	context[i] = document.getElementById("droppable").getElementsByTagName("h4")[i].innerHTML;
-	        }
-	        alert(context)
+  			$("#draggable input").remove();
+  			
+  			var input = document.getElementById("droppable").getElementsByTagName("input");
+  				var question_id = [];
+	  			for(i=0;i<input.length;i++)
+	  			{
+					question_id.push(input[i].value)
+	  			}
+	  			
+	  			$("#droppable input").remove();
+	  			
+	  			$("#droppable").append("<input type=hidden name=question_id value = " + question_id + " >");
+  			
        }
+       
+      function validateForm(){
+      	if($("#droppable input")[0].value){
+      		return true;
+      	}
+      	else{
+      		alert("Section Should Not Be Empty. Add Some Questions In Section!!!");
+      	 	return false;
+      	}
+      }
+       
        
 </script>
 
@@ -50,14 +82,6 @@
  
 {% endblock %}
 
-{% if messages %}
-<div class="alert alert-success">
-    {% for m in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ m }}</li>
-    {% endfor %}
-</div>
-{% endif %}
-
 {% block content %}
  <h1>Add Questions With Drag And Drop Methon in Section  </h1>
  
@@ -65,7 +89,9 @@
  <p>You can Add Questions in Section  using the following Drag and Drop method:</p>
 <br/> 
 
- <form action="." method="post" enctype="multipart/form-data">
+<font color="red" size = 5></font>
+
+ <form action="." onsubmit="return validateForm()" method="post" enctype="multipart/form-data">
  {% csrf_token %}
  
  
@@ -74,23 +100,33 @@
 
 
 <div id="draggable" class="col-md-5" style="border-style:solid">
-{% for data in model %}
-<h4>{{ data.question_text}}<h4>
-{% endfor %}
+{% if model %}
+	{% for data in model %}
+		{% if data.id in qsmapping_q_id %}
+		{% else %}
+		<h4>{{ data.question_text}} <input type="hidden" value={{ data.id }} name={{ data.id }}><h4>
+		{% endif %}
+	{% endfor %}	
+{% else %}
+	<p align="center">Empty Questions</p>
+{% endif %}
 </div>
 
 
 <div id="droppable" class="col-md-6 ui-droppable" style="border-style:solid;left: 50px;">
-<p align="center">Drop Here Questions.....</p>
+{% if qsmapping %}
+	{% for data in qsmapping %}
+	<h4>{{ data.for_question.question_text}} <input type="hidden" value={{ data.for_question.id }} name={{ data.for_question.id }}></h4> 
+	{% endfor %}
+{% else %}
+	<p align="center">Drop Here Questions.....</p>
+{% endif %}
 </div>
-
- <br><br><br><br><br><br><br><br><br><br>
-<p><input type="submit" class="btn btn-success" value="Save changes"></p>
- </form>
  
-  
+ 
  </div>
- 
- 
+<br>
+<p><input type="submit" class="btn btn-success" value="Save changes" onclick="SendData()" style="margin-left: 240px;"></p>
+ </form>
+
 {% endblock %}
- 
