@@ -24,6 +24,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from assesments.models import Result
 from easy_pdf.views import PDFTemplateView
+from django.db.models import Count,Sum
 
 class InstitutionStudentLoginView(LoginView):
     template_name = 'student/login.html'
@@ -55,8 +56,24 @@ def dashboard(request):
     #license_institute = License.objects.get(li_institute=current_institute)
 
     #license_form = LicenseViewForm(instance = license_institute)
+    
+    #card view data=============
+    student_obj = Student.objects.get(studentuser = request.user)
+    total_obj = Result.objects.filter(registered_user = student_obj,assesment_submitted = True).aggregate(total = Count('assesment_submitted'))
+    passed_obj = Result.objects.filter(publish_result = True, registered_user = student_obj,result_passed = True).aggregate(passed = Count('result_passed'))
+    pending_obj = Result.objects.filter(publish_result = False, registered_user = student_obj).count()
+    
+    total = total_obj['total']
+    passed = passed_obj['passed']
+    pending = pending_obj
+    failed = (total-pending) - passed
+ 
+    
+    #graph data=================
+    result_obj = Result.objects.filter(publish_result = True, registered_user = student_obj,assesment_submitted = True).values('assesment__header').annotate(obtained_marks = Sum('obtained_marks'),total_marks = Sum('total_marks'),passing_marks = Sum('assesment__passing_marks'))
 
-    return render(request, 'student/dashboard.html', {'section': 'dashboard'})
+    
+    return render(request, 'student/dashboard.html', {'section': 'dashboard','total':total,'passed':passed,'failed':failed,'pending':pending_obj,'result_obj':result_obj})
     '''
     from django.http.response import HttpResponse
     return HttpResponse('sddf')
