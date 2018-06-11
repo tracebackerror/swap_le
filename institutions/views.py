@@ -34,6 +34,8 @@ from django.utils.decorators import method_decorator
 from fees.models import FeesInstallment
 from .filters import ViewFeesInstallmentFilter
 from django_filters.views import FilterView
+from students.models import Student
+from django.db.models import Count,Q
 
 def institute_login(request):
     if request.method == 'POST':
@@ -164,8 +166,12 @@ def dashboard(request):
     license_institute = License.objects.get(li_institute=current_institute)
 
     license_form = LicenseViewForm(instance = license_institute)
-
-    return render(request, 'institutions/dashboard.html', {'section': 'dashboard', 'current_details': license_form })
+    
+    #Total Male/Female Student Counting data
+    total_male = Student.objects.filter(staffuser__institute = current_institute,gender='male').count()
+    total_female = Student.objects.filter(staffuser__institute = current_institute,gender='female').count()
+    
+    return render(request, 'institutions/dashboard.html', {'section': 'dashboard', 'current_details': license_form,'total_male':total_male,'total_female':total_female})
 
 
 

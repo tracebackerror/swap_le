@@ -26,10 +26,11 @@ class StudentEditForm(forms.ModelForm):
     address = forms.CharField(widget=forms.Textarea,required=True)
     student_contact_no = forms.IntegerField(widget=forms.NumberInput,required=True)
     parent_contact_no = forms.IntegerField(widget=forms.NumberInput,required=True)
+    gender = forms.ChoiceField(widget=forms.RadioSelect(attrs={'style': 'width: 50px;'}),choices=(('male','Male'),('female','Female')))
     
     class Meta:
         model=Student
-        fields=['standard','address','student_contact_no','parent_contact_no']     
+        fields=['standard','address','student_contact_no','parent_contact_no','gender']     
 
 class StudentUserEditForm(forms.ModelForm):    
     class Meta:
@@ -45,6 +46,7 @@ class StudentAddForm(UserCreationForm):
     address = forms.CharField(widget=forms.Textarea,required=True)
     student_contact_no = forms.IntegerField(widget=forms.NumberInput,required=True)
     parent_contact_no = forms.IntegerField(widget=forms.NumberInput,required=True)
+    gender = forms.ChoiceField(widget=forms.RadioSelect(attrs={'style': 'width: 50px;'}),choices=(('male','Male'),('female','Female')))
     
     class Meta:
         model=User

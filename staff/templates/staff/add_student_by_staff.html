@@ -36,6 +36,13 @@
      {{ add_s_form.parent_contact_no.label}}<br>
      {{ add_s_form.parent_contact_no}}<br><br><br>
      
+     {{ add_s_form.gender.label}}<br>
+     <div style="display: flex;">
+     {{ add_s_form.gender.0 }}
+     {{add_s_form.gender.1}}
+     </div>
+     <br>
+     
      {{ add_s_form.password1.label}}<br>
      {{ add_s_form.password1}}<br><br><br>
      {{ add_s_form.password2.errors }}

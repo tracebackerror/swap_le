@@ -54,6 +54,7 @@ class Student(models.Model):
     address = models.TextField(null=True)
     student_contact_no = models.IntegerField(null=True)
     parent_contact_no = models.IntegerField(null=True)
+    gender = models.CharField(max_length = 10,null=True)
     
     
     class Meta:

@@ -36,6 +36,13 @@
      {{ student_form.parent_contact_no.label}}<br>
      {{ student_form.parent_contact_no}}<br><br><br>
      
+     {{ student_form.gender.label}}<br>
+     <div style="display: flex;">
+     {{ student_form.gender.0 }}
+     {{student_form.gender.1}}
+     </div>
+     <br>
+     
      
  <p><input type="submit" class="btn btn-success" value="Save changes"></p>
  </form>
