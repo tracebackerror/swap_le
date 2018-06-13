@@ -1,8 +1,198 @@
 {% extends "student/base.html" %}
 {% block title %}DashBoard Student{% endblock %}
 {% block content %}
-<div class="container" style="min-height:60%">
 
-	Welcome To Student Portal  
+<div class="container" style="min-height:80%">
+<br>
+  <div class = "col-md-3">
+	<div class="card border-success mb-3" style="max-width: 30rem;">
+	  <div align="center" class="card-body text-success">
+	   <font size = 20 color="blue"><span class="count">{{total}}</span></font>
+	  </div>
+	  <div align="center" class="card-footer bg-transparent border-success">Total Submitted Assessments</div>
+	</div>
+  </div>
+  
+  <div class = "col-md-3">
+	<div class="card border-success mb-3" style="max-width: 30rem;">
+	  <div align="center" class="card-body text-success">
+	    <font size = 20 color="lightgreen"><span class="count">{{passed}}</span></font>
+	  </div>
+	  <div align="center" class="card-footer bg-transparent border-success">Total Passed Assessments</div>
+	</div>
+  </div>
+  
+  <div class = "col-md-3">
+	<div class="card border-success mb-3" style="max-width: 30rem;">
+	  <div align="center" class="card-body text-success">
+	    <font size = 20 color="red"><span class="count">{{failed}}</span></font>
+	  </div>
+	  <div align="center" class="card-footer bg-transparent border-success">Total Failed Assessments</div>
+	</div>
+  </div>
+  
+    <div class = "col-md-3">
+	<div class="card border-success mb-3" style="max-width: 30rem;">
+	  <div align="center" class="card-body text-success">
+	    <font size = 20 color="#ffbf00"><span class="count">{{pending}}</span></font>
+	  </div>
+	  <div align="center" class="card-footer bg-transparent border-success">Total Pending Assessments</div>
+	</div>
+  </div>
+  
+  
+<!-- Graph code -->
+
+<div align="center" class="card">
+	<div style="width:75%;">
+		<canvas id="canvas"></canvas>
+	</div>
 </div>
+	
+</div>
+
+
+<!-- COunter increment motion Script======================================================== -->
+
+<script>
+$('.count').each(function () {
+    $(this).prop('Counter',0).animate({
+        Counter: $(this).text()
+    }, {
+        duration: 2000,
+        easing: 'swing',
+        step: function (now) {
+            $(this).text(Math.ceil(now));
+        }
+    });
+});
+
+
+//  Graph Script======================================================== 
+		
+		assesment_header = [];
+		{% for data in result_obj %}
+			assesment_header.push("{{data.assesment__header}}")
+		{% endfor %}
+	
+		total_marks = [];
+		{% for data in result_obj %}
+			total_marks.push("{{data.total_marks}}")
+		{% endfor %}
+	
+		passing_marks = [];
+		{% for data in result_obj %}
+			passing_marks.push("{{data.passing_marks}}")
+		{% endfor %}
+		
+		obtained_marks = [];
+		{% for data in result_obj %}
+			obtained_marks.push("{{data.obtained_marks}}")
+		{% endfor %}
+		
+		i = -1;
+		function TotalQuestionsFunction() {
+			i++;
+			return total_marks[i];
+		};
+		
+		j = -1;
+		function AttemptedQuestionFunction() {
+			j++;
+			return obtained_marks[j];
+		};
+		
+		k = -1;
+		function CorrectedQuestionsFunction() {
+			k++;
+			return passing_marks[k];
+		};
+		
+		
+		var CallTotalQuestions = [];
+		var CallAttemptedQuestions = [];
+		var CallCorrectedQuestions = [];
+		for(a=0;a<assesment_header.length;a++)
+		{
+			CallTotalQuestions.push(TotalQuestionsFunction());
+			CallAttemptedQuestions.push(AttemptedQuestionFunction());
+			CallCorrectedQuestions.push(CorrectedQuestionsFunction());
+		};
+		
+		
+		
+		var config = {
+			type: 'line',
+			data: {
+				labels: assesment_header,
+				datasets: [{
+					label: 'Total Marks',
+					fill: false,
+					backgroundColor: window.chartColors.red,
+					borderColor: window.chartColors.red,
+					data: CallTotalQuestions,
+					
+				},{
+					label: 'Passing Marks',
+					fill: false,
+					backgroundColor: window.chartColors.blue,
+					borderColor: window.chartColors.blue,
+					data: CallCorrectedQuestions,
+				},{
+					label: 'Obtained Marks',
+					fill: false,
+					backgroundColor: window.chartColors.green,
+					borderColor: window.chartColors.green,
+					data: CallAttemptedQuestions,
+					
+				}]
+			},
+			
+			options: {
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Student Assessment Graph View'
+				},
+				tooltips: {
+					mode: 'index',
+					intersect: false,
+				},
+				hover: {
+					mode: 'nearest',
+					intersect: true
+				},
+				scales: {
+					xAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'ASSESSMENT NAME'
+						}
+					}],
+					yAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'MARKS'
+						},
+						ticks: {
+							min: 0,
+							max: 40,
+
+							// forces step size to be 5 units
+							stepSize: 2
+						}
+					}]
+				}
+			}
+		};
+
+		window.onload = function() {
+			var ctx = document.getElementById('canvas').getContext('2d');
+			window.myLine = new Chart(ctx, config);
+		};
+		
+</script>
+
 {% endblock %} 
