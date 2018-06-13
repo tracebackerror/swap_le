@@ -1,8 +1,22 @@
 {% extends "staff/base.html" %}
+{% load static %}
+
 {% block title %}Staff Portal{% endblock %}
 {% block content %}
   <h1>Dashboard</h1>
   <div class="container" style="min-height:60%">
-  <p>Welcome to Staff Portal </p	>
+  <p>Welcome to Staff Portal </p>
+  
+    <div id="canvas-holder" style="width:80%">
+		<canvas id="chart-area"></canvas>
+	</div>
+  
   </div>
- {% endblock %} 
+  
+  
+<script>
+	studentCounting = [{{total_male}},{{total_female}}];
+</script>
+	
+<script src="{% static "js/male_female_st_pie_chart_script.js" %}"></script>
+{% endblock %} 

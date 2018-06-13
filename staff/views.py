@@ -58,8 +58,13 @@ def dashboard(request):
     #license_institute = License.objects.get(li_institute=current_institute)
 
     #license_form = LicenseViewForm(instance = license_institute)
+    
+    #Total Male/Female Student Counting data
+    current_institute = Staff.objects.get(staffuser = request.user).institute
+    total_male = Student.objects.filter(staffuser__institute = current_institute,gender='male').count()
+    total_female = Student.objects.filter(staffuser__institute = current_institute,gender='female').count()
 
-    return render(request, 'staff/dashboard.html', {'section': 'dashboard'})
+    return render(request, 'staff/dashboard.html', {'section': 'dashboard','total_male':total_male,'total_female':total_female})
     '''
     from django.http.response import HttpResponse
     return HttpResponse('sddf')
@@ -205,8 +210,9 @@ def add_student_by_staff(request):
                     address=request.POST['address']
                     student_contact_no=request.POST['student_contact_no']
                     parent_contact_no=request.POST['parent_contact_no']
+                    gender = request.POST['gender']
                     
-                    student_profile=Student.objects.create(studentuser=user,staffuser=request.user.staff,deleted='N',standard=standard,address=address,student_contact_no=student_contact_no,parent_contact_no=parent_contact_no)
+                    student_profile=Student.objects.create(studentuser=user,staffuser=request.user.staff,deleted='N',standard=standard,address=address,student_contact_no=student_contact_no,parent_contact_no=parent_contact_no,gender=gender)
                     
                     license_institute.li_current_students += 1
                     student_profile.save()
