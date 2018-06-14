@@ -19,19 +19,56 @@
     	{{  current_details.as_table }}
     </table>
    </div>
-   
+
    <div class="col-md-6">
     <div id="canvas-holder" style="width:125%">
-		<canvas id="chart-area"></canvas>
+		<canvas id="pie-chart"></canvas>
 	</div>
    </div>
+   
 
  </div>
+ 
+ <br><br><br>
+ <!-- ------------------ Assessment Filter	----------------------- -->
+ <div class="col-md-4">
+ </div>
+ 
+ <div align="center" class="col-md-4">
+   <form method="post">
+		 {% csrf_token %}
+			<select name="assessment_id" class="selectpicker" data-live-search="true">
+			<option value=""></option>
+			 {% for data in all_instituion_assessments %}
+			  <option value="{{data.id}}">{{ data.header }}</option>
+			  {% endfor %}
+			</select>
+		   <button class="btn btn-success" style="padding-left: 50px;padding-right: 50px;height: 38px;">FILTER</button></div>
+	</form>
+</div>
+	
+ <br>
+<div align="center">
+     <div style="width:50%">
+		<canvas id="time-series-graph"></canvas>
+	 </div>
+ </div>
+ 
  
  
 <script>
 	studentCounting = [{{total_male}},{{total_female}}];
+	studentUsername = [];
+	studentMarks = [];
+	assessmentHeader = "{{assessment_header}}"
+	
+	{% for data in result_obj %}
+		studentUsername.push("{{data.registered_user.studentuser.username}}")
+		studentMarks.push({{data.obtained_marks}})
+	{% endfor %}
+	
+
 </script>
 	
-<script src="{% static "js/male_female_st_pie_chart_script.js" %}"></script>
+<script src="{% static "js/institution_dashboard_script.js" %}"></script>
 {% endblock %} 

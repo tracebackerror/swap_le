@@ -36,6 +36,7 @@ from .filters import ViewFeesInstallmentFilter
 from django_filters.views import FilterView
 from students.models import Student
 from django.db.models import Count,Q
+from assesments.models import Result,Assesment
 
 def institute_login(request):
     if request.method == 'POST':
@@ -167,11 +168,21 @@ def dashboard(request):
 
     license_form = LicenseViewForm(instance = license_institute)
     
-    #Total Male/Female Student Counting data
+    #Total Male/Female Student Counting data(Pie Chart)
     total_male = Student.objects.filter(staffuser__institute = current_institute,gender='male').count()
     total_female = Student.objects.filter(staffuser__institute = current_institute,gender='female').count()
     
-    return render(request, 'institutions/dashboard.html', {'section': 'dashboard', 'current_details': license_form,'total_male':total_male,'total_female':total_female})
+    #Student Marks in Particular Assessment data(Time-Series Graph)
+    all_instituion_assessments = Assesment.objects.filter(subscriber_users__staffuser__institute = current_institute).distinct
+    
+    if request.method == "POST":
+        assessment_id = request.POST['assessment_id']
+        if assessment_id:
+            result_obj = Result.objects.filter(assesment__id = int(assessment_id)).order_by('id')
+            assessment_obj = Assesment.objects.get(id = int(assessment_id))
+            return render(request, 'institutions/dashboard.html', {'section': 'dashboard', 'current_details': license_form,'total_male':total_male,'total_female':total_female,'result_obj':result_obj,'assessment_header':assessment_obj.header,'all_instituion_assessments':all_instituion_assessments})
+    
+    return render(request, 'institutions/dashboard.html', {'section': 'dashboard', 'current_details': license_form,'total_male':total_male,'total_female':total_female,'all_instituion_assessments':all_instituion_assessments})
 
 
 
