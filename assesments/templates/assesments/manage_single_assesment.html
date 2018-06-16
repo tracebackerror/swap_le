@@ -7,11 +7,70 @@
 
 {% block content %} 
  <h1>Manage Single Assesment</h1>
+
+<br>
+<!-- ------------------- Student Assessment Bubble Progress Bar ------------------- -->
+
 <div class="container">
+  <div align="center" class="col-md-4">
+	<style>
+	.ldBar {
+	    position: relative
+	}
+	
+	.ldBar.label-center>.ldBar-label {
+	    position: absolute;
+	    top: 50%;
+	    left: 50%;
+		font-size : 30;
+		font-style : italic;
+	    -webkit-transform: translate(-50%, -50%);
+	    transform: translate(-50%, -50%);
+	    text-shadow: 0 0 3px #fff
+	}
+	
+	.ldBar-label:after {
+	    content: "%";
+	    display: inline
+	}
+	</style>
+	
+	<div
+	  data-preset="bubble"
+	  class="ldBar label-center"
+	  data-value={{percentage_student}}
+	  style="width: 80%; height: 30%;"
+	>
+	</div>
+	 <p>Assessment Taken Percentage(%)</p>
+  </div>
+  
+  <div align="center" class="col-md-4">
+  	<div class="card border-success mb-3" style="max-width: 30rem;height:20%;top:35;">
+	  <div align="center" class="card-body text-success">
+	   <font style="font-size:60;" color="blue"><span class="count">{{ total_subscribes_student }}</span></font>
+	  </div>
+	  <div align="center" class="card-footer bg-transparent border-success">Total Subscribes Student </div>
+	</div>
+  </div>
+  
+  <div align="center" class="col-md-4">
+    <div class="card border-success mb-3" style="max-width: 30rem;height:20%;top:35">
+	  <div align="center" class="card-body text-success">
+	   <font style="font-size:60;" color="lightgreen"><span class="count">{{ attend_exam_student }}</span></font>
+	  </div>
+	  <div align="center" class="card-footer bg-transparent border-success">All Student Submitted Assessments</div>
+	</div>
+  </div>
+  
+</div>
 
 
+<br>
 
- 
+<!-- ------------------- Table Data ------------------- -->
+
+<div class="container">
   <div class="row">
 
     <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'staff:assesments:assesment_manage_add_question' request.resolver_match.kwargs.assesmentid %}">
@@ -53,6 +112,22 @@
  </div>
  
  </div>
+ 
+ 
+<!-- Counter increment motion Script======================================================== -->
+<script>
+$('.count').each(function () {
+    $(this).prop('Counter',0).animate({
+        Counter: $(this).text()
+    }, {
+        duration: 2000,
+        easing: 'swing',
+        step: function (now) {
+            $(this).text(Math.ceil(now));
+        }
+    });
+});
+</script>
  
 {% endblock %}
 

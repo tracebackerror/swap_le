@@ -461,6 +461,16 @@ class ManageSingleAsessment(SingleTableView):
         table_section = ManageSectionTable(self.section_queryset)
         #table_section.paginate(page=self.request.GET.get('page', 1), per_page=1)
         context['table_section'] =  table_section
+        
+        #Stduent Assessment Progress Bar Data
+        total_subscribes_student = Assesment.objects.filter(id = self.kwargs['assesmentid']).aggregate(total_user = Count('subscriber_users'))
+        attend_exam_student = Result.objects.filter(assesment__id = self.kwargs['assesmentid'] , assesment_submitted = True).count()
+        
+        percentage_of_attend_exam = (attend_exam_student / total_subscribes_student['total_user']) * 100
+        context['percentage_student'] = round(percentage_of_attend_exam,2)
+        context['total_subscribes_student'] = total_subscribes_student['total_user']
+        context['attend_exam_student'] = attend_exam_student
+
         return context
     
     
