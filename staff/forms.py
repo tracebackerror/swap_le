@@ -3,7 +3,6 @@ from django import forms
 from django.contrib.auth.models import User
 from staff.models import Staff,StudentEnquiry
 from students.models import Student
-
 from django.forms import widgets
 from django.contrib.auth.forms import UserCreationForm
 
@@ -48,6 +47,18 @@ class StudentAddForm(UserCreationForm):
     parent_contact_no = forms.IntegerField(widget=forms.NumberInput,required=True)
     gender = forms.ChoiceField(widget=forms.RadioSelect(attrs={'style': 'width: 50px;'}),choices=(('male','Male'),('female','Female')))
     
+    def clean_student_contact_no(self):
+        data = self.cleaned_data['student_contact_no']
+        if len(str(data)) != 10:
+            raise forms.ValidationError("Invalid Mobile Number : Enter 10 digit mobile number")
+        
+    def clean_parent_contact_no(self):
+        data = self.cleaned_data['parent_contact_no']
+        if len(str(data)) != 10:
+            raise forms.ValidationError("Invalid Mobile Number : Enter 10 digit mobile number")
+        
+            len(str(data))
+        
     class Meta:
         model=User
         fields = ['username','first_name','last_name','email','password1','password2']
