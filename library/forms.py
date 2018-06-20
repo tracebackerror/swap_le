@@ -22,7 +22,7 @@ class LibraryAssetForm(forms.Form):
            del cleaned_data["asset_unique_code"]
            raise forms.ValidationError("Asset Unique Code Already Exists!!!")
     
-       return cleaned_data
+       return asset_unique_code
     
     
 
