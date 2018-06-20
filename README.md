@@ -3,12 +3,6 @@
 ### SwapLE is an digital assesment solution for larger institutions enabling them to conduct a paperless examination with instant feedback and reporting. It allows institutions to save there valuable time in evaluation, review and grading assesment.
 
 
-
-* Version
-	* Still in development phase.
-	
-* [Repository Link](https://bitbucket.org/tracebackerror/swaple/overview)
-
 ### How do I get set up? ###
 
 * Install Dependencies
