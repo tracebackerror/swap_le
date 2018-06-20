@@ -1,16 +1,9 @@
 # SwapLE #
 ![IMAGE](swaple_logo.jpg)
-Swapping the traditional paperbased examination with digital solution.
+### SwapLE is an digital assesment solution for larger institutions enabling them to conduct a paperless examination with instant feedback and reporting. It allows institutions to save there valuable time in evaluation, review and grading assesment.
 
-### What is this repository for? ###
 
-* Quick summary
-- SwapLE provides a complete solution for colleges, institution to manage and take assesments.
-- Currenly Supported Assesments:
-	* Single Choice Question
-	* Multiple Choice Question
-	* Plain Text Question And Answer
-	
+
 * Version
 	* Still in development phase.
 	
@@ -18,14 +11,16 @@ Swapping the traditional paperbased examination with digital solution.
 
 ### How do I get set up? ###
 
-* Dependencies
+* Install Dependencies
 	- Install all the requirements located in requirements folder:
-	- pip install -r requirements.txt
-* Database configuration
-* How to run tests
-	- python manage.py test
-* Deployment instructions
-	- Server specific
+	- `pip install -r requirements.txt`
+* Run Database configuration
+    - `python manage.py makemigrations`
+    - `python manage.py migrate`
+* Run tests
+	- `python manage.py test`
+* Run Server
+	- `python manage.py runserver`
 
 ### Contribution guidelines ###
 
@@ -36,3 +31,7 @@ Swapping the traditional paperbased examination with digital solution.
 
 * Repo owner or admin
 	- shivam9172@gmail.com
+	
+Major Contributors:
+- [V!Ru$](https://github.com/vinaykp2499 "V!Ru$")
+
