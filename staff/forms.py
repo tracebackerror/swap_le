@@ -57,8 +57,6 @@ class StudentAddForm(UserCreationForm):
         if len(str(data)) != 10:
             raise forms.ValidationError("Invalid Mobile Number : Enter 10 digit mobile number")
         
-            len(str(data))
-        
     class Meta:
         model=User
         fields = ['username','first_name','last_name','email','password1','password2']
