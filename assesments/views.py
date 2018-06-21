@@ -670,8 +670,7 @@ def assessment_edit_by_staff(request, assesmentid):
         exam_start_date_time = datetime.strptime(request.POST['exam_start_date_time_0']+"/"+request.POST['exam_start_date_time_1'],'%Y-%m-%d/%H:%M:%S')
         total_exam_duration_val = str(expired_on - exam_start_date_time)
         
-        asses_obj = Assesment.objects.get(id=assesmentid)
-        
+        asses_obj = Assesment.objects.get(id=assesmentid) 
         
         assesment_form = AssessmentForm( instance=asses_obj, request=request,
                                  data=request.POST)
@@ -680,6 +679,17 @@ def assessment_edit_by_staff(request, assesmentid):
         if assesment_form.is_valid():
             assesment_form.save()
             
+            #All Result Publish Script
+            result_publish = assesment_form['publish_result'].value()
+            if result_publish:
+                result_obj = Result.objects.filter(assesment__id = assesmentid)
+                for result in result_obj:
+                    if result.publish_result == False:
+                        result.publish_result = True
+                        result.save()
+                    else:
+                        continue
+                    
             fetch_appropriate_result = Result.soft_objects.filter(assesment__id = int(assesmentid))
         
             if fetch_appropriate_result.exists():
@@ -751,4 +761,24 @@ def assessment_question_delete(request,questionid):
             information = 'You don\'t have authorized permission to delete this Question. '
    
     return render(request, 'assesments/assesment_question_delete.html', {'information': [information]})
+
+
+def ResultPublish(request,assesmentid,resultid):
+    result_obj = Result.objects.get(id = resultid)
+    if result_obj.publish_result == True:
+        result_obj.publish_result = False
+        msg = 'Result UnPublished Successfully'
+    else:
+        result_obj.publish_result = True
+        msg = 'Result Published Successfully'
+    result_obj.save()
+    messages.add_message(request, messages.SUCCESS, msg)
+    success_url = reverse("staff:assesments:assessment_manage_by_staff", kwargs = {'assesmentid':assesmentid})
+    return HttpResponseRedirect(success_url)
+    
+    
+    
+    
+    
+
     

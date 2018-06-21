@@ -1,9 +1,10 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Assesment, Question, Answer
+from .models import Assesment, Question, Answer, Result
 
 from students.models import Student
 from django.forms.models import modelformset_factory
+from django.db.models import Count
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field, Fieldset, Reset
@@ -150,6 +151,9 @@ class AssessmentForm(forms.ModelForm):
                                                       widget=forms.CheckboxSelectMultiple())
     
     
+    publish_result = forms.BooleanField(widget = forms.CheckboxInput(),label = "Publish All Results",required = False)
+    
+    
     class Meta:
         model = Assesment
         fields = ('__all__')
@@ -169,6 +173,7 @@ class AssessmentForm(forms.ModelForm):
             'passing_marks'         : forms.NumberInput(attrs={'class':'form-control',}),
             'privilege'             : forms.Select(attrs={'class':'custom-select custom-select-md mb-3'}),
 
+
         }
     
     def __init__(self, *args, **kwargs):
@@ -178,6 +183,16 @@ class AssessmentForm(forms.ModelForm):
         # If you pass FormHelper constructor a form instance
         # It builds a default layout with all its fields
         #self.helper = FormHelper(self)
+        
+        #All Results Publish Script
+        assesmentid = kwargs.get('instance').id
+        result_obj = Result.objects.filter(assesment__id = assesmentid)
+        count_publish_result = Result.objects.filter(assesment__id = assesmentid, publish_result = True).aggregate(count = Count('publish_result'))
+        
+        if count_publish_result['count'] == result_obj.count():
+            self.fields["publish_result"].initial = True
+        
+        
         self.fields["subscriber_users"].queryset = Student.active.filter(staffuser__institute = self.request.user.staff.institute)   
         
 
