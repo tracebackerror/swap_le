@@ -12,16 +12,11 @@ class ResultTable(tables.Table):
     review_sqa = tables.LinkColumn('reviewsqa', text='Review Descriptive Answer')
     #review_sqa = tables.TemplateColumn('<a href="{% url "staff:assesments:assesment_manage_review_sqa_question" assesmentid=self.request.GET.assesmentid %}">Review Descriptive Answer</a>')
     result_report = tables.TemplateColumn('<a href="{% url "staff:assesments:assessment_result_by_staff" pk=record.pk %}">View</a>')
-    publish = tables.TemplateColumn(
-        '{% if not record.publish_result %}<a href=".">Publish</a>'
-        '{% else %}<b><i>Published</b><i>'
-        '{% endif %}')
-    
+    publish = tables.TemplateColumn('Published')
 
     def render_review_sqa(self, record):
         url = reverse('staff:assesments:assesment_manage_review_sqa_question',kwargs={'assesmentid': self.assesmentid})
         return format_html('<a href="{}">{}</a>', url, 'Review Descriptive Answer')
-    
     
     def render_publish(self, record):
         url = reverse('staff:assesments:result_publish',kwargs={'assesmentid': self.assesmentid,'resultid':record.id})
