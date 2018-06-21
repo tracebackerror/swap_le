@@ -2,7 +2,7 @@ from django.conf.urls import url,include
 from .views import ManageAllAssesmentView, ManageStudentAssesmentView, \
  ProcesStudentAssesmentView, assessment_delete_by_staff,  assessment_edit_by_staff, \
  assessment_create_by_staff, ManageSingleAsessment,assessment_question_delete, ManageSingleQuestionAddView, ReviewAllSqaView, \
- GenerateAssesmentResultView, AssessmentResultByStaff
+ GenerateAssesmentResultView, AssessmentResultByStaff,ResultPublish
  
 from section.views import AddQuestionSection
 
@@ -25,5 +25,8 @@ urlpatterns = [
     #section
     url(r'^(?P<assesmentid>\w{0,15})/question-section/add/$',AddQuestionSection.as_view(),name="add_question_section"),
     url(r'^question-section/', include('section.urls', namespace='section', app_name='section')),
+    
+    #Result Publish
+    url(r'^(?P<assesmentid>\w{0,15})/change/(?P<resultid>\w{0,15})/result-publish$', ResultPublish, name='result_publish'),
     
    ]
