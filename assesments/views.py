@@ -470,7 +470,15 @@ class ManageSingleAsessment(SingleTableView):
         context['percentage_student'] = round(percentage_of_attend_exam,2)
         context['total_subscribes_student'] = total_subscribes_student['total_user']
         context['attend_exam_student'] = attend_exam_student
-
+        
+        #Publish All Results
+        result_obj = Result.objects.filter(assesment__id = self.kwargs['assesmentid'])
+        flag = True
+        count_publish_result = Result.objects.filter(assesment__id = self.kwargs['assesmentid'], publish_result = True).aggregate(count = Count('publish_result'))
+        if count_publish_result['count'] == result_obj.count():
+            flag = False
+        context['flag'] = flag
+        
         return context
     
     
@@ -678,17 +686,6 @@ def assessment_edit_by_staff(request, assesmentid):
         
         if assesment_form.is_valid():
             assesment_form.save()
-            
-            #All Result Publish Script
-            result_publish = assesment_form['publish_result'].value()
-            if result_publish:
-                result_obj = Result.objects.filter(assesment__id = assesmentid)
-                for result in result_obj:
-                    if result.publish_result == False:
-                        result.publish_result = True
-                        result.save()
-                    else:
-                        continue
                     
             fetch_appropriate_result = Result.soft_objects.filter(assesment__id = int(assesmentid))
         
@@ -763,18 +760,35 @@ def assessment_question_delete(request,questionid):
     return render(request, 'assesments/assesment_question_delete.html', {'information': [information]})
 
 
-def ResultPublish(request,assesmentid,resultid):
-    result_obj = Result.objects.get(id = resultid)
-    if result_obj.publish_result == True:
-        result_obj.publish_result = False
-        msg = 'Result UnPublished Successfully'
-    else:
-        result_obj.publish_result = True
-        msg = 'Result Published Successfully'
-    result_obj.save()
-    messages.add_message(request, messages.SUCCESS, msg)
+@login_required(login_url="/staff/login/")
+def PublishAllResults(request,assesmentid):
+    result_obj = Result.objects.filter(assesment__id = assesmentid)
+    flag = "published"
+    count_publish_result = Result.objects.filter(assesment__id = assesmentid, publish_result = True).aggregate(count = Count('publish_result'))
+    if count_publish_result['count'] == result_obj.count():
+        flag = "unpublished"
+     
+    if (flag == "published"):
+        for result in result_obj:
+            result.publish_result = True
+            result.save()
+        msg = "Published All Results Successfully"
+    elif (flag == "unpublished"):
+        for result in result_obj:
+            result.publish_result = False
+            result.save()
+        msg = "Un-Published All Results Successfully"
+
+    messages.add_message(request, messages.SUCCESS,msg)
     success_url = reverse("staff:assesments:assessment_manage_by_staff", kwargs = {'assesmentid':assesmentid})
     return HttpResponseRedirect(success_url)
+
+
+
+
+
+
+
     
     
     
