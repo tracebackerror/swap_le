@@ -151,8 +151,6 @@ class AssessmentForm(forms.ModelForm):
                                                       widget=forms.CheckboxSelectMultiple())
     
     
-    publish_result = forms.BooleanField(widget = forms.CheckboxInput(),label = "Publish All Results",required = False)
-    
     
     class Meta:
         model = Assesment
@@ -183,16 +181,6 @@ class AssessmentForm(forms.ModelForm):
         # If you pass FormHelper constructor a form instance
         # It builds a default layout with all its fields
         #self.helper = FormHelper(self)
-        
-        #All Results Publish Script
-        assesmentid = kwargs.get('instance').id
-        result_obj = Result.objects.filter(assesment__id = assesmentid)
-        count_publish_result = Result.objects.filter(assesment__id = assesmentid, publish_result = True).aggregate(count = Count('publish_result'))
-        
-        if count_publish_result['count'] == result_obj.count():
-            self.fields["publish_result"].initial = True
-        
-        
         self.fields["subscriber_users"].queryset = Student.active.filter(staffuser__institute = self.request.user.staff.institute)   
         
 

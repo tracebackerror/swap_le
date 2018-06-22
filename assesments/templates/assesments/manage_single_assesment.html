@@ -85,6 +85,7 @@
   {% render_table table  %}
  </div>
  
+ <br>
  
   <div class="row">
 
@@ -102,6 +103,21 @@
  
  <div class="row">
  {% render_table table_section  %}
+ </div>
+ 
+ <br>
+  
+ <!-- Publish All Results  -->
+   <div class="row">
+
+    <form class="form-inline my-2 my-lg-0" method="GET" action="{% url "staff:assesments:publish_all_results" request.resolver_match.kwargs.assesmentid %}">
+      {% if flag %}
+      	<button class="btn btn-default " type="submit">Publish All Results</button>
+      {% else %}
+      	<button class="btn btn-default " type="submit">Un-Publish All Results</button>
+      {% endif %}
+    </form>
+    
  </div>
  
  
