@@ -7,26 +7,32 @@ from django_tables2 import A
 
 
 class StaffTable(tables.Table):
-    row_number = tables.Column(empty_values=())
+    row_number = tables.Column(empty_values=(), verbose_name="Row")
     edit_staff = tables.TemplateColumn('<a href=" {% url "institutions:edit_institution_staff" username=record.staffuser  %} ">Edit</a>')
     delete_staff = tables.TemplateColumn('<a href=" {% url "institutions:delete_institution_staff" username=record.staffuser  %} ">Delete</a>')
-
+    email_student = tables.Column(accessor='staffuser.email',
+                          verbose_name='Email')
+    first_name = tables.Column(accessor='staffuser.first_name',
+                          verbose_name='First Name')
+    last_name = tables.Column(accessor='staffuser.last_name',
+                          verbose_name='Last Name')
+    
     def __init__(self, *args, **kwargs):
         super(StaffTable, self).__init__(*args, **kwargs)
         self.counter = itertools.count()
 
     def render_row_number(self):
-        return 'Row %d' % next(self.counter)
+        return '%d' % (int(next(self.counter))+1)
 
-
+    
 
     class Meta:
         model = Staff
         # add class="paleblue" to <table> tag
-        exclude = ('id', 'deleted', 'user_type')
+        exclude = ('id', 'deleted', 'user_type', 'institute', 'created', 'updated', 'allowregistration', )
         attrs = {'class': 'paleblue'}
         # fields = ('row_number', 'institute',)
-        sequence = ('row_number', 'staffuser', 'institute', 'allowregistration', 'created', 'updated', 'user_type', 'deleted')
+        sequence = ('row_number', 'staffuser', 'first_name', 'last_name', 'email_student', 'user_type', 'deleted')
 
 
 

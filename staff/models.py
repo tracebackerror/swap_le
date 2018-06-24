@@ -23,7 +23,8 @@ class Staff(models.Model):
     active = StaffManager()  # Our custom manager
 
     staffuser = models.OneToOneField(settings.AUTH_USER_MODEL,
-                                      on_delete=models.CASCADE
+                                      on_delete=models.CASCADE,
+                                      verbose_name="Username"
                                       )
     institute = models.ForeignKey(Institutions, related_name='staffinstitute',
                                   on_delete=models.CASCADE)

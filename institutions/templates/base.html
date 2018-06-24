@@ -49,11 +49,11 @@
  
   {% if messages %}
  <div id="userDisplayMessage">
- 	<ul class="messages" >    
- 		{% for message in messages %}
- 		      <li class="{{ message.tags }}">        {{ message|safe }}          </li>
- 		{% endfor %}
-   </ul>
+ 	{% for message in messages %}
+ 		      {{ message|safe }}
+ 	{% endfor %}
+ 	
+ 	
  </div>
  {% endif %}
 

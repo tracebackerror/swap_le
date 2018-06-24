@@ -3,7 +3,7 @@ from django.shortcuts import render
 from .models import Institutions
 # Create your views here.
 from .forms import InstitutionsEditForm, UserEditForm, InstitutionLoginForm,StaffCreateForm
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login     
 from django.contrib.auth.decorators import login_required  #permission_required, resolve_url, settings, six,urlparse,user_passes_test, wraps
 from django.contrib.auth.views import PasswordChangeDoneView, PasswordChangeView, LoginView
@@ -24,7 +24,7 @@ from institutions.forms import StaffProfileForm
 from django.contrib.auth.forms import UserCreationForm
 from licenses.models import License
 from django.contrib.auth.views import (PasswordResetView,PasswordResetDoneView, PasswordResetConfirmView ,PasswordResetCompleteView)
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import PermissionRequiredMixin,LoginRequiredMixin
 from guardian.shortcuts import assign_perm
 from django.contrib.auth.decorators import permission_required
@@ -93,6 +93,7 @@ def institute_staff_edit(request, username):
             user_form.save()
             #institution_form.save()
             messages.add_message(request, messages.SUCCESS, 'Staff Profile Updated Successfully')
+            return HttpResponseRedirect(reverse_lazy('institutions:manage_staff'))
     else:
         user_form = UserEditForm(instance=User.objects.get(username=username))
         #staff_form = StaffEditForm()
@@ -130,7 +131,7 @@ def institute_staff_create(request):
             profile_form.save()  # Gracefully save the form
             messages.add_message(request, messages.SUCCESS, 'Staff Profile Added Successfully')
         else:
-            messages.add_message(request, messages.INFO, 'Staff Limit Reached. Kindly Reach to Admin for Upgrade.')
+            messages.add_message(request, messages.INFO, str(user_form.errors.as_ul()))
     else:
         user_form = StaffCreateForm()
         # profile_form = StaffProfileForm()
@@ -235,7 +236,7 @@ def people(request):
 class InstitutionStaffView(PermissionRequiredMixin, SingleTableView, ListView):
     model = Staff
     context_object_name = 'table'
-    paginate_by = 3
+    paginate_by = 10
     template_name = 'institutions/staff.html'
     table_class = StaffTable
     permission_required = 'institutions.is_institute'
