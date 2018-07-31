@@ -10,10 +10,12 @@
 <br/>
 <div class="container"> 
 {% if filter %}
+<div class="btn-group">
     <form action="" method="get" class="form form-inline">
-        {% bootstrap_form filter.form layout='inline' %}
+        {% bootstrap_form filter.form %}
         {% bootstrap_button 'filter' %}
     </form>
+</div>
 {% endif %}
 </div>
 

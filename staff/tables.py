@@ -8,8 +8,8 @@ from django_tables2 import A
 
 class StaffTable(tables.Table):
     row_number = tables.Column(empty_values=(), verbose_name="Row")
-    edit_staff = tables.TemplateColumn('<a href=" {% url "institutions:edit_institution_staff" username=record.staffuser  %} ">Edit</a>')
-    delete_staff = tables.TemplateColumn('<a href=" {% url "institutions:delete_institution_staff" username=record.staffuser  %} ">Delete</a>')
+    edit_staff = tables.TemplateColumn('<a href=" {% url "institutions:edit_institution_staff" username=record.staffuser  %} "  ><center><span class="glyphicon glyphicon-edit "></span></center></a>')
+    delete_staff = tables.TemplateColumn('<a href=" {% url "institutions:delete_institution_staff" username=record.staffuser  %}" ><center><span class="glyphicon glyphicon-remove"></span></center></a>')
     email_student = tables.Column(accessor='staffuser.email',
                           verbose_name='Email')
     first_name = tables.Column(accessor='staffuser.first_name',
