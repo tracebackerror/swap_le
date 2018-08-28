@@ -60,5 +60,9 @@ class Student(models.Model):
     class Meta:
         ordering = ('created',)
         
+    def get_student_name_for_staff(self):
+        return "{} {} ({}) <- {}".format(self.studentuser.first_name, self.studentuser.last_name, self.studentuser.username, self.staffuser.staffuser.username)
+    
+        
     def __str__(self):
        return 'Student Name- {}({}) - Belongs to Staff - {}'.format(self.studentuser.first_name,self.studentuser, self.staffuser)

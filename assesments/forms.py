@@ -129,6 +129,10 @@ class ReviewSqaFormSetHelper(FormHelper):
         self.add_input(Submit("submit", "Update Marks"))
         self.render_required_fields = True
         
+class CustomOptionsForAssesment(forms.ModelMultipleChoiceField):
+    def label_from_instance(self, obj):
+         return obj.get_student_name_for_staff()
+        
         
 class AssessmentForm(forms.ModelForm):
     DURATION_HOURS_CHOICES = [
@@ -159,7 +163,7 @@ class AssessmentForm(forms.ModelForm):
                                )
     
     
-    subscriber_users = forms.ModelMultipleChoiceField(queryset = Student.objects.filter(id=1),
+    subscriber_users = CustomOptionsForAssesment(queryset = Student.objects.filter(id=1),
                                                       widget=forms.CheckboxSelectMultiple())
     
     
@@ -194,8 +198,7 @@ class AssessmentForm(forms.ModelForm):
         # It builds a default layout with all its fields
         #self.helper = FormHelper(self)
         self.fields["subscriber_users"].queryset = Student.active.filter(staffuser__institute = self.request.user.staff.institute)   
-        
-
+         
 class AssessmentCreationForm(forms.ModelForm):
     DURATION_HOURS_CHOICES = [
         (i,i) for i in range(0,24)
@@ -223,7 +226,7 @@ class AssessmentCreationForm(forms.ModelForm):
                                                           
                                )
 
-    subscriber_users = forms.ModelMultipleChoiceField(queryset = Student.objects.filter(id=1),
+    subscriber_users = CustomOptionsForAssesment(queryset = Student.objects.filter(id=1),
                                                       widget=forms.CheckboxSelectMultiple())
     
     class Meta:
