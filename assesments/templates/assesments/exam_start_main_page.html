@@ -6,7 +6,7 @@
 
 
 
-<div class="container">
+<div class="container" >
 <h3>Assesment In Progres:</h3>
 
 
@@ -18,7 +18,7 @@
 	<thead>
 	<tr>
 		<td class="col-md-2">Remaining Time:</td>
-		<td class="col-md-3">Remaining Time Script</td>
+		<td class="col-md-3"><div id="examtime" style="font-size:20;"></div></td>
 		<td class="col-md-3">
 		
 		
@@ -331,6 +331,103 @@ $(document).ready(function(){
 	
 	 	
 });
+
 </script>
+ 
+ 
+<!-- Assessment Time Script -->
+<script type="text/javascript">
+if("{{result_object.assesment_submitted}}"=="True"){
+	document.getElementById("examtime").innerHTML = "ASSESSMENT ALREADY SUBMITTED";
+    document.title="ASSESSMENT ALREADY SUBMITTED";
+    alert("ASSESSMENT ALREADY SUBMITTED");
+    window.history.back();
+}
+else{
+	
+var durationHour = {{assesment_object.duration_hours}};
+var durationMinute = {{assesment_object.duration_minutes}};
+var date =  "{{result_object.exam_taken_date_time.date}}";
+var hour =  "{{result_object.exam_taken_date_time.time.hour}}";
+var minute = "{{result_object.exam_taken_date_time.time.minute}}";
+//alert(date+"\n"+hour+"\n"+minute);
+
+//var examEnd = new Date("Aug 28, 2018 15:30:00").getTime();
+var examEnd = new Date(date+","+hour+":"+minute+":00")
+examEnd.setHours (examEnd.getHours() + durationHour );
+examEnd.setMinutes (examEnd.getMinutes() + durationMinute );
+
+var x = setInterval(function() {
+	  // Get todays date and time
+	  var now = new Date();
+	  var distance = examEnd.getTime()-now.getTime();
+	  
+	  // Time calculations for days, hours, minutes and seconds
+	  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+	  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+	  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+	  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+	  // Display the result in the element with id="demo"
+	  document.getElementById("examtime").innerHTML = hours+' : '+minutes+' : '+seconds;
+	  document.title="Time Left - "+hours+':'+minutes+':'+seconds;
+
+	  // After count down finished
+	  if (distance < 0) {
+	    clearInterval(x);
+	    document.getElementById("examtime").innerHTML = "TIME EXPIRED";
+	    document.title="TIME EXPIRED";
+	    document.getElementById("assesment_submission_form").submit();//To click the submit button automatically when the time is up
+	  }
+	}, 100);
+
+
+}//else block ending
+
+
+//Restriction Code For Browser Back Button
+(function (global) { 
+
+    if(typeof (global) === "undefined") {
+        throw new Error("window is undefined");
+    }
+
+    var _hash = "!";
+    var noBackPlease = function () {
+        global.location.href += "#";
+
+        // making sure we have the fruit available for juice (^__^)
+        global.setTimeout(function () {
+            global.location.href += "!";
+        }, 50);
+    };
+
+    global.onhashchange = function () {
+        if (global.location.hash !== _hash) {
+            global.location.hash = _hash;
+        }
+    };
+
+    global.onload = function () {            
+        noBackPlease();
+
+        // disables backspace on page except on input fields and textarea..
+        document.body.onkeydown = function (e) {
+            var elm = e.target.nodeName.toLowerCase();
+            if (e.which === 8 && (elm !== 'input' && elm  !== 'textarea')) {
+                e.preventDefault();
+            }
+            // stopping event bubbling up the DOM tree..
+            e.stopPropagation();
+        };          
+    }
+
+})(window);
+
+
+</script>
+
 {% endblock %}
 </div>
+
+

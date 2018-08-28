@@ -541,9 +541,10 @@ class ProcesStudentAssesmentView(DetailView):
                     
                     result_of_assesment = Result.soft_objects.filter(assesment = assesment_to_undertake, registered_user = self.request.user.student
                     )
-                    
                     if len(result_of_assesment)  == 0:
                         self.create_result_instance = Result()
+                        #exam_taken_date_time use for exam time
+                        self.create_result_instance.exam_taken_date_time = datetime.now()
                         self.create_result_instance.assesment = assesment_to_undertake
                         self.create_result_instance.registered_user = self.request.user.student
                         self.create_result_instance.created_by = self.request.user
@@ -604,13 +605,13 @@ class ProcesStudentAssesmentView(DetailView):
                     else:
                             get_the_current_answer_obj = get_the_current_answer_obj[0]
                             
-                    get_the_current_answer_obj.save()
-                        
+                    get_the_current_answer_obj.save() 
                     # Check whether user has answered any question
                     return render(self.request, 'assesments/exam_start_main_page.html', {
                         'assesment_object': assesment_to_undertake,
                         'all_question_to_answer':page_question_obj,
                         'get_the_answer_obj':get_the_current_answer_obj,
+                        'result_object':self.create_result_instance,
                         })
         else:
             '''

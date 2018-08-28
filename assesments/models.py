@@ -62,6 +62,9 @@ class Assesment(MetaInformationMixin, SoftDeletionModelMixin):
 
     subscriber_users = models.ManyToManyField(Student)
     
+    duration_hours = models.IntegerField(null=True)
+    duration_minutes = models.IntegerField(null=True)
+    
     
         
     class Meta:
