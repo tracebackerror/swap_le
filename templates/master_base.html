@@ -61,10 +61,14 @@
  	if (checkWhetherMessageExists) {
 	 	$( function() {
 	    $( "#userDisplayMessage" ).dialog({
-	    	modal: true
+	    	modal: true,
 	    	});
 	  	} );
   	}
+    
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip({ boundary: 'window' })
+    })
 });
 
 

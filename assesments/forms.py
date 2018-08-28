@@ -181,8 +181,8 @@ class AssessmentForm(forms.ModelForm):
                                     ),
             
             'passing_marks'         : forms.NumberInput(attrs={'class':'form-control',}),
-            'privilege'             : forms.Select(attrs={'class':'custom-select custom-select-md mb-3'}),
-
+            'privilege'             : forms.Select(attrs={'class':'custom-select custom-select-md mb-3', 'data-toggle':"tooltip", 'data-placement':"right", 'title':"<h5>Public: Assesment Visibile to Students \n Private and Protected: Only To Staff</h3>"}),
+            
 
         }
     
@@ -244,7 +244,7 @@ class AssessmentCreationForm(forms.ModelForm):
                                     ),
             
             'passing_marks'         : forms.NumberInput(attrs={'class':'form-control',}),
-            'privilege'             : forms.Select(attrs={'class':'custom-select custom-select-md mb-3'}),
+            'privilege'             : forms.Select(attrs={'class':'custom-select custom-select-md mb-3', 'data-toggle':"tooltip", 'data-placement':"right", 'title':"Public: Assessment Visible to Students. \n\n Private and Protected: Assessment Visible Only To Staff"}),
             
                    
             
