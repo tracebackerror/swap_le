@@ -183,7 +183,8 @@ class Result(MetaInformationMixin, SoftDeletionModelMixin):
     assesment_submitted = models.BooleanField(default=False)
     #deleted = models.CharField(max_length=1, default="N")
 
-   
+    
+        
     def __str__(self):
         return 'Result : {}-{}'.format(self.assesment,self.registered_user)
     

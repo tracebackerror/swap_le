@@ -16,6 +16,10 @@ class ResultTable(tables.Table):
     def render_review_sqa(self, record):
         url = reverse('staff:assesments:assesment_manage_review_sqa_question',kwargs={'assesmentid': self.assesmentid})
         return format_html('<a href="{}">{}</a>', url, 'Review Descriptive Answer')
+        
+    def render_registered_user(self, record):
+        reg_user = record.registered_user.get_name_registered_student()
+        return format_html('{}'.format(reg_user))
     
     def __init__(self, *args, **kwargs):
         super(ResultTable, self).__init__(*args)
