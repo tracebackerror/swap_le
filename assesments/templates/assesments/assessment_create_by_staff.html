@@ -7,7 +7,7 @@
 	 <p>You can Create your Assessment using the following form:</p>
 	 
 	 <form action="." method="post" enctype="multipart/form-data">
-	     {{ assessment_c_form.as_p}}
+	     {{ assessment_c_form.as_table}}
 	     {% csrf_token %}
 	 <input type="submit" class="btn btn-success" value="Save">
 	 </form>

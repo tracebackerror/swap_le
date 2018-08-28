@@ -9,6 +9,7 @@ from django.db.models import Count
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field, Fieldset, Reset
 from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions
+from django.template.defaultfilters import default
 
 
 class QuestionForm(forms.ModelForm):
@@ -130,6 +131,17 @@ class ReviewSqaFormSetHelper(FormHelper):
         
         
 class AssessmentForm(forms.ModelForm):
+    DURATION_HOURS_CHOICES = [
+        (i,i) for i in range(0,24)
+        ]
+    
+    DURATION_MINUTES_CHOICES = [
+        (i,i) for i in range(0,60)
+        ]
+    
+    duration_hours = forms.ChoiceField(choices=DURATION_HOURS_CHOICES, required=True)
+    duration_minutes = forms.ChoiceField(choices=DURATION_MINUTES_CHOICES, required=True)
+    
     expired_on = forms.SplitDateTimeField(input_date_formats=['%Y-%m-%d'],
                                input_time_formats=['%H:%M:%S'], 
                                widget=forms.SplitDateTimeWidget(date_format='%Y-%m-%d',
@@ -185,6 +197,17 @@ class AssessmentForm(forms.ModelForm):
         
 
 class AssessmentCreationForm(forms.ModelForm):
+    DURATION_HOURS_CHOICES = [
+        (i,i) for i in range(0,24)
+        ]
+    
+    DURATION_MINUTES_CHOICES = [
+        (i,i) for i in range(0,60)
+        ]
+    
+    duration_hours = forms.ChoiceField(choices=DURATION_HOURS_CHOICES, required=True)
+    duration_minutes = forms.ChoiceField(choices=DURATION_MINUTES_CHOICES, required=True)
+    
     expired_on = forms.SplitDateTimeField(input_date_formats=['%Y-%m-%d'],
                                input_time_formats=['%H:%M:%S'], 
                                widget=forms.SplitDateTimeWidget(date_format='%Y-%m-%d',
