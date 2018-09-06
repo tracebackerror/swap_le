@@ -16,10 +16,18 @@ class StudentAdminForm(forms.ModelForm):
         model = Student
         fields = ('studentuser', 'staffuser', 'deleted')
         
+class StudentOptionForStudentRegistration(forms.ModelChoiceField):
+    def label_from_instance(self,obj):
+         return obj.get_institute_name()
 
+class StaffOptionForStudentRegistration(forms.ModelChoiceField):
+    def label_from_instance(self,obj):
+         return obj.get_staff_name()
+         
 class StudentRegistrationForm(UserCreationForm):
-    institution_name = forms.ModelChoiceField(queryset=Institutions.objects.all(),label="Institutions Name",required=True)
-    staffuser = forms.ModelChoiceField(queryset=Staff.objects.all(),label="Staff Name",required=True)
+
+    institution_name = StudentOptionForStudentRegistration(queryset=Institutions.objects.all(),label="Institutions Name",required=True)
+    staffuser = StaffOptionForStudentRegistration(queryset=Staff.objects.all(),label="Staff Name",required=True)
     first_name = forms.CharField(widget=forms.TextInput,required=True)
     last_name = forms.CharField(widget=forms.TextInput,required=True)
     email = forms.EmailField(widget=forms.EmailInput,required=True)

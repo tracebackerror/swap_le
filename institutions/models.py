@@ -21,7 +21,7 @@ class Institutions(models.Model):
         ) 
     
     user = models.OneToOneField(settings.AUTH_USER_MODEL, editable=True,verbose_name='Institute User Name',on_delete=models.CASCADE)
-    institute_name = models.CharField(max_length=45, null=False)
+    institute_name = models.CharField(max_length=100, null=False)
     institute_contact_mobile = models.CharField( max_length=13, null = False)
     institute_contact_landline = models.CharField( max_length=13, null = True)
     institute_address = models.CharField(max_length=200, null = False)
@@ -46,3 +46,10 @@ class Institutions(models.Model):
     def __str__(self):
         detailed = "%s - %s - %s - %s" % (str(self.institute_name),str(self.institute_city),str(self.institute_state),str(self.institute_country)) 
         return  detailed
+        
+    def get_institute_name(self):
+        if self.institute_city.strip():
+            return "{0:3}, {1:>3}".format(self.institute_name, self.institute_city)
+        else:
+            return "{0:^40}".format(self.institute_name)
+    

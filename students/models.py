@@ -67,4 +67,4 @@ class Student(models.Model):
         return "{} {} ({})".format(self.studentuser.first_name, self.studentuser.last_name, self.studentuser.username)
         
     def __str__(self):
-       return 'Student Name- {}({}) - Belongs to Staff - {}'.format(self.studentuser.first_name,self.studentuser, self.staffuser)
+       return self.get_name_registered_student()

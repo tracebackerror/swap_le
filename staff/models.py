@@ -44,9 +44,11 @@ class Staff(models.Model):
         )
     def __str__(self):
         return 'Staff - {} Of Institute - {}'.format(self.staffuser.username, self.institute.institute_name)
-    
-
-
+        
+        
+    def get_staff_name(self):
+        return "{} {} ({})".format(self.staffuser.first_name.strip(), self.staffuser.last_name.strip(), self.staffuser.username)
+        
 class StudentEnquiry(models.Model):
     created_by=models.ForeignKey(Staff,on_delete=models.CASCADE)
     full_name=models.CharField(max_length=100)

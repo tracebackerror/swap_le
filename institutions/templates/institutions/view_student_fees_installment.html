@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load bootstrap3 %}
+
 
 {% block title %}   View Fees Installment   {% endblock %}
 
@@ -10,11 +10,16 @@
 <br/>
 <div class="container"> 
 {% if filter %}
-<div class="btn-group">
+<div class="row">
+<div class="col-md-12">
     <form action="" method="get" class="form form-inline">
-        {% bootstrap_form filter.form %}
-        {% bootstrap_button 'filter' %}
+        
+        
+            {{ filter.form.as_p }}
+        <button  class="btn btn-success" type="submit">Search</button>
+  </form>
     </form>
+</div>
 </div>
 {% endif %}
 </div>
