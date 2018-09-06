@@ -23,7 +23,7 @@ class Assesment(MetaInformationMixin, SoftDeletionModelMixin):
     ASSESMENT_PRIVILEGE_CHOICES = (
         ('public', 'Public'),
         ('private', 'Private'),
-        ('protected', 'Protected'),
+        #('protected', 'Protected'),
         )
     
     #objects = models.Manager()  # The Default Manager
