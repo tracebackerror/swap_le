@@ -32,5 +32,7 @@ urlpatterns = [
     #result
     url(r'^result/$',StudentResult.as_view(),name='result'),
     url(r'^result/(?P<pk>\d+)/report.pdf/$',ResultReport.as_view(),name='result_report'),
+    
+    #student registration
+    url(r'^registration/$',StudentRegistration.as_view(),name='student_registration'),
 ]   
-

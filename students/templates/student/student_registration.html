@@ -1,0 +1,75 @@
+
+{% extends "student/base.html" %}
+{% block title %}   Student Registration   {% endblock %}
+
+{% block content %} 
+ <h1>Student Registration  </h1>
+ 
+ <div class="container" style="min-height:60%">
+ <p>You can Register your Student Record using the following form:</p>
+ 
+ <form action="." method="post" enctype="multipart/form-data">
+ 	 {% csrf_token %}
+ 	 
+ 	 {{ form.institution_name.label}}<br>
+     {{ form.institution_name}}<br><br><br>
+     
+     {% if form.institution_name.value %}
+     
+     {{ form.staffuser.label}}<br>
+     {{ form.staffuser}}<br><br><br>
+     {% endif %}
+     
+     {% if form.staffuser.value %}
+     {{ form.username.label}}<br>
+     {{ form.username}}<br><br><br>
+     {{ form.username.errors }}
+     
+     {{ form.first_name.label}}<br>
+     {{ form.first_name}}<br><br><br>
+     
+     {{ form.last_name.label}}<br>
+     {{ form.last_name}}<br><br><br>
+     
+     {{ form.email.label}}<br>
+     {{ form.email}}<br><br><br>
+     
+     {{ form.standard.label}}<br>
+     {{ form.standard}}<br><br><br>
+     
+     {{ form.address.label}}<br>
+     {{ form.address}}<br><br><br><br><br>
+     
+     {{ form.student_contact_no.label}}<br>
+     {{ form.student_contact_no}}<br><br>
+     {{ form.student_contact_no.errors }}<br>
+     
+     {{ form.parent_contact_no.label}}<br>
+     {{ form.parent_contact_no}}<br><br>
+     {{ form.parent_contact_no.errors }}<br>
+     
+     {{ form.gender.label}}<br>
+     <div style="display: flex;">
+     {{ form.gender.0 }}
+     {{form.gender.1}}
+     </div>
+     <br>
+     
+     {{ form.password1.label}}<br>
+     {{ form.password1}}<br><br><br>
+     {{ form.password2.errors }}
+     
+     {{ form.password2.label}}<br>
+     {{ form.password2}}<br><br><br>
+     
+     {% endif %}
+ {% if form.staffuser.value == None %}    
+ <p><input type="submit" class="btn btn-success" value="Next"></p>
+ {% else %}
+ <p><input type="submit" class="btn btn-success" value="Register"></p>
+ {% endif %}
+ 
+ </form>
+ </div>
+{% endblock %}
+

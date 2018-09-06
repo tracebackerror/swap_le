@@ -9,7 +9,7 @@ from django.views.decorators.debug import sensitive_post_parameters
 from django.urls import reverse_lazy
 from django.contrib import messages
 from institutions.forms import UserEditForm
-from django.views.generic import ListView,View
+from django.views.generic import ListView,View,FormView
 from django.contrib.auth import login as auth_login
 
 from django.contrib.auth.views import (PasswordResetView,PasswordResetDoneView, PasswordResetConfirmView ,PasswordResetCompleteView)
@@ -19,6 +19,8 @@ from library.models import AssetHistory,LibraryAsset
 from django.contrib.auth.models import User
 from .filters import ViewLibraryAssetFilter
 from .models import Student
+from staff.models import Staff
+from .forms import StudentRegistrationForm
 from django_filters.views import FilterView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -31,7 +33,6 @@ class InstitutionStudentLoginView(LoginView):
 
     def form_valid(self, form):
         """Security check complete. Log the user in."""
-
         if hasattr(form.get_user(), 'student') and (form.get_user().student.user_type == 'student'):
             
             student_object = Student.objects.get(studentuser = form.get_user())
@@ -47,8 +48,7 @@ class InstitutionStudentLoginView(LoginView):
             #     form.errors.update({'__all__': [invalidInstitution]})
             form.add_error(None, invalidInstitution)
             return super(InstitutionStudentLoginView, self).form_invalid(form)
-
-
+  
 
 @login_required(login_url="login/")
 def dashboard(request):
@@ -191,3 +191,32 @@ class ResultReport(LoginRequiredMixin,PDFTemplateView):
         context['result'] = result
         context['student'] = student
         return context
+
+
+
+class StudentRegistration(FormView):
+    template_name = 'student/student_registration.html'
+    form_class = StudentRegistrationForm
+    success_url = "/student/login/"
+    
+    def form_valid(self, form):
+        user_obj = form.save()
+        #user_obj.is_active = False
+        student_obj = Student()
+        staff_obj = Staff.objects.get(id=self.request.POST['staffuser'])
+    
+        student_obj.studentuser = user_obj
+        student_obj.staffuser = staff_obj
+        student_obj.standard = self.request.POST['standard']
+        student_obj.address = self.request.POST['address']
+        student_obj.student_contact_no = self.request.POST['student_contact_no']
+        student_obj.parent_contact_no = self.request.POST['parent_contact_no']
+        student_obj.gender = self.request.POST['gender']
+        #student_obj.deleted='Y'
+        
+        student_obj.save()
+        user_obj.save()
+        messages.add_message(self.request, messages.SUCCESS, 'Your Account Registered Successfully')
+        return HttpResponseRedirect(self.get_success_url())
+    
+        
