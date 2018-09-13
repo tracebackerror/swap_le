@@ -138,12 +138,33 @@ class ManageStudentView(PermissionRequiredMixin, SingleTableView, ListView):
     def dispatch(self, *args, **kwargs):
         return super(ManageStudentView, self).dispatch(*args, **kwargs)
 
-
     
     def get_context_data(self, **kwargs):
         context = super(ManageStudentView, self).get_context_data(**kwargs)
-       
         return context
+    
+    
+    def post(self, request, *args, **kwargs):
+        if request.is_ajax():               
+            if request.method == "POST":
+                student_reg = request.POST.get('student_reg')
+                auto_active = request.POST.get('auto_active')
+                staff_obj = Staff.objects.get(id=self.request.user.staff.id)
+                staff_obj.allowregistration = 1 if student_reg == "true" else 0
+                staff_obj.auto_active_student = 1 if auto_active == "true" else 0
+                staff_obj.save()
+        return super(ManageStudentView,self).get(request, *args, **kwargs)
+    
+    
+    def render_to_response(self, context, **response_kwargs):
+        context['allow_registration']=1 if self.request.user.staff.allowregistration else 0
+        context['auto_active_student']=1 if self.request.user.staff.auto_active_student else 0
+        return self.response_class(
+            request = self.request,
+            template = self.get_template_names(),
+            context = context,
+            **response_kwargs
+        )
     
     
 @permission_required('staff.is_staff',login_url=reverse_lazy('staff:login'))

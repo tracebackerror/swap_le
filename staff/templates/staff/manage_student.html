@@ -1,4 +1,3 @@
-
 {% extends "staff/base.html" %}
 {% load render_table from django_tables2 %}
 
@@ -11,12 +10,83 @@
  <form action="." method="post" enctype="multipart/form-data">
      {{ student_enroll_form.as_p}}
      {% csrf_token %}
+	
+	<div class="col-md-4">
+     <table class="table table-bordered">
+	     <tr>
+	     <td> <h4 style="text-align: center;">Student Registration</h4> </td>
+	     <td> <center><input id="student_reg" type="checkbox" data-toggle="toggle" data-onstyle="info" name="student_reg">	</center> </td>
+	     </tr>
+	</table>
+	</div>
+	
+	<div class="col-md-4">
+     <table class="table table-bordered">
+	     <tr>
+	     <td> <h4 style="text-align: center;">Auto Active Student Account</h4> </td>
+	     <td> <center><input id="auto_active" type="checkbox" data-toggle="toggle" data-onstyle="info" name="auto_active" disabled> </center> </td>
+	     </tr>
+	</table>
+	</div>
+	
+	
+	
  </form>
  
   {% render_table table  %}
  </div>
+ 
+ 
+ 
+<!-- Student Registration On Off Status Saving In Database -->
+
+<script type="text/javascript">
+
+if(Boolean({{allow_registration}}) == true){
+	$('#student_reg').bootstrapToggle('on');
+	$('#auto_active').bootstrapToggle('enable');
+	
+	if(Boolean({{auto_active_student}}) == true){
+		$('#auto_active').bootstrapToggle('on');
+	}
+}
+else {
+	$('#student_reg').bootstrapToggle('off');
+}
+
+
+$("input:checkbox").change(function () {
+	student_reg = $("#student_reg").is(":checked");
+	auto_active = $("#auto_active").is(":checked");
+	
+	if(student_reg == false){
+		auto_active = false;
+	}
+	
+	$.ajax({ 
+		url: "{% url "staff:manage_student" %}",
+		type : "POST",
+		data: { 'student_reg': student_reg, 'auto_active':auto_active, csrfmiddlewaretoken:$("input[name=csrfmiddlewaretoken]").val()},
+		success:function(){
+			if(student_reg == true){
+				$('#auto_active').bootstrapToggle('enable');
+			}
+			else{
+				$('#auto_active').bootstrapToggle('disable');
+				
+			}
+			
+		}
+	
+	});
+	
+
+  });
+
+</script>
+
+
+
 {% endblock %}
-
-
 
 
