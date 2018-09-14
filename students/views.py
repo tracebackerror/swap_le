@@ -13,7 +13,6 @@ from django.views.generic import ListView,View,FormView
 from django.contrib.auth import login as auth_login
 
 from django.contrib.auth.views import (PasswordResetView,PasswordResetDoneView, PasswordResetConfirmView ,PasswordResetCompleteView)
-from django.urls import reverse_lazy
 
 from library.models import AssetHistory,LibraryAsset
 from django.contrib.auth.models import User
@@ -48,6 +47,18 @@ class InstitutionStudentLoginView(LoginView):
             #     form.errors.update({'__all__': [invalidInstitution]})
             form.add_error(None, invalidInstitution)
             return super(InstitutionStudentLoginView, self).form_invalid(form)
+        
+        
+    def post(self, request, *args, **kwargs):
+        
+        form = self.get_form()
+        username = self.request.POST['username']
+        password = self.request.POST['password']
+        user = User.objects.get(username=username)
+        if user.is_active == False:
+            messages.add_message(self.request, messages.ERROR, 'Your Account is Not ACTIVE. Please Contact Us With Your Registered Staff')
+            
+        return super(InstitutionStudentLoginView, self).post(request, *args, **kwargs)
   
 
 @login_required(login_url="login/")
@@ -201,9 +212,10 @@ class StudentRegistration(FormView):
     
     def form_valid(self, form):
         user_obj = form.save()
-        #user_obj.is_active = False
-        student_obj = Student()
         staff_obj = Staff.objects.get(id=self.request.POST['staffuser'])
+        if staff_obj.auto_active_student == False:
+            user_obj.is_active = False
+        student_obj = Student()
     
         student_obj.studentuser = user_obj
         student_obj.staffuser = staff_obj
@@ -212,11 +224,35 @@ class StudentRegistration(FormView):
         student_obj.student_contact_no = self.request.POST['student_contact_no']
         student_obj.parent_contact_no = self.request.POST['parent_contact_no']
         student_obj.gender = self.request.POST['gender']
-        #student_obj.deleted='Y'
         
         student_obj.save()
         user_obj.save()
         messages.add_message(self.request, messages.SUCCESS, 'Your Account Registered Successfully')
         return HttpResponseRedirect(self.get_success_url())
     
-        
+    def form_invalid(self, form):
+        if 'staffuser' in self.request.POST.keys():
+            staff_obj = Staff.objects.get(id=self.request.POST['staffuser'])
+            if staff_obj.allowregistration == False:
+                messages.add_message(self.request, messages.ERROR, 'Registration Not Allowed!!!')
+                return HttpResponseRedirect(reverse_lazy('student:student_registration'))
+        return super(StudentRegistration,self).form_invalid(form)
+    
+    
+    def get_context_data(self, **kwargs):
+        if self.request.method == "POST":
+            if 'staffuser' in self.request.POST.keys():
+                staff_obj = Staff.objects.get(id=self.request.POST['staffuser'])
+                kwargs['staff_obj'] = staff_obj
+        return super(StudentRegistration,self).get_context_data(**kwargs)
+    
+    
+    def render_to_response(self, context, **response_kwargs):
+        response_kwargs.setdefault('content_type', self.content_type)
+        return self.response_class(
+            request = self.request,
+            template = self.get_template_names(),
+            context = context,
+            **response_kwargs
+        )
+    
