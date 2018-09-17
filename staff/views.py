@@ -340,3 +340,20 @@ class UpdateStudentEnquiryView(PermissionRequiredMixin,LoginRequiredMixin,Update
         return HttpResponseRedirect(self.get_success_url())
     
     
+    
+
+#Student Activate Deactivate View
+@login_required(login_url=reverse_lazy('staff:login'))
+def StudentActivateDeactivate(request,pk):
+    student_obj = Student.objects.get(id=1)
+    if student_obj.studentuser.is_active:
+        student_obj.studentuser.is_active = False
+    else:
+        student_obj.studentuser.is_active = True
+    student_obj.studentuser.save()
+    return HttpResponseRedirect(reverse_lazy("staff:manage_student"))
+
+
+
+
+    
