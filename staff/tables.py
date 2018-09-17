@@ -48,6 +48,15 @@ class StudentTable(tables.Table):
     edit_student = tables.TemplateColumn('<a href=" {% url "staff:student_edit_by_staff" upk=record.pk  %} ">Edit</a>')
     delete_student = tables.TemplateColumn('<a href=" {% url "staff:delete_institution_staff_student" username=record.studentuser  %} ">Delete</a>')
     student_fees = tables.TemplateColumn('<a href=" {% url "staff:fees:manage_fees_installment" pk=record.id  %} ">Installment</a>')
+    Approval = tables.TemplateColumn(
+        '<a href=" {% url "staff:student_activate_deactivate" pk=record.id  %} ">'
+        '{% if record.studentuser.is_active %}'
+        'Deactivate'
+        '{% else %}'
+        'Activate'
+        '{% endif %}'
+        '</a>',order_by="studentuser.is_active"
+        )
     
     def __init__(self, *args, **kwargs):
         super(StudentTable, self).__init__(*args, **kwargs)
@@ -64,6 +73,8 @@ class StudentTable(tables.Table):
     
     def render_email(self,value):
         return value
+        
+    
     class Meta:
         model = Student
         sequence = ('row_number', 'studentuser','first_name','last_name','email', 'staffuser', 'created', 'updated', 'user_type', )

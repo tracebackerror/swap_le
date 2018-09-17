@@ -35,6 +35,10 @@ urlpatterns = [
     url(r'^library/', include('library.urls', namespace='library', app_name='library')),
     
 # Fees
-    url(r'^fees/', include('fees.urls', namespace='fees', app_name='fees')),  
+    url(r'^fees/', include('fees.urls', namespace='fees', app_name='fees')),
+    
+#Student Ativate/Deactivate
+    url(r'^activate-deactivate/(?P<pk>\d+)/$',StudentActivateDeactivate, name='student_activate_deactivate'),
+
 
 ]
