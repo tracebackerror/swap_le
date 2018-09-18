@@ -52,7 +52,7 @@ class Assesment(MetaInformationMixin, SoftDeletionModelMixin):
                                        default='private')
     
    
-    is_exam_active = models.BooleanField(default=True)
+    is_exam_active = models.BooleanField(default=True, blank=True)
     expired_on = models.DateTimeField(default=datetime.now)
     
     
@@ -69,6 +69,7 @@ class Assesment(MetaInformationMixin, SoftDeletionModelMixin):
         
     class Meta:
         ordering = ('created',)
+        
         
     def __str__(self):
         return 'Assesment - {}'.format(self.header)

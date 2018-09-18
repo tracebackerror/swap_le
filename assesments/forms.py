@@ -170,8 +170,9 @@ class AssessmentForm(forms.ModelForm):
     
     class Meta:
         model = Assesment
-        fields = ('__all__')
-        exclude= ['deleted_by','deleted_at', 'created_by', 'updated_by', 'exam_start_type']
+        
+        fields = ('header', 'brief', 'exam_start_date_time', 'passing_marks', 'privilege', 'expired_on', 'subscriber_users')
+        exclude= ['deleted_by','deleted_at', 'created_by', 'updated_by', 'exam_start_type', 'is_exam_active']
         labels = {
         "header": "Short Heading",
         "privilege": "Visibility",
@@ -232,7 +233,7 @@ class AssessmentCreationForm(forms.ModelForm):
     class Meta:
         model = Assesment
         fields = ('__all__')
-        exclude= ['deleted_by','deleted_at', 'created_by', 'updated_by', 'exam_start_type','total_exam_duration']
+        exclude= ['deleted_by','deleted_at', 'created_by', 'updated_by', 'exam_start_type','total_exam_duration', 'is_exam_active']
         
         labels = {
         "header": "Short Heading",

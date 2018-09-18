@@ -66,10 +66,17 @@
 
       <nav id="nav-menu-container">
         <ul class="nav-menu">
-          <li class="menu-active"><a href="#intro">Home</a></li>
-          <li><a href="#about">About Us</a></li>
+          
+          
           <li><a href="#features">Features</a></li>
           <li><a href="#pricing">Pricing</a></li>
+          <li class="menu-has-children"><a href="">Register</a>
+            <ul>
+              <li><a href="{% url "student:login" %}">Student</a></li>
+              <li><a href="{% url "staff:login" %}">Staff</a></li>
+              <li><a href="{% url "institutions:login" %}">Institution</a></li>
+            </ul>
+          </li>
           <li class="menu-has-children"><a href="">Log In</a>
             <ul>
               <li><a href="{% url "student:login" %}">Student</a></li>
@@ -140,7 +147,7 @@
 
               <div class="col-lg-6 col-md-6 box wow fadeInRight">
                 <div class="icon"><i class="ion-ios-speedometer-outline"></i></div>
-                <h4 class="title"><a href="">Automated Workflow</a></h4>
+                <h4 class="title"><a href="">Automated Assesment Workflow</a></h4>
                 <p class="description">Allows to take automated Single, Multiple Choice and reviewing Descriptive Assesments.</p>
               </div>
               <div class="col-lg-6 col-md-6 box wow fadeInRight" data-wow-delay="0.1s">
@@ -178,15 +185,7 @@
     <section id="call-to-action">
       <div class="container">
         <div class="row">
-          <div class="col-lg-9 text-center text-lg-left">
-            <h3 class="cta-title">Pay Bill</h3>
-            <p class="cta-text">Pay the monthly billed amount flexibly using the below action button.</p>
-          </div>
-          <div class="col-lg-3 cta-btn-container text-center">
-          <a class="cta-btn align-middle"  href="https://www.instamojo.com/@projectbaba/" rel="im-checkout" data-behaviour="remote" data-style="light" data-text="Pay Bill (via Project Baba)"></a>
-<script src="https://js.instamojo.com/v1/button.js"></script>
-            
-          </div>
+
           
           <iframe frameborder="0" width="560" height="315" src="https://biteable.com/watch/embed/swaple-1921976" allowfullscreen="true"></iframe><p></p>
           
@@ -197,6 +196,11 @@
     <!--==========================
       Clients
     ============================-->
+    <div class="container">
+    <div class="col-md-12">
+        <p><h2> Sponsors</h2></p>
+    </div>
+    </div>
     <section id="clients">
       <div class="container">
 
@@ -239,48 +243,36 @@
         <div class="section-header">
           <h3 class="section-title">Pricing</h3>
           <span class="section-divider"></span>
-          <p class="section-description">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque</p>
+          <p class="section-description">Free for all User</p>
         </div>
 
         <div class="row">
 
-          <div class="col-lg-4 col-md-6">
+          <div class="col-lg-6 col-md-6">
             <div class="box wow fadeInLeft">
-              <h3>Hobbyist</h3>
-              <h4><sup>INR</sup>1000<span> month</span></h4>
+              <h3>Business</h3>
+              <h4><sup>INR</sup>FREE<span> month</span></h4>
               <ul>
-                <li><i class="ion-android-checkmark-circle"></i> 10 Staff</li>
-                <li><i class="ion-android-checkmark-circle"></i> 50 Learners</li>
-                <li><i class="ion-android-checkmark-circle"></i> 50 Assement</li>
+                <li><i class="ion-android-checkmark-circle">50 Staff </i></li>
+                <li><i class="ion-android-checkmark-circle">500 Learners</i></li>
+                <li><i class="ion-android-checkmark-circle">1000 Assement</i></li>
                 
               </ul>
-              <a href="#" class="get-started-btn">Get Started</a>
+             
             </div>
           </div>
 
-          <div class="col-lg-4 col-md-6">
-            <div class="box featured wow fadeInUp">
-              <h3>Business</h3>
-              <h4><sup>INR</sup>2500<span> month</span></h4>
-              <ul>
-                <li><i class="ion-android-checkmark-circle"></i> 30 Staff</li>
-                <li><i class="ion-android-checkmark-circle"></i> 200 Learners</li>
-                <li><i class="ion-android-checkmark-circle"></i> 200 Assement</li>
-              </ul>
-              <a href="#" class="get-started-btn">Get Started</a>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6">
+          
+          <div class="col-lg-6  col-md-6">
             <div class="box wow fadeInRight">
               <h3>Enterprise</h3>
-              <h4><sup>INR</sup>5000<span> month</span></h4>
+              <h4>Connect with our team</h4>
               <ul>
-                <li><i class="ion-android-checkmark-circle"></i> 100 Staff</li>
-                <li><i class="ion-android-checkmark-circle"></i> 500 Learners</li>
-                <li><i class="ion-android-checkmark-circle"></i> Unlimited Assement</li>
+                <li><i class="ion-android-checkmark-circle">Unlimited Staff</i></li>
+                <li><i class="ion-android-checkmark-circle">Unlimited Learners</i></li>
+                <li><i class="ion-android-checkmark-circle">Unlimited Assement</i></li>
               </ul>
-              <a href="#" class="get-started-btn">Get Started</a>
+              <a href="#contact" class="get-started-btn">Contact Now</a>
             </div>
           </div>
 

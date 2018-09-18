@@ -738,6 +738,7 @@ def assessment_create_by_staff(request):
             assesment_creation_form.save_m2m()
             #messages.success(request, 'Assessment Updated Successfully')
             messages.add_message(request, messages.SUCCESS, 'Assessment Created Successfully')
+            return redirect(reverse_lazy("staff:assesments:manage_all_assesment"))
             
     else:
         assesment_creation_form = AssessmentCreationForm(request= request)

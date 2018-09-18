@@ -57,6 +57,33 @@
 	
 	    return (hours <= 9 ? "0" : "") + hours + ":" + (minutes <= 9 ? "0" : "") + minutes;
 	}
+    
+      
+   $("#id_exam_start_date_time_1, #id_expired_on_1").keypress(function (e) {
+     //if the letter is not digit then display error and don't type anything
+     if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+        //display error message
+        
+               return false;
+    }
+    if ($(this).val().length ==2 || $(this).val().length == 5 ){
+        $(this).val($(this).val() + ":")
+    }
+   });
+    
+   $("#id_expired_on_0, #id_exam_start_date_time_0").keypress(function (e) {
+     //if the letter is not digit then display error and don't type anything
+     if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+        //display error message
+        
+               return false;
+    }
+    if ($(this).val().length ==4 || $(this).val().length == 7 ){
+        $(this).val($(this).val() + "-")
+    }
+   });
+   
+   
  });
  </script>
 

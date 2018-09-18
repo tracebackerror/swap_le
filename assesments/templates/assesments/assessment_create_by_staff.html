@@ -2,9 +2,28 @@
 {% block title %}   Create Assessment   {% endblock %}
 
 {% block content %} 
+ 
  <h1>Create Assessment</h1>
 <div class="container" style="min-height:60%;">
 	 <p>You can Create your Assessment using the following form:</p>
+
+{% if assessment_c_form.errors %}
+    
+    
+        {% for key, value in assessment_c_form.errors.items %}
+            <div class="alert alert-danger">
+                <strong>{{key }} - {{ value|escape }}</strong>
+            </div>
+        {% endfor %}
+    
+     {% for key, value in assessment_c_form.non_field_errors.items %}
+            <div class="alert alert-danger">
+                <strong>{{key }} - {{ value|escape }}</strong>
+            </div>
+        {% endfor %}
+  
+{% endif %}
+
 	 
 	 <form action="." method="post" enctype="multipart/form-data">
 	     {{ assessment_c_form.as_table}}
@@ -58,6 +77,32 @@
 	
 	    return (hours <= 9 ? "0" : "") + hours + ":" + (minutes <= 9 ? "0" : "") + minutes;
 	}
+    
+   $("#id_exam_start_date_time_1, #id_expired_on_1").keypress(function (e) {
+     //if the letter is not digit then display error and don't type anything
+     if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+        //display error message
+        
+               return false;
+    }
+    if ($(this).val().length ==2 || $(this).val().length == 5 ){
+        $(this).val($(this).val() + ":")
+    }
+   });
+    
+   $("#id_expired_on_0, #id_exam_start_date_time_0").keypress(function (e) {
+     //if the letter is not digit then display error and don't type anything
+     if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+        //display error message
+        
+               return false;
+    }
+    if ($(this).val().length ==4 || $(this).val().length == 7 ){
+        $(this).val($(this).val() + "-")
+    }
+   });
+   
+   
  });
  </script>
  
