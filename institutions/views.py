@@ -1,5 +1,5 @@
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Institutions
 # Create your views here.
 from .forms import InstitutionsEditForm, UserEditForm, InstitutionLoginForm,StaffCreateForm
@@ -225,6 +225,17 @@ class InstitutionLoginView(LoginView):
             #     form.errors.update({'__all__': [invalidInstitution]})
             form.add_error(None, invalidInstitution)
             return super(InstitutionLoginView, self).form_invalid(form)
+            
+    def dispatch(self, *args, **kwargs):
+        if self.request.user.is_authenticated():
+            if self.request.user.has_perm('institutions.is_institute'):
+                return redirect(reverse_lazy("institutions:dashboard"))
+            elif self.request.user.has_perm('staff.is_staff'):
+                return redirect(reverse_lazy("staff:dashboard"))
+            else:
+                return redirect(reverse_lazy("student:dashboard"))
+
+        return super(InstitutionLoginView, self).dispatch(*args, **kwargs)
 
 
 def people(request):

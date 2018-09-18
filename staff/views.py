@@ -1,5 +1,5 @@
 from django.http.response import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import PasswordChangeDoneView, PasswordChangeView, LoginView
 from django.utils.decorators import method_decorator
@@ -49,6 +49,18 @@ class InstitutionStaffLoginView(LoginView):
             #     form.errors.update({'__all__': [invalidInstitution]})
             form.add_error(None, invalidInstitution)
             return super(InstitutionStaffLoginView, self).form_invalid(form)
+            
+            
+    def dispatch(self, *args, **kwargs):
+        if self.request.user.is_authenticated():
+            if self.request.user.has_perm('institutions.is_institute'):
+                return redirect(reverse_lazy("institutions:dashboard"))
+            elif self.request.user.has_perm('staff.is_staff'):
+                return redirect(reverse_lazy("staff:dashboard"))
+            else:
+                return redirect(reverse_lazy("student:dashboard"))
+
+        return super(InstitutionStaffLoginView, self).dispatch(*args, **kwargs)
 
             
 @permission_required('staff.is_staff',login_url=reverse_lazy('staff:login'))
