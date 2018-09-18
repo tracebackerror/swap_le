@@ -22,4 +22,4 @@ class ManageSectionTable(tables.Table):
         model = Section
         attrs = {'class': 'paleblue'}
         sequence = ('row_number','name','linked_assessment')
-        exclude = ('id')
+        exclude = ('id', 'linked_assessment')

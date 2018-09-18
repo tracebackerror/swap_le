@@ -33,7 +33,7 @@ class ResultTable(tables.Table):
         model = Result
         attrs = {'class': 'paleblue'}
         sequence = ('row_number',)
-        exclude = ('id', 'deleted_at','deleted_by','created_by','updated_by','type','assesment')
+        exclude = ('id', 'deleted_at','deleted_by','created_by','updated_by','type','assesment','created','updated',)
 
 class QuestionTable(tables.Table):
     row_number = tables.Column(empty_values=(),
@@ -52,14 +52,14 @@ class QuestionTable(tables.Table):
         model = Question
         attrs = {'class': 'paleblue'}
         sequence = ('row_number',)
-        exclude = ('id', 'deleted_at','deleted_by','created_by','updated_by',)
+        exclude = ('id', 'deleted_at','deleted_by','created_by','updated_by','created','updated', 'assesment_linked')
 
 class AssesmentTable(tables.Table):
     row_number = tables.Column(empty_values=(),
                                 verbose_name='Row')
     
-    edit_assesment = tables.TemplateColumn('<a href=" {% url "staff:assesments:assessment_edit_by_staff" assesmentid=record.id  %} ">Edit</a>')
-    delete_assesment = tables.TemplateColumn('<a href=" {% url "staff:assesments:assessment_delete_by_staff" assesmentid=record.id  %} ">Delete</a>')
+    edit_assesment = tables.TemplateColumn('<a href=" {% url "staff:assesments:assessment_edit_by_staff" assesmentid=record.id  %} "><center><span class="glyphicon glyphicon-edit ">Edit</span></center></a></a>')
+    delete_assesment = tables.TemplateColumn('<a href=" {% url "staff:assesments:assessment_delete_by_staff" assesmentid=record.id  %} "><center><span class="glyphicon glyphicon-remove">Delete</span></center></a>')
     manage_assesment = tables.TemplateColumn('<a href=" {% url "staff:assesments:assessment_manage_by_staff" assesmentid=record.id  %} ">Manage</a>')
     
     #manage_assesment = tables.TemplateColumn('<form method="GET"  action="{%  url "staff:assesments:assessment_manage_by_staff" %}">  {% csrf_token %} <input type="hidden" name="examid" value={{record.id }}> <input class="btn btn-dark" type="submit" value="Manage"> </form>')
