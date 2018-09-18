@@ -4,10 +4,11 @@ import itertools
 from django.utils.html import format_html
 from students.models import Student
 from django_tables2 import A
+from django.utils.translation import ugettext_lazy as _
 
 
 class StaffTable(tables.Table):
-    row_number = tables.Column(empty_values=(), verbose_name="Row")
+    row_number = tables.Column(empty_values=(), verbose_name="No.")
     edit_staff = tables.TemplateColumn('<a href=" {% url "institutions:edit_institution_staff" username=record.staffuser  %} "  ><center><span class="glyphicon glyphicon-edit "></span></center></a>')
     delete_staff = tables.TemplateColumn('<a href=" {% url "institutions:delete_institution_staff" username=record.staffuser  %}" ><center><span class="glyphicon glyphicon-remove"></span></center></a>')
     email_student = tables.Column(accessor='staffuser.email',
@@ -37,7 +38,7 @@ class StaffTable(tables.Table):
 
 
 class StudentTable(tables.Table):
-    row_number = tables.Column(empty_values=())
+    row_number = tables.Column(empty_values=(), verbose_name="No.")
     first_name = tables.Column(accessor='studentuser.first_name',
                                verbose_name='First Name')
     last_name = tables.Column(accessor='studentuser.last_name',
@@ -45,9 +46,9 @@ class StudentTable(tables.Table):
     email = tables.Column(accessor='studentuser.email',
                           verbose_name='Mail Address')
     
-    edit_student = tables.TemplateColumn('<a href=" {% url "staff:student_edit_by_staff" upk=record.pk  %} ">Edit</a>')
-    delete_student = tables.TemplateColumn('<a href=" {% url "staff:delete_institution_staff_student" username=record.studentuser  %} ">Delete</a>')
-    student_fees = tables.TemplateColumn('<a href=" {% url "staff:fees:manage_fees_installment" pk=record.id  %} ">Installment</a>')
+    edit_student = tables.TemplateColumn('<a href=" {% url "staff:student_edit_by_staff" upk=record.pk  %} "><center><span class="glyphicon glyphicon-edit "></span></center></a>', verbose_name="Edit")
+    delete_student = tables.TemplateColumn('<a href=" {% url "staff:delete_institution_staff_student" username=record.studentuser  %} "><center><span class="glyphicon glyphicon-remove"></span></center></a>', verbose_name="Delete")
+    student_fees = tables.TemplateColumn('<a href=" {% url "staff:fees:manage_fees_installment" pk=record.id  %} ">Installment</a>', verbose_name="Fees")
     Approval = tables.TemplateColumn(
         '<a href=" {% url "staff:student_activate_deactivate" pk=record.id  %} ">'
         '{% if record.studentuser.is_active %}'
@@ -57,7 +58,9 @@ class StudentTable(tables.Table):
         '{% endif %}'
         '</a>',order_by="studentuser.is_active"
         )
-    
+    standard = tables.Column(accessor='standard', verbose_name=_('Std.'))
+    staffuser = tables.Column(accessor='staffuser', verbose_name=_('Manage By'))
+	
     def __init__(self, *args, **kwargs):
         super(StudentTable, self).__init__(*args, **kwargs)
         self.counter = itertools.count()
@@ -81,5 +84,5 @@ class StudentTable(tables.Table):
         # add class="paleblue" to <table> tag 
         attrs = {'class': 'paleblue'}
         # fields = ('row_number', 'institute',)
-        exclude = ('id', 'deleted', 'last_login')
+        exclude = ('id', 'deleted', 'last_login', 'created', 'updated')
 

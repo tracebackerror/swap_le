@@ -708,7 +708,9 @@ def assessment_edit_by_staff(request, assesmentid):
                 
             #messages.success(request, 'Assessment Updated Successfully')
             messages.add_message(request, messages.SUCCESS, 'Assessment Updated Successfully')
-            
+            success_url = reverse_lazy("staff:assesments:manage_all_assesment")
+            return HttpResponseRedirect(success_url)
+ 
     else:   
         assesment_form = AssessmentForm(request=request,instance=Assesment.objects.get(id=assesmentid)) 
         

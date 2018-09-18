@@ -44,7 +44,8 @@ class Staff(models.Model):
             ("is_staff", "Friendly permission description"),
         )
     def __str__(self):
-        return 'Staff - {} Of Institute - {}'.format(self.staffuser.username, self.institute.institute_name)
+		return self.get_staff_name()
+        #return 'Staff - {} Of Institute - {}'.format(self.staffuser.username, self.institute.institute_name)
         
         
     def get_staff_name(self):
