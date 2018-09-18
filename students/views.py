@@ -1,31 +1,44 @@
-from django.http.response import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required  #permission_required, resolve_url, settings, six,urlparse,user_passes_test, wraps
+from django.http.response import HttpResponse
+from django.http.response import HttpResponseRedirect
+
+from django.shortcuts import render
+from django.shortcuts import redirect
+
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login as auth_login
+from django.contrib.auth.models import User
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import (PasswordResetView,PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView)
 from django.contrib.auth.views import PasswordChangeDoneView, PasswordChangeView, LoginView
+
+from django.utils import timezone
 from django.utils.decorators import method_decorator
+
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
+
 from django.urls import reverse_lazy
-from django.contrib import messages
 from institutions.forms import UserEditForm
 from django.views.generic import ListView,View,FormView
-from django.contrib.auth import login as auth_login
 
-from django.contrib.auth.views import (PasswordResetView,PasswordResetDoneView, PasswordResetConfirmView ,PasswordResetCompleteView)
-
-from library.models import AssetHistory,LibraryAsset
-from django.contrib.auth.models import User
 from .filters import ViewLibraryAssetFilter
 from .models import Student
-from staff.models import Staff
 from .forms import StudentRegistrationForm
-from django_filters.views import FilterView
-from django.contrib.auth.mixins import LoginRequiredMixin
 
+from library.models import AssetHistory
+from library.models import LibraryAsset
+from assesments.models import Assesment
 from assesments.models import Result
+from staff.models import Staff
+
+from django_filters.views import FilterView
+
 from easy_pdf.views import PDFTemplateView
-from django.db.models import Count,Sum
+
+from django.db.models import Count
+from django.db.models import Sum
 
 from functools import wraps
 
@@ -85,6 +98,21 @@ def dashboard(request):
     total_obj = Result.objects.filter(registered_user = student_obj,assesment_submitted = True).aggregate(total = Count('assesment_submitted'))
     passed_obj = Result.objects.filter(publish_result = True, registered_user = student_obj,result_passed = True).aggregate(passed = Count('result_passed'))
     pending_obj = Result.objects.filter(publish_result = False, registered_user = student_obj).count()
+    total_live_assessment, live_asessment = None, None
+    
+    all_user_linked_assesment = Assesment.soft_objects.filter(subscriber_users = student_obj, privilege='public')
+    all_user_linked_assesment_filter_exam_date = all_user_linked_assesment.filter(exam_start_date_time__lte= timezone.datetime.now(), expired_on__gte= timezone.datetime.now())
+
+    if all_user_linked_assesment_filter_exam_date.exists():
+        all_user_linked_result = Result.soft_objects.filter(registered_user=student_obj).filter(assesment_submitted=True)
+        if all_user_linked_result.exists():
+            live_asessment = all_user_linked_assesment_filter_exam_date.exclude(result = all_user_linked_result )
+        else:
+            live_asessment = all_user_linked_assesment_filter_exam_date
+    else:
+        live_asessment = all_user_linked_assesment_filter_exam_date
+        
+    total_live_assessment =  live_asessment.count()
     
     total = total_obj['total']
     passed = passed_obj['passed']
@@ -96,7 +124,7 @@ def dashboard(request):
     result_obj = Result.objects.filter(publish_result = True, registered_user = student_obj,assesment_submitted = True).values('assesment__header').annotate(obtained_marks = Sum('obtained_marks'),total_marks = Sum('total_marks'),passing_marks = Sum('assesment__passing_marks'))
 
     
-    return render(request, 'student/dashboard.html', {'section': 'dashboard','total':total,'passed':passed,'failed':failed,'pending':pending_obj,'result_obj':result_obj})
+    return render(request, 'student/dashboard.html', {'section': 'dashboard','total':total,'passed':passed,'failed':failed,'pending':pending_obj,'result_obj':result_obj, 'total_live_assessment':total_live_assessment, })
     '''
     from django.http.response import HttpResponse
     return HttpResponse('sddf')

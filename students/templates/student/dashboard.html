@@ -4,8 +4,9 @@
 
 <div class="container" style="min-height:80%">
 <br>
-  <div class = "col-md-3">
-	<div class="card border-success mb-3" style="max-width: 30rem;">
+<div class="row">
+  <div class = "col-md-4">
+	<div class="card border-success mb-4" style="max-width: 30rem;">
 	  <div align="center" class="card-body text-success">
 	   <font size = 20 color="blue"><span class="count">{{total}}</span></font>
 	  </div>
@@ -13,8 +14,8 @@
 	</div>
   </div>
   
-  <div class = "col-md-3">
-	<div class="card border-success mb-3" style="max-width: 30rem;">
+  <div class = "col-md-4">
+	<div class="card border-success mb-4" style="max-width: 30rem;">
 	  <div align="center" class="card-body text-success">
 	    <font size = 20 color="lightgreen"><span class="count">{{passed}}</span></font>
 	  </div>
@@ -22,8 +23,8 @@
 	</div>
   </div>
   
-  <div class = "col-md-3">
-	<div class="card border-success mb-3" style="max-width: 30rem;">
+  <div class = "col-md-4">
+	<div class="card border-success mb-4" style="max-width: 30rem;">
 	  <div align="center" class="card-body text-success">
 	    <font size = 20 color="red"><span class="count">{{failed}}</span></font>
 	  </div>
@@ -31,16 +32,27 @@
 	</div>
   </div>
   
-    <div class = "col-md-3">
-	<div class="card border-success mb-3" style="max-width: 30rem;">
+ </div>
+ <div class="row">
+
+    <div class = "col-md-4">
+	<div class="card border-success mb-4" style="max-width: 30rem;">
 	  <div align="center" class="card-body text-success">
 	    <font size = 20 color="#ffbf00"><span class="count">{{pending}}</span></font>
 	  </div>
-	  <div align="center" class="card-footer bg-transparent border-success">Total Pending Assessments</div>
+	  <div align="center" class="card-footer bg-transparent border-success">Total Pending Result </div>
 	</div>
   </div>
   
-  
+  <div class = "col-md-6">
+	<div class="card border-success mb-6" style="max-width: 30rem;">
+	  <div align="center" class="card-body text-success">
+	    <font size = 20 color="red"><span class="count">{{total_live_assessment}}</span></font>
+	  </div>
+	  <div align="center" class="card-footer bg-transparent border-success">Live Assessments</div>
+	</div>
+  </div>
+ </div>
 <!-- Graph code -->
 
 <div align="center" class="card">
