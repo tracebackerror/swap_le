@@ -27,6 +27,8 @@ from assesments.models import Result
 from easy_pdf.views import PDFTemplateView
 from django.db.models import Count,Sum
 
+from functools import wraps
+
 class InstitutionStudentLoginView(LoginView):
     template_name = 'student/login.html'
 
@@ -214,12 +216,34 @@ class ResultReport(LoginRequiredMixin,PDFTemplateView):
         return context
 
 
+def authentication_check_decorator(func):
+
+    @wraps(func)
+    def check_authentication(self, *args, **kwargs):
+            if self.request.user.is_authenticated():
+                if self.request.user.has_perm('institutions.is_institute'):
+                    return redirect(reverse_lazy("institutions:dashboard"))
+                elif self.request.user.has_perm('staff.is_staff'):
+                    return redirect(reverse_lazy("staff:dashboard"))
+                else:
+                    return redirect(reverse_lazy("student:dashboard"))
+                    
+            return func(self, *args, **kwargs)
+                    
+    def inner_decoration(self, *args, **kwargs):
+        return check_authentication(self, *args, **kwargs)
+        
+    return inner_decoration
 
 class StudentRegistration(FormView):
     template_name = 'student/student_registration.html'
     form_class = StudentRegistrationForm
     success_url = "/student/login/"
     
+    @authentication_check_decorator
+    def dispatch(self, *args, **kwargs):
+        return super(StudentRegistration, self).dispatch(*args, **kwargs)
+        
     def form_valid(self, form):
         user_obj = form.save()
         staff_obj = Staff.objects.get(id=self.request.POST['staffuser'])
