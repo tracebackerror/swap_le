@@ -48,6 +48,8 @@ from datetime import datetime
 from section.tables import ManageSectionTable
 from section.models import Section,SectionQuestionMapping
 from django.db.models import Count
+from base64 import b64encode
+from django.template.defaulttags import register
 
 class ReviewAllSqaView(TemplateView):
     model = Answer
@@ -238,7 +240,14 @@ class ManageSingleQuestionAddView(TemplateView):
             return HttpResponseForbidden()
         
         if question_form and question_form.is_valid():
-            question_form.save()
+            if request.FILES:
+                question_image = request.FILES['question_image'].read()
+            else:
+                question_image = None
+            
+            question_obj=question_form.save()
+            question_obj.question_image = question_image
+            question_obj.save()
             
             # Processing Existing Result Set to Update the Details
             fetch_appropriate_result = Result.soft_objects.filter(assesment__id = int(self.kwargs['assesmentid']))
@@ -607,11 +616,21 @@ class ProcesStudentAssesmentView(DetailView):
                             
                     get_the_current_answer_obj.save() 
                     # Check whether user has answered any question
+                    
+                    
+                    #question image display view
+                    question_image_obj = {}
+                    for question in fetch_all_linked_question:
+                        if(question.question_image):
+                            question_image_obj[question.id] = b64encode(question.question_image)
+    
+                        
                     return render(self.request, 'assesments/exam_start_main_page.html', {
                         'assesment_object': assesment_to_undertake,
                         'all_question_to_answer':page_question_obj,
                         'get_the_answer_obj':get_the_current_answer_obj,
                         'result_object':self.create_result_instance,
+                        'question_image_obj':question_image_obj,
                         })
         else:
             '''
@@ -623,7 +642,12 @@ class ProcesStudentAssesmentView(DetailView):
             })#, content_type='application/xhtml+xml')
             '''
             pass
-    
+        
+        
+    @register.filter
+    def get_item(dictionary, key):
+        return dictionary.get(key)
+
     @method_decorator(login_decorator)
     def get(self, *args, **kwargs):
         self._process_assesment(self, *args, **kwargs)
@@ -636,7 +660,6 @@ class ProcesStudentAssesmentView(DetailView):
     
     def get_context_data(self, **kwargs):
         context = super(ProcesStudentAssesmentView, self).get_context_data(**kwargs)
-       
         return context 
     
     
