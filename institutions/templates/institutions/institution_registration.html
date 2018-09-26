@@ -1,0 +1,54 @@
+{%  extends 'base.html' %}
+
+{% block title %}   Institution Registration   {% endblock %}
+
+{% block content %} 
+ <h1>Institution Registration  </h1>
+ 
+ <div class="container" style="min-height:60%">
+ <p>Please fill all the details for Institution Account:</p>
+ 
+ <form action="." method="post" enctype="multipart/form-data">
+ 	 {% csrf_token %}
+ 	 
+	     {{ form.username.label}}<font color=red> *</font><br>
+	     {{ form.username}}<br><br><br>
+	     {{ form.username.errors }}
+	     
+	     {{ form.institute_name.label}}<font color=red> *</font><br>
+	     {{ form.institute_name}}<br><br><br>
+	     
+	     {{ form.email.label}}<br>
+	     {{ form.email}}<br><br><br>
+	     
+	     {{ form.institute_address.label}}<font color=red> *</font><br>
+	     {{ form.institute_address}}<br><br><br>
+	     
+	     {{ form.institute_city.label}}<font color=red> *</font><br>
+	     {{ form.institute_city}}<br><br><br>
+	     
+	     {{ form.institute_state.label}}<font color=red> *</font><br>
+	     {{ form.institute_state}}<br><br><br>
+	     
+	     {{ form.institute_country.label}}<font color=red> *</font><br>
+	     {{ form.institute_country}}<br><br><br>
+	     
+	     {{ form.institute_contact_mobile.label}}<font color=red> *</font><br>
+	     {{ form.institute_contact_mobile}}<br><br><br>
+	     {{ form.institute_contact_mobile.errors }}
+	     
+	     {{ form.institute_contact_landline.label}}<br>
+	     {{ form.institute_contact_landline}}<br><br><br>
+	     
+	     {{ form.password1.label}}<font color=red> *</font><br>
+	     {{ form.password1}}<br><br><br>
+	     {{ form.password2.errors }}
+	     
+	     Confirm Password<font color=red> *</font><br>
+	     {{ form.password2}}<br><br><br>
+ 	 
+ 	 
+ 	 <p><input type="submit" class="btn btn-success" value="Register"></p>
+ </form>
+ </div>
+{% endblock %}
