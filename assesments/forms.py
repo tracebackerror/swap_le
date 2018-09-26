@@ -13,10 +13,11 @@ from django.template.defaultfilters import default
 
 
 class QuestionForm(forms.ModelForm):
+    question_image = forms.ImageField(required=False)
     def __init__(self, *args, **kwargs):
-        
         super(QuestionForm, self).__init__(*args, **kwargs)
         
+        self.fields['question_image'].help_text = "<font color=blue> File Size Should Be Less Than 500kb </font> <br> <font color=blue> File Should Be Upload Only .jpg, .jpeg, .png</font>"
         self.helper = FormHelper()
         self.helper.form_method = 'post'
         self.helper.form_action = '.'
@@ -35,6 +36,7 @@ class QuestionForm(forms.ModelForm):
                                 Fieldset(
                                     'Please Use the below form for adding a Question to Assesment',
                                    'question_text',
+                                   'question_image',
                                    'max_marks',
                                    
                                    

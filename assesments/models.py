@@ -112,6 +112,7 @@ class Question(MetaInformationMixin, SoftDeletionModelMixin):
 
 
     question_text = models.TextField()
+    question_image = models.BinaryField(blank=True,null=True, editable=True)
 
     length_size = 250    
     option_one = models.TextField(max_length=length_size,

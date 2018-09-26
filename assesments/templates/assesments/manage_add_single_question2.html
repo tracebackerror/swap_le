@@ -151,4 +151,40 @@ $(document).ready(function(){
 	 console.log("-- DOM Ended --");
 });
 </script>
+
+
+<!--  File Uploading Validation  -->
+
+<script type="text/javascript">
+
+$('#id_question_image').change(function(e){
+	var file = $('input[type=file]').prop('files')[0];
+    if (file){
+    	var file_size = Math.round(file.size / 1024);
+    	var file_ext = file.name.split('.')[1].toLowerCase();
+    	//console.log(file_ext+" - "+file_size);
+    	if(file_size > 500){
+    		alert("File Size Should Be Less Than 500kb.");
+			document.getElementById("id_question_image").value = "";
+    	}
+    	else{
+	    	var validFileExtensions = ["jpg", "jpeg", "png"];
+	    	switch(file_ext)
+	        {
+	            case 'jpg':
+	            case 'png':
+	            case 'jpeg':
+	                break;
+	            default:
+	                alert('File Should Upload Be Only .jpg, .jpeg, .png');
+	                this.value='';
+	        }
+    	}
+    	
+    }
+})
+
+
+</script>
+
 {% endblock %}
