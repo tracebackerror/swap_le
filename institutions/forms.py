@@ -40,3 +40,28 @@ class StaffCreateForm(UserCreationForm):
     class Meta:
         model=User
         fields = ['username','first_name','last_name','email','password1','password2']
+        
+        
+class InstitutionRegistrationForm(UserCreationForm):
+    institute_name = forms.CharField(widget = forms.TextInput,required = True,label = "Institution Name")
+    email =  forms.EmailField(widget = forms.EmailInput,label = "Email",required = False)
+    username = forms.CharField(widget = forms.TextInput,required = True,label = "Institution Username")
+    institute_contact_mobile = forms.CharField(widget = forms.NumberInput,required = True,label = "Contact Number")
+    institute_contact_landline = forms.CharField(widget = forms.NumberInput,required = False, label = "Landline Number")
+    institute_address = forms.CharField(widget = forms.TextInput,required = True,label = "Address") 
+    institute_city = forms.CharField(widget = forms.TextInput,required = True,label = "City")
+    institute_state = forms.CharField(widget = forms.TextInput,required = True,label = "State")
+    institute_country = forms.CharField(widget = forms.TextInput,required = True,label = "Country")
+    
+    
+    def clean_institute_contact_mobile(self):
+        data = self.cleaned_data['institute_contact_mobile']
+        if len(str(data)) != 10:
+            raise forms.ValidationError("Invalid Contact Number : Enter 10 digit Contact Number")
+    
+    
+    class Meta:
+        model=User
+        fields = ['username','first_name','last_name','email','password1','password2']
+        
+    

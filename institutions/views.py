@@ -2,7 +2,7 @@
 from django.shortcuts import render, redirect
 from .models import Institutions
 # Create your views here.
-from .forms import InstitutionsEditForm, UserEditForm, InstitutionLoginForm,StaffCreateForm
+from .forms import InstitutionsEditForm, UserEditForm, InstitutionLoginForm,StaffCreateForm,InstitutionRegistrationForm
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login     
 from django.contrib.auth.decorators import login_required  #permission_required, resolve_url, settings, six,urlparse,user_passes_test, wraps
@@ -11,7 +11,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
-from django.views.generic import ListView
+from django.views.generic import ListView,FormView
 from institutions.models import Institutions
 from staff.models import Staff
 from django.contrib.auth.models import User
@@ -37,6 +37,9 @@ from django_filters.views import FilterView
 from students.models import Student
 from django.db.models import Count,Q
 from assesments.models import Result,Assesment
+
+from datetime import datetime,timedelta
+import random, string
 
 def institute_login(request):
     if request.method == 'POST':
@@ -306,6 +309,42 @@ class StudentFeesInstallment(PermissionRequiredMixin,LoginRequiredMixin,FilterVi
     permission_required = 'institutions.is_institute'
     
     
+
+class InstitutionRegistration(FormView):
+    template_name = 'institutions/institution_registration.html'
+    form_class = InstitutionRegistrationForm
+    success_url = reverse_lazy('institutions:login')
     
+    
+    def form_valid(self, form):
+        user_obj = form.save()
+        assign_perm('institutions.is_institute', user_obj)
+        user_obj.save()
+        institution_obj = Institutions()
+
+        institution_obj.user = user_obj
+        institution_obj.institute_name = self.request.POST['institute_name']
+        institution_obj.institute_address = self.request.POST['institute_address']
+        institution_obj.institute_city = self.request.POST['institute_city']
+        institution_obj.institute_state = self.request.POST['institute_state']
+        institution_obj.institute_country = self.request.POST['institute_country']
+        institution_obj.institute_contact_mobile = self.request.POST['institute_contact_mobile']
+        institution_obj.institute_contact_landline = self.request.POST['institute_contact_landline']
+        
+        license_obj = License()
+        institution_obj.save()
+        
+        license_obj.li_institute = institution_obj
+        license_obj.li_key = ''.join(random.choices(string.ascii_uppercase + string.digits, k=16))
+        license_obj.li_expiration_date = datetime.now() + timedelta(days=10*365)
+        license_obj.li_max_staff = 50
+        license_obj.li_max_students = 500
+        license_obj.li_max_assesments = 1000
+        license_obj.li_current_status = 'acti'
+        
+        license_obj.save()
+        
+        messages.add_message(self.request, messages.SUCCESS, 'Your Account Registered Successfully')
+        return HttpResponseRedirect(self.get_success_url())
     
     
