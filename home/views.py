@@ -6,6 +6,9 @@ from django.contrib import messages
 class HomePageView(TemplateView):
     template_name = "home/index.html"
     
+class GoogleIndexViewVerification(TemplateView):
+    template_name = "home/google0f6eb0891016c158.html"
+    
 def contactus(request):
     if request.method=="GET":
         iname=request.GET['name']
