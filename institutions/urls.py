@@ -36,5 +36,6 @@ urlpatterns = [
     #fees installment
     url(r'^fees-installment/view/$',StudentFeesInstallment.as_view(),name='view_student_fees_installment'),
     
-    
+    #institution registration
+    url(r'^registration/$',InstitutionRegistration.as_view(),name='institution_registration'),
 ]
