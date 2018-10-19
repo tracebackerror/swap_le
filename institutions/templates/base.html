@@ -2,9 +2,12 @@
 {% load staticfiles %}
 
 {% load static %}
-{%  include 'master_static.html' %}
 
  <html> <head> 
+{%  include 'master_static.html' %}
+{% include "google_analytics.html" %}
+{% include "google_adsense.html" %}
+ 	
  <title>{% block title %}{% endblock %}</title>  
  <link href="{% static "css/base.css" %}" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'django_tables2/themes/paleblue/css/screen.css' %}" />
