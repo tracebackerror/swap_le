@@ -47,12 +47,13 @@ class QuestionTable(tables.Table):
     
     def render_row_number(self):
         return '%d' % next(self.counter)
+        
     
     class Meta:
         model = Question
         attrs = {'class': 'paleblue'}
         sequence = ('row_number',)
-        exclude = ('id', 'deleted_at','deleted_by','created_by','updated_by','created','updated', 'assesment_linked')
+        exclude = ('id', 'deleted_at','deleted_by','created_by','updated_by','created','updated', 'assesment_linked', 'question_image' )
 
 class AssesmentTable(tables.Table):
     row_number = tables.Column(empty_values=(),
