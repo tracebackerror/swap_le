@@ -13,46 +13,56 @@
  <br>
  
  <div class="container">
- 
-   <div class="col-md-6">
-    <table>
-    	{{  current_details.as_table }}
-    </table>
-   </div>
+	<div class="row">
+	   <div class="col-md-6">
+		<table>
+			{{  current_details.as_table }}
+		</table>
+	   </div>
 
-   <div class="col-md-6">
-    <div id="canvas-holder" style="width:125%">
-		<canvas id="pie-chart"></canvas>
+	   <div class="col-md-6">
+		<div id="canvas-holder" class="border border-dark">
+			<canvas id="pie-chart"></canvas>
+		</div>
+	   </div>
 	</div>
-   </div>
-   
+	<br>
+	<div class="row">
+		<div class="col-md-4"></div>
+		<div align="center" class="col-md-6" >
+		 <!-- ------------------ Assessment Filter	----------------------- -->
+		   <form method="post">
+				 {% csrf_token %}
+				 <div class="row">
+						 <div class="col-md-8">
+							<select name="assessment_id" class="form-control align-middle" data-live-search="true">
+							<option value=""></option>
+							 {% for data in all_instituion_assessments %}
+							  <option value="{{data.id}}">{{ data.header }}</option>
+							  {% endfor %}
+							</select>
+						</div>
+						<div class="col-md-4">   <button class="btn btn-success" >Filter</button></div>
+				</div>
+			</form>
+		</div>
+		
+	</div>
+	<div class="row">
+		<div class="col-md-12 ">
+			<div align="center">
+				 <div style="width:50%">
+					<canvas id="time-series-graph"></canvas>
+				 </div>
+			 </div>
+	</div>
+	
+	
+		
+	</div>
 
  </div>
- 
- <br><br><br>
- <!-- ------------------ Assessment Filter	----------------------- -->
- <div class="col-md-4">
- </div>
- 
- <div align="center" class="col-md-4">
-   <form method="post">
-		 {% csrf_token %}
-			<select name="assessment_id" class="selectpicker" data-live-search="true">
-			<option value=""></option>
-			 {% for data in all_instituion_assessments %}
-			  <option value="{{data.id}}">{{ data.header }}</option>
-			  {% endfor %}
-			</select>
-		   <button class="btn btn-success" style="padding-left: 50px;padding-right: 50px;height: 38px;">FILTER</button></div>
-	</form>
-</div>
-	
- <br>
-<div align="center">
-     <div style="width:50%">
-		<canvas id="time-series-graph"></canvas>
-	 </div>
- </div>
+
  
  
  
