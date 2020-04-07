@@ -21,8 +21,8 @@ urlpatterns = [
     url(r'^password-change/$',PasswordChangeViewForInstitutions.as_view(), name='password_change'),
     url(r'^password-change/done/$',PasswordChangeDoneViewForInstitutions.as_view(), name='password_change_done'),
     url(r'^manage/staff/$', InstitutionStaffView.as_view(), name='manage_staff'),
-    url(r'^manage/staff/(?P<username>)/edit/$', institute_staff_edit, name='edit_institution_staff'),
-    url(r'^manage/staff/(?P<username>)/delete/$', institute_staff_delete, name='delete_institution_staff'),
+    url(r'^manage/staff/(?P<username>[\w.@+-]+)/edit/$', institute_staff_edit, name='edit_institution_staff'),
+    url(r'^manage/staff/(?P<username>[\w.@+-]+)/delete/$', institute_staff_delete, name='delete_institution_staff'),
     url(r'^manage/staff/create/$', institute_staff_create, name='create_institution_staff'),
     
     #password reset through email
