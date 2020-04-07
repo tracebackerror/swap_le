@@ -28,14 +28,14 @@ class Staff(models.Model):
                                       )
     institute = models.ForeignKey(Institutions, related_name='staffinstitute',
                                   on_delete=models.CASCADE)
-    allowregistration = models.BooleanField(default=False)
+    allowregistration = models.BooleanField(default=True)
     
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     
     user_type = models.CharField(max_length=10, default="staff", editable=False)
     deleted = models.CharField(max_length=1, default="N")
-    auto_active_student = models.BooleanField(default=False)
+    auto_active_student = models.BooleanField(default=True)
 
     
     class Meta:
