@@ -9,8 +9,8 @@ from django.utils.translation import ugettext_lazy as _
 
 class StaffTable(tables.Table):
     row_number = tables.Column(empty_values=(), verbose_name="No.")
-    edit_staff = tables.TemplateColumn('<a href=" {% url "institutions:edit_institution_staff" username=record.staffuser  %} "  ><center><span class="glyphicon glyphicon-edit "></span></center></a>')
-    delete_staff = tables.TemplateColumn('<a href=" {% url "institutions:delete_institution_staff" username=record.staffuser  %}" ><center><span class="glyphicon glyphicon-remove"></span></center></a>')
+    edit_staff = tables.TemplateColumn('<a href=" {% url "institutions:edit_institution_staff" username=record.staffuser  %} "  ><center><span class="fas fa-edit"></span></center></a>')
+    delete_staff = tables.TemplateColumn('<a href=" {% url "institutions:delete_institution_staff" username=record.staffuser  %}" ><center><span class="fas fa-trash-alt"></span></center></a>')
     email_student = tables.Column(accessor='staffuser.email',
                           verbose_name='Email')
     first_name = tables.Column(accessor='staffuser.first_name',
@@ -46,9 +46,9 @@ class StudentTable(tables.Table):
     email = tables.Column(accessor='studentuser.email',
                           verbose_name='Mail Address')
     
-    edit_student = tables.TemplateColumn('<a href=" {% url "staff:student_edit_by_staff" upk=record.pk  %} "><center><span class="glyphicon glyphicon-edit "></span></center></a>', verbose_name="Edit")
-    delete_student = tables.TemplateColumn('<a href=" {% url "staff:delete_institution_staff_student" username=record.studentuser  %} "><center><span class="glyphicon glyphicon-remove"></span></center></a>', verbose_name="Delete")
-    student_fees = tables.TemplateColumn('<a href=" {% url "staff:fees:manage_fees_installment" pk=record.id  %} ">Installment</a>', verbose_name="Fees")
+    edit_student = tables.TemplateColumn('<a href=" {% url "staff:student_edit_by_staff" upk=record.pk  %} "><center><span class="fas fa-edit "></span></center></a>', verbose_name="Edit")
+    delete_student = tables.TemplateColumn('<a href=" {% url "staff:delete_institution_staff_student" username=record.studentuser  %} "><center><span class="fas fa-trash-alt"></span></center></a>', verbose_name="Delete")
+    #student_fees = tables.TemplateColumn('<a href=" {% url "staff:fees:manage_fees_installment" pk=record.id  %} ">Installment</a>', verbose_name="Fees")
     Approval = tables.TemplateColumn(
         '<a href=" {% url "staff:student_activate_deactivate" pk=record.id  %} ">'
         '{% if record.studentuser.is_active %}'
@@ -59,7 +59,7 @@ class StudentTable(tables.Table):
         '</a>',order_by="studentuser.is_active"
         )
     standard = tables.Column(accessor='standard', verbose_name=_('Std.'))
-    staffuser = tables.Column(accessor='staffuser', verbose_name=_('Manage By'))
+    staffuser = tables.Column(accessor='staffuser', verbose_name=_('Under Professor'))
 	
     def __init__(self, *args, **kwargs):
         super(StudentTable, self).__init__(*args, **kwargs)
@@ -80,9 +80,9 @@ class StudentTable(tables.Table):
     
     class Meta:
         model = Student
-        sequence = ('row_number', 'studentuser','first_name','last_name','email', 'staffuser', 'created', 'updated', 'user_type', )
+        sequence = ('row_number', 'studentuser','first_name','last_name','email', 'staffuser',  )
         # add class="paleblue" to <table> tag 
         attrs = {'class': 'paleblue'}
         # fields = ('row_number', 'institute',)
-        exclude = ('id', 'deleted', 'last_login', 'created', 'updated')
+        exclude = ('id', 'deleted', 'last_login', 'created', 'updated', 'user_type',)
 

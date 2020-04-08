@@ -344,6 +344,18 @@ class InstitutionRegistration(FormView):
         
         license_obj.save()
         
+        #Register Institute as first user:
+        
+        user_obj.refresh_from_db()  # This will load the Profile created by the Signal
+        assign_perm('staff.is_staff', user_obj)
+        profile_form = Staff()  # Reload the profile form with the profile instance
+        profile_form.institute = user_obj.institutions
+        profile_form.staffuser = user_obj
+        profile_form.full_clean()  # Manually clean the form this time. It is implicitly called by "is_valid()" method
+        license_obj.li_current_staff += 1
+        license_obj.save()
+        profile_form.save()  # Gracefully save the form
+        
         messages.add_message(self.request, messages.SUCCESS, 'Your Account Registered Successfully')
         return HttpResponseRedirect(self.get_success_url())
     

@@ -14,6 +14,7 @@ from django.template.defaultfilters import default
 
 class QuestionForm(forms.ModelForm):
     question_image = forms.ImageField(required=False)
+    question_text = forms.CharField(label="Question ", widget=forms.Textarea(attrs={'rows':14, 'cols':50}))
     def __init__(self, *args, **kwargs):
         super(QuestionForm, self).__init__(*args, **kwargs)
         
@@ -35,6 +36,7 @@ class QuestionForm(forms.ModelForm):
                                     
                                 Fieldset(
                                     'Please Use the below form for adding a Question to Assesment',
+                                  'max_marks',
                                    'question_text',
                                    'question_image',
                                    'max_marks',
@@ -66,11 +68,11 @@ class QuestionForm(forms.ModelForm):
                                 """),
                                 
                                 Div(
-                                         Submit('submit', 'Submit', css_class='btn-primary col-md-5'),
+                                         Submit('submit', 'Submit', css_class='btn-primary '),
                                          Div(
                                              css_class="col-md-1"
                                              ),
-                                         Reset('name', 'Reset', css_class='btn btn-danger col-md-5'),
+                                         Reset('name', 'Reset', css_class='btn btn-danger'),
                                       css_class="col-md-12 row"),
                                 HTML("""</div> </div>""")
                             )

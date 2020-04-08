@@ -41,6 +41,7 @@
         <li class="nav-item active">
           <a class="nav-link" href="{% url "institutions:dashboard" %}">Home <span class="sr-only"> {% if section == "dashboard" %}(current){% endif %}</span></a>
         </li>
+		
 		{% if request.user.is_authenticated and perms.institutions.is_institute %} 
 		
         
@@ -52,6 +53,7 @@
 			</a>
 			<ul class="navbar-nav mr-auto">
 			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+					<li class="dropdown-item" > <a  href ={% url "staff:dashboard" %}> Dashboard</a> </li>
 					<li class="dropdown-item" > <a  href ={% url "institutions:manage_staff" %}> Manage Staff</a> </li>
 					<li class="dropdown-item" > <a  href ={% url "institutions:create_institution_staff" %}> Add Staff</a> </li>
 			</div>
@@ -69,19 +71,88 @@
 			</div>
 			</ul>
 		</li>
-		{% endif %}  
+		
+		
+		{% endif %}
+		{% if request.user.is_authenticated %} 
+		<li class="nav-item dropdown">
+			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			  Student
+			</a>
+			<ul class="navbar-nav mr-auto">
+			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+					{% if request.user.is_authenticated and perms.staff.is_staff or request.user.is_authenticated and perms.institutions.is_institute %} 
+						
+						<li class="dropdown-item" > <a  href ={% url "staff:manage_student" %}>  Manage Student</a> </li>
+						<li class="dropdown-item" > <a  href ={% url "staff:add_student" %}> Add Student</a> </li>
+					{% else %}
+						<li class="dropdown-item"> <a href="{% url "student:dashboard" %}">Dashboard</a></li>
+					{% endif %}
+					
+					
+					<!--
+					<li class="dropdown-item"> <a href ={% url "student:view_library_asset" %}>View Library Asset </a> </li>
+					<li class="dropdown-item"> <a href ={% url "student:my_issued_library_asset" %}>My Issued Library Asset </a> </li> -->
+		 
+					
+			</div>
+			</ul>
+		</li>
+		<li class="nav-item dropdown">
+			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			  Test / Assesment
+			</a>
+			<ul class="navbar-nav mr-auto">
+			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+				{% if request.user.is_authenticated and perms.staff.is_staff or request.user.is_authenticated and perms.institutions.is_institute %}
+					<li class="dropdown-item" > <a  href ={% url "staff:assesments:manage_all_assesment" %}> Manage Assesment</a> </li>
+					<li class="dropdown-item" > <a  href ={% url "staff:assesments:assessment_create_by_staff" %}>  Create Assessment</a> </li>
+				{% else %}
+					<li class="dropdown-item" > <a href ={% url "student:assesments:manage_student_assesment" %}> Live Assesment </a> </li>
+					<li class="dropdown-item" > <a href ={% url "student:result" %}> Results </a> </li>
+				{% endif %}	
+					
+					
+					
+			</div>
+			</ul>
+		</li>
+		
+		{% endif %}
+		
+		<!--
+		
+		    <li> <a href ={% url "staff:create_student_enquiry" %}> Student Enquiry Form </a> </li>
+		    <li> <a href ={% url "staff:manage_student_enquiry" %}> Manage Student Enquiry </a> </li>
+		    <li> <a href ={% url "staff:library:create_library_asset" %}> Create Library Asset </a> </li>
+		    <li> <a href ={% url "staff:library:manage_library_asset" %}> Manage Library Asset </a> </li>
+		    
+		-->
+		 
       </ul>
+	  
+	  
       <ul class="navbar-nav nav-flex-icons">
-		{% if request.user.is_authenticated and perms.institutions.is_institute %} 
+		{% if request.user.is_authenticated %} 
         <li class="nav-item">
           <a class="nav-link" href="{% url "institutions:logout" %}">Log Out<i class="fas fa-sign-out-alt"></i></a>
         </li>
         
 		{% else %}  
 		
-		<li class="nav-item">
-          <a class="nav-link" href="{% url "institutions:login"  %}">Log In</a>
-        </li>
+		<li class="nav-item dropdown">
+			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			  Log In
+			</a>
+			<ul class="navbar-nav mr-auto">
+			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+					<li class="dropdown-item" > <a  href ={% url "institutions:login" %}> Institute</a> </li>
+					<li class="dropdown-item" > <a  href ={% url "staff:login"  %}>  Staff</a> </li>
+					<li class="dropdown-item" > <a  href ={% url "student:login"  %}> Student</a> </li>
+					
+			</div>
+			</ul>
+		</li>
 		 
 		{% endif %}  
       </ul>
