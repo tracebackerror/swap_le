@@ -1,6 +1,8 @@
 from django.conf.urls import url
 from .views import *
 
+app_name='section'
+
 urlpatterns = [
     
     url(r'^(?P<pk>\d+)/delete/$',DeleteQuestionSection.as_view(),name="delete_question_section"),

@@ -1,16 +1,11 @@
 from django.conf.urls import url
-
-#from .views import edit, institute_staff_edit, dashboard, PasswordChangeViewForInstitutions,\
-#    PasswordChangeDoneViewForInstitutions, InstitutionLoginView, InstitutionStaffView, \
-#    institute_staff_delete, institute_staff_create,InstitutionPasswordResetView\
-#    ,InstitutionPasswordResetDoneView,InstitutionPasswordResetConfirmView,InstitutionPasswordResetCompleteView
-
 from .views import *
 
 from django.contrib.auth.views import LoginView, LogoutView, logout_then_login, PasswordChangeDoneView
 
 
-    
+app_name='institutions'
+
 urlpatterns = [
     url(r'^edit/$', edit, name="edit"),
     # url(r'^login/$', institute_login, name='login'), 

@@ -7,7 +7,7 @@ from .views import *
 
 
 
-
+app_name='student'
 
 urlpatterns = [
     url(r'^login/',  InstitutionStudentLoginView.as_view(), name='login'),
@@ -16,7 +16,7 @@ urlpatterns = [
     url(r'^logout/$',  LogoutView.as_view(template_name='student/logged_out.html'), name='logout'),
     url(r'^password-change/$',PasswordChangeViewForStudent.as_view(), name='password_change'),
     url(r'^password-change/done/$',PasswordChangeDoneViewForStudent.as_view(), name='password_change_done'),
-    url(r'^', include('assesments.urls', namespace='assesments', app_name='assesments')),
+    url(r'^', include('assesments.urls', namespace='assesments', )),
     
     #password reset through email
     url(r'^password_reset/$',StudentPasswordResetView.as_view(),name='password_reset'),

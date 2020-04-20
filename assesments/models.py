@@ -153,7 +153,8 @@ class Question(MetaInformationMixin, SoftDeletionModelMixin):
     
     
     assesment_linked = models.ForeignKey(Assesment,
-                                                null=True)
+                                                null=True,
+                                                on_delete=models.CASCADE)
     
     
     def __str__(self):
@@ -165,8 +166,8 @@ class Result(MetaInformationMixin, SoftDeletionModelMixin):
     #objects = models.Manager()  # The Default Manager
     #active = AssesmentManager()  # Our custom manager
 
-    assesment = models.ForeignKey(Assesment)
-    registered_user = models.ForeignKey(Student)
+    assesment = models.ForeignKey(Assesment, on_delete=models.CASCADE)
+    registered_user = models.ForeignKey(Student, on_delete=models.CASCADE)
     #attempt_number = models.IntegerField(default=10) --FUTURE IMPL
     
     exam_taken_date_time = models.DateTimeField(default=timezone.now)
@@ -206,8 +207,8 @@ class Answer(MetaInformationMixin, SoftDeletionModelMixin):
     #active = AssesmentManager()  # Our custom manager
 
 
-    for_result = models.ForeignKey(Result)
-    for_question = models.ForeignKey(Question)
+    for_result = models.ForeignKey(Result, on_delete=models.CASCADE)
+    for_question = models.ForeignKey(Question, on_delete=models.CASCADE)
 
     length_size = 250    
    

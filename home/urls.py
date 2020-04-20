@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from .views import HomePageView, GoogleIndexViewVerification
 
-
+app_name='home'
 
 urlpatterns = [
     url(r'^', HomePageView.as_view(), name="homeview"),

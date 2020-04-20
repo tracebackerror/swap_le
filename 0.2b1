@@ -1,0 +1,7 @@
+Requirement already satisfied: xhtml2pdf in c:\users\tracebackerror\anaconda3\lib\site-packages (0.2.4)
+Requirement already satisfied: reportlab>=3.0 in c:\users\tracebackerror\anaconda3\lib\site-packages (from xhtml2pdf) (3.5.42)
+Requirement already satisfied: Pillow in c:\users\tracebackerror\anaconda3\lib\site-packages (from xhtml2pdf) (7.1.1)
+Requirement already satisfied: pyPdf2 in c:\users\tracebackerror\anaconda3\lib\site-packages (from xhtml2pdf) (1.26.0)
+Requirement already satisfied: html5lib>=1.0 in c:\users\tracebackerror\anaconda3\lib\site-packages (from xhtml2pdf) (1.0.1)
+Requirement already satisfied: six in c:\users\tracebackerror\anaconda3\lib\site-packages (from xhtml2pdf) (1.14.0)
+Requirement already satisfied: webencodings in c:\users\tracebackerror\anaconda3\lib\site-packages (from html5lib>=1.0->xhtml2pdf) (0.5.1)

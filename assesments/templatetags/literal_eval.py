@@ -42,7 +42,7 @@ class CurrentAnswerNode(template.Node):
         context['selected_answer'] = list(self.obj_val)
         return ''
     
-@register.assignment_tag
+@register.simple_tag(takes_context=True)
 def set_var(parser, token):
     """
     {% set some_var = '123' %}

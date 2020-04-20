@@ -34,8 +34,8 @@ from assesments.models import Result
 from staff.models import Staff
 
 from django_filters.views import FilterView
-
-from easy_pdf.views import PDFTemplateView
+from django.views.generic import TemplateView
+#from easy_pdf.views import PDFTemplateView
 
 from django.db.models import Count
 from django.db.models import Sum
@@ -229,7 +229,7 @@ class StudentResult(LoginRequiredMixin,ListView):
         return super(StudentResult,self).get_queryset()
     
  
-class ResultReport(LoginRequiredMixin,PDFTemplateView):
+class ResultReport(LoginRequiredMixin,TemplateView):
     template_name = 'student/student_result_report.html'
     pdf_filename = None
     login_url=reverse_lazy('student:login')

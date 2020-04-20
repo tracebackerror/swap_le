@@ -3,7 +3,7 @@ from django.contrib.auth.views import LoginView, LogoutView, logout_then_login, 
 #from .views import InstitutionStaffLoginView, dashboard, edit, PasswordChangeViewForStaff, PasswordChangeDoneViewForStaff, ManageStudentView, delete_institution_staff_student, student_edit_by_staff,add_student_by_staff
 from .views import *
 
-
+app_name='staff'
 urlpatterns = [
     url(r'^login/',  InstitutionStaffLoginView.as_view(), name='login'),
     url(r'^$', dashboard, name='dashboard'),
@@ -14,7 +14,7 @@ urlpatterns = [
     url(r'^manage/student/$', ManageStudentView.as_view(), name='manage_student'),
     url(r'^manage/student/add-student/', add_student_by_staff, name='add_student'),
     url(r'^manage/student/(?P<username>[\w.@+-]+)/delete/$', delete_institution_staff_student, name='delete_institution_staff_student'),
-    url(r'^manage/', include('assesments.urls', namespace='assesments', app_name='assesments')),
+    url(r'^manage/', include('assesments.urls', namespace='assesments', )),
     url(r'^manage/student/(?P<upk>\w{0,15})/edit/$', student_edit_by_staff, name='student_edit_by_staff'),
     
 #password reset through email
@@ -32,10 +32,10 @@ urlpatterns = [
     
     
 # Library
-    url(r'^library/', include('library.urls', namespace='library', app_name='library')),
+    url(r'^library/', include('library.urls', namespace='library', )),
     
 # Fees
-    url(r'^fees/', include('fees.urls', namespace='fees', app_name='fees')),
+    url(r'^fees/', include('fees.urls', namespace='fees', )),
     
 #Student Ativate/Deactivate
     url(r'^activate-deactivate/(?P<pk>\d+)/$',StudentActivateDeactivate, name='student_activate_deactivate'),

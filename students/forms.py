@@ -49,6 +49,7 @@ class StudentRegistrationForm(UserCreationForm):
     
     def __init__(self,*args, **kwargs):
         super(StudentRegistrationForm, self).__init__(*args, **kwargs)
+        import pdb; pdb.set_trace()
         if 'data' in kwargs:
             institution_id = kwargs.get('data')['institution_name']
             instition_obj = Institutions.objects.get(id=institution_id)

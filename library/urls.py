@@ -1,6 +1,8 @@
 from django.conf.urls import url
 from .views import *
 
+app_name='library'
+
 urlpatterns = [
     url(r'^asset/create/',CreateLibraryAsset.as_view(),name="create_library_asset"),
     url(r'^asset/manage/',ManageLibraryAsset.as_view(),name="manage_library_asset"),

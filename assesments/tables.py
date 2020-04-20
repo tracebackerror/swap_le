@@ -4,7 +4,8 @@ from django.utils.html import format_html
 from .models import Assesment, Question, Result
 from django_tables2 import A
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
+
 class ResultTable(tables.Table):
     row_number = tables.Column(empty_values=(),
                                 verbose_name='No.')

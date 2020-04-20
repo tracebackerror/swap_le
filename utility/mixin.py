@@ -6,7 +6,7 @@ from django.db.models.query import QuerySet
 
 
 from polymorphic.models import PolymorphicModel
-from polymorphic.manager import PolymorphicManager
+from polymorphic.managers import PolymorphicManager
 from polymorphic.query import PolymorphicQuerySet
 
 

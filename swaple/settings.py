@@ -34,6 +34,9 @@ ALLOWED_HOSTS = [
   
 ]
 
+#Custom Authentication ModelBackend
+#AUTH_USER_MODEL = 'users.SwapLeUserModel' 
+
 
 # Application definition
 
@@ -45,6 +48,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
+    'django.contrib.sites',
+    'allauth', 
+    'allauth.account', 
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
     'guardian',
     'django_tables2',
     'django_filters',
@@ -60,12 +68,13 @@ INSTALLED_APPS = [
     'library',
     'fees',
     'section',
-    'widget_tweaks'
+    'widget_tweaks',
+    'easy_pdf',
 ]
 
 MIDDLEWARE = [
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -142,8 +151,15 @@ USE_TZ = True
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend', # this is default
+     "allauth.account.auth_backends.AuthenticationBackend",
     'guardian.backends.ObjectPermissionBackend',
+   
 )
+
+SITE_ID = 1
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
@@ -156,7 +172,8 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
