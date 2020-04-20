@@ -6,13 +6,13 @@
 {% block content %} 
  <h1>Add a Staff account</h1>
  <div class="container" style="min-height:50%"> 
- <p>You can create a staff account using the following form:</p>
- <form action="." method="post" enctype="multipart/form-data">
-     {{ user_form.as_p}}
+	 <p>You can create a staff account using the following form:</p>
+	 <form action="." method="post" enctype="multipart/form-data">
+		 {{ user_form.as_p}}
 
-     {% csrf_token %}
- <p><input type="submit" class="btn btn-success" value="Save changes"></p>
- 
- </form>
+		 {% csrf_token %}
+	 <p><input type="submit" class="btn btn-success" value="Save changes"></p>
+	 
+	 </form>
 </div>
 {% endblock %}

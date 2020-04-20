@@ -131,7 +131,7 @@ class PasswordChangeDoneViewForStaff(PasswordChangeDoneView):
 class ManageStudentView(PermissionRequiredMixin, SingleTableView, ListView):
     model = Student
     context_object_name = 'table'
-    paginate_by = 3
+    paginate_by = 20
     template_name = 'staff/manage_student.html'
     table_class = StudentTable
     permission_required = 'staff.is_staff'

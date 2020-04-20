@@ -40,24 +40,16 @@ class StaffTable(tables.Table):
 class StudentTable(tables.Table):
     row_number = tables.Column(empty_values=(), verbose_name="No.")
     first_name = tables.Column(accessor='studentuser.first_name',
-                               verbose_name='First Name')
+                               verbose_name='First Name', attrs={"th": {"class": "text-nowrap"}})
     last_name = tables.Column(accessor='studentuser.last_name',
-                              verbose_name='Last Name')
+                              verbose_name='Last Name',  attrs={"th": {"class": "text-nowrap"}})
     email = tables.Column(accessor='studentuser.email',
-                          verbose_name='Mail Address')
+                          verbose_name='Mail Address',  attrs={"th": {"class": "text-nowrap"}})
     
-    edit_student = tables.TemplateColumn('<a href=" {% url "staff:student_edit_by_staff" upk=record.pk  %} "><center><span class="fas fa-edit "></span></center></a>', verbose_name="Edit")
+    edit_student = tables.TemplateColumn('<a href=" {% url "staff:student_edit_by_staff" upk=record.pk  %} "><center><span class="fas fa-edit "></span></center></a>', verbose_name="Edit",  attrs={"td": {"class": "text-nowrap"}})
     delete_student = tables.TemplateColumn('<a href=" {% url "staff:delete_institution_staff_student" username=record.studentuser  %} "><center><span class="fas fa-trash-alt"></span></center></a>', verbose_name="Delete")
     #student_fees = tables.TemplateColumn('<a href=" {% url "staff:fees:manage_fees_installment" pk=record.id  %} ">Installment</a>', verbose_name="Fees")
-    Approval = tables.TemplateColumn(
-        '<a href=" {% url "staff:student_activate_deactivate" pk=record.id  %} ">'
-        '{% if record.studentuser.is_active %}'
-        'Deactivate'
-        '{% else %}'
-        'Activate'
-        '{% endif %}'
-        '</a>',order_by="studentuser.is_active"
-        )
+    
     standard = tables.Column(accessor='standard', verbose_name=_('Std.'))
     staffuser = tables.Column(accessor='staffuser', verbose_name=_('Under Professor'))
 	
@@ -84,5 +76,5 @@ class StudentTable(tables.Table):
         # add class="paleblue" to <table> tag 
         attrs = {'class': 'paleblue'}
         # fields = ('row_number', 'institute',)
-        exclude = ('id', 'deleted', 'last_login', 'created', 'updated', 'user_type',)
+        exclude = ('id', 'deleted', 'last_login', 'created', 'updated', 'user_type', 'address')
 

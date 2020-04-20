@@ -6,28 +6,28 @@
 
 {% block content %} 
  <h1>Manage all the Students</h1>
- <div class="container" style="min-height:60%;margin-right: 300;">
+ <div class="container-fluid" style="min-height:60%;">
  <form action="." method="get" enctype="multipart/form-data">
      {{ student_enroll_form.as_p}}
      {% csrf_token %}
 	
-	<div class="col-md-4">
-     <table class="table table-bordered">
-	     <tr>
-	     <td> <h4 style="text-align: center;">Student Registration</h4> </td>
-	     <td> <center><input id="student_reg" type="checkbox" data-toggle="toggle" data-onstyle="info" name="student_reg">	</center> </td>
-	     </tr>
-	</table>
+	<div class="row">
+		<div class="col-md-4">
+			<div class="form-group">
+				<label for=""  style="">Allow student registration using website home page :</label> 
+				
+			</div>
+		</div>
+		<div class="col-md-4">
+		<input id="student_reg" class="form-control" type="checkbox" data-toggle="toggle" data-onstyle="info" name="student_reg">
+		</div>
 	</div>
-	
+	<!--
 	<div class="col-md-4">
-     <table class="table table-bordered">
-	     <tr>
-	     <td> <h4 style="text-align: center;">Auto Active Student Account</h4> </td>
-	     <td> <center><input id="auto_active" type="checkbox" data-toggle="toggle" data-onstyle="info" name="auto_active" disabled> </center> </td>
-	     </tr>
-	</table>
-	</div>
+      <h4 style="text-align: center;">Auto Active Student Account</h4> </td>
+	     <input id="auto_active" type="checkbox" data-toggle="toggle" data-onstyle="info" name="auto_active" disabled> 
+	     
+	</div>-->
 	
 	
 	
@@ -41,7 +41,7 @@
 <!-- Student Registration On Off Status Saving In Database -->
 
 <script type="text/javascript">
-
+$('#auto_active')
 if(Boolean({{allow_registration}}) == true){
 	$('#student_reg').bootstrapToggle('on');
 	$('#auto_active').bootstrapToggle('enable');
@@ -57,7 +57,7 @@ else {
 
 $("input:checkbox").change(function () {
 	student_reg = $("#student_reg").is(":checked");
-	auto_active = $("#auto_active").is(":checked");
+	auto_active = true;//$("#auto_active").is(":checked");
 	
 	if(student_reg == false){
 		auto_active = false;
@@ -66,7 +66,7 @@ $("input:checkbox").change(function () {
 	$.ajax({ 
 		url: "{% url "staff:manage_student" %}",
 		type : "POST",
-		data: { 'student_reg': student_reg, 'auto_active':auto_active, csrfmiddlewaretoken:$("input[name=csrfmiddlewaretoken]").val()},
+		data: { 'student_reg': student_reg, 'auto_active':true, csrfmiddlewaretoken:$("input[name=csrfmiddlewaretoken]").val()},
 		success:function(){
 			if(student_reg == true){
 				$('#auto_active').bootstrapToggle('enable');
