@@ -143,7 +143,7 @@ class ManageStudentView(PermissionRequiredMixin, SingleTableView, ListView):
 
     def get_queryset(self):
         get_associated_staff = Staff.active.filter(staffuser=self.request.user)
-        self.queryset = Student.active.filter(staffuser = get_associated_staff)#active.filter(institute__user__exact=self.request.user)
+        self.queryset = Student.active.filter(staffuser__in = get_associated_staff)#active.filter(institute__user__exact=self.request.user)
         return super(ManageStudentView, self).get_queryset()
 
     @method_decorator(login_decorator)

@@ -37,6 +37,8 @@ class StudentRegistrationForm(UserCreationForm):
     parent_contact_no = forms.IntegerField(widget=forms.NumberInput,required=True)
     gender = forms.ChoiceField(widget=forms.RadioSelect(attrs={'style': 'width: 50px;'}),choices=(('male','Male'),('female','Female')))
     
+
+            
     def clean_student_contact_no(self):
         data = self.cleaned_data['student_contact_no']
         if len(str(data)) != 10:
@@ -49,15 +51,22 @@ class StudentRegistrationForm(UserCreationForm):
     
     def __init__(self,*args, **kwargs):
         super(StudentRegistrationForm, self).__init__(*args, **kwargs)
-        import pdb; pdb.set_trace()
+        
         if 'data' in kwargs:
             institution_id = kwargs.get('data')['institution_name']
             instition_obj = Institutions.objects.get(id=institution_id)
             self.fields['staffuser'].queryset = Staff.objects.filter(institute = instition_obj)
 
-        
+        for fieldname in [ 'password1', 'password2']:
+            self.fields[fieldname].help_text = None
     class Meta:
         model=User
+        help_texts = {
+            'username': None,
+            'email': None,
+            'password1':None,
+            'password2':None
+        }
         fields = ['username','first_name','last_name','email','password1','password2']
         
         

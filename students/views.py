@@ -73,16 +73,17 @@ class InstitutionStudentLoginView(LoginView):
                 return redirect(reverse_lazy("student:dashboard"))
 
         return super(InstitutionStudentLoginView, self).dispatch(*args, **kwargs)
-        
+    
     def post(self, request, *args, **kwargs):
         
         form = self.get_form()
-        username = self.request.POST['username']
-        password = self.request.POST['password']
-        user = User.objects.get(username=username)
+        username = self.request.POST.get('username', '')
+        password = self.request.POST.get('password', '')
+        
+        user = User.objects.filter(username=username).first()
         if user.is_active == False:
             messages.add_message(self.request, messages.ERROR, 'Your Account is Not ACTIVE. Please Contact Us With Your Registered Staff')
-            
+        
         return super(InstitutionStudentLoginView, self).post(request, *args, **kwargs)
   
 
@@ -299,6 +300,7 @@ class StudentRegistration(FormView):
                 messages.add_message(self.request, messages.ERROR, 'Registration Not Allowed!!!')
                 return HttpResponseRedirect(reverse_lazy('student:student_registration'))
         return super(StudentRegistration,self).form_invalid(form)
+    
     
     
     def get_context_data(self, **kwargs):
