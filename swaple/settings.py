@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
     'django.contrib.sites',
-    'allauth', 
+    #'allauth', 
     'allauth.account', 
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
@@ -151,12 +151,13 @@ USE_TZ = True
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend', # this is default
-     "allauth.account.auth_backends.AuthenticationBackend",
+     #"allauth.account.auth_backends.AuthenticationBackend",
     'guardian.backends.ObjectPermissionBackend',
    
 )
 
 SITE_ID = 1
+
 
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False

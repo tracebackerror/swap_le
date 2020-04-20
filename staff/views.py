@@ -52,7 +52,7 @@ class InstitutionStaffLoginView(LoginView):
             
             
     def dispatch(self, *args, **kwargs):
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             if self.request.user.has_perm('institutions.is_institute'):
                 return redirect(reverse_lazy("institutions:dashboard"))
             elif self.request.user.has_perm('staff.is_staff'):

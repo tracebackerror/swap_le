@@ -64,7 +64,7 @@ class InstitutionStudentLoginView(LoginView):
             return super(InstitutionStudentLoginView, self).form_invalid(form)
         
     def dispatch(self, *args, **kwargs):
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             if self.request.user.has_perm('institutions.is_institute'):
                 return redirect(reverse_lazy("institutions:dashboard"))
             elif self.request.user.has_perm('staff.is_staff'):
@@ -248,7 +248,7 @@ def authentication_check_decorator(func):
 
     @wraps(func)
     def check_authentication(self, *args, **kwargs):
-            if self.request.user.is_authenticated():
+            if self.request.user.is_authenticated:
                 if self.request.user.has_perm('institutions.is_institute'):
                     return redirect(reverse_lazy("institutions:dashboard"))
                 elif self.request.user.has_perm('staff.is_staff'):
