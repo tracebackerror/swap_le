@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load literal_eval %}
 {% load crispy_forms_tags %}
-
+{% load widget_tweaks %}
 {% block title %}Add a Question{% endblock %} {% block content %}
 
 <h3>Add a Question:</h3>
@@ -18,7 +18,90 @@
 </div>
 {% endif %}
 
-{% crispy question_form question_form.helper %}
+<div class="container">
+	<form method="POST" id="add_question_form">
+		{% csrf_token %}
+		<div class="row">
+			<div class="col-md-12"><h1 class="h1">Please use the below form for adding a Question :</h1></div>
+		</div>
+		<div class="form-row">
+			<div class="form-group col-md-12">
+				<label for="brief_answer">{{"Question:"|title}}*</label>
+					<div class="input-group">
+						
+						{% render_field question_form.question_text  class="form-control " rows="3" %}
+					</div>
+			</div>
+			
+		</div>
+		<div class="form-row">
+			<div class="form-group col-md-4"> {{ question_form.max_marks | as_crispy_field }}</div>
+			<div class="form-group col-md-4"> {{ question_form.question_image | as_crispy_field }} <span class="small em">File(jpg/jpeg/png) Size Should Be Less Than 500kb.</span></div>
+			<div class="form-group col-md-4"> {{ question_form.question_type | as_crispy_field }}</div>
+		</div>
+		<div class="row" id="div_id_brief_answer">
+			<div class="col-md-12">
+			<label for="brief_answer">{{"Reference Answer(not visible to student)"|title}}</label>
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text" id="basic-addon1">
+							<i class="fa fa-usd" aria-hidden="true"></i>
+						</span>
+					</div>
+					{% render_field question_form.brief_answer  class="form-control " rows="3" %}
+				</div>
+			</div>
+		</div>
+		<div class="form-row option-fields">
+			<div class="col-md-6">
+				<label for="option_one">{{"Option 1: "|title}}</label>
+
+					{% render_field question_form.option_one  class="form-control " rows="2" %}
+			</div>
+			<div class="col-md-6">
+				<label for="option_one">{{"Option 2: "|title}}</label>
+
+					{% render_field question_form.option_two  class="form-control " rows="2" %}
+			</div>
+		</div>
+		<div class="form-row option-fields">
+			<div class="col-md-6">
+				<label for="option_three">{{"Option 3: "|title}}</label>
+				{% render_field question_form.option_three  class="form-control " rows="2" %}
+			</div>
+			<div class="col-md-6 option-fields">
+				<label for="option_four">{{"Option 4: "|title}}</label>
+
+					{% render_field question_form.option_four  class="form-control " rows="2" %}
+			</div>
+		</div>
+			
+		<div class="form-row">	
+			<div class="form-group col-md-6 option-fields"> 
+				<label for="option_three">{{"Option 5: "|title}}</label> 
+				{% render_field question_form.option_five  class="form-control " rows="2" %}
+			</div>
+			
+		</div>
+		<div class="form-row">	
+			
+			<div class="form-group col-md-12 option-fields" id="option-answer"> 
+				
+			</div>
+		</div>
+		<div class="form-row">
+				{% render_field question_form.correct_options  type="hidden" class="form-control "  %}
+			  <div class="col-md-4">
+				<button id="Submit" name="Submit" class="btn btn-success">Submit</button>
+			  </div>
+			  <div class="col-md-4">
+				<button id="reset" name="reset" class="btn btn-danger">Reset</button>
+			  </div>
+			
+		</div>
+	</form>
+</div>
+
 
 
 
@@ -42,7 +125,7 @@ $(document).ready(function(){
 	 		$("#option-fields").show();
 	 		var options = ["Option One", "Option Two", "Option Three", "Option Four", "Option Five"];
 	 		
-	 		var container = $('#option-fields');
+	 		var container = $('#option-answer');
 	 		$('<div/>', {
 					    id: 'option_elements',
 					   	class: 'col-md-12 row form-group'
@@ -80,7 +163,7 @@ $(document).ready(function(){
 	 		}
 	 	}else if($("#id_question_type").val() == 'sqa') {
 	 		$("#div_id_brief_answer").show();
-	 		$("#option-fields").hide();
+	 		$(".option-fields").hide();
 	 	}
 	 	console.log("--End setup_valid_answer_fields --")
 	 }
@@ -89,7 +172,7 @@ $(document).ready(function(){
 	 	console.log("--Start setup_valid_answer_fields --");
     	if( ($("#id_question_type").val() == 'scq') || ($("#id_question_type").val() == 'mcq') ) {
 	 		$("#div_id_brief_answer").hide();
-	 		$("#option-fields").show();
+	 		$(".option-fields").show();
 	 		
 	 		if($("#id_question_type").val() == 'scq'){
 	 			var checkbox = $("#cb1");
@@ -127,13 +210,13 @@ $(document).ready(function(){
 	 		}
 	 	}else if($("#id_question_type").val() == 'sqa') {
 	 		$("#div_id_brief_answer").show();
-	 		$("#option-fields").hide();
+	 		$(".option-fields").hide();
 	 	}
 	 	console.log("--End setup_valid_answer_fields --")
 	 }
 	 
 	 function addCheckbox(name) {
-   		var container = $('#option-fields');
+   		var container = $('#option-answer');
    		var inputs = container.find('input');
    		var id = inputs.length+1;
 
@@ -141,7 +224,7 @@ $(document).ready(function(){
    		$('<label />', { 'for': 'cb'+id, text: name }).appendTo(container);
 	}
 
-	$('#action_question_add').on('submit', function() {
+	$('#add_question_form').on('submit', function() {
         var checkedVals = $('.correct_answer_options_raw:checked').map(function() {
                             return this.value;
                             }).get();

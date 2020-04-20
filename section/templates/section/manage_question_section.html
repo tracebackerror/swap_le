@@ -1,4 +1,4 @@
-{% extends "staff/base.html" %}
+{% extends "base.html" %}
 
 {% block title %}   Add Questions In Section  {% endblock %}
 
@@ -14,10 +14,7 @@
 
             $("#draggable h4").draggable({
                 helper: 'clone',
-                opacity : '0.3',
-                
-
-                
+                opacity : '0.3', 
             });
             
 		    $( "#droppable" ).droppable({
@@ -42,7 +39,7 @@
                 
 
                 
-            })
+            });
 		    
 		
        });
@@ -86,47 +83,56 @@
  <h1>Add Questions With Drag And Drop Methon in Section  </h1>
  
  <div class="container" style="min-height:60%">
- <p>You can Add Questions in Section  using the following Drag and Drop method:</p>
-<br/> 
+	<div class="row">
+	<p class="p">You can Add Questions in Section  using the following Drag and Drop method:</p>
+	</div>
 
-<font color="red" size = 5></font>
+	 <form action="." onsubmit="return validateForm()" method="post" enctype="multipart/form-data">
+	 {% csrf_token %}
+	 <div class="row">
+		<div class="col-md-6">
+			<!-- Drag And Drop Data  -->
+			<h2 class="h2">Questions(Draggable)</h2>
+			<div id="draggable"  style="border-style:solid">
+			{% if model %}
+				{% for data in model %}
+					{% if data.id in qsmapping_q_id %}
+					{% else %}
+					<h4 class="h4">{{ data.question_text}} <input type="hidden" value={{ data.id }} name={{ data.id }}><h4>
+					{% endif %}
+				{% endfor %}	
+			{% else %}
+				<p align="center">Empty Questions</p>
+			{% endif %}
+			</div>
+		</div>
+		<div class="col-md-6">
+			<h2 class="h2">Drop Here Your Question</h2>
+			<div id="droppable" class="ui-droppable" style="border-style:solid;">
+			{% if qsmapping %}
+				{% for data in qsmapping %}
+				<h4>{{ data.for_question.question_text}} <input type="hidden" value={{ data.for_question.id }} name={{ data.for_question.id }}></h4> 
+				{% endfor %}
+			{% else %}
+				<p align="center">Drop Here Questions.....</p>
+			{% endif %}
+			</div>
+		</div>
+	 </div>
+	 
 
- <form action="." onsubmit="return validateForm()" method="post" enctype="multipart/form-data">
- {% csrf_token %}
- 
- 
- <!-- Drag And Drop Data  -->
-<h2>Questions(Draggable) <span style="float:right;margin-right: 205px;">Section(Droppable)<span></h2>
+
+	
 
 
-<div id="draggable" class="col-md-5" style="border-style:solid">
-{% if model %}
-	{% for data in model %}
-		{% if data.id in qsmapping_q_id %}
-		{% else %}
-		<h4>{{ data.question_text}} <input type="hidden" value={{ data.id }} name={{ data.id }}><h4>
-		{% endif %}
-	{% endfor %}	
-{% else %}
-	<p align="center">Empty Questions</p>
-{% endif %}
-</div>
+	
+	
+	<div class="row">
+		<p><input type="submit" class="btn btn-success" value="Save changes" onclick="SendData()" style="margin-left: 240px;"></p>
+	</div>
+	 </form>
 
-
-<div id="droppable" class="col-md-6 ui-droppable" style="border-style:solid;left: 50px;">
-{% if qsmapping %}
-	{% for data in qsmapping %}
-	<h4>{{ data.for_question.question_text}} <input type="hidden" value={{ data.for_question.id }} name={{ data.for_question.id }}></h4> 
-	{% endfor %}
-{% else %}
-	<p align="center">Drop Here Questions.....</p>
-{% endif %}
-</div>
- 
  
  </div>
-<br>
-<p><input type="submit" class="btn btn-success" value="Save changes" onclick="SendData()" style="margin-left: 240px;"></p>
- </form>
 
 {% endblock %}

@@ -6,14 +6,7 @@
 
 
 {% block content %} 
- <h1>Manage Single Assesment</h1>
-
-<br>
-<!-- ------------------- Student Assessment Bubble Progress Bar ------------------- -->
-
-<div class="container">
-  <div align="center" class="col-md-4">
-	<style>
+<style>
 	.ldBar {
 	    position: relative
 	}
@@ -35,33 +28,41 @@
 	}
 	</style>
 	
-	<div
-	  data-preset="bubble"
-	  class="ldBar label-center"
-	  data-value={{percentage_student}}
-	  style="width: 80%; height: 30%;"
-	>
+<h1>Manage Single Assesment</h1>
+
+<br>
+<!-- ------------------- Student Assessment Bubble Progress Bar ------------------- -->
+
+<div class="container">
+	<div class="row">
+	<h2>Metrics:</h2>
+	
 	</div>
-	 <p>Assessment Taken Percentage(%)</p>
-  </div>
+	<div class="row">
+		
+		<div class="col-md-6">
+			<div class="card border-success " style="">
+			  <div align="center" class="card-body text-success">
+			   <font style="font-size:60;" color="blue"><span class="count">{{ total_subscribes_student }}</span></font>
+			  </div>
+			  <div align="center" class="card-footer bg-transparent border-success">Total Subscribes Student </div>
+			</div>
+		  </div>
+		<div  class="col-md-6">
+			<div class="card border-success " style="">
+			  <div align="center" class="card-body text-success">
+			   <font style="font-size:60;" color="lightgreen"><span class="count">{{ attend_exam_student }}</span></font>
+			  </div>
+			  <div align="center" class="card-footer bg-transparent border-success">All Student Submitted Assessments</div>
+			</div>
+		  </div>
+		
+		</div>
+	</div>
   
-  <div align="center" class="col-md-4">
-  	<div class="card border-success mb-3" style="max-width: 30rem;height:20%;top:35;">
-	  <div align="center" class="card-body text-success">
-	   <font style="font-size:60;" color="blue"><span class="count">{{ total_subscribes_student }}</span></font>
-	  </div>
-	  <div align="center" class="card-footer bg-transparent border-success">Total Subscribes Student </div>
-	</div>
-  </div>
   
-  <div align="center" class="col-md-4">
-    <div class="card border-success mb-3" style="max-width: 30rem;height:20%;top:35">
-	  <div align="center" class="card-body text-success">
-	   <font style="font-size:60;" color="lightgreen"><span class="count">{{ attend_exam_student }}</span></font>
-	  </div>
-	  <div align="center" class="card-footer bg-transparent border-success">All Student Submitted Assessments</div>
-	</div>
-  </div>
+  
+  
   
 </div>
 

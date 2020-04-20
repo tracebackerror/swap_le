@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'library',
     'fees',
     'section',
+    'widget_tweaks'
 ]
 
 MIDDLEWARE = [

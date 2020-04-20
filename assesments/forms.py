@@ -18,7 +18,9 @@ class QuestionForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(QuestionForm, self).__init__(*args, **kwargs)
         
-        self.fields['question_image'].help_text = "<font color=blue> File Size Should Be Less Than 500kb </font> <br> <font color=blue> File Should Be Upload Only .jpg, .jpeg, .png</font>"
+        
+        '''
+        self.fields['question_image'].help_text = "File(jpg/jpeg/png) Size Should Be Less Than 500kb. "
         self.helper = FormHelper()
         self.helper.form_method = 'post'
         self.helper.form_action = '.'
@@ -36,7 +38,7 @@ class QuestionForm(forms.ModelForm):
                                     
                                 Fieldset(
                                     'Please Use the below form for adding a Question to Assesment',
-                                  'max_marks',
+                                  
                                    'question_text',
                                    'question_image',
                                    'max_marks',
@@ -76,7 +78,7 @@ class QuestionForm(forms.ModelForm):
                                       css_class="col-md-12 row"),
                                 HTML("""</div> </div>""")
                             )
-        #self.helper.add_input()
+        #self.helper.add_input()'''
         
     
     class Meta:
