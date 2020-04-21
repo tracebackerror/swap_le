@@ -220,7 +220,7 @@ class AssessmentCreationForm(forms.ModelForm):
     duration_hours = forms.ChoiceField(choices=DURATION_HOURS_CHOICES, required=True)
     duration_minutes = forms.ChoiceField(choices=DURATION_MINUTES_CHOICES, required=True)
     
-     expired_on = forms.DateTimeField(
+    expired_on = forms.DateTimeField(
                                 input_formats=['%d/%m/%Y %H:%M'],
                                 widget=forms.DateTimeInput(attrs={
                                                                 'class': 'form-control datetimepicker-input',
