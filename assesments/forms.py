@@ -152,19 +152,21 @@ class AssessmentForm(forms.ModelForm):
     duration_hours = forms.ChoiceField(choices=DURATION_HOURS_CHOICES, required=True)
     duration_minutes = forms.ChoiceField(choices=DURATION_MINUTES_CHOICES, required=True)
     
-    expired_on = forms.SplitDateTimeField(input_date_formats=['%Y-%m-%d'],
-                               input_time_formats=['%H:%M:%S'], 
-                               widget=forms.SplitDateTimeWidget(date_format='%Y-%m-%d',
-                                                          time_format='%H:%M:%S',
-                                                          attrs={'class':'form-control'}),
+    expired_on = forms.DateTimeField(
+                                input_formats=['%d/%m/%Y %H:%M'],
+                                widget=forms.DateTimeInput(attrs={
+                                                                'class': 'form-control datetimepicker-input',
+                                                                'data-target': '#expired_on'
+                                                            }),
                                                           
                                )
                                
-    exam_start_date_time = forms.SplitDateTimeField(input_date_formats=['%Y-%m-%d'],
-                               input_time_formats=['%H:%M:%S'], 
-                               widget=forms.SplitDateTimeWidget(date_format='%Y-%m-%d',
-                                                          time_format='%H:%M:%S',
-                                                          attrs={'class':'form-control'}),
+    exam_start_date_time = forms.DateTimeField(
+                                input_formats=['%d/%m/%Y %H:%M'],
+                                widget=forms.DateTimeInput(attrs={
+                                                                'class': 'form-control datetimepicker-input',
+                                                                'data-target': '#datetimepicker1'
+                                                            }),
                                                           
                                )
     
@@ -218,18 +220,21 @@ class AssessmentCreationForm(forms.ModelForm):
     duration_hours = forms.ChoiceField(choices=DURATION_HOURS_CHOICES, required=True)
     duration_minutes = forms.ChoiceField(choices=DURATION_MINUTES_CHOICES, required=True)
     
-    expired_on = forms.SplitDateTimeField(input_date_formats=['%Y-%m-%d'],
-                               input_time_formats=['%H:%M:%S'], 
-                               widget=forms.SplitDateTimeWidget(date_format='%Y-%m-%d',
-                                                          time_format='%H:%M:%S',
-                                                          attrs={'class':'form-control'}),
+     expired_on = forms.DateTimeField(
+                                input_formats=['%d/%m/%Y %H:%M'],
+                                widget=forms.DateTimeInput(attrs={
+                                                                'class': 'form-control datetimepicker-input',
+                                                                'data-target': '#expired_on'
+                                                            }),
                                                           
                                )
-    exam_start_date_time = forms.SplitDateTimeField(input_date_formats=['%Y-%m-%d'],
-                               input_time_formats=['%H:%M:%S'], 
-                               widget=forms.SplitDateTimeWidget(date_format='%Y-%m-%d',
-                                                          time_format='%H:%M:%S',
-                                                          attrs={'class':'form-control'}),
+                               
+    exam_start_date_time = forms.DateTimeField(
+                                input_formats=['%d/%m/%Y %H:%M'],
+                                widget=forms.DateTimeInput(attrs={
+                                                                'class': 'form-control datetimepicker-input',
+                                                                'data-target': '#datetimepicker1'
+                                                            }),
                                                           
                                )
 

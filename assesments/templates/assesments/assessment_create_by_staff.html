@@ -1,11 +1,18 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
 {% block title %}   Create Assessment   {% endblock %}
 
 {% block content %} 
- 
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
  <h1>Create Assessment</h1>
 <div class="container" style="min-height:60%;">
-	 <p>You can Create your Assessment using the following form:</p>
+	<div class="row">
+		<h3 >You can Create your Assessment using the following form:</h3>
+	 </div>
+	 
 
 {% if assessment_c_form.errors %}
     
@@ -24,12 +31,79 @@
   
 {% endif %}
 
+	
 	 
-	 <form action="." method="post" enctype="multipart/form-data">
-	     {{ assessment_c_form.as_table}}
-	     {% csrf_token %}
+	<form action="." method="post" enctype="multipart/form-data">
+		{% csrf_token %}
+		<div class="form-row">
+			<div class="form-group col-md-12">
+							{{ assessment_c_form.header|as_crispy_field  }}
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="form-group col-md-12">
+							{{ assessment_c_form.brief|as_crispy_field  }}
+			</div>
+		</div>
+		<div class="form-row">
+						
+			<div class="form-group col-md-4">
+				<label>Assesment available from: </label>
+				<div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+				  {{ assessment_c_form.exam_start_date_time  }}
+				  <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+					<div class="input-group-text"><i class="fa fa-calendar"></i></div>
+				  </div>
+				</div>
+
+							
+			</div>
+			<div class="form-group col-md-4">
+				<label>Assesesment will expire on: </label>
+				<div class="input-group date" id="expiredon" data-target-input="nearest">
+				  {{ assessment_c_form.expired_on  }}
+				  <div class="input-group-append" data-target="#expiredon" data-toggle="datetimepicker">
+					<div class="input-group-text"><i class="fa fa-calendar"></i></div>
+				  </div>
+				</div>
+						
+			</div>
+			<div class="form-group col-md-2">
+							{{ assessment_c_form.duration_hours|as_crispy_field  }}
+			</div>
+			<div class="form-group col-md-2">
+							{{ assessment_c_form.duration_minutes|as_crispy_field  }}
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="form-group col-md-4">
+							{{ assessment_c_form.passing_marks|as_crispy_field  }}
+			</div>
+			<div class="form-group col-md-4">
+							{{ assessment_c_form.privilege|as_crispy_field  }}
+			</div>
+			<div class="form-group col-md-4">
+							
+			</div>
+		</div>
+		<div class="form-row">
+		
+			<div class="form-group col-md-12 " style="">
+			<label >Please select the student which you want to subscribe: </label>
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="col-md-12 overflow-auto" style="height:200px; border: 1px solid #ccc; padding: 10px 10px;">
+						{{ assessment_c_form.subscriber_users }}
+			</div>
+						
+		</div>
+			
+		
+	    
+	     
 	 <input type="submit" class="btn btn-success" value="Save">
-	 </form>
+	</form>
  </div>
  
  
@@ -41,6 +115,16 @@
 </style> 
 <script type="text/javascript">
  $(document).ready(function(){	
+	$("#datetimepicker1").datetimepicker({
+      format: 'DD/MM/YYYY HH:mm',
+	  date: moment( '{{assessment_c_form.exam_start_date_time.value|date:'d/m/Y H:i' }}', 'DD/MM/YYYY HH:mm') 
+    });
+	$("#expiredon").datetimepicker({
+      format: 'DD/MM/YYYY HH:mm',
+	  date: moment( '{{assessment_c_form.expired_on.value|date:'d/m/Y H:i' }}', 'DD/MM/YYYY HH:mm') 
+    });
+	/*
+	
  	$("#id_total_exam_duration").prop("readonly", true);
  	$("#id_expired_on_0, #id_exam_start_date_time_0").attr("placeholder", "YYYY:MM:DD");
  	$("#id_expired_on_1, #id_exam_start_date_time_1").attr("placeholder", "HH:MM:SS");
@@ -101,6 +185,7 @@
         $(this).val($(this).val() + "-")
     }
    });
+   */
    
    
  });

@@ -697,9 +697,10 @@ def __recalculate_result(assesment_id = None, *args, **kwargs):
 @login_required(login_url="/staff/login/")
 def assessment_edit_by_staff(request, assesmentid):
     messages.get_messages(request).used = True
+    date_time_format = "%d/%m/%Y %H:%M"
     if request.method == 'POST':
-        expired_on = datetime.strptime(request.POST['expired_on_0']+"/"+request.POST['expired_on_1'],'%Y-%m-%d/%H:%M:%S')
-        exam_start_date_time = datetime.strptime(request.POST['exam_start_date_time_0']+"/"+request.POST['exam_start_date_time_1'],'%Y-%m-%d/%H:%M:%S')
+        expired_on = datetime.strptime(request.POST['expired_on'], date_time_format)
+        exam_start_date_time = datetime.strptime(request.POST['exam_start_date_time'], date_time_format)
         total_exam_duration_val = str(expired_on - exam_start_date_time)
         
         asses_obj = Assesment.objects.get(id=assesmentid) 
@@ -737,7 +738,7 @@ def assessment_edit_by_staff(request, assesmentid):
     else:   
         assesment_form = AssessmentForm(request=request,instance=Assesment.objects.get(id=assesmentid)) 
         
-    return render(request, 'assesments/assessment_edit_by_staff.html', {'assessment_form': assesment_form})
+    return render(request, 'assesments/assessment_create_by_staff.html', {'assessment_c_form': assesment_form})
     
 
 
@@ -745,9 +746,10 @@ def assessment_edit_by_staff(request, assesmentid):
 @permission_required('staff.is_staff',login_url=reverse_lazy('staff:login'))
 @login_required(login_url=reverse_lazy('staff:login'))
 def assessment_create_by_staff(request):
+    date_time_format = "%d/%m/%Y %H:%M"
     if request.method == 'POST':
-        expired_on = datetime.strptime(request.POST['expired_on_0']+"/"+request.POST['expired_on_1'],'%Y-%m-%d/%H:%M:%S')
-        exam_start_date_time = datetime.strptime(request.POST['exam_start_date_time_0']+"/"+request.POST['exam_start_date_time_1'],'%Y-%m-%d/%H:%M:%S')
+        expired_on = datetime.strptime(request.POST['expired_on'], date_time_format)
+        exam_start_date_time = datetime.strptime(request.POST['exam_start_date_time'], date_time_format)
         total_exam_duration = expired_on - exam_start_date_time
         
         assesment_creation_form = AssessmentCreationForm(request.POST, request=request)
