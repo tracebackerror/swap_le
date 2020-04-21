@@ -5,6 +5,8 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 
 from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login as auth_login
 from django.contrib.auth.models import User
@@ -269,6 +271,8 @@ class StudentRegistration(FormView):
     form_class = StudentRegistrationForm
     success_url = "/student/login/"
     
+   
+            
     @authentication_check_decorator
     def dispatch(self, *args, **kwargs):
         return super(StudentRegistration, self).dispatch(*args, **kwargs)

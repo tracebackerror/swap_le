@@ -1,4 +1,6 @@
 {%  extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
 
 {% block title %}   Institution Registration   {% endblock %}
 
@@ -6,49 +8,61 @@
  <h1>Institution Registration  </h1>
  
  <div class="container" style="min-height:60%">
- <p>Please fill all the details for Institution Account:</p>
- 
- <form action="." method="post" enctype="multipart/form-data">
- 	 {% csrf_token %}
+	 <div class="row">
+		<h3 >Please fill all the details for Insititute account:</h3>
+	 </div>
+	 
+	 <form action="." method="post" enctype="multipart/form-data">
+		 {% csrf_token %}
+		<div class="form-row">
+				<div class="form-group col-md-4">
+					{{ form.username|as_crispy_field}}
+				</div>
+				<div class="form-group col-md-8">
+					{{ form.institute_name|as_crispy_field}}
+				</div>
+		</div>
+		<div class="form-row">
+				<div class="form-group col-md-4">
+					{{ form.email|as_crispy_field }}
+				</div>
+				<div class="form-group col-md-4">
+					{{ form.institute_address|as_crispy_field }}
+				</div>
+				<div class="form-group col-md-4">
+					{{ form.institute_contact_mobile|as_crispy_field }}
+				</div>
+		</div>
+		<div class="form-row">
+				
+				<div class="form-group col-md-4">
+					{{ form.institute_country|as_crispy_field }}
+				</div>
+				<div class="form-group col-md-4">
+					{{ form.institute_state|as_crispy_field }}
+				</div>
+				<div class="form-group col-md-4">
+					{{ form.institute_city|as_crispy_field }}
+				</div>
+		</div>
+		<div class="form-row">
+				
+				<div class="form-group col-md-4">
+					{{ form.institute_contact_landline|as_crispy_field }}
+				</div>
+				<div class="form-group col-md-4">
+					{{ form.password1|as_crispy_field }}
+				</div>
+				<div class="form-group col-md-4">
+					{{ form.password2|as_crispy_field }}
+				</div>
+		</div>
+		<p><input type="submit" class="btn btn-success" value="Register"></p>
+	</form>
  	 
-	     {{ form.username.label}}<font color=red> *</font><br>
-	     {{ form.username}}<br><br><br>
-	     {{ form.username.errors }}
 	     
-	     {{ form.institute_name.label}}<font color=red> *</font><br>
-	     {{ form.institute_name}}<br><br><br>
 	     
-	     {{ form.email.label}}<br>
-	     {{ form.email}}<br><br><br>
-	     
-	     {{ form.institute_address.label}}<font color=red> *</font><br>
-	     {{ form.institute_address}}<br><br><br>
-	     
-	     {{ form.institute_city.label}}<font color=red> *</font><br>
-	     {{ form.institute_city}}<br><br><br>
-	     
-	     {{ form.institute_state.label}}<font color=red> *</font><br>
-	     {{ form.institute_state}}<br><br><br>
-	     
-	     {{ form.institute_country.label}}<font color=red> *</font><br>
-	     {{ form.institute_country}}<br><br><br>
-	     
-	     {{ form.institute_contact_mobile.label}}<font color=red> *</font><br>
-	     {{ form.institute_contact_mobile}}<br><br><br>
-	     {{ form.institute_contact_mobile.errors }}
-	     
-	     {{ form.institute_contact_landline.label}}<br>
-	     {{ form.institute_contact_landline}}<br><br><br>
-	     
-	     {{ form.password1.label}}<font color=red> *</font><br>
-	     {{ form.password1}}<br><br><br>
-	     {{ form.password2.errors }}
-	     
-	     Confirm Password<font color=red> *</font><br>
-	     {{ form.password2}}<br><br><br>
- 	 
- 	 
- 	 <p><input type="submit" class="btn btn-success" value="Register"></p>
- </form>
+ 	
+
  </div>
 {% endblock %}

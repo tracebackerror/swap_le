@@ -53,7 +53,13 @@ class InstitutionRegistrationForm(UserCreationForm):
     institute_state = forms.CharField(widget = forms.TextInput,required = True,label = "State")
     institute_country = forms.CharField(widget = forms.TextInput,required = True,label = "Country")
     
-    
+    def __init__(self,*args, **kwargs):
+        super(InstitutionRegistrationForm, self).__init__(*args, **kwargs)
+        
+        for fieldname in [ 'password1', 'password2']:
+            self.fields[fieldname].help_text = None
+            
+            
     def clean_institute_contact_mobile(self):
         data = self.cleaned_data['institute_contact_mobile']
         if len(str(data)) != 10:

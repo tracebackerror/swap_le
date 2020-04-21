@@ -115,6 +115,20 @@
 			</div>
 			</ul>
 		</li>
+		{% else %}
+			<li class="nav-item dropdown">
+				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				  Log In
+				</a>
+				<ul class="navbar-nav mr-auto">
+				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+						<li class="dropdown-item" > <a  href ={% url "institutions:login" %}> Institute</a> </li>
+						<li class="dropdown-item" > <a  href ={% url "staff:login"  %}>  Staff</a> </li>
+						<li class="dropdown-item" > <a  href ={% url "student:login"  %}> Student</a> </li>
+						
+				</div>
+				</ul>
+			</li>
 		
 		{% endif %}
 		
@@ -138,19 +152,7 @@
         
 		{% else %}  
 		
-		<li class="nav-item dropdown">
-			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			  Log In
-			</a>
-			<ul class="navbar-nav mr-auto">
-			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<li class="dropdown-item" > <a  href ={% url "institutions:login" %}> Institute</a> </li>
-					<li class="dropdown-item" > <a  href ={% url "staff:login"  %}>  Staff</a> </li>
-					<li class="dropdown-item" > <a  href ={% url "student:login"  %}> Student</a> </li>
-					
-			</div>
-			</ul>
-		</li>
+		
 		 
 		{% endif %}  
       </ul>
@@ -159,26 +161,25 @@
 
 </header>
 
-
- 
- 
-
- 
- 
  </div>
-{% endblock %}
  
  
- 
-  {% if messages %}
- <div id="userDisplayMessage">
+ <div id="messages">
  	{% for message in messages %}
- 		      {{ message|safe }}
+ 		    <div class="alert alert-success" role="alert">
+				{{ message|safe }}
+			</div>  
  	{% endfor %}
  	
  	
  </div>
- {% endif %}
+
+
+{% endblock %}
+ 
+ 
+ 
+ 
  
  
 
@@ -209,6 +210,8 @@
  <script type="text/javascript">
  
  $(document).ready(function(){
+	/*
+	//Dialog Modal For Message Popup
  	var checkWhetherMessageExists = 0;
  	checkWhetherMessageExists = $("#userDisplayMessage").length > 0;
  	
@@ -219,6 +222,7 @@
 	    	});
 	  	} );
   	}
+	*/
 });
 
 
