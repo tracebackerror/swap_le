@@ -36,8 +36,8 @@ class ReviewSqaAnswerForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ReviewSqaAnswerForm, self).__init__(*args, **kwargs)
         #self.fields['question_text']=forms.ModelChoiceField(queryset=Question.objects.filter(question_text="sdf"))
-            
         
+        self.fields['written_answer'].required = False    
         
     class Meta:
         model   = Answer

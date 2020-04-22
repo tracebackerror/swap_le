@@ -98,7 +98,7 @@ class ReviewAllSqaView(TemplateView):
             return HttpResponseForbidden()
         
         answer_formset = ReviewSqaFormSet(request.POST or None)
-        import pdb;pdb.set_trace();
+        
         answer_formset.save()
         
         associated_answer_obj = Answer.objects.filter(for_result__assesment__id = self.kwargs['assesmentid'], for_question__question_type = 'sqa')
@@ -111,6 +111,7 @@ class ReviewAllSqaView(TemplateView):
         
         context = self.get_context_data()
         context['answer_formset'] = answer_formset
+        context['answer__required_review_count'] = len(associated_answer_obj)
         context['answer_formset_helper'] = answer_formset_helper
         
         return self.render_to_response(context)
