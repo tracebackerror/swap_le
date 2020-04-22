@@ -1,9 +1,11 @@
-
 {% extends "base.html" %}
-{% block title %}   Add Student   {% endblock %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+{% block title %}   Student Registration   {% endblock %}
 
 {% block content %} 
- <h1>Add Student </h1>
+ <h1>Student Registration  </h1>
  <div id="user_message_display">
 		{% for message in messages %}
 				<div class="alert alert-success" role="alert">
@@ -12,54 +14,112 @@
 		{% endfor %}
 	</div>
  <div class="container" style="min-height:60%">
- <p>You can Add your Student Record using the following form:</p>
+ <div class="row">
+	<h3 >Please fill all the details for Student account:</h3>
+ </div>
+ 
  
  <form action="." method="post" enctype="multipart/form-data">
  	 {% csrf_token %}
- 	 
-     {{ add_s_form.username.label}}<br>
-     {{ add_s_form.username}}<br><br><br>
-     {{ add_s_form.username.errors }}
-     
-     {{ add_s_form.first_name.label}}<br>
-     {{ add_s_form.first_name}}<br><br><br>
-     
-     {{ add_s_form.last_name.label}}<br>
-     {{ add_s_form.last_name}}<br><br><br>
-     
-     {{ add_s_form.email.label}}<br>
-     {{ add_s_form.email}}<br><br><br>
-     
-     {{ add_s_form.standard.label}}<br>
-     {{ add_s_form.standard}}<br><br><br>
-     
-     {{ add_s_form.address.label}}<br>
-     {{ add_s_form.address}}<br><br><br><br><br>
-     
-     {{ add_s_form.student_contact_no.label}}<br>
-     {{ add_s_form.student_contact_no}}<br><br>
-     {{ add_s_form.student_contact_no.errors }}<br>
-     
-     {{ add_s_form.parent_contact_no.label}}<br>
-     {{ add_s_form.parent_contact_no}}<br><br>
-     {{ add_s_form.parent_contact_no.errors }}<br>
-     
-     {{ add_s_form.gender.label}}<br>
-     <div style="display: flex;">
-     {{ add_s_form.gender.0 }}
-     {{add_s_form.gender.1}}
-     </div>
-     <br>
-     
-     {{ add_s_form.password1.label}}<br>
-     {{ add_s_form.password1}}<br><br><br>
-     {{ add_s_form.password2.errors }}
-     
-     {{ add_s_form.password2.label}}<br>
-     {{ add_s_form.password2}}<br><br><br>
-     
- <p><input type="submit" class="btn btn-success" value="Save changes"></p>
+ 	
+		
+		
+		<div class="form-row"><p> Please fill all your details : </p></div>
+		<div class="form-row">
+			<div class="form-group col-md-4">
+				<label for="brief_answer">{{"User Id:"}}*</label>
+					<div class="input-group">
+							
+							{% if form.username.errors %}
+								  
+								  {% render_field form.username  class="form-control  is-invalid" required="required"  %}
+								  {% for error in form.username.errors %}
+									<div class="invalid-feedback">
+									  {{ error }}
+									</div>
+								  {% endfor %}
+							{% else %}
+								  {% render_field form.username  class="form-control" required="required" %}
+							{% endif %}
+					</div>
+			</div>
+			<div class="form-group col-md-4">
+				{{ form.first_name|as_crispy_field }}
+			</div>
+			<div class="form-group col-md-4">
+				{{ form.last_name|as_crispy_field }}
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="form-group col-md-4">
+				{{ form.standard|as_crispy_field}}
+			</div>
+			<div class="form-group col-md-4">
+				{{ form.parent_contact_no|as_crispy_field}}
+			</div>
+			<div class="form-group col-md-4">
+				{{ form.student_contact_no|as_crispy_field }}
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="form-group col-md-4">
+				<label for="brief_answer">{{"Address:"}}*</label>
+					<div class="input-group">
+							
+							
+							
+								{% if form.address.errors %}
+								  
+								  {% render_field form.address  class="form-control  is-invalid" required="required" rows="2" %}
+								  {% for error in form.address.errors %}
+									<div class="invalid-feedback">
+									  {{ error }}
+									</div>
+								  {% endfor %}
+								{% else %}
+								  {% render_field form.address class="form-control" rows="2" %}
+								{% endif %}
+							 
+					</div>
+				
+			</div>
+			<div class="form-group col-md-4">
+				
+				<label for="brief_answer">{{ form.gender.label_tag }}*</label>
+				{{form.gender.0}}{{form.gender.1}}
+				
+			</div>
+			<div class="col-md-4">
+				{{ form.email|as_crispy_field }}
+				
+         	</div>
+		</div>
+		<div class="form-row">
+			<div class="form-group col-md-4">
+				{{ form.password1|as_crispy_field }}
+			</div>
+			<div class="form-group col-md-4">
+				{{ form.password2|as_crispy_field }}
+			</div>
+			<div class="form-group col-md-4">
+				
+			</div>
+		</div>
+		
+ 	 <br>
+
+ <p><input type="submit" class="btn btn-success" value="Register"></p>
+ 
+ 
  </form>
  </div>
+ 
+ <script type="text/javascript">
+ $('form').submit(function(e) {
+    $(':disabled').each(function(e) {
+        $(this).removeAttr('disabled');
+    })
+});
+ </script>
 {% endblock %}
 

@@ -256,7 +256,7 @@ def add_student_by_staff(request):
                 messages.add_message(request, messages.INFO, 'Staff Limit Reached. Kindly Reach to Admin for Upgrade.')
         else:
             add_student_form = StudentAddForm()
-        return render(request, 'staff/add_student_by_staff.html', {'add_s_form': add_student_form})
+        return render(request, 'staff/add_student_by_staff.html', {'form': add_student_form})
     else:
         return render(request, 'staff/display_messege_staff.html')
     

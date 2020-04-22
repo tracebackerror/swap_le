@@ -66,7 +66,8 @@ class AssesmentTable(tables.Table):
     manage_assesment = tables.TemplateColumn('<a href=" {% url "staff:assesments:assessment_manage_by_staff" assesmentid=record.id  %} ">Manage</a>', verbose_name="Manage")
     
     #manage_assesment = tables.TemplateColumn('<form method="GET"  action="{%  url "staff:assesments:assessment_manage_by_staff" %}">  {% csrf_token %} <input type="hidden" name="examid" value={{record.id }}> <input class="btn btn-dark" type="submit" value="Manage"> </form>')
-    
+    expired_on = tables.Column(accessor='expired_on', verbose_name='Expires On')
+    exam_start_date_time = tables.Column(accessor='exam_start_date_time', verbose_name='Available From')
     def __init__(self, *args, **kwargs):
         super(AssesmentTable, self).__init__(*args, **kwargs)
         self.counter = itertools.count()
@@ -79,11 +80,11 @@ class AssesmentTable(tables.Table):
    
     class Meta:
         model = Assesment
-        sequence = ('row_number', 'header','brief','exam_start_date_time', 'passing_marks','privilege')
+        sequence = ('row_number', 'header','brief','exam_start_date_time', 'expired_on', 'passing_marks','privilege')
         # add class="paleblue" to <table> tag 
         attrs = {'class': 'paleblue'}
         # fields = ('row_number', 'institute',)
-        exclude = ('id', 'brief', 'deleted_at','deleted_by','created', 'updated', 'created_by','updated_by','type','exam_start_type','expired_on','is_exam_active')
+        exclude = ('id', 'brief', 'deleted_at','deleted_by','created', 'updated', 'created_by','updated_by','type','exam_start_type', 'is_exam_active')
 
 
 
