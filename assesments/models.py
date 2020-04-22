@@ -112,7 +112,7 @@ class Question(MetaInformationMixin, SoftDeletionModelMixin):
 
 
     question_text = models.TextField()
-    question_image = models.BinaryField(blank=True,null=True, editable=True)
+    question_image = models.TextField(blank=True,null=True, editable=True)
 
     length_size = 250    
     option_one = models.TextField(max_length=length_size,
@@ -213,7 +213,7 @@ class Answer(MetaInformationMixin, SoftDeletionModelMixin):
     length_size = 250    
    
     opted_choice =  models.TextField(max_length=length_size)
-    written_answer = models.TextField()
+    written_answer = models.TextField(null=True, blank=True)
     alloted_marks = models.FloatField(max_length=length_size)
      
 

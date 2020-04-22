@@ -79,7 +79,7 @@
     {% if question.id in question_image_obj %}
     <tr>
      <th style="vertical-align: middle;">Figure</th>
-     <td colspan=2><img width="auto" height="150px" src="data:;base64,{{ question_image_obj|get_item:question.id}}"/></td>
+     <td colspan=2><img width="auto" height="150px" src="{{ question_image_obj|get_item:question.id}}"/></td>
     </tr>
     {% endif %}
     

@@ -3,7 +3,7 @@ from django_tables2 import SingleTableView
 from django.utils.decorators import method_decorator
 from django.utils import timezone
 from students.models import Student
-
+import base64, os
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
@@ -98,6 +98,7 @@ class ReviewAllSqaView(TemplateView):
             return HttpResponseForbidden()
         
         answer_formset = ReviewSqaFormSet(request.POST or None)
+        import pdb;pdb.set_trace();
         answer_formset.save()
         
         associated_answer_obj = Answer.objects.filter(for_result__assesment__id = self.kwargs['assesmentid'], for_question__question_type = 'sqa')
@@ -163,7 +164,7 @@ class GenerateAssesmentResultView(TemplateView):
             
             obtained_marks_calculate = get_assesment_obj_to_update.answer_set.aggregate(answer_obtained_marks = Sum('alloted_marks'))
             get_assesment_obj_to_update.obtained_marks = obtained_marks_calculate.get('answer_obtained_marks')
-            get_assesment_obj_to_update.result_passed = obtained_marks_calculate.get('answer_obtained_marks') > get_assesment_obj_to_update.assesment.passing_marks  
+            get_assesment_obj_to_update.result_passed = obtained_marks_calculate.get('answer_obtained_marks') >= get_assesment_obj_to_update.assesment.passing_marks  
             get_assesment_obj_to_update.save()
             messages.success(request, 'Assesment Has Been Completed')
             return redirect('student:dashboard')
@@ -245,8 +246,12 @@ class ManageSingleQuestionAddView(TemplateView):
             return HttpResponseForbidden()
         
         if question_form and question_form.is_valid():
+            #import pdb; pdb.set_trace();
             if request.FILES:
-                question_image = request.FILES['question_image'].read()
+                file_extension = request.FILES['question_image'].content_type
+                
+                encoded_string = base64.b64encode(request.FILES['question_image'].read())
+                question_image = 'data:%s;base64,%s' % (file_extension, encoded_string.decode("utf-8"))
             else:
                 question_image = None
             
@@ -269,7 +274,7 @@ class ManageSingleQuestionAddView(TemplateView):
                     
                     obtained_marks_calculate = get_assesment_obj_to_update.answer_set.aggregate(answer_obtained_marks = Sum('alloted_marks'))
                     get_assesment_obj_to_update.obtained_marks = obtained_marks_calculate.get('answer_obtained_marks')
-                    get_assesment_obj_to_update.result_passed = obtained_marks_calculate.get('answer_obtained_marks') > get_assesment_obj_to_update.assesment.passing_marks  
+                    get_assesment_obj_to_update.result_passed = obtained_marks_calculate.get('answer_obtained_marks') >= get_assesment_obj_to_update.assesment.passing_marks  
                     get_assesment_obj_to_update.save()
             messages.success(request, 'Question Has Been Added to Assesment.')
             return redirect('staff:assesments:assessment_manage_by_staff', self.kwargs['assesmentid'])
@@ -293,7 +298,7 @@ class ManageSingleQuestionAddView(TemplateView):
 class ManageAllAssesmentView(PermissionRequiredMixin, SingleTableMixin, FilterView):
     model = Assesment
     context_object_name = 'table'
-    paginate_by = 3
+    paginate_by = 20
     template_name = 'assesments/manage_all_assesment.html'
     table_class = AssesmentTable
     filterset_class = AssesmentFilter
@@ -383,7 +388,7 @@ class AssessmentResultByStaff(DetailView):
 class ManageStudentAssesmentView(SingleTableView, ListView):
     model = Assesment
     context_object_name = 'table'
-    paginate_by = 3
+    paginate_by = 20
     template_name = 'assesments/manage_student_assesment.html'
     table_class = StudentAssesmentTable
     http_method_names = ['get', 'post']
@@ -442,7 +447,7 @@ class ManageStudentAssesmentView(SingleTableView, ListView):
 class ManageSingleAsessment(SingleTableView):
     model = Question
     context_object_name = 'table'
-    paginate_by = 3
+    paginate_by = 20
     template_name = 'assesments/manage_single_assesment.html'
     table_class = QuestionTable
     http_method_names = ['get', 'POST']
@@ -627,7 +632,7 @@ class ProcesStudentAssesmentView(DetailView):
                     question_image_obj = {}
                     for question in fetch_all_linked_question:
                         if(question.question_image):
-                            question_image_obj[question.id] = b64encode(question.question_image)
+                            question_image_obj[question.id] = question.question_image
     
                         
                     return render(self.request, 'assesments/exam_start_main_page.html', {
@@ -730,7 +735,7 @@ def assessment_edit_by_staff(request, assesmentid):
                     
                     obtained_marks_calculate = get_assesment_obj_to_update.answer_set.aggregate(answer_obtained_marks = Sum('alloted_marks'))
                     get_assesment_obj_to_update.obtained_marks = obtained_marks_calculate.get('answer_obtained_marks')
-                    get_assesment_obj_to_update.result_passed = obtained_marks_calculate.get('answer_obtained_marks') > get_assesment_obj_to_update.assesment.passing_marks  
+                    get_assesment_obj_to_update.result_passed = obtained_marks_calculate.get('answer_obtained_marks') >= get_assesment_obj_to_update.assesment.passing_marks  
                     get_assesment_obj_to_update.save()
 
                 

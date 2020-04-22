@@ -19,7 +19,7 @@
 {% endif %}
 
 <div class="container">
-	<form method="POST" id="add_question_form">
+	<form enctype="multipart/form-data" method="POST" id="add_question_form">
 		{% csrf_token %}
 		<div class="row">
 			<div class="col-md-12"><h1 class="h1">Please use the below form for adding a Question :</h1></div>

@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from .models import Assesment, Question, Answer, Result
 
 from students.models import Student
-from django.forms.models import modelformset_factory
+from django.forms.models import modelformset_factory, inlineformset_factory
 from django.db.models import Count
 
 from crispy_forms.helper import FormHelper
@@ -32,7 +32,7 @@ class QuestionForm(forms.ModelForm):
 
 
 class ReviewSqaAnswerForm(forms.ModelForm):
-    written_answer = forms.CharField(label="Written Brief Answer: ", widget=forms.Textarea(attrs={'rows':14, 'cols':50}))
+    written_answer = forms.CharField(label="Written Brief Answer: ", widget=forms.Textarea(attrs={'rows':7, 'cols':50}))
     def __init__(self, *args, **kwargs):
         super(ReviewSqaAnswerForm, self).__init__(*args, **kwargs)
         #self.fields['question_text']=forms.ModelChoiceField(queryset=Question.objects.filter(question_text="sdf"))
@@ -65,7 +65,7 @@ class ReviewSqaFormSetHelper(FormHelper):
         self.form_action = '.'
         self.layout = Layout(
                                     Field('for_question',style="height: 34px;", title="Question text of the asked answer?", css_class="select", css_id="",readonly=True),
-                                    Field('written_answer',style="height: 34px;", title="Question text of the asked answer?", css_class="select", css_id="", readonly=True),
+                                    Field('written_answer',style="", title="Question text of the asked answer?", css_class="select", css_id="", readonly=True),
                                     Field('alloted_marks',style="height: 34px;", title="Question text of the asked answer?", css_class="select", css_id=""),
                                     
                                     #FormActions(Submit('submit', 'Update Marks'))

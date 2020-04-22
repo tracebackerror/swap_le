@@ -10,8 +10,8 @@ class ResultTable(tables.Table):
     row_number = tables.Column(empty_values=(),
                                 verbose_name='No.')
     
-    review_sqa = tables.LinkColumn('reviewsqa', text='Review Descriptive Answer')
-    #review_sqa = tables.TemplateColumn('<a href="{% url "staff:assesments:assesment_manage_review_sqa_question" assesmentid=self.request.GET.assesmentid %}">Review Descriptive Answer</a>')
+    #review_sqa = tables.LinkColumn('reviewsqa', text='Review Descriptive Answer')
+    review_sqa = tables.TemplateColumn('<a href="{% url "staff:assesments:assesment_manage_review_sqa_question" assesmentid=self.request.GET.assesmentid %}">Review Descriptive Answer</a>')
     result_report = tables.TemplateColumn('<a href="{% url "staff:assesments:assessment_result_by_staff" pk=record.pk %}">View</a>')
 
     def render_review_sqa(self, record):

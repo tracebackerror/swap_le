@@ -8,163 +8,206 @@
 {% block content %}
 
 <div class="container" style="min-height:60%;">
-	<h3>Below is the Result of Student:</h3>
-	
-	
-	
-<div class="card">
-  <div class="card-body">
-  <h5 class="card-title">Examination Detailed Information: </h5>
-  <h6 class="card-subtitle mb-2 text-muted">Result linked to {{object.registered_user.user_type|title}} with username {{object.registered_user.studentuser.username}} and First and Last Name as {{object.registered_user.studentuser.first_name|upper}}  {{object.registered_user.studentuser.last_name|upper}} having mailing address as  {{object.registered_user.studentuser.email}} </h6>
-    
-    <table class="table">
-     
-      <tbody>
-        <tr>
-          <th scope="row"  class="col-sm-2 "><h5> Assesment Header </h5></th>
-          <td><h5> {{object.assesment.header}}</h5></td>  
-        </tr>
-        <tr>
-          <th scope="row"  class="col-sm-2"> <h5> Assesment Description</h5></th>
-          <td><h5> {{object.assesment.brief}}</h5></td>
-        </tr>
-        <tr>
-          <th scope="row"  class="col-sm-2"><h5> Assesment Date & Timing</h5></th>
-          <td><h5> {{object.assesment.exam_start_date_time}}</h5></td>
-        </tr>
-       
-        <tr>
-          <th scope="row"  class="col-sm-2"><h5> Assesment End Date & Timing</h5></th>
-          <td><h5> {{object.assesment.expired_on}}</h5></td>
-        </tr>
-            <tr>
-          <th scope="row"  class="col-sm-2"><h5> Minimum Required Marks</h5></th>
-          <td><h5> {{object.assesment.passing_marks}}</h5></td>
-        </tr>
-      </tbody>
-    </table>
-   </div>
- </div>
-	
-<br/>
-
-
-<div class="card">
-  <div class="card-body">
-  <h5 class="card-title">Summary: </h5>
-  <h6 class="card-subtitle mb-2 text-muted">Result Overview</h6>
-    <table class="table">
-      <tbody>
-        <tr>
-          <th scope="row"  class="col-sm-2"><h5>Taken Date Time</h5></th>
-          <td><h5>{{object.exam_taken_date_time}}</h5></td>  
-        </tr>
-        <tr>
-          <th scope="row"  class="col-sm-2"><h5>Total Question </h5></th>
-          <td><h5>{{object.total_question}}</h5></td>
-        </tr>
-        <tr>
-          <th scope="row"  class="col-sm-2"><h5>Attempted Question</h5></th>
-          <td><h5>{{object.total_attempted}}</h5></td>
-        </tr>
-            <tr>
-          <th scope="row"  class="col-sm-2"><h5>Total Marks</h5></th>
-          <td><h5>{{object.total_marks}}</h5></td>
-        </tr>
-            <tr>
-          <th scope="row"  class="col-sm-2"><h5>Obtained Marks</h5></th>
-          <td><h5>{{object.obtained_marks}}</h5></td>
-        </tr>
-        <tr>
-          <th scope="row"  class="col-sm-2"><h5>Result</h5></th>
-          <td><h5>{{object.result_passed|yesno:"Pass,Fail"}}</h5></td>
-        </tr>
-        <tr>
-          <th scope="row"  class="col-sm-2"><h5>Examination Status</h5></th>
-          <td><h5>{{object.assesment_submitted|yesno:"Student Has Completed The Assesment,Assesment is in Progress"}}</h5></td>
-        </tr>
-      </tbody>
-    </table>
-   </div>
- </div>
-
-<br/>
-  {% for single_answer in object.answer_set.all %}
-	 	{{ ans.pk }}
-	 
-    <div class="card">
-      <div class="card ">
-      <div class="card-header">
-        {{ single_answer.for_question.question_text|title }}
-      </div>
-      <div class="card-body">
-      {% if single_answer.for_question.question_type == 'scq' or  question_type == 'mcq'%}
-      
-        <h5 class="card-title">Options: </h5>
-          <ul class="list-group list-group-flush">
-            {% if single_answer.for_question.option_one|length > 0 %}
-                <li class="list-group-item">1-{{ single_answer.for_question.option_one }}</li>
-            {% endif %}
-            {% if single_answer.for_question.option_two|length > 0 %}
-                <li class="list-group-item">2-{{ single_answer.for_question.option_two }}</li>
-            {% endif %}
-            {% if single_answer.for_question.option_three|length > 0 %}
-                <li class="list-group-item">3-{{ single_answer.for_question.option_three }}</li>
-            {% endif %}
-            {% if single_answer.for_question.option_four|length > 0 %}
-                <li class="list-group-item">4-{{ single_answer.for_question.option_four }}</li>
-            {% endif %}
-            {% if single_answer.for_question.option_five|length > 0 %}
-                <li class="list-group-item">5-{{ single_answer.for_question.option_five }}</li>
-            {% endif %}
-        	<li class="list-group-item"><h6 class="card-subtitle">Selected Choice - {{ single_answer.opted_choice|replace_literals}}</h6></li>
-         	<li class="list-group-item"><h6 class="card-subtitle">Correct Choice - {{ single_answer.for_question.correct_options}}</h6></li>
-        </ul>
-        <p class="card-text">Marks Obtained</p>
-        {% else %}
-         <ul class="list-group list-group-flush">
-            <li class="list-group-item">{{ single_answer.written_answer}}</li>
-        </ul>
-            <p class="card-text">Marks Obtained</p>
-            {% endif %}
-      </div>
-      <div class="card-footer text-muted text-center">
-        <a href="#" class="btn btn-primary "> {{ single_answer.alloted_marks}} / {{ single_answer.for_question.max_marks}}</a>
-        
-      </div>
-    </div>
-{% endfor %}
-    
-<div align="center" class="card">
-	<div style="width:75%;">
-		<canvas id="canvas"></canvas>
+	<div class="row">
+		<h1>Below is the Result of Student:</h1>
 	</div>
-</div>
-	
-</div>
-<script>
+	<br>
+
+		<div class="row">
+			<div class="card">
+				<div class="card-body">
+					<h5 class="card-title">Examination Detailed Information: </h5>
+					<h6 class="card-subtitle mb-2 text-muted">
+						Result linked to {{object.registered_user.user_type|title}} with username {{object.registered_user.studentuser.username}} and First and Last Name as {{object.registered_user.studentuser.first_name|upper}}  {{object.registered_user.studentuser.last_name|upper}} having mailing address as  {{object.registered_user.studentuser.email}} 
+					</h6>
+
+					<div class="row border-bottom my-1">
+						<div class="col-md-12">
+							<h5> Assesment Header: </h5>
+						</div>
+
+						<div class="col-md-12">
+							<h6> {{object.assesment.header}}</h6>
+						</div>
+					</div>
+					<div class="row border-bottom my-1">
+						<div class="col-md-12">
+							<h5> Assesment Description: </h5>
+						</div>
+						<div class="col-md-12">
+							<h6> {{object.assesment.brief}}</h6>
+						</div>
+					</div>
+					<div class="row border-bottom my-1">
+						<div class="col-md-3">
+							Assesment Date & Timing: 
+						</div>
+						<div class="col-md-3">
+							{{object.assesment.exam_start_date_time}}
+						</div>
+						<div class="col-md-3">
+							Assesment End Date & Timing: 
+						</div>
+						<div class="col-md-3">
+							{{object.assesment.expired_on}}
+						</div>
+					</div>
+
+					<div class="row border-bottom my-1">
+						<div class="col-md-4">
+							Minimum Required Marks To Pass: 
+						</div>
+						<div class="col-md-3">
+							{{object.assesment.passing_marks}}
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+
+		<br/>
+
+
+		<div class="card">
+			<div class="card-body">
+				<h5 class="card-title">Summary: </h5>
+				<h6 class="card-subtitle mb-2 text-muted">Result Overview</h6>
+				<div class="row border-bottom my-1">
+					<div class="col-md-3">
+						Taken Date Time: 
+					</div>
+					<div class="col-md-3">
+						{{object.exam_taken_date_time}}
+					</div>
+
+					<div class="col-md-3 alert alert-primary">
+						Result : {{object.result_passed|yesno:"Pass,Fail"}}
+					</div>
+				</div>
+				<div class="row border-bottom my-1">
+					<div class="col-md-2">
+						Total Question: 
+					</div>
+					<div class="col-md-1">
+						{{object.total_question}}
+					</div>
+					<div class="col-md-2">
+						Attempted Question: 
+					</div>
+					<div class="col-md-1">
+						{{object.total_attempted}}
+					</div>
+					<div class="col-md-2">
+						Total Marks: 
+					</div>
+					<div class="col-md-1">
+						{{object.total_marks}}
+					</div>
+					<div class="col-md-2">
+						Obtained Marks: 
+					</div>
+					<div class="col-md-1">
+						{{object.obtained_marks}}
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2">
+						Status: 
+					</div>
+					<div class="col-md-10">
+						{{object.assesment_submitted|yesno:"Student Has Completed The Assesment,Assesment is in Progress"}}
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<br/>
+		{% for single_answer in object.answer_set.all %}
+		{{ ans.pk }}
+		<div class="row my-3	">
+			<div class="col-md-12">
+			<div class="card">
+				<div class="card ">
+					<div class="card-header">
+						<b>Question:</b> {{ single_answer.for_question.question_text|title }}
+					</div>
+					<div class="card-body">
+						{% if single_answer.for_question.question_type == 'scq' or  question_type == 'mcq'%}
+
+						<h5 class="card-title">Options: </h5>
+						<ul class="list-group list-group-flush">
+							{% if single_answer.for_question.option_one|length > 0 %}
+							<li class="list-group-item">1-{{ single_answer.for_question.option_one }}</li>
+							{% endif %}
+							{% if single_answer.for_question.option_two|length > 0 %}
+							<li class="list-group-item">2-{{ single_answer.for_question.option_two }}</li>
+							{% endif %}
+							{% if single_answer.for_question.option_three|length > 0 %}
+							<li class="list-group-item">3-{{ single_answer.for_question.option_three }}</li>
+							{% endif %}
+							{% if single_answer.for_question.option_four|length > 0 %}
+							<li class="list-group-item">4-{{ single_answer.for_question.option_four }}</li>
+							{% endif %}
+							{% if single_answer.for_question.option_five|length > 0 %}
+							<li class="list-group-item">5-{{ single_answer.for_question.option_five }}</li>
+							{% endif %}
+							<li class="list-group-item"><h6 class="card-subtitle">Selected Choice - {{ single_answer.opted_choice|replace_literals}}</h6></li>
+							<li class="list-group-item"><h6 class="card-subtitle">Correct Choice - {{ single_answer.for_question.correct_options}}</h6></li>
+						</ul>
+						<p class="card-text">Marks Obtained</p>
+						{% else %}
+						<ul class="list-group list-group-flush">
+							<li class="list-group-item">{{ single_answer.written_answer}}</li>
+						</ul>
+						<p class="card-text">Marks Obtained</p>
+						{% endif %}
+					</div>
+					<div class="card-footer text-muted text-center">
+						<a href="#" class="btn btn-primary "> {{ single_answer.alloted_marks}} / {{ single_answer.for_question.max_marks}}</a>
+
+					</div>
+				</div>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+		<div class="row">
+			<div class="col-md-12">
+			<div align="center" class=" card">
+				
+					<canvas id="canvas"></canvas>
+				
+			</div>
+			</div>
+		</div>
+	</div>
+	<script>
 		section = [];
 		{% for data in section_name %}
 		section.push("{{data}}");
 		{% endfor %}
-		
+
 		total_questions = [];
 		{% for data in total_questions %}
 		total_questions.push({{data}});
 		{% endfor %}
-		
+
 		attempted_questions = [];
 		{% for data in attempted_questions %}
 		attempted_questions.push({{data}});
 		{% endfor %}
-		
+
 		corrected_questions = [];
 		{% for data in corrected_questions %}
 		corrected_questions.push({{data}});
 		{% endfor %}
-</script>
+	</script>
 
-<script src="{% static "js/assessment_display_result_script.js" %}"></script>
-{% endblock %}
+	<script src="{% static "js/assessment_display_result_script.js" %}"></script>
+	{% endblock %}
 
 
+	s
