@@ -12,7 +12,16 @@ class ResultTable(tables.Table):
     #review_sqa = tables.LinkColumn('reviewsqa', text='Review Descriptive Answer')
     review_sqa = tables.TemplateColumn('<a href="{% url "staff:assesments:assesment_manage_review_sqa_question"  assesmentid=self.request.GET.assesmentid %}"><span class="fas fa-comments"></span></a>', verbose_name="Validate Descriptive Answer")
     result = tables.TemplateColumn('<a href="{% url "staff:assesments:assessment_result_by_staff" pk=record.pk %}"><center><span class="fas fa-file"></span></center></a>')
-
+    exam_taken_date_time = tables.Column(accessor='exam_taken_date_time', verbose_name='Taken At')
+    total_question = tables.Column(accessor='total_question', verbose_name='Questions')
+    total_attempted = tables.Column(accessor='total_attempted', verbose_name='Attempted')
+    total_marks = tables.Column(accessor='total_marks', verbose_name='Total')
+    obtained_marks = tables.Column(accessor='obtained_marks', verbose_name='Obtained')
+    result_passed = tables.Column(accessor='result_passed', verbose_name='Passed')
+    assesment_submitted = tables.Column(accessor='assesment_submitted', verbose_name='Submitted')
+    publish_result = tables.Column(accessor='publish_result', verbose_name='Published')
+    registered_user = tables.Column(accessor='registered_user', verbose_name='Student')
+    
     def render_review_sqa(self, record):
         url = reverse('staff:assesments:assesment_manage_review_sqa_question',kwargs={'assesmentid': self.assesmentid})
         return format_html('<a href="{}"><span class="fas fa-comments">Validate Score</span></a>', url)
