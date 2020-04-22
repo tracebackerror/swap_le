@@ -4,7 +4,13 @@
 
 {% block content %}
  <h1> My Issued Library Assets </h1>
-
+<div id="user_message_display">
+		{% for message in messages %}
+				<div class="alert alert-success" role="alert">
+					{{ message|safe }}
+				</div>  
+		{% endfor %}
+	</div>
 <!--Data-->
 
 <div class="container">        

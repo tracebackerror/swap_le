@@ -2,17 +2,17 @@
 
 {% block title %}   Edit Question Section  {% endblock %}
 
-{% if messages %}
-<div class="alert alert-success">
-    {% for m in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ m }}</li>
-    {% endfor %}
-</div>
-{% endif %}
+
 
 {% block content %}
  <h1>Edit Question Section  </h1>
- 
+ <div id="user_message_display">
+		{% for message in messages %}
+				<div class="alert alert-success" role="alert">
+					{{ message|safe }}
+				</div>  
+		{% endfor %}
+	</div>
  <div class="container" style="min-height:60%">
  <p>You can Edit Question Section  using the following form:</p>
  

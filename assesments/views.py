@@ -273,9 +273,11 @@ class ManageSingleQuestionAddView(TemplateView):
                     sum_of_marks = get_assesment_obj_to_update.assesment.question_set.aggregate(sum_of_marks = Sum('max_marks'))
                     get_assesment_obj_to_update.total_marks  = sum_of_marks['sum_of_marks']
                     
-                    obtained_marks_calculate = get_assesment_obj_to_update.answer_set.aggregate(answer_obtained_marks = Sum('alloted_marks'))
-                    get_assesment_obj_to_update.obtained_marks = obtained_marks_calculate.get('answer_obtained_marks')
-                    get_assesment_obj_to_update.result_passed = obtained_marks_calculate.get('answer_obtained_marks') >= get_assesment_obj_to_update.assesment.passing_marks  
+                    check_if_sqa_is_reviewed = get_assesment_obj_to_update.answer_set.aggregate(answer_obtained_marks = Sum('alloted_marks'))
+                    if check_if_sqa_is_reviewed.get('answer_obtained_marks'):
+                        obtained_marks_calculate = get_assesment_obj_to_update.answer_set.aggregate(answer_obtained_marks = Sum('alloted_marks'))
+                        get_assesment_obj_to_update.obtained_marks = obtained_marks_calculate.get('answer_obtained_marks')
+                        get_assesment_obj_to_update.result_passed = obtained_marks_calculate.get('answer_obtained_marks') >= get_assesment_obj_to_update.assesment.passing_marks  
                     get_assesment_obj_to_update.save()
             messages.success(request, 'Question Has Been Added to Assesment.')
             return redirect('staff:assesments:assessment_manage_by_staff', self.kwargs['assesmentid'])
@@ -610,7 +612,9 @@ class ProcesStudentAssesmentView(DetailView):
                     else:
                         pass
                     
-                        
+                    if len(page_question_obj) == 0 :
+                        messages.add_message(self.request, messages.SUCCESS,  'Assessment Test Is Not Having Any Single Question To Answer. ')
+                        return redirect(reverse_lazy("staff:assesments:manage_student_assesment"))
                     get_the_current_answer_obj = Answer.soft_objects.filter(for_result = self.create_result_instance, for_question = page_question_obj[0])
                         
                     if len(get_the_current_answer_obj) == 0:
@@ -693,7 +697,9 @@ def assessment_delete_by_staff(request, assesmentid):
             assesment_obj = Assesment.soft_objects.get(id__exact=assesmentid)
             if assesment_obj.created_by == request.user:
                 assesment_obj.delete(request.user)
-                information = 'Assessment Deleted Successfully. '
+                
+                messages.add_message(request, messages.SUCCESS,  'Assessment Test Deleted Successfully. ')
+                return redirect(reverse_lazy("staff:assesments:manage_all_assesment"))
             else:
                 information = 'You don\'t have authorized permission to delete this record '
                 
@@ -782,7 +788,7 @@ def assessment_create_by_staff(request):
 
 
 @login_required(login_url="/staff/login/")
-def assessment_question_delete(request,questionid):
+def assessment_question_delete(request, assesmentid, questionid ):
     information = ''
     if request.method == 'GET':
         information = 'Are you sure you want to delete question set which id is  {} ?'.format(str(questionid))
@@ -792,7 +798,10 @@ def assessment_question_delete(request,questionid):
         if question_obj.created_by == request.user:
             #question_obj.delete(request.user)
             question_obj.hard_delete()
-            information = 'Question Deleted Successfully. '
+            
+            messages.add_message(request, messages.SUCCESS,  'Question Deleted Successfully. ')
+            return redirect(reverse_lazy("staff:assesments:assessment_manage_by_staff", kwargs={'assesmentid': assesmentid}))
+            
         else:
             information = 'You don\'t have authorized permission to delete this Question. '
    

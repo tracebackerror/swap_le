@@ -12,6 +12,13 @@
 
 {% block content %}
  <h1>Add Library Assets </h1>
+ <div id="user_message_display">
+		{% for message in messages %}
+				<div class="alert alert-success" role="alert">
+					{{ message|safe }}
+				</div>  
+		{% endfor %}
+	</div>
  
  <div class="container" style="min-height:60%">
  <p>You can Add Library Assets using the following form:</p>

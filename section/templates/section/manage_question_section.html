@@ -81,7 +81,13 @@
 
 {% block content %}
  <h1>Add Questions With Drag And Drop Methon in Section  </h1>
- 
+ <div id="user_message_display">
+		{% for message in messages %}
+				<div class="alert alert-success" role="alert">
+					{{ message|safe }}
+				</div>  
+		{% endfor %}
+	</div>
  <div class="container" style="min-height:60%">
 	<div class="row">
 	<p class="p">You can Add Questions in Section  using the following Drag and Drop method:</p>

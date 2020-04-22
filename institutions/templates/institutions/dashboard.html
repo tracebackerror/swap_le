@@ -8,8 +8,15 @@
 {% block content %}
 <div class="">
   <h1>Dashboard</h1>
+  
  </div>
- 
+ <div id="user_message_display">
+		{% for message in messages %}
+				<div class="alert alert-success" role="alert">
+					{{ message|safe }}
+				</div>  
+		{% endfor %}
+	</div>
  <br>
  
  <div class="container">

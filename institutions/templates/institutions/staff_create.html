@@ -5,6 +5,13 @@
 
 {% block content %} 
  <h1>Add a Staff account</h1>
+ <div id="user_message_display">
+		{% for message in messages %}
+				<div class="alert alert-success" role="alert">
+					{{ message|safe }}
+				</div>  
+		{% endfor %}
+	</div>
  <div class="container" style="min-height:50%"> 
 	 <p>You can create a staff account using the following form:</p>
 	 <form action="." method="post" enctype="multipart/form-data">

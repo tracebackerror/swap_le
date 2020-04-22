@@ -8,6 +8,13 @@
 {% block content %}
 
 <div class="container" style="min-height:60%;">
+<div id="user_message_display">
+		{% for message in messages %}
+				<div class="alert alert-success" role="alert">
+					{{ message|safe }}
+				</div>  
+		{% endfor %}
+	</div>
 	<div class="row">
 		<h1>Below is the Result of Student:</h1>
 	</div>

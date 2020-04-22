@@ -9,6 +9,13 @@
 
  <h1>Create Assessment</h1>
 <div class="container" style="min-height:60%;">
+<div id="user_message_display">
+		{% for message in messages %}
+				<div class="alert alert-success" role="alert">
+					{{ message|safe }}
+				</div>  
+		{% endfor %}
+	</div>
 	<div class="row">
 		<h3 >You can Create your Assessment using the following form:</h3>
 	 </div>

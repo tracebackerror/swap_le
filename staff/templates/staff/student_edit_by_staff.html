@@ -4,7 +4,13 @@
 
 {% block content %} 
  <h1>Edit Student </h1>
- 
+ <div id="user_message_display">
+		{% for message in messages %}
+				<div class="alert alert-success" role="alert">
+					{{ message|safe }}
+				</div>  
+		{% endfor %}
+	</div>
  <div class="container" style="min-height:60%">
  <p>You can Edit your Student Record using the following form:</p>
  

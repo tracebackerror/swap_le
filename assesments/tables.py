@@ -12,7 +12,7 @@ class ResultTable(tables.Table):
     
     #review_sqa = tables.LinkColumn('reviewsqa', text='Review Descriptive Answer')
     review_sqa = tables.TemplateColumn('<a href="{% url "staff:assesments:assesment_manage_review_sqa_question" assesmentid=self.request.GET.assesmentid %}">Review Descriptive Answer</a>')
-    result_report = tables.TemplateColumn('<a href="{% url "staff:assesments:assessment_result_by_staff" pk=record.pk %}">View</a>')
+    result = tables.TemplateColumn('<a href="{% url "staff:assesments:assessment_result_by_staff" pk=record.pk %}"><center><span class="fas fa-report-alt">Result</span></center></a>')
 
     def render_review_sqa(self, record):
         url = reverse('staff:assesments:assesment_manage_review_sqa_question',kwargs={'assesmentid': self.assesmentid})
@@ -40,7 +40,7 @@ class QuestionTable(tables.Table):
     row_number = tables.Column(empty_values=(),
                                 verbose_name='No.', )
    
-    action = tables.TemplateColumn(' <div class="row"> <div class="col-md-6"> <a href=" {% url "staff:assesments:assessment_question_delete" questionid=record.pk  %} "><center><span class="fas fa-trash-alt"></span></center></a></div></div>')
+    action = tables.TemplateColumn(' <div class="row"> <div class="col-md-6"> <a href=" {% url "staff:assesments:assessment_question_delete" assesmentid=record.assesment_linked.pk questionid=record.pk  %} "><center><span class="fas fa-trash-alt"></span></center></a></div></div>')
     
     def __init__(self, *args, **kwargs):
         super(QuestionTable, self).__init__(*args, **kwargs)
@@ -63,7 +63,7 @@ class AssesmentTable(tables.Table):
     
     action = tables.TemplateColumn('<div class="row"><div class="col-md-6"><a alt="edit" class="btn-link"  href="{% url "staff:assesments:assessment_edit_by_staff" assesmentid=record.id  %} "><center><span class="fas fa-edit "></span></center></a></a> </div> <div class="col-md-6"> <a href=" {% url "staff:assesments:assessment_delete_by_staff" assesmentid=record.id  %} "><center><span class="fas fa-trash-alt"></span></center></a></div></div>')
     
-    manage_assesment = tables.TemplateColumn('<a href=" {% url "staff:assesments:assessment_manage_by_staff" assesmentid=record.id  %} ">Manage</a>')
+    manage_assesment = tables.TemplateColumn('<a href=" {% url "staff:assesments:assessment_manage_by_staff" assesmentid=record.id  %} ">Manage</a>', verbose_name="Manage")
     
     #manage_assesment = tables.TemplateColumn('<form method="GET"  action="{%  url "staff:assesments:assessment_manage_by_staff" %}">  {% csrf_token %} <input type="hidden" name="examid" value={{record.id }}> <input class="btn btn-dark" type="submit" value="Manage"> </form>')
     
@@ -83,7 +83,7 @@ class AssesmentTable(tables.Table):
         # add class="paleblue" to <table> tag 
         attrs = {'class': 'paleblue'}
         # fields = ('row_number', 'institute',)
-        exclude = ('id', 'deleted_at','deleted_by','created', 'updated', 'created_by','updated_by','type','exam_start_type','expired_on','is_exam_active')
+        exclude = ('id', 'brief', 'deleted_at','deleted_by','created', 'updated', 'created_by','updated_by','type','exam_start_type','expired_on','is_exam_active')
 
 
 

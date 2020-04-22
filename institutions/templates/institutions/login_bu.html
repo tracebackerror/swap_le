@@ -4,6 +4,13 @@
 {% block title %}Log-in{% endblock %}
 {% block content %}
   <h1>Log-in</h1>  
+  <div id="user_message_display">
+		{% for message in messages %}
+				<div class="alert alert-success" role="alert">
+					{{ message|safe }}
+				</div>  
+		{% endfor %}
+	</div>
   <p>Please, use the following form to log-in:</p>
   <form action="." method="post">
   {{ form.as_p }}

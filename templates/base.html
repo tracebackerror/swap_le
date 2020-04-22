@@ -179,15 +179,7 @@
  </div>
  
  
- <div id="messages">
- 	{% for message in messages %}
- 		    <div class="alert alert-success" role="alert">
-				{{ message|safe }}
-			</div>  
- 	{% endfor %}
- 	
- 	
- </div>
+
 
 
 {% endblock %}
@@ -198,8 +190,12 @@
  
  
 
-
- <div id="content">    {% block content %}    {% endblock %}  </div>
+ 
+ <div id="content">  
+ 
+ {% block content %}    {% endblock %}  
+ 
+ </div>
  
 
  <div id="footer">

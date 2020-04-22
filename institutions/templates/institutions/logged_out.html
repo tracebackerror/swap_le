@@ -2,6 +2,15 @@
 {% block title %}Logged out{% endblock %}
 {% block content %}  
 <h1>Logged out</h1>  
+<div id="user_message_display">
+		{% for message in messages %}
+				<div class="alert alert-success" role="alert">
+					{{ message|safe }}
+				</div>  
+		{% endfor %}
+		
+		
+</div>
 <div class="container" style="min-height:65%">
 <p>You have been successfully logged out. You can <a href="{% url "institutions:login" %}">log-in again</a>.</p> 
 </div>

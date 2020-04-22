@@ -5,7 +5,13 @@
 
 {% block content %}
  <h1>View all Student Fees Installment </h1>
-
+<div id="user_message_display">
+		{% for message in messages %}
+				<div class="alert alert-success" role="alert">
+					{{ message|safe }}
+				</div>  
+		{% endfor %}
+	</div>
 <!--Filter-->
 <br/>
 <div class="container"> 

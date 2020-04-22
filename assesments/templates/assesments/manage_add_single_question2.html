@@ -19,6 +19,13 @@
 {% endif %}
 
 <div class="container">
+<div id="user_message_display">
+		{% for message in messages %}
+				<div class="alert alert-success" role="alert">
+					{{ message|safe }}
+				</div>  
+		{% endfor %}
+	</div>
 	<form enctype="multipart/form-data" method="POST" id="add_question_form">
 		{% csrf_token %}
 		<div class="row">

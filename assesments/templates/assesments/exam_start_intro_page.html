@@ -1,6 +1,13 @@
 {% extends "base.html" %} {% block title %}DashBoard Student{% endblock %} {% block content %}
 
 <div class="container" style="min-height:60%;">
+<div id="user_message_display">
+		{% for message in messages %}
+				<div class="alert alert-success" role="alert">
+					{{ message|safe }}
+				</div>  
+		{% endfor %}
+	</div>
 <h3>Please Read the Below Assesment Instruction Carefully:</h3>
 
 {% if user.is_authenticated and request.user.student in assesment_object.subscriber_users.all %}

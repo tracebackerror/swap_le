@@ -9,7 +9,16 @@
 
 {% block content %} 
  <h1>Review Descriptive Question</h1>
- 
+ 	
+	<div id="user_message_display">
+		{% for message in messages %}
+				<div class="alert alert-success" role="alert">
+					{{ message|safe }}
+				</div>  
+		{% endfor %}
+		
+		
+	 </div>
  <p>
  {% if information %}  <ul class="information">    {% for message in information %}      <li class="warning">        {{ message|safe }}          <a href="#" class="close"></a>      </li>    {% endfor %}  </ul> {% endif %}
  </p>

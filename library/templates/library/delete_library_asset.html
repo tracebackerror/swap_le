@@ -13,6 +13,13 @@
 
 {% block content %} 
  <h1>Delete Library Asset</h1>
+ <div id="user_message_display">
+		{% for message in messages %}
+				<div class="alert alert-success" role="alert">
+					{{ message|safe }}
+				</div>  
+		{% endfor %}
+	</div>
        
   <form method="POST" action="."> {% csrf_token %}
       <h3>Are you sure you want to delete: "{{ form.asset_id.asset_unique_code }}"?</h3>

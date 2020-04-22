@@ -4,6 +4,14 @@
 
   <h1><center>Log-in[Institution]</center></h1> 
   <div class=" container centeredForm">
+  
+	<div id="user_message_display">
+		{% for message in messages %}
+				<div class="alert alert-success" role="alert">
+					{{ message|safe }}
+				</div>  
+		{% endfor %}
+	</div>
 
   {% if form.errors %} 
   <p>      Your username and password didn't match.       Please try again.    </p> 
