@@ -16,13 +16,11 @@
 <div class="table-responsive">
 <table class="table table-bordered">
 	<thead>
-	<tr>
-		<td class="col-md-2">Remaining Time:</td>
-		<td class="col-md-3"><div id="examtime" style="font-size:20;"></div></td>
-		<td class="col-md-3">
-		
-		
-		 <input type="button" name="final_submit" value="Final Submit" class="btn btn-danger" data-toggle="modal" data-target="#modalForFinalExit"/>
+	<tr >
+		<td >Remaining Time:</td>
+		<td style="width:30%;"><div id="examtime" style="font-size:20;"></div></td>
+		<td >
+			<input type="button" name="final_submit" value="Final Submit" class="btn btn-danger" data-toggle="modal" data-target="#modalForFinalExit"/>
 
 		</td>
 	</tr>
@@ -62,7 +60,6 @@
 
 <form action="{% url 'student:assesments:process_assesment' %}" method="POST" id="questionProcessingForm">
 
-
 {% if get_the_answer_obj %} 
 	{% if get_the_answer_obj.for_question.question_type|lower == "scq"  or get_the_answer_obj.for_question.question_type|lower == "mcq" %}
 		<input type="hidden" value = '{{get_the_answer_obj.opted_choice|replace:"/['\"]/_"  }}' name="selected_answer" id="selected_answer" />		
@@ -75,7 +72,7 @@
     {% for question in all_question_to_answer %}
     <input type="hidden" value={{question.pk}} name="question_id">
 	<tr>
-      <th class="col-md-1">Question</th>
+      <th style="width:10%;">Question</th>
       <th>{{ question.question_text }}</th>
     </tr>
     
@@ -89,7 +86,7 @@
 	{% if question.question_type|lower == 'scq'%}
 	<input type="hidden" name="question_type" value="scq" />
 	  <tr>
-        <td class="col-md-1 col-sm-2">
+        <td style="width:10%;>
         <div class="form-group">
 				{% if question.option_one|length > 0 %}
         <input class="form-control" type="radio" name="answer" id="option1" value=1 {% if get_the_answer_obj.opted_choice.2 == 1 %} checked="checked" {% endif %}>
@@ -99,7 +96,7 @@
         <td>{{ question.option_one }}</td>
       </tr>
       <tr>
-        <td>
+        <td style="width:10%;>
         <div class="form-group">
 				{% if question.option_two|length > 0 %}
         <input class="form-control" type="radio" name="answer" id="option2" value=2 {% if  get_the_answer_obj.opted_choice.2 == 2 %} checked="checked" {% endif %}></td>
@@ -108,7 +105,7 @@
         <td>{{ question.option_two }}</td>
       </tr>
       <tr>
-        <td>
+        <td style="width:10%;>
         <div class="form-group">
 				{% if question.option_three|length > 0 %}
         <input class="form-control" type="radio" name="answer" id="option3" value=3 {% if get_the_answer_obj.opted_choice.2 == 3 %} checked="checked" {% endif %} ></td>
@@ -117,7 +114,7 @@
         <td>{{ question.option_three }}</td>
       </tr>
       <tr>
-        <td>
+        <td style="width:10%;>
         <div class="form-group">
 				{% if question.option_four|length > 0 %}
         <input class="form-control" type="radio" name="answer" id="option4" value=4 {% if get_the_answer_obj.opted_choice.2 == 4 %} checked="checked" {% endif %} ></td>
@@ -126,7 +123,7 @@
         <td>{{ question.option_four }}</td>
       </tr>
       <tr>
-        <td>
+        <td style="width:10%;>
         <div class="form-group">
 				{% if question.option_five|length > 0 %}
         <input class="form-control" type="radio" name="answer" id="option5" value=5 {% if get_the_answer_obj.opted_choice.2 == 5 %} checked="checked" {% endif %}></td>
@@ -137,7 +134,7 @@
       {% elif question.question_type|lower == 'mcq' %}
       <input type="hidden" name="question_type" value="mcq" />
 	  <tr>
-        <td class="col-md-1">
+        <td style="width:10%;>
         <div class="form-group">
 				{% if question.option_one|length > 0 %}
         <input class="form-control" type="checkbox" name="answer" id="option1" value=1></td>
@@ -146,7 +143,7 @@
         <td>{{ question.option_one }}</td>
       </tr>
       <tr>
-        <td>
+        <td style="width:10%;>
         <div class="form-group">
 				{% if question.option_two|length > 0 %}
         <input class="form-control" type="checkbox" name="answer"  id="option2" value=2></td>
@@ -155,7 +152,7 @@
         <td>{{ question.option_two }}</td>
       </tr>
       <tr>
-        <td>
+        <td style="width:10%;>
         <div class="form-group">
 				{% if question.option_three|length > 0 %}
         <input class="form-control" type="checkbox" name="answer"  id="option3" value=3>
@@ -165,7 +162,7 @@
         <td>{{ question.option_three }}</td>
       </tr>
       <tr>
-        <td>
+        <td style="width:10%;>
         <div class="form-group">
 				{% if question.option_four|length > 0 %}
         <input class="form-control" type="checkbox" name="answer"  id="option4" value=4 class="form-control" >
@@ -175,13 +172,13 @@
         <td>{{ question.option_four }}</td>
       </tr>
       <tr>
-        <td>
+        <td style="width:10%;>
         <div class="form-group">
 				{% if question.option_five|length > 0 %}
         <input class="form-control" type="checkbox" name="answer" class="form-control"  value=5 id="option5">
         {% endif %}
 				</div>
-        </td>
+        </td >
         <td>{{ question.option_five }}</td>
       </tr>
     {% elif question.question_type|lower == 'sqa' %}
@@ -198,7 +195,7 @@
   </tbody>
   <tfoot>
   <tr>
-      <th class="col-md-1">
+      <td colspan="2">
       
      
 								<ul class="pagination btn-toolbar" role="toolbar" aria-label="pagination_toolbar">
@@ -226,17 +223,30 @@
 								</li>
 							{% endif %}
 							</ul>
-			</th>
-      <th>
-     
-      
+			</td>
+    
+    </tr>
+    
+  </tfoot>
+</table>
+
+<div class="row">
+	<div class="col-md-12">
+		<p>Question Navigation Panel :</p>
+		
+	</div>
+	<div class="col-md-12">
+		
 				{% if all_question_to_answer.has_other_pages %}
 					<ul class="pagination  btn-toolbar" role="toolbar" aria-label="pagination_toolbar">
 
 
 						{% for i in all_question_to_answer.paginator.page_range %}
 							{% if all_question_to_answer.number == i %}
-								<li class="nav-item   active "><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+								<li class="nav-item   active ">
+									<button type="button" class="btn btn-info" name="page" value={{ i }}> {{ i }} </button>
+								</li>
+								
 							{% else %}
 								<li class="nav-item">
 								<button type="button" class="btn btn-default consequetive_question" name="page" value={{ i }}> {{ i }} </button>
@@ -245,18 +255,16 @@
 						{% endfor %}
 
 					</ul>
-				{% endif %}																					 
-			</th>
-    </tr>
-    <tr>
-    <th colspan=2>
-     <p><small>Do Not Forget To Click on <button type="button" class="btn btn-default" disabled>&laquo; </button> OR
-      <button type="button" class="btn btn-default" disabled>&raquo; </button>
+				{% endif %}			
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<p><small>Do Not Forget To Click on <button type="button" class="btn btn-default" disabled>&laquo; </button> OR
+		<button type="button" class="btn btn-default" disabled>&raquo; </button>
 								buttons after answering each question</small></p>
-    </th>
-    </tr>
-  </tfoot>
-</table>
+	</div>
+</div>
 
 
 

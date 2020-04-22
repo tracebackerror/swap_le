@@ -39,8 +39,8 @@ class ResultTable(tables.Table):
 class QuestionTable(tables.Table):
     row_number = tables.Column(empty_values=(),
                                 verbose_name='No.', )
-    
-    delete_question = tables.TemplateColumn('<a href="{% url "staff:assesments:assessment_question_delete" questionid=record.pk %}">Delete</a>')
+   
+    action = tables.TemplateColumn(' <div class="row"> <div class="col-md-6"> <a href=" {% url "staff:assesments:assessment_question_delete" questionid=record.pk  %} "><center><span class="fas fa-trash-alt"></span></center></a></div></div>')
     
     def __init__(self, *args, **kwargs):
         super(QuestionTable, self).__init__(*args, **kwargs)
@@ -49,12 +49,13 @@ class QuestionTable(tables.Table):
     def render_row_number(self):
         return '%d' % next(self.counter)
         
-    
+    def render_question_text(self,value):
+        return (value[:75] + '..') if len(value) > 75 else value
     class Meta:
         model = Question
         attrs = {'class': 'paleblue'}
         sequence = ('row_number',)
-        exclude = ('id', 'deleted_at','deleted_by','created_by','updated_by','created','updated', 'assesment_linked', 'question_image' )
+        exclude = ('id', 'deleted_at','deleted_by','created_by','updated_by','created','updated', 'assesment_linked', 'question_image', 'option_one', 'option_two', 'option_three', 'option_four', 'option_five', 'correct_options', 'brief_answer' )
 
 class AssesmentTable(tables.Table):
     row_number = tables.Column(empty_values=(),

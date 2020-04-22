@@ -4,6 +4,8 @@
 <h3>Please Read the Below Assesment Instruction Carefully:</h3>
 
 {% if user.is_authenticated and request.user.student in assesment_object.subscriber_users.all %}
+<form action={% url 'student:assesments:process_assesment' %} method="POST">
+	
 <table  class="table borderless">
 	<tr>
 		<th colspan=2>Assesment Detail Information</th>
@@ -34,15 +36,15 @@
 		<td>Please Click on the below button to start the assesments.</td>
 	<tr>
 	<tr>
-	<form action={% url 'student:assesments:process_assesment' %} method="POST">
 	<input type="hidden" name="assesment_obj" value={{ assesment_object.pk }}>
 	<input type="hidden" name="start_assesment_boolean" value="True">
 	{%csrf_token%}
 		<td> Start:</td>
 		<td><input type="submit" class="btn btn-danger" value="Start Now"></td>
-	</form>
+	
 	<tr>
 </table>
+</form>
 {% endif %}
 </div>
 {% endblock %}

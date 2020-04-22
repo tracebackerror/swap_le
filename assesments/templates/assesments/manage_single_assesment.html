@@ -35,8 +35,7 @@
 
 <div class="container">
 	<div class="row">
-	<h2>Metrics:</h2>
-	
+		<h2>Metrics:</h2>
 	</div>
 	<div class="row">
 		
@@ -58,7 +57,20 @@
 		  </div>
 		
 		</div>
+	<div class="row">
+
+		<form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'staff:assesments:assesment_manage_add_question' request.resolver_match.kwargs.assesmentid %}">
+			<button class="btn btn-default " type="submit">Add Question</button>
+		</form>
+		
 	</div>
+	<div class="row">
+		<h4 >Questions : </h4>
+	</div>
+	<div class="row">
+		{% render_table table  %}
+	</div>
+</div>
   
   
   
@@ -72,22 +84,7 @@
 <!-- ------------------- Table Data ------------------- -->
 
 <div class="container">
-  <div class="row">
 
-    <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'staff:assesments:assesment_manage_add_question' request.resolver_match.kwargs.assesmentid %}">
-     
-      <button class="btn btn-default " type="submit">Add Question</button>
-    </form>
-    
- </div>
- 
- <div class="row">
- <p> Linked Question</p>
-  {% render_table table  %}
- </div>
- 
- <br>
- 
   <div class="row">
 
     <form class="form-inline my-2 my-lg-0" method="GET" action="{% url "staff:assesments:add_question_section" request.resolver_match.kwargs.assesmentid %}">

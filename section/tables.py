@@ -9,7 +9,7 @@ class ManageSectionTable(tables.Table):
     
     edit_section= tables.TemplateColumn('<a href="{% url "staff:assesments:section:edit_question_section" pk=record.pk %}">Edit</a>')
     delete_section= tables.TemplateColumn('<a href="{% url "staff:assesments:section:delete_question_section" pk=record.pk %}">Delete</a>')
-    manage_section= tables.TemplateColumn('<a href="{% url "staff:assesments:section:manage_question_section" pk=record.pk %}">Manage</a>')
+    manage_section= tables.TemplateColumn('<a href="{% url "staff:assesments:section:manage_question_section" pk=record.pk assesmentid=record.linked_assessment.pk %}">Manage</a>')
     
     def __init__(self, *args, **kwargs):
         super(ManageSectionTable, self).__init__(*args, **kwargs)

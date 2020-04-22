@@ -6,7 +6,7 @@ from django.shortcuts import redirect
 
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
-
+from django.utils.timezone import make_aware
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login as auth_login
 from django.contrib.auth.models import User
@@ -104,12 +104,12 @@ def dashboard(request):
     total_live_assessment, live_asessment = None, None
     
     all_user_linked_assesment = Assesment.soft_objects.filter(subscriber_users = student_obj, privilege='public')
-    all_user_linked_assesment_filter_exam_date = all_user_linked_assesment.filter(exam_start_date_time__lte= timezone.datetime.now(), expired_on__gte= timezone.datetime.now())
+    all_user_linked_assesment_filter_exam_date = all_user_linked_assesment.filter(exam_start_date_time__lte= make_aware(timezone.datetime.now()), expired_on__gte= make_aware(timezone.datetime.now()))
 
     if all_user_linked_assesment_filter_exam_date.exists():
         all_user_linked_result = Result.soft_objects.filter(registered_user=student_obj).filter(assesment_submitted=True)
         if all_user_linked_result.exists():
-            live_asessment = all_user_linked_assesment_filter_exam_date.exclude(result = all_user_linked_result )
+            live_asessment = all_user_linked_assesment_filter_exam_date.exclude(result__in = all_user_linked_result )
         else:
             live_asessment = all_user_linked_assesment_filter_exam_date
     else:

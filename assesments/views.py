@@ -7,7 +7,7 @@ from students.models import Student
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
-
+from django.utils.timezone import make_aware
 from .models import Assesment, Question
 from .tables import AssesmentTable, StudentAssesmentTable, QuestionTable, ResultTable
 from .filter import AssesmentFilter
@@ -27,7 +27,7 @@ from utility import swaple_constants
 
 import logging
 from django_tables2 import SingleTableView
-from django.views.generic import ListView, DetailView, TemplateView
+from django.views.generic import ListView, DetailView, TemplateView, UpdateView
 
 from .models import Assesment, Question, Answer, Result
 from django.views import View
@@ -180,8 +180,13 @@ class GenerateAssesmentResultView(TemplateView):
         return context 
     
     
+class ManageSingleQuestionUpdateView(LoginRequiredMixin, UpdateView):    
+    model = Question
+    template_name = 'assesments/manage_add_single_question2.html'
+    form_class = QuestionForm
+    pk_url_kwarg = 'questionid' 
     
-
+     
 class ManageSingleQuestionAddView(TemplateView):
     model = Question
     template_name = 'assesments/manage_add_single_question2.html'
@@ -394,12 +399,12 @@ class ManageStudentAssesmentView(SingleTableView, ListView):
         
         #self.queryset = Assesment.soft_objects.filter(subscriber_users = student_obj, privilege='public').filter(Q(result__assesment_submitted=False) |  Q(result__isnull=True))
         all_user_linked_assesment = Assesment.soft_objects.filter(subscriber_users = student_obj, privilege='public')
-        all_user_linked_assesment_filter_exam_date = all_user_linked_assesment.filter(exam_start_date_time__lte= timezone.datetime.now(), expired_on__gte= timezone.datetime.now())
+        all_user_linked_assesment_filter_exam_date = all_user_linked_assesment.filter(exam_start_date_time__lte= make_aware(timezone.datetime.now()), expired_on__gte= make_aware(timezone.datetime.now()))
 
         if all_user_linked_assesment_filter_exam_date.exists():
             all_user_linked_result = Result.soft_objects.filter(registered_user=student_obj).filter(assesment_submitted=True)
             if all_user_linked_result.exists():
-                self.queryset = all_user_linked_assesment_filter_exam_date.exclude(result = all_user_linked_result )
+                self.queryset = all_user_linked_assesment_filter_exam_date.exclude(result__in = all_user_linked_result )
             else:
                 self.queryset = all_user_linked_assesment_filter_exam_date
         else:
@@ -553,7 +558,7 @@ class ProcesStudentAssesmentView(DetailView):
                     if len(result_of_assesment)  == 0:
                         self.create_result_instance = Result()
                         #exam_taken_date_time use for exam time
-                        self.create_result_instance.exam_taken_date_time = datetime.now()
+                        self.create_result_instance.exam_taken_date_time = make_aware(datetime.now())
                         self.create_result_instance.assesment = assesment_to_undertake
                         self.create_result_instance.registered_user = self.request.user.student
                         self.create_result_instance.created_by = self.request.user
@@ -565,7 +570,7 @@ class ProcesStudentAssesmentView(DetailView):
                     if question_type and question_type in all_question_types:
                         pk_of_question = self.request.POST.get('question_id')
                         question_obj = Question.soft_objects.filter(assesment_linked = assesment_to_undertake, pk = pk_of_question)
-                        get_the_answer_obj = Answer.soft_objects.filter(for_result = self.create_result_instance, for_question = question_obj)
+                        get_the_answer_obj = Answer.soft_objects.filter(for_result = self.create_result_instance, for_question__in = question_obj)
                         
                         if len(get_the_answer_obj) == 0:
                             get_the_answer_obj = Answer()
@@ -699,15 +704,14 @@ def assessment_edit_by_staff(request, assesmentid):
     messages.get_messages(request).used = True
     date_time_format = "%d/%m/%Y %H:%M"
     if request.method == 'POST':
-        expired_on = datetime.strptime(request.POST['expired_on'], date_time_format)
-        exam_start_date_time = datetime.strptime(request.POST['exam_start_date_time'], date_time_format)
+        expired_on = make_aware(datetime.strptime(request.POST['expired_on'], date_time_format))
+        exam_start_date_time = make_aware(datetime.strptime(request.POST['exam_start_date_time'], date_time_format))
         total_exam_duration_val = str(expired_on - exam_start_date_time)
         
         asses_obj = Assesment.objects.get(id=assesmentid) 
         
         assesment_form = AssessmentForm( instance=asses_obj, request=request,
                                  data=request.POST)
-        
         
         if assesment_form.is_valid():
             assesment_form.save()
@@ -748,8 +752,8 @@ def assessment_edit_by_staff(request, assesmentid):
 def assessment_create_by_staff(request):
     date_time_format = "%d/%m/%Y %H:%M"
     if request.method == 'POST':
-        expired_on = datetime.strptime(request.POST['expired_on'], date_time_format)
-        exam_start_date_time = datetime.strptime(request.POST['exam_start_date_time'], date_time_format)
+        expired_on = make_aware(datetime.strptime(request.POST['expired_on'], date_time_format))
+        exam_start_date_time = make_aware(datetime.strptime(request.POST['exam_start_date_time'], date_time_format))
         total_exam_duration = expired_on - exam_start_date_time
         
         assesment_creation_form = AssessmentCreationForm(request.POST, request=request)

@@ -19,67 +19,6 @@ class QuestionForm(forms.ModelForm):
         super(QuestionForm, self).__init__(*args, **kwargs)
         
         
-        '''
-        self.fields['question_image'].help_text = "File(jpg/jpeg/png) Size Should Be Less Than 500kb. "
-        self.helper = FormHelper()
-        self.helper.form_method = 'post'
-        self.helper.form_action = '.'
-        self.helper.form_id = 'action_question_add'
-        self.helper.label_class = 'col-md-4'
-        self.helper.field_class = 'col-md-8'
-        self.helper.form_show_errors = True
-        self.helper.form_error_title = "error of form"
-        self.helper.formset_error_title ="E formset"
-        self.helper.layout = Layout(
-                                HTML("""
-                                        <div class="container">
-                                        <div class="col-md-12">
-                                """),
-                                    
-                                Fieldset(
-                                    'Please Use the below form for adding a Question to Assesment',
-                                  
-                                   'question_text',
-                                   'question_image',
-                                   'max_marks',
-                                   
-                                   
-                                   Field('question_type',style="height: 34px;", title="What kind of question you want to create ?", css_class="select", css_id="which_question"),
-                                   
-                                   Field('brief_answer',style="", title="Please Enter Correct Answer For Reference", css_class="", css_id="reference_answer"),
-                                   Div(
-                                   Field('option_one',style="", title="Please Enter Option For Answer", css_class="", css_id="option_one"),
-                                   Field('option_two',style="", title="Please Enter Option For Answer", css_class="", css_id="option_two"),
-                                   Field('option_three',style="", title="Please Enter Option For Answer", css_class="", css_id="option_three"),
-                                   Field('option_four',style="", title="Please Enter Option For Answer", css_class="", css_id="option_four"),
-                                   Field('option_five',style="", title="Please Enter Option For Answer", css_class="", css_id="option_five"),
-                                   
-                                   Field('correct_options', type='hidden', style="", title="", css_class=""),
-                                   HTML("""
-                                        <p class="col-md-12">Please Choose The correct options</p>
-                                        """),
-                                   css_id = 'option-fields',
-                                   css_class="form-group"
-                                   ),
-                                         
-                                 
-                                   
-                                ),
-                                 HTML("""
-                                        <p class="col-md-12">Please click on submit, <strong>for creating the question</strong></p>
-                                """),
-                                
-                                Div(
-                                         Submit('submit', 'Submit', css_class='btn-primary '),
-                                         Div(
-                                             css_class="col-md-1"
-                                             ),
-                                         Reset('name', 'Reset', css_class='btn btn-danger'),
-                                      css_class="col-md-12 row"),
-                                HTML("""</div> </div>""")
-                            )
-        #self.helper.add_input()'''
-        
     
     class Meta:
         model   = Question
@@ -179,8 +118,8 @@ class AssessmentForm(forms.ModelForm):
     class Meta:
         model = Assesment
         
-        fields = ('header', 'brief', 'exam_start_date_time', 'passing_marks', 'privilege', 'expired_on', 'subscriber_users')
-        exclude= ['deleted_by','deleted_at', 'created_by', 'updated_by', 'exam_start_type', 'is_exam_active']
+        fields = ('__all__')
+        exclude= ['deleted_by','deleted_at', 'created_by', 'updated_by', 'exam_start_type','total_exam_duration', 'is_exam_active']
         labels = {
         "header": "Short Heading",
         "privilege": "Visibility",

@@ -73,6 +73,7 @@ class ManageQuestionSection(LoginRequiredMixin,View):
 
     def get_queryset(self,**kwargs):
         pk = self.kwargs.get('pk')
+        import pdb;pdb.set_trace()
         section_obj = Section.objects.get(id = pk)
         assessment_obj = Assesment.objects.filter(id=section_obj.linked_assessment.id)
         queryset = Question.objects.filter(assesment_linked = assessment_obj)
@@ -113,27 +114,24 @@ class ManageQuestionSection(LoginRequiredMixin,View):
         
                 
     def get(self, request, *args, **kwargs):
-        self.object_list = self.get_queryset()
-        context = self.get_context_data(object_list=self.object_list)
-        return self.render_to_response(context)
-    
-    def get_context_data(self, **kwargs):
-        queryset = kwargs.pop('object_list')
         pk = self.kwargs.get('pk')
         for_section = Section.objects.get(id = pk)
+        import pdb; pdb.set_trace();
         qsmapping = SectionQuestionMapping.objects.filter(for_section = for_section)
         qsmapping_q_id = []
         for i in qsmapping:
             qsmapping_q_id.append(i.for_question.id)
             
         context_object_name = self.context_object_name
-        if context_object_name is not None:
-            context = {
-                context_object_name : queryset,
+        context = {
+                'context_object_name' : 'model',
                 'qsmapping' : qsmapping,
                 'qsmapping_q_id' : qsmapping_q_id
                 }
-        return context
+        
+        return self.render_to_response(context)
+    
+    
     
     def render_to_response(self, context):
         return render(self.request,self.template_name,context)
