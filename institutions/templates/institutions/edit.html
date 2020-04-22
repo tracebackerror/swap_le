@@ -1,28 +1,76 @@
 
-{% extends "base.html" %}
+{%  extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
 {% block title %}   Edit your account   {% endblock %}
 
 
 {% block content %} 
- <h1>Edit your account</h1>
- 	
-	
- <div class="container">
- <div id="user_message_display">
+ <h1>Institution Details  </h1>
+ 
+ <div class="container" style="min-height:60%">
+	<div class="row " id="user_message_display">
 		{% for message in messages %}
-				<div class="alert alert-success" role="alert">
+				<div class=" col-md-12 alert alert-success" role="alert">
 					{{ message|safe }}
 				</div>  
 		{% endfor %}
-		
-		
- </div>
- <p>You can edit your account using the following form:</p>
- <form action="." method="post" enctype="multipart/form-data">
-     {{ user_form.as_p}}
-     {{ institution_form.as_p }}
-     {% csrf_token %}
- <p><input type="submit" class="btn btn-success" value="Save changes"></p>
- </form>
+	</div>
+	 <div class="row">
+		<h3 >Please fill all the details for Insititute account:</h3>
+	 </div>
+	 
+	 <form action="." method="post" enctype="multipart/form-data">
+		 {% csrf_token %}
+		<div class="form-row">
+				<div class="form-group col-md-4">
+					{{ user_form.username|as_crispy_field}}
+				</div>
+				<div class="form-group col-md-8">
+					{{ institution_form.institute_name|as_crispy_field}}
+				</div>
+		</div>
+		<div class="form-row">
+				<div class="form-group col-md-4">
+					{{ user_form.email|as_crispy_field }}
+				</div>
+				<div class="form-group col-md-4">
+					{{ institution_form.institute_address|as_crispy_field }}
+				</div>
+				<div class="form-group col-md-4">
+					{{ institution_form.institute_contact_mobile|as_crispy_field }}
+				</div>
+		</div>
+		<div class="form-row">
+				
+				<div class="form-group col-md-4">
+					{{ institution_form.institute_country|as_crispy_field }}
+				</div>
+				<div class="form-group col-md-4">
+					{{ institution_form.institute_state|as_crispy_field }}
+				</div>
+				<div class="form-group col-md-4">
+					{{ institution_form.institute_city|as_crispy_field }}
+				</div>
+		</div>
+		<div class="form-row">
+				
+				<div class="form-group col-md-4">
+					{{ institution_form.institute_contact_landline|as_crispy_field }}
+				</div>
+				<div class="form-group col-md-4">
+					{{ user_form.first_name|as_crispy_field }}
+				</div>
+				<div class="form-group col-md-4">
+					{{ user_form.last_name|as_crispy_field }}
+				</div>
+		</div>
+		<p><input type="submit" class="btn btn-success" value="Update"></p>
+	</form>
+ 	 
+	     
+	     
+ 	
+
  </div>
 {% endblock %}

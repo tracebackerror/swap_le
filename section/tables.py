@@ -4,8 +4,7 @@ import itertools
 
 
 class ManageSectionTable(tables.Table):
-    row_number = tables.Column(empty_values=(),
-                                verbose_name='No.')
+    
     
     action= tables.TemplateColumn('<div class="row"><div class="col-md-6"><a alt="edit" class="btn-link"  href="{% url "staff:assesments:section:edit_question_section" pk=record.pk %} "><center><span class="fas fa-edit "></span></center></a></a> </div> <div class="col-md-6"> <a href="{% url "staff:assesments:section:delete_question_section" pk=record.pk %} "><center><span class="fas fa-trash-alt"></span></center></a></div></div>')
     
@@ -15,11 +14,9 @@ class ManageSectionTable(tables.Table):
         super(ManageSectionTable, self).__init__(*args, **kwargs)
         self.counter = itertools.count()
     
-    def render_row_number(self):
-        return '%d' % next(self.counter)
     
     class Meta:
         model = Section
         attrs = {'class': 'paleblue'}
-        sequence = ('row_number','name','linked_assessment')
+        sequence = ('name','linked_assessment')
         exclude = ('id', 'linked_assessment')

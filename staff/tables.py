@@ -8,7 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class StaffTable(tables.Table):
-    row_number = tables.Column(empty_values=(), verbose_name="No.")
+    
     edit_staff = tables.TemplateColumn('<a href=" {% url "institutions:edit_institution_staff" username=record.staffuser  %} "  ><center><span class="fas fa-edit"></span></center></a>')
     delete_staff = tables.TemplateColumn('<a href=" {% url "institutions:delete_institution_staff" username=record.staffuser  %}" ><center><span class="fas fa-trash-alt"></span></center></a>')
     email_student = tables.Column(accessor='staffuser.email',
@@ -22,9 +22,6 @@ class StaffTable(tables.Table):
         super(StaffTable, self).__init__(*args, **kwargs)
         self.counter = itertools.count()
 
-    def render_row_number(self):
-        return '%d' % (int(next(self.counter))+1)
-
     
 
     class Meta:
@@ -32,13 +29,13 @@ class StaffTable(tables.Table):
         # add class="paleblue" to <table> tag
         exclude = ('id', 'deleted', 'user_type', 'institute', 'created', 'updated', 'allowregistration', )
         attrs = {'class': 'paleblue'}
-        # fields = ('row_number', 'institute',)
-        sequence = ('row_number', 'staffuser', 'first_name', 'last_name', 'email_student', 'user_type', 'deleted')
+        # fields = ( 'institute',)
+        sequence = ( 'staffuser', 'first_name', 'last_name', 'email_student', 'user_type', 'deleted')
 
 
 
 class StudentTable(tables.Table):
-    row_number = tables.Column(empty_values=(), verbose_name="No.")
+    
     first_name = tables.Column(accessor='studentuser.first_name',
                                verbose_name='First Name', attrs={"th": {"class": "text-nowrap"}})
     last_name = tables.Column(accessor='studentuser.last_name',
@@ -56,10 +53,6 @@ class StudentTable(tables.Table):
     def __init__(self, *args, **kwargs):
         super(StudentTable, self).__init__(*args, **kwargs)
         self.counter = itertools.count()
-
-    def render_row_number(self):
-        return ' %d' % next(self.counter)
-
     def render_first_name(self,value):
         return value
     
@@ -72,9 +65,9 @@ class StudentTable(tables.Table):
     
     class Meta:
         model = Student
-        sequence = ('row_number', 'studentuser','first_name','last_name','email', 'staffuser',  )
+        sequence = ( 'studentuser','first_name','last_name','email', 'staffuser',  )
         # add class="paleblue" to <table> tag 
         attrs = {'class': 'paleblue'}
-        # fields = ('row_number', 'institute',)
+        # fields = ( 'institute',)
         exclude = ('id', 'deleted', 'last_login', 'created', 'updated', 'user_type', 'address')
 

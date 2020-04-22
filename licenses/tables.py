@@ -8,14 +8,12 @@ class LicenseViewTable(tables.Table):
         super(StaffTable, self).__init__(*args, **kwargs)
         self.counter = itertools.count()
 
-    def render_row_number(self):
-        return 'Row %d' % next(self.counter)
-
+    
 
 
     class Meta:
         model = License
         # add class="paleblue" to <table> tag
         attrs = {'class': 'paleblue'}
-        # fields = ('row_number', 'institute',)
-        sequence = ('row_number', 'staffuser', 'institute', 'allowregistration', 'created', 'updated', 'user_type', 'deleted')
+        # fields = ( 'institute',)
+        sequence = ( 'staffuser', 'institute', 'allowregistration', 'created', 'updated', 'user_type', 'deleted')

@@ -7,16 +7,15 @@ from django_tables2 import A
 from django.urls import reverse
 
 class ResultTable(tables.Table):
-    row_number = tables.Column(empty_values=(),
-                                verbose_name='No.')
+    
     
     #review_sqa = tables.LinkColumn('reviewsqa', text='Review Descriptive Answer')
-    review_sqa = tables.TemplateColumn('<a href="{% url "staff:assesments:assesment_manage_review_sqa_question" assesmentid=self.request.GET.assesmentid %}">Review Descriptive Answer</a>')
-    result = tables.TemplateColumn('<a href="{% url "staff:assesments:assessment_result_by_staff" pk=record.pk %}"><center><span class="fas fa-report-alt">Result</span></center></a>')
+    review_sqa = tables.TemplateColumn('<a href="{% url "staff:assesments:assesment_manage_review_sqa_question"  assesmentid=self.request.GET.assesmentid %}"><span class="fas fa-comments"></span></a>', verbose_name="Validate Descriptive Answer")
+    result = tables.TemplateColumn('<a href="{% url "staff:assesments:assessment_result_by_staff" pk=record.pk %}"><center><span class="fas fa-file"></span></center></a>')
 
     def render_review_sqa(self, record):
         url = reverse('staff:assesments:assesment_manage_review_sqa_question',kwargs={'assesmentid': self.assesmentid})
-        return format_html('<a href="{}">{}</a>', url, 'Review Descriptive Answer')
+        return format_html('<a href="{}"><span class="fas fa-comments">Validate Score</span></a>', url)
         
     def render_registered_user(self, record):
         reg_user = record.registered_user.get_name_registered_student()
@@ -27,43 +26,36 @@ class ResultTable(tables.Table):
         self.counter = itertools.count()
         self.assesmentid = kwargs.get('assesmentid',None)
     
-    def render_row_number(self):
-        return '%d' % next(self.counter)
+    
     
     class Meta:
         model = Result
         attrs = {'class': 'paleblue'}
-        sequence = ('row_number',)
+        
         exclude = ('id', 'deleted_at','deleted_by','created_by','updated_by','type','assesment','created','updated',)
 
 class QuestionTable(tables.Table):
-    row_number = tables.Column(empty_values=(),
-                                verbose_name='No.', )
-   
+    
     action = tables.TemplateColumn(' <div class="row"> <div class="col-md-6"> <a href=" {% url "staff:assesments:assessment_question_delete" assesmentid=record.assesment_linked.pk questionid=record.pk  %} "><center><span class="fas fa-trash-alt"></span></center></a></div></div>')
     
     def __init__(self, *args, **kwargs):
         super(QuestionTable, self).__init__(*args, **kwargs)
         self.counter = itertools.count()
     
-    def render_row_number(self):
-        return '%d' % next(self.counter)
+    
         
     def render_question_text(self,value):
         return (value[:75] + '..') if len(value) > 75 else value
     class Meta:
         model = Question
         attrs = {'class': 'paleblue'}
-        sequence = ('row_number',)
+        
         exclude = ('id', 'deleted_at','deleted_by','created_by','updated_by','created','updated', 'assesment_linked', 'question_image', 'option_one', 'option_two', 'option_three', 'option_four', 'option_five', 'correct_options', 'brief_answer' )
 
 class AssesmentTable(tables.Table):
-    row_number = tables.Column(empty_values=(),
-                                verbose_name='Row')
     
-    action = tables.TemplateColumn('<div class="row"><div class="col-md-6"><a alt="edit" class="btn-link"  href="{% url "staff:assesments:assessment_edit_by_staff" assesmentid=record.id  %} "><center><span class="fas fa-edit "></span></center></a></a> </div> <div class="col-md-6"> <a href=" {% url "staff:assesments:assessment_delete_by_staff" assesmentid=record.id  %} "><center><span class="fas fa-trash-alt"></span></center></a></div></div>')
+    management = tables.TemplateColumn('<div class="row"><div class="col-md-3"><a alt="edit" class="btn-link"  href="{% url "staff:assesments:assessment_edit_by_staff" assesmentid=record.id  %} "><center><span class="fas fa-edit "></span></center></a></a> </div> <div class="col-md-3"> <a href=" {% url "staff:assesments:assessment_delete_by_staff" assesmentid=record.id  %} "><center><span class="fas fa-trash-alt"></span></center></a></div><div class="col-md-3"><a href=" {% url "staff:assesments:assessment_manage_by_staff" assesmentid=record.id  %} "><span class="fas fa-cogs "></span></a></div></div>')
     
-    manage_assesment = tables.TemplateColumn('<a href=" {% url "staff:assesments:assessment_manage_by_staff" assesmentid=record.id  %} ">Manage</a>', verbose_name="Manage")
     
     #manage_assesment = tables.TemplateColumn('<form method="GET"  action="{%  url "staff:assesments:assessment_manage_by_staff" %}">  {% csrf_token %} <input type="hidden" name="examid" value={{record.id }}> <input class="btn btn-dark" type="submit" value="Manage"> </form>')
     expired_on = tables.Column(accessor='expired_on', verbose_name='Expires On')
@@ -72,25 +64,23 @@ class AssesmentTable(tables.Table):
         super(AssesmentTable, self).__init__(*args, **kwargs)
         self.counter = itertools.count()
 
-    def render_row_number(self):
-        return '%d' % next(self.counter)
+    
 
     def render_brief(self,value):
         return (value[:75] + '..') if len(value) > 75 else value
    
     class Meta:
         model = Assesment
-        sequence = ('row_number', 'header','brief','exam_start_date_time', 'expired_on', 'passing_marks','privilege')
+        sequence = ( 'header','brief','exam_start_date_time', 'expired_on', 'passing_marks','privilege')
         # add class="paleblue" to <table> tag 
         attrs = {'class': 'paleblue'}
-        # fields = ('row_number', 'institute',)
+        # fields = ( 'institute',)
         exclude = ('id', 'brief', 'deleted_at','deleted_by','created', 'updated', 'created_by','updated_by','type','exam_start_type', 'is_exam_active')
 
 
 
 class StudentAssesmentTable(tables.Table):
-    row_number = tables.Column(empty_values=(),
-                                verbose_name='No.')
+    
     
     take_assesment = tables.TemplateColumn('<form method="POST"  action=".">  {% csrf_token %} <input type="hidden" name="examid" value={{record.id }}> <input type="submit" class="btn btn-dark" value="Take Exam"> </form>')
     
@@ -121,8 +111,8 @@ class StudentAssesmentTable(tables.Table):
    
     class Meta:
         model = Assesment
-        sequence = ('row_number', 'header','exam_start_date_time','passing_marks','privilege','expired_on')
+        sequence = ( 'header','exam_start_date_time','passing_marks','privilege','expired_on')
         # add class="paleblue" to <table> tag 
         attrs = {'class': 'paleblue'}
-        # fields = ('row_number', 'institute',)
+        # fields = ( 'institute',)
         exclude = ('id', 'deleted_at','brief','deleted_by','created_by','updated_by','type','exam_start_type', 'polymorphic_ctype','created','updated','slug','is_exam_active')

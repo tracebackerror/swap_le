@@ -104,17 +104,29 @@ class ReviewAllSqaView(TemplateView):
         associated_answer_obj = Answer.objects.filter(for_result__assesment__id = self.kwargs['assesmentid'], for_question__question_type = 'sqa')
         answer_formset = ReviewSqaFormSet(initial = request.POST, queryset=associated_answer_obj)
         answer_formset_helper = ReviewSqaFormSetHelper()
-        messages.success(request,"Upated")
-        
-        redirect_url = request.POST.get('next', None)
         
         
-        context = self.get_context_data()
-        context['answer_formset'] = answer_formset
-        context['answer__required_review_count'] = len(associated_answer_obj)
-        context['answer_formset_helper'] = answer_formset_helper
+        assesment_to_submit = self.kwargs['assesmentid']
+        fetch_appropriate_result = Result.soft_objects.filter(assesment__id = assesment_to_submit)
         
-        return self.render_to_response(context)
+        if fetch_appropriate_result.exists():
+            get_assesment_obj_to_update = fetch_appropriate_result[0]
+            get_assesment_obj_to_update.assesment_submitted = True
+            get_assesment_obj_to_update.total_question =  get_assesment_obj_to_update.assesment.question_set.count()
+            get_assesment_obj_to_update.total_attempted = get_assesment_obj_to_update.answer_set.all().count()
+            
+            sum_of_marks = get_assesment_obj_to_update.assesment.question_set.aggregate(sum_of_marks = Sum('max_marks'))
+            get_assesment_obj_to_update.total_marks  = sum_of_marks['sum_of_marks']
+            
+            obtained_marks_calculate = get_assesment_obj_to_update.answer_set.aggregate(answer_obtained_marks = Sum('alloted_marks'))
+            get_assesment_obj_to_update.obtained_marks = obtained_marks_calculate.get('answer_obtained_marks')
+            get_assesment_obj_to_update.result_passed = obtained_marks_calculate.get('answer_obtained_marks') >= get_assesment_obj_to_update.assesment.passing_marks  
+            get_assesment_obj_to_update.save()
+        messages.success(request, 'Result Has Been Updated')
+            
+        
+        
+        return redirect(reverse_lazy("staff:assesments:assessment_manage_by_staff", kwargs={'assesmentid': self.kwargs['assesmentid']}))
 
     def get_context_data(self, **kwargs):
         context = super(ReviewAllSqaView, self).get_context_data(**kwargs)
