@@ -6,7 +6,7 @@ from assesments.models import Assesment,Question
 class Section(models.Model):
     name = models.CharField(max_length = 50)
     linked_assessment = models.ForeignKey(Assesment,on_delete = models.CASCADE)
-    
+    for_question = models.ManyToManyField(Question, verbose_name="Question Mapped To This Section:") 
     def __str__(self):
         return self.name
     

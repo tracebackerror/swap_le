@@ -12,7 +12,7 @@ class ResultTable(tables.Table):
     #review_sqa = tables.LinkColumn('reviewsqa', text='Review Descriptive Answer')
     review_sqa = tables.TemplateColumn('<a href="{% url "staff:assesments:assesment_manage_review_sqa_question"  assesmentid=self.request.GET.assesmentid %}"><span class="fas fa-comments"></span></a>', verbose_name="Validate Descriptive Answer")
     result = tables.TemplateColumn('<a href="{% url "staff:assesments:assessment_result_by_staff" pk=record.pk %}"><center><span class="fas fa-file"></span></center></a>')
-    exam_taken_date_time = tables.Column(accessor='exam_taken_date_time', verbose_name='Taken At')
+    exam_taken_date_time = tables.DateTimeColumn(accessor='exam_taken_date_time', verbose_name='Taken At')
     total_question = tables.Column(accessor='total_question', verbose_name='Questions')
     total_attempted = tables.Column(accessor='total_attempted', verbose_name='Attempted')
     total_marks = tables.Column(accessor='total_marks', verbose_name='Total')
@@ -66,8 +66,8 @@ class AssesmentTable(tables.Table):
     
     
     #manage_assesment = tables.TemplateColumn('<form method="GET"  action="{%  url "staff:assesments:assessment_manage_by_staff" %}">  {% csrf_token %} <input type="hidden" name="examid" value={{record.id }}> <input class="btn btn-dark" type="submit" value="Manage"> </form>')
-    expired_on = tables.Column(accessor='expired_on', verbose_name='Expires On')
-    exam_start_date_time = tables.Column(accessor='exam_start_date_time', verbose_name='Available From')
+    expired_on = tables.DateTimeColumn(accessor='expired_on', verbose_name='Expires On')
+    exam_start_date_time = tables.DateTimeColumn(accessor='exam_start_date_time', verbose_name='Available From')
     def __init__(self, *args, **kwargs):
         super(AssesmentTable, self).__init__(*args, **kwargs)
         self.counter = itertools.count()

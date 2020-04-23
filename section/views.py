@@ -7,22 +7,31 @@ from .models import Section,SectionQuestionMapping
 from assesments.models import Assesment,Question
 from django.urls import reverse_lazy,reverse
 from django.contrib import messages
-
+from django.contrib.messages.views import SuccessMessageMixin
 # Create your views here.
 
-class AddQuestionSection(FormView):
+class AddQuestionSection(SuccessMessageMixin, FormView):
     model = Section
     template_name="section/add_question_section.html"
     success_url = 'staff:assesments:assessment_manage_by_staff'
     form_class = AddQuestionSectionForm
     context_object_name = "form"
     login_url=reverse_lazy('staff:login')
+    success_message = "Section %(name)s was added successfully"
     
     def form_valid(self, form,**kwargs):
+        section_obj_to_add = form.save(commit=False)
         assesmentid = self.kwargs.get('assesmentid')
         linked_assessment = Assesment.objects.get(id = assesmentid)
+        section_obj_to_add.linked_assessment = linked_assessment
+        section_obj_to_add.save()
+        form.save_m2m()
+        '''
+        
         name  = form.cleaned_data['name']
-        Section.objects.create(name=name,linked_assessment=linked_assessment)
+        section_created = Section.objects.create(name=name,linked_assessment=linked_assessment)
+        import pdb; pdb.set_trace()
+        section_created.for_question.add(form.cleaned_data['for_question'])'''
         messages.add_message(self.request, messages.SUCCESS, 'Question Section Created!')
         return HttpResponseRedirect(self.get_success_url(assesmentid))
     
@@ -47,20 +56,18 @@ class DeleteQuestionSection(LoginRequiredMixin,DeleteView):
         return HttpResponseRedirect(self.success_url)
     
     
-class EditQuestionSection(LoginRequiredMixin,UpdateView):
+class EditQuestionSection(SuccessMessageMixin, LoginRequiredMixin,UpdateView):
     model = Section
     template_name="section/edit_question_section.html"
-    success_url =  reverse_lazy('staff:assesments:manage_all_assesment')
+    success_url =  'staff:assesments:assessment_manage_by_staff'
     form_class = AddQuestionSectionForm
     context_object_name = "form"
     login_url=reverse_lazy('staff:login')
+    success_message = "Section %(name)s was update successfully"
      
-    
-    def form_valid(self, form):
-        if super(EditQuestionSection,self).form_valid(form):
-            form.save()
-            messages.add_message(self.request, messages.SUCCESS, 'Updated Question Section Successfully!')
-        return HttpResponseRedirect(self.success_url)
+    def get_success_url(self,*args, **kwargs):
+        
+        return reverse(self.success_url, kwargs={'assesmentid':  self.object.linked_assessment.pk})
     
     
 

@@ -396,7 +396,8 @@ var durationHour = {{assesment_object.duration_hours}};
 var durationMinute = {{assesment_object.duration_minutes}};
 
 //var examEnd = new Date("Aug 28, 2018 15:30:00").getTime();
-var examEnd = new Date(moment("{{result_object.exam_taken_date_time|date:'Y-m-d H:i'}}").format('YYYY-MM-DD HH:mm'));
+//var examEnd = new Date(moment("{{result_object.exam_taken_date_time|date:'Y-m-d H:i'}}").format('YYYY-MM-DD HH:mm'));
+var examEnd = new Date("{{result_object.exam_taken_date_time.isoformat}}");
 examEnd.setHours (examEnd.getHours() + durationHour );
 examEnd.setMinutes (examEnd.getMinutes() + durationMinute );
 

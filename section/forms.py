@@ -6,4 +6,10 @@ class AddQuestionSectionForm(forms.ModelForm):
     
     class Meta():
         model = Section
-        fields = ['name']
+        fields = ['name', 'for_question']
+        widgets = {
+            'for_question': forms.CheckboxSelectMultiple(
+                                       attrs={}
+                                    ),
+            
+        }

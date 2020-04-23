@@ -158,7 +158,8 @@ class Question(MetaInformationMixin, SoftDeletionModelMixin):
     
     
     def __str__(self):
-        return 'Question - {}'.format(self.question_text)
+        data = (self.question_text[:150] + '..') if len(self.question_text) > 75 else self.question_text
+        return 'Question - {}'.format(data)
     
     
 class Result(MetaInformationMixin, SoftDeletionModelMixin):

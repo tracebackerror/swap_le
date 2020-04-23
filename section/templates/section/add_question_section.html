@@ -1,5 +1,6 @@
 {% extends "base.html" %}
-
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
 {% block title %}   Add Question Section  {% endblock %}
 
 {% if messages %}
@@ -11,6 +12,16 @@
 {% endif %}
 
 {% block content %}
+<style>
+input[type=checkbox]  {
+	width:5%;
+}
+
+label {
+	width:95%;
+	white-space: nowrap!important;
+}
+</style>
  <h1>Add Question Section  </h1>
  <div id="user_message_display">
 		{% for message in messages %}
@@ -20,17 +31,36 @@
 		{% endfor %}
 	</div>
  <div class="container" style="min-height:60%">
- <p>You can Add Question Section  using the following form:</p>
- 
+ <div class="row">
+	<p>You can Add Question Section  using the following form:</p>
+ </div>
  
   <form action="." method="post" enctype="multipart/form-data">
  {% csrf_token %}
 
-
-     {{ form.name.label}}<br>
-     {{ form.name	}}<br><br><br>
-
-     
+	<div class="row">
+		<div class="form-group col-md-12">
+							{{ form.name|as_crispy_field  }}
+		</div>
+	</div>
+	<div class="form-row">
+			
+			<div class="col-md-12 " style="">
+					<p class="p">Question Mapped To This Section:</p>
+			</div>
+						
+		</div>
+	<div class="form-row">
+			
+			<div class="col-md-12 overflow-auto" style="height:200px; border: 1px solid #ccc; padding: 10px 10px;">
+					{% for question in form.for_question %}
+							{{ question }}
+					{% endfor %}
+						
+			</div>
+						
+		</div>
+   
  <p><input type="submit" class="btn btn-success" value="Save changes"></p>
  </form>
  

@@ -580,7 +580,7 @@ class ProcesStudentAssesmentView(DetailView):
                         self.create_result_instance = Result()
                         #exam_taken_date_time use for exam time
                         
-                        self.create_result_instance.exam_taken_date_time = timezone.datetime.now(timezone)
+                        self.create_result_instance.exam_taken_date_time = timezone.now()
                         self.create_result_instance.assesment = assesment_to_undertake
                         self.create_result_instance.registered_user = self.request.user.student
                         self.create_result_instance.created_by = self.request.user
@@ -588,13 +588,14 @@ class ProcesStudentAssesmentView(DetailView):
                         self.create_result_instance.save()
                     else:
                         self.create_result_instance = result_of_assesment[0]
-                        
-                    difference =  timezone.make_aware(timezone.datetime.now()) - self.create_result_instance.exam_taken_date_time 
+                    
+                    difference =  timezone.now() - self.create_result_instance.exam_taken_date_time 
                     seconds_in_day = 24 * 60 * 60
                     alloted_seconds = (assesment_to_undertake.duration_hours * 60 + assesment_to_undertake.duration_minutes) * 60
-                    minutes_over, seconds_over = divmod(difference.seconds, 60)
+                    minutes_cumulative_over, seconds_over = divmod(difference.seconds, 60)
+                    hours_over, minutes_over = divmod(minutes_cumulative_over, 60)
                     
-                    if difference.seconds > alloted_seconds:
+                    if hours_over >= assesment_to_undertake.duration_hours and minutes_over >= assesment_to_undertake.duration_minutes:
                         # Time Over Exit Assesment
                         self.create_result_instance.assesment_submitted = True
                         self.create_result_instance.total_question =  self.create_result_instance.assesment.question_set.count()
