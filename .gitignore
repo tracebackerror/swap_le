@@ -10,6 +10,7 @@ eggs/
 ENV/
 env/
 htmlcov/
+db.sqlite3
 .hypothesis/
 instance/
 parts/

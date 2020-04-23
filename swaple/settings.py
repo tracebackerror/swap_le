@@ -13,7 +13,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY','(!&6*!a9x(g#2tba@125a^$t_s+*1882+jd3$@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-
+DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap-responsive.html"
 
 ALLOWED_HOSTS = [
   'swaple-shivam9172873031.codeanyapp.com',
@@ -61,7 +61,13 @@ INSTALLED_APPS = [
     'section',
     'widget_tweaks',
     'easy_pdf',
+    'django_extensions',
 ]
+
+GRAPH_MODELS = {
+  'all_applications': True,
+  'group_models': True,
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

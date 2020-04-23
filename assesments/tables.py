@@ -17,9 +17,9 @@ class ResultTable(tables.Table):
     total_attempted = tables.Column(accessor='total_attempted', verbose_name='Attempted')
     total_marks = tables.Column(accessor='total_marks', verbose_name='Total')
     obtained_marks = tables.Column(accessor='obtained_marks', verbose_name='Obtained')
-    result_passed = tables.Column(accessor='result_passed', verbose_name='Passed')
-    assesment_submitted = tables.Column(accessor='assesment_submitted', verbose_name='Submitted')
-    publish_result = tables.Column(accessor='publish_result', verbose_name='Published')
+    result_passed = tables.BooleanColumn(accessor='result_passed', verbose_name='Passed')
+    assesment_submitted = tables.BooleanColumn(accessor='assesment_submitted', verbose_name='Submitted')
+    publish_result = tables.BooleanColumn(accessor='publish_result', verbose_name='Published')
     registered_user = tables.Column(accessor='registered_user', verbose_name='Student')
     
     def render_review_sqa(self, record):
@@ -40,7 +40,6 @@ class ResultTable(tables.Table):
     class Meta:
         model = Result
         attrs = {'class': 'paleblue'}
-        
         exclude = ('id', 'deleted_at','deleted_by','created_by','updated_by','type','assesment','created','updated',)
 
 class QuestionTable(tables.Table):

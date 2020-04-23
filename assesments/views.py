@@ -419,7 +419,7 @@ class ManageStudentAssesmentView(SingleTableView, ListView):
         
         #self.queryset = Assesment.soft_objects.filter(subscriber_users = student_obj, privilege='public').filter(Q(result__assesment_submitted=False) |  Q(result__isnull=True))
         all_user_linked_assesment = Assesment.soft_objects.filter(subscriber_users = student_obj, privilege='public')
-        all_user_linked_assesment_filter_exam_date = all_user_linked_assesment.filter(exam_start_date_time__lte= make_aware(timezone.datetime.now()), expired_on__gte= make_aware(timezone.datetime.now()))
+        all_user_linked_assesment_filter_exam_date = all_user_linked_assesment.filter(exam_start_date_time__lte= timezone.datetime.now(), expired_on__gte= timezone.datetime.now())
 
         if all_user_linked_assesment_filter_exam_date.exists():
             all_user_linked_result = Result.soft_objects.filter(registered_user=student_obj).filter(assesment_submitted=True)
@@ -575,10 +575,12 @@ class ProcesStudentAssesmentView(DetailView):
                     
                     result_of_assesment = Result.soft_objects.filter(assesment = assesment_to_undertake, registered_user = self.request.user.student
                     )
+                    
                     if len(result_of_assesment)  == 0:
                         self.create_result_instance = Result()
                         #exam_taken_date_time use for exam time
-                        self.create_result_instance.exam_taken_date_time = make_aware(datetime.now())
+                        
+                        self.create_result_instance.exam_taken_date_time = timezone.datetime.now(timezone)
                         self.create_result_instance.assesment = assesment_to_undertake
                         self.create_result_instance.registered_user = self.request.user.student
                         self.create_result_instance.created_by = self.request.user
@@ -587,6 +589,28 @@ class ProcesStudentAssesmentView(DetailView):
                     else:
                         self.create_result_instance = result_of_assesment[0]
                         
+                    difference =  timezone.make_aware(timezone.datetime.now()) - self.create_result_instance.exam_taken_date_time 
+                    seconds_in_day = 24 * 60 * 60
+                    alloted_seconds = (assesment_to_undertake.duration_hours * 60 + assesment_to_undertake.duration_minutes) * 60
+                    minutes_over, seconds_over = divmod(difference.seconds, 60)
+                    
+                    if difference.seconds > alloted_seconds:
+                        # Time Over Exit Assesment
+                        self.create_result_instance.assesment_submitted = True
+                        self.create_result_instance.total_question =  self.create_result_instance.assesment.question_set.count()
+                        self.create_result_instance.total_attempted = self.create_result_instance.answer_set.all().count()
+                            
+                        sum_of_marks = self.create_result_instance.assesment.question_set.aggregate(sum_of_marks = Sum('max_marks'))
+                        self.create_result_instance.total_marks  = sum_of_marks['sum_of_marks']
+                            
+                        obtained_marks_calculate = self.create_result_instance.answer_set.aggregate(answer_obtained_marks = Sum('alloted_marks'))
+                        self.create_result_instance.obtained_marks = obtained_marks_calculate.get('answer_obtained_marks')
+                        self.create_result_instance.result_passed = obtained_marks_calculate.get('answer_obtained_marks') >= self.create_result_instance.assesment.passing_marks  
+                        self.create_result_instance.save()
+                        messages.success(self.request, 'Alloted Time Over: Assesment Test Has Been Submitted')
+                        return redirect('student:dashboard')
+                        
+                    
                     if question_type and question_type in all_question_types:
                         pk_of_question = self.request.POST.get('question_id')
                         question_obj = Question.soft_objects.filter(assesment_linked = assesment_to_undertake, pk = pk_of_question)

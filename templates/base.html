@@ -3,151 +3,152 @@
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 
- <html> <head> 
-{%  include 'master_static.html' %}
-{% include "google_analytics.html" %}
-{% include "google_adsense.html" %}
- 	
- <title>{% block title %}{% endblock %}</title>  
- <link href="{% static "css/base.css" %}" rel="stylesheet">
-  <link rel="stylesheet" href="{% static 'django_tables2/themes/paleblue/css/screen.css' %}" />
-  
-  <style type="text/css">
-	.centeredForm {
-	  margin: 0 auto;
-    	width:80% /* value of your choice which suits your alignment */
-	}
-	@media (max-width: 500px) {
-	  .myForm {
-	    min-width: 90%;
-	  }
-	}
-  </style>
- </head> <body>
- 
- 
- {% block menu %}
- <!--Main Navigation-->
-<header>
+<html> <head> 
+		{%  include 'master_static.html' %}
+		{% include "google_analytics.html" %}
+		{% include "google_adsense.html" %}
 
-  <nav class="navbar fixed-top navbar-expand-lg navbar-dark pink scrolling-navbar">
-    <a class="navbar-brand" href="{% url 'home:homeview'%}"><strong>SwapLE</strong></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="{% url "institutions:dashboard" %}">Home <span class="sr-only"> {% if section == "dashboard" %}(current){% endif %}</span></a>
-        </li>
-		
-		{% if request.user.is_authenticated and perms.institutions.is_institute %} 
-		
-        
-		
-		<!--<li class="nav-item" > <a class="nav-link" href="{% url "institutions:view_student_fees_installment" %}"> Student Fees Installment</a> </li>-->	 
-		<li class="nav-item dropdown">
-			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			  Staff
-			</a>
-			<ul class="navbar-nav mr-auto">
-			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<li class="dropdown-item" > <a  href ={% url "staff:dashboard" %}> Dashboard</a> </li>
-					<li class="dropdown-item" > <a  href ={% url "institutions:manage_staff" %}> Manage Staff</a> </li>
-					<li class="dropdown-item" > <a  href ={% url "institutions:create_institution_staff" %}> Add Staff</a> </li>
-			</div>
-			</ul>
-		</li>
-		
-		<li class="nav-item dropdown">
-			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			  Profile
-			</a>
-			<ul class="navbar-nav mr-auto">
-			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<li class="dropdown-item" > <a  href ={% url "institutions:password_change" %}> Change Password</a> </li>
-					<li class="dropdown-item" > <a  href ={% url "institutions:edit" %}> Edit Profile</a> </li>
-			</div>
-			</ul>
-		</li>
-		
-		
-		{% endif %}
-		{% if request.user.is_authenticated %} 
-		<li class="nav-item dropdown">
-			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			  Student
-			</a>
-			<ul class="navbar-nav mr-auto">
-			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					{% if request.user.is_authenticated and perms.staff.is_staff or request.user.is_authenticated and perms.institutions.is_institute %} 
-						
-						<li class="dropdown-item" > <a  href ={% url "staff:manage_student" %}>  Manage Student</a> </li>
-						<li class="dropdown-item" > <a  href ={% url "staff:add_student" %}> Add Student</a> </li>
-					{% else %}
-						<li class="dropdown-item"> <a href="{% url "student:dashboard" %}">Dashboard</a></li>
-					{% endif %}
-					
-					
-					<!--
+		<title>{% block title %}{% endblock %}</title>  
+		<link href="{% static "css/base.css" %}" rel="stylesheet">
+			<link rel="stylesheet" href="{% static 'django_tables2/themes/paleblue/css/screen.css' %}" />
+
+			<style type="text/css">
+				.centeredForm {
+				margin: 0 auto;
+				width:80% /* value of your choice which suits your alignment */
+				}
+				@media (max-width: 500px) {
+				.myForm {
+				min-width: 90%;
+				}
+				}
+			</style>
+		</head> <body>
+
+
+			{% block menu %}
+			<!--Main Navigation-->
+			<header>
+
+				<nav class="navbar fixed-top navbar-expand-lg navbar-dark pink scrolling-navbar">
+					<a class="navbar-brand" href="{% url 'home:homeview'%}"><strong>SwapLE</strong></a>
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+							aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="navbar-nav mr-auto">
+							<li class="nav-item active">
+								<a class="nav-link" href="{% url "institutions:dashboard" %}">Home <span class="sr-only"> {% if section == "dashboard" %}(current){% endif %}</span></a>
+							</li>
+
+							{% if request.user.is_authenticated and perms.institutions.is_institute %} 
+
+
+
+							<!--<li class="nav-item" > <a class="nav-link" href="{% url "institutions:view_student_fees_installment" %}"> Student Fees Installment</a> </li>-->	 
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									Staff
+								</a>
+								<ul class="navbar-nav mr-auto">
+									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+										<li class="dropdown-item" > <a  href ={% url "staff:dashboard" %}> Dashboard</a> </li>
+										<li class="dropdown-item" > <a  href ={% url "institutions:manage_staff" %}> Manage Staff</a> </li>
+										<li class="dropdown-item" > <a  href ={% url "institutions:create_institution_staff" %}> Add Staff</a> </li>
+									</div>
+								</ul>
+							</li>
+
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									Profile
+								</a>
+								<ul class="navbar-nav mr-auto">
+									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+										<li class="dropdown-item" > <a  href ={% url "institutions:password_change" %}> Change Password</a> </li>
+										<li class="dropdown-item" > <a  href ={% url "institutions:edit" %}> Edit Profile</a> </li>
+									</div>
+								</ul>
+							</li>
+
+
+							{% endif %}
+							{% if request.user.is_authenticated %} 
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									Student
+								</a>
+								<ul class="navbar-nav mr-auto">
+									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+										{% if request.user.is_authenticated and perms.staff.is_staff or request.user.is_authenticated and perms.institutions.is_institute %} 
+
+										<li class="dropdown-item" > <a  href ={% url "staff:manage_student" %}>  Manage Student</a> </li>
+										<li class="dropdown-item" > <a  href ={% url "staff:add_student" %}> Add Student</a> </li>
+										{% else %}
+										<li class="dropdown-item"> <a href="{% url "student:dashboard" %}">Dashboard</a></li>
+										{% endif %}
+
+
+										<!--
 					<li class="dropdown-item"> <a href ={% url "student:view_library_asset" %}>View Library Asset </a> </li>
 					<li class="dropdown-item"> <a href ={% url "student:my_issued_library_asset" %}>My Issued Library Asset </a> </li> -->
-		 
-					
-			</div>
-			</ul>
-		</li>
-		<li class="nav-item dropdown">
-			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			  Test / Assesment
-			</a>
-			<ul class="navbar-nav mr-auto">
-			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-				{% if request.user.is_authenticated and perms.staff.is_staff or request.user.is_authenticated and perms.institutions.is_institute %}
-					<li class="dropdown-item" > <a  href ={% url "staff:assesments:manage_all_assesment" %}> Manage Assesment</a> </li>
-					<li class="dropdown-item" > <a  href ={% url "staff:assesments:assessment_create_by_staff" %}>  Create Assessment</a> </li>
-				{% else %}
-					<li class="dropdown-item" > <a href ={% url "student:assesments:manage_student_assesment" %}> Live Assesment </a> </li>
-					<li class="dropdown-item" > <a href ={% url "student:result" %}> Results </a> </li>
-				{% endif %}	
-					
-					
-					
-			</div>
-			</ul>
-		</li>
-		{% else %}
-			<li class="nav-item dropdown">
-				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				  Log In
-				</a>
-				<ul class="navbar-nav mr-auto">
-				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-						<li class="dropdown-item" > <a  href ={% url "institutions:login" %}> Institute</a> </li>
-						<li class="dropdown-item" > <a  href ={% url "staff:login"  %}>  Staff</a> </li>
-						<li class="dropdown-item" > <a  href ={% url "student:login"  %}> Student</a> </li>
-						
-				</div>
-				</ul>
-			</li>
-			<li class="nav-item dropdown">
-				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				  Register
-				</a>
-				<ul class="navbar-nav mr-auto">
-				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-						<li class="dropdown-item" > <a  href ={% url 'institutions:institution_registration' %}> Institute</a> </li>
-						<!-- <li class="dropdown-item" > <a  href ={% url "staff:login"  %}>  Staff</a> </li> -->
-						<li class="dropdown-item" > <a  href ={% url "student:student_registration" %}> Student</a> </li>
-						
-				</div>
-				</ul>
-			</li>
-		
-		{% endif %}
-		
-		<!--
+
+
+									</div>
+								</ul>
+							</li>
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									Test / Assesment
+								</a>
+								<ul class="navbar-nav mr-auto">
+									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+										{% if request.user.is_authenticated and perms.staff.is_staff or request.user.is_authenticated and perms.institutions.is_institute %}
+										<li class="dropdown-item" > <a  href ={% url "staff:assesments:manage_all_assesment" %}> Manage Assesment</a> </li>
+										<li class="dropdown-item" > <a  href ={% url "staff:assesments:assessment_create_by_staff" %}>  Create Assessment</a> </li>
+										{% else %}
+										<li class="dropdown-item" > <a href ={% url "student:assesments:manage_student_assesment" %}> Live Assesment </a> </li>
+										<li class="dropdown-item" > <a href ={% url "student:result" %}> Results </a> </li>
+										{% endif %}	
+
+
+
+									</div>
+								</ul>
+							</li>
+							
+							{% else %}
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									Log In
+								</a>
+								<ul class="navbar-nav mr-auto">
+									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+										<li class="dropdown-item" > <a  href ={% url "institutions:login" %}> Institute</a> </li>
+										<li class="dropdown-item" > <a  href ={% url "staff:login"  %}>  Staff</a> </li>
+										<li class="dropdown-item" > <a  href ={% url "student:login"  %}> Student</a> </li>
+
+									</div>
+								</ul>
+							</li>
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									Register
+								</a>
+								<ul class="navbar-nav mr-auto">
+									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+										<li class="dropdown-item" > <a  href ={% url 'institutions:institution_registration' %}> Institute</a> </li>
+										<!-- <li class="dropdown-item" > <a  href ={% url "staff:login"  %}>  Staff</a> </li> -->
+										<li class="dropdown-item" > <a  href ={% url "student:student_registration" %}> Student</a> </li>
+
+									</div>
+								</ul>
+							</li>
+
+							{% endif %}
+
+							<!--
 		
 		    <li> <a href ={% url "staff:create_student_enquiry" %}> Student Enquiry Form </a> </li>
 		    <li> <a href ={% url "staff:manage_student_enquiry" %}> Manage Student Enquiry </a> </li>
@@ -155,86 +156,89 @@
 		    <li> <a href ={% url "staff:library:manage_library_asset" %}> Manage Library Asset </a> </li>
 		    
 		-->
-		 
-      </ul>
-	  
-	  
-      <ul class="navbar-nav nav-flex-icons">
-		{% if request.user.is_authenticated %} 
-        <li class="nav-item">
-          <a class="nav-link" href="{% url "institutions:logout" %}">Log Out<i class="fas fa-sign-out-alt"></i></a>
-        </li>
-        
-		{% else %}  
-		
-		
-		 
-		{% endif %}  
-      </ul>
-    </div>
-  </nav>
 
-</header>
+						</ul>
 
- </div>
- 
- 
+
+						<ul class="navbar-nav nav-flex-icons">
+							{% if request.user.is_authenticated %} 
+							<li class="nav-item">
+								<a class="nav-link" href="#">{{ request.user.get_full_name|title }}</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="{% url "institutions:logout" %}">Log Out<i class="fas fa-sign-out-alt"></i></a>
+							</li>
+
+							{% else %}  
 
 
 
-{% endblock %}
- 
- 
- 
- 
- 
- 
+							{% endif %}  
+						</ul>
+					</div>
+				</nav>
 
- 
- <div id="content">  
- 
- {% block content %}    {% endblock %}  
- 
- </div>
- 
+			</header>
 
- <div id="footer">
-     {% block footer %} 
-		
+		</div>
 
-	  <div class="container">
-	  <div class="row">
-	  <div class="col-lg-6 text-lg-left text-center">
-          <div class="copyright">
-           &copy; Copyright <strong>SwapLE</strong>. All Rights Reserved
-          </div>
-         
-        </div>
-	   
-	  </div>
-	  </div>
-    
-     {% endblock %}
- </div>
- </body> </html> 
- 
- <script type="text/javascript">
- 
- $(document).ready(function(){
+
+
+
+
+		{% endblock %}
+
+
+
+
+
+
+
+
+		<div id="content">  
+
+			{% block content %}    {% endblock %}  
+
+		</div>
+
+
+		<div id="footer">
+			{% block footer %} 
+
+
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-6 text-lg-left text-center">
+						<div class="copyright">
+							&copy; Copyright <strong>SwapLE</strong>. All Rights Reserved
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+			{% endblock %}
+		</div>
+	</body> </html> 
+
+<script type="text/javascript">
+
+	$(document).ready(function(){
 	/*
 	//Dialog Modal For Message Popup
- 	var checkWhetherMessageExists = 0;
- 	checkWhetherMessageExists = $("#userDisplayMessage").length > 0;
- 	
- 	if (checkWhetherMessageExists) {
-	 	$( function() {
-	    $( "#userDisplayMessage" ).dialog({
-	    	modal: true
-	    	});
-	  	} );
-  	}
+	var checkWhetherMessageExists = 0;
+	checkWhetherMessageExists = $("#userDisplayMessage").length > 0;
+
+	if (checkWhetherMessageExists) {
+	$( function() {
+	$( "#userDisplayMessage" ).dialog({
+	modal: true
+	});
+	} );
+	}
 	*/
-});
+	});
 
 
- </script>
+</script>
