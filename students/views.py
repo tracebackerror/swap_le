@@ -308,13 +308,21 @@ class StudentRegistration(FormView):
     
     
     def get_context_data(self, **kwargs):
-        data = super().get_context_data(**kwargs)
+        
         if self.request.method == "POST":
             if 'staffuser' in self.request.POST.keys():
                 staff_obj = Staff.objects.get(id=self.request.POST['staffuser'])
-                data['staff_obj'] = staff_obj
-        return data
+                kwargs['staff_obj'] = staff_obj
+        return super(StudentRegistration,self).get_context_data(**kwargs)
     
     
-    
+    def render_to_response(self, context, **response_kwargs):
+        response_kwargs.setdefault('content_type', self.content_type)
+        return self.response_class(
+            request = self.request,
+            template = self.get_template_names(),
+            context = context,
+            **response_kwargs
+        )
+
     

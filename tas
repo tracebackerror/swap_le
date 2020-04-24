@@ -1,0 +1,37 @@
+[1mdiff --git a/db.sqlite3 b/db.sqlite3[m
+[1mindex 47ce32e..25fd693 100644[m
+Binary files a/db.sqlite3 and b/db.sqlite3 differ
+[1mdiff --git a/students/templates/student/student_registration.html b/students/templates/student/student_registration.html[m
+[1mindex 732dc91..4f78fad 100644[m
+[1m--- a/students/templates/student/student_registration.html[m
+[1m+++ b/students/templates/student/student_registration.html[m
+[36m@@ -19,7 +19,7 @@[m
+  </div>[m
+  [m
+  [m
+[31m- <form action="." method="post" enctype="multipart/form-data">[m
+[32m+[m[32m <form action="." method="post" >[m[41m[m
+  	 {% csrf_token %}[m
+  	 <div class="form-row">[m
+ 	[m
+[1mdiff --git a/students/views.py b/students/views.py[m
+[1mindex 044afd2..ee64a9c 100644[m
+[1m--- a/students/views.py[m
+[1m+++ b/students/views.py[m
+[36m@@ -295,7 +295,7 @@[m [mclass StudentRegistration(FormView):[m
+         student_obj.save()[m
+         user_obj.save()[m
+         messages.add_message(self.request, messages.SUCCESS, 'Your Account Registered Successfully')[m
+[31m-        return HttpResponseRedirect(self.get_success_url())[m
+[32m+[m[32m        return super().form_valid(form)[m[41m[m
+     [m
+     def form_invalid(self, form):[m
+         if 'staffuser' in self.request.POST.keys():[m
+[36m@@ -304,6 +304,7 @@[m [mclass StudentRegistration(FormView):[m
+                 messages.add_message(self.request, messages.ERROR, 'Registration Not Allowed!!!')[m
+                 return HttpResponseRedirect(reverse_lazy('student:student_registration'))[m
+         return super(StudentRegistration,self).form_invalid(form)[m
+[32m+[m[41m        [m
+     [m
+     [m
+     [m
