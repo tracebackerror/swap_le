@@ -5,17 +5,6 @@
 			return total_questions[i];
 		};
 		
-		j = -1;
-		function AttemptedQuestionFunction() {
-			j++;
-			return attempted_questions[j];
-		};
-		
-		k = -1;
-		function CorrectedQuestionsFunction() {
-			k++;
-			return corrected_questions[k];
-		};
 		
 		
 		var CallTotalQuestions = [];
@@ -24,8 +13,7 @@
 		for(a=0;a<section.length;a++)
 		{
 			CallTotalQuestions.push(TotalQuestionsFunction());
-			CallAttemptedQuestions.push(AttemptedQuestionFunction());
-			CallCorrectedQuestions.push(CorrectedQuestionsFunction());
+			
 		};
 		
 		
@@ -34,27 +22,16 @@
 			type: 'line',
 			data: {
 				labels: section,
-				datasets: [{
-					label: 'Total Question',
-					fill: false,
-					backgroundColor: window.chartColors.red,
-					borderColor: window.chartColors.red,
-					data: CallTotalQuestions,
-					
-				},{
-					label: 'Attempted Questions',
-					fill: false,
-					backgroundColor: window.chartColors.blue,
-					borderColor: window.chartColors.blue,
-					data: CallAttemptedQuestions,
-					
-				}, {
-					label: 'Corrected Questions',
-					fill: false,
-					backgroundColor: window.chartColors.green,
-					borderColor: window.chartColors.green,
-					data: CallCorrectedQuestions,
-				}]
+				datasets: [
+					{
+						label: 'Marks Obtained',
+						fill: false,
+						backgroundColor: window.chartColors.red,
+						borderColor: window.chartColors.red,
+						data: CallTotalQuestions,
+						
+					},
+				]
 			},
 			
 			options: {
@@ -83,7 +60,7 @@
 						display: true,
 						scaleLabel: {
 							display: true,
-							labelString: 'QUESTIONS'
+							labelString: 'Marks'
 						},
 						ticks: {
 							min: 0,

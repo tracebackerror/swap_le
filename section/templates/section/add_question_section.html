@@ -43,23 +43,7 @@ label {
 							{{ form.name|as_crispy_field  }}
 		</div>
 	</div>
-	<div class="form-row">
-			
-			<div class="col-md-12 " style="">
-					<p class="p">Question Mapped To This Section:</p>
-			</div>
-						
-		</div>
-	<div class="form-row">
-			
-			<div class="col-md-12 overflow-auto" style="height:200px; border: 1px solid #ccc; padding: 10px 10px;">
-					{% for question in form.for_question %}
-							{{ question }}
-					{% endfor %}
-						
-			</div>
-						
-		</div>
+	
    
  <p><input type="submit" class="btn btn-success" value="Save changes"></p>
  </form>

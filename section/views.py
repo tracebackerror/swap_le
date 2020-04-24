@@ -2,14 +2,31 @@ from django.shortcuts import *
 from .models import Section
 from django.views.generic import FormView,DeleteView,UpdateView,ListView,View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import AddQuestionSectionForm
+from .forms import AddQuestionSectionForm, EditQuestionSectionForm
 from .models import Section,SectionQuestionMapping
 from assesments.models import Assesment,Question
 from django.urls import reverse_lazy,reverse
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
+@login_required
+def add_section(request, assesmentid):
+    messages.get_messages(request).used = True
+    
+    if request.method == 'POST':
+        
+        asses_obj = Assesment.objects.get(id=assesmentid) 
+        
+        add_section_form = AddQuestionSectionForm( instance=asses_obj, request=request,
+                                 data=request.POST)
+        
+    else:   
+        add_section_form = AddQuestionSectionForm(request=request,instance=Assesment.objects.get(id=assesmentid)) 
+        
+    return render(request, 'section/add_question_section.html', {'form': add_section_form}) 
+    
 class AddQuestionSection(SuccessMessageMixin, FormView):
     model = Section
     template_name="section/add_question_section.html"
@@ -19,6 +36,8 @@ class AddQuestionSection(SuccessMessageMixin, FormView):
     login_url=reverse_lazy('staff:login')
     success_message = "Section %(name)s was added successfully"
     
+    
+        
     def form_valid(self, form,**kwargs):
         section_obj_to_add = form.save(commit=False)
         assesmentid = self.kwargs.get('assesmentid')
@@ -26,12 +45,7 @@ class AddQuestionSection(SuccessMessageMixin, FormView):
         section_obj_to_add.linked_assessment = linked_assessment
         section_obj_to_add.save()
         form.save_m2m()
-        '''
         
-        name  = form.cleaned_data['name']
-        section_created = Section.objects.create(name=name,linked_assessment=linked_assessment)
-        import pdb; pdb.set_trace()
-        section_created.for_question.add(form.cleaned_data['for_question'])'''
         messages.add_message(self.request, messages.SUCCESS, 'Question Section Created!')
         return HttpResponseRedirect(self.get_success_url(assesmentid))
     
@@ -60,7 +74,7 @@ class EditQuestionSection(SuccessMessageMixin, LoginRequiredMixin,UpdateView):
     model = Section
     template_name="section/edit_question_section.html"
     success_url =  'staff:assesments:assessment_manage_by_staff'
-    form_class = AddQuestionSectionForm
+    form_class = EditQuestionSectionForm
     context_object_name = "form"
     login_url=reverse_lazy('staff:login')
     success_message = "Section %(name)s was update successfully"

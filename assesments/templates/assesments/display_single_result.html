@@ -89,8 +89,11 @@
 						{{object.exam_taken_date_time}}
 					</div>
 
-					<div class="col-md-3 alert alert-primary">
-						Result : {{object.result_passed|yesno:"Pass,Fail"}}
+					<div class="col-md-3 ">
+						Result:
+					</div>
+					<div class="col-md-3 ">
+						{{object.result_passed|yesno:"Pass,Fail"}}
 					</div>
 				</div>
 				<div class="row border-bottom my-1">
@@ -193,28 +196,78 @@
 	</div>
 	<script>
 		section = [];
-		{% for data in section_name %}
-		section.push("{{data}}");
-		{% endfor %}
-
 		total_questions = [];
-		{% for data in total_questions %}
-		total_questions.push({{data}});
+		{% for key, value in section_name.items %}
+				section.push("{{key}}");
+				total_questions.push({{value}});
 		{% endfor %}
+		
 
-		attempted_questions = [];
-		{% for data in attempted_questions %}
-		attempted_questions.push({{data}});
-		{% endfor %}
+		var config = {
+			type: 'line',
+			data: {
+				labels: section,
+				datasets: [
+					{
+						label: 'Marks Obtained',
+						fill: false,
+						backgroundColor: window.chartColors.red,
+						borderColor: window.chartColors.red,
+						data: total_questions,
+						
+					},
+				]
+			},
+			
+			options: {
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Section Wise Student Result Graph View'
+				},
+				tooltips: {
+					mode: 'index',
+					intersect: false,
+				},
+				hover: {
+					mode: 'nearest',
+					intersect: true
+				},
+				scales: {
+					xAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'SECTION NAME'
+						}
+					}],
+					yAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Marks'
+						},
+						ticks: {
+							min: 0,
+							max: 20,
 
-		corrected_questions = [];
-		{% for data in corrected_questions %}
-		corrected_questions.push({{data}});
-		{% endfor %}
+							// forces step size to be 5 units
+							stepSize: 1
+						}
+					}]
+				}
+			}
+		};
+
+		window.onload = function() {
+			var ctx = document.getElementById('canvas').getContext('2d');
+			window.myLine = new Chart(ctx, config);
+		};
+
 	</script>
 
-	<script src="{% static "js/assessment_display_result_script.js" %}"></script>
+	<!--<script src="{% static "js/assessment_display_result_script.js" %}"></script> -->
 	{% endblock %}
 
 
-	s
+	

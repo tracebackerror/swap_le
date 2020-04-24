@@ -2,7 +2,7 @@ from django.conf.urls import url, include
 from django.contrib.auth.views import LoginView, LogoutView, logout_then_login, PasswordChangeDoneView
 #from .views import InstitutionStudentLoginView, dashboard, edit, PasswordChangeViewForStudent, PasswordChangeDoneViewForStudent
 from .views import *
-
+from assesments.views import AssessmentResultByStaff
 #, dashboard, edit, delete_institution_staff_student, PasswordChangeViewForStaff, PasswordChangeDoneViewForStaff, ManageStudentView
 
 
@@ -32,6 +32,7 @@ urlpatterns = [
     #result
     url(r'^result/$',StudentResult.as_view(),name='result'),
     url(r'^result/(?P<pk>\d+)/report.pdf/$',ResultReport.as_view(),name='result_report'),
+    url(r'^result/(?P<pk>\d+)/report/$',AssessmentResultByStaff.as_view(),name='result_report_detailed'),
     
     #student registration
     url(r'^registration/$',StudentRegistration.as_view(),name='student_registration'),

@@ -48,8 +48,10 @@ from datetime import datetime
 from section.tables import ManageSectionTable
 from section.models import Section,SectionQuestionMapping
 from django.db.models import Count
+from django.db.models import CharField, Value, F, IntegerField
 from base64 import b64encode
 from django.template.defaulttags import register
+import pandas as pd
 
 class ReviewAllSqaView(TemplateView):
     model = Answer
@@ -342,7 +344,7 @@ class ManageAllAssesmentView(PermissionRequiredMixin, SingleTableMixin, FilterVi
         return context
 
 
-class AssessmentResultByStaff(DetailView):
+class AssessmentResultByStaff(LoginRequiredMixin, DetailView):
     model = Result
     template_name = 'assesments/display_single_result.html'
     login_decorator = login_required(login_url=reverse_lazy('staff:login'))
@@ -361,37 +363,20 @@ class AssessmentResultByStaff(DetailView):
         data = [];
         #print(ans_obj)
         attempted , corrected,total = 0,0,0
-        for i in Section.objects.filter(linked_assessment  = curr_assessment).order_by('id'):
-            for j in SectionQuestionMapping.objects.filter(for_section = i):
-                total+=1
-                for k in ans_obj:
-                    if j.for_question == k.for_question:
-                        if k.alloted_marks > 0:
-                            attempted+=1
-                            corrected+=1
-                        else:
-                            attempted+=1
-            data.append({'section_name' : i.name,'total_question' : total,'attempted' : attempted,'corrected' : corrected})
-            attempted , corrected,total = 0,0,0
-        #print(data)
-        
-        section_name = []
-        total_questions = []
-        attempted_questions = []
-        corrected_questions = []
-        for i in data:
-            section_name.append(i['section_name'])
-            total_questions.append(i['total_question'])
-            attempted_questions.append(i['attempted'])
-            corrected_questions.append(i['corrected'])
-        #end==============================================================================================================
+        q1 = ans_obj.values('alloted_marks', question_id = F('for_question__id') )
+        q2 = Section.objects.filter(linked_assessment = curr_assessment).values('name', question_id = F('for_question__id')).exclude(question_id__isnull=True)
+
+        p1 =pd.DataFrame(q1)
+        p2 = pd.DataFrame(q2)
+
+        p1.question_id.astype('int') 
+        p2.question_id.astype('int') 
+        joined_marks_question_and_section = p1.merge(p2)
+        sum_df = joined_marks_question_and_section.groupby('name')['alloted_marks'].agg('sum')
         
         
-        context['section_name'] = section_name
-        context['total_questions'] = total_questions
-        context['attempted_questions'] = attempted_questions
-        context['corrected_questions'] =  corrected_questions
-       
+        context['section_name'] = sum_df.to_dict()
+        
         return self.response_class(
             request = self.request,
             template = self.get_template_names(),

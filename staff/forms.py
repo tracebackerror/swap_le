@@ -47,6 +47,12 @@ class StudentAddForm(UserCreationForm):
     parent_contact_no = forms.IntegerField(widget=forms.NumberInput,required=True)
     gender = forms.ChoiceField(widget=forms.RadioSelect(attrs={'style': 'width: 50px;'}),choices=(('male','Male'),('female','Female')))
     
+    def __init__(self,*args, **kwargs):
+        super(StudentAddForm, self).__init__(*args, **kwargs)
+        
+        for fieldname in [ 'password1', 'password2']:
+            self.fields[fieldname].help_text = None
+            
     def clean_student_contact_no(self):
         data = self.cleaned_data['student_contact_no']
         if len(str(data)) != 10:

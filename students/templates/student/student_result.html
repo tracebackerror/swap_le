@@ -40,6 +40,7 @@
         <th>Obtained Marks</th>
         <th>Result Passed</th>
         <th>Report</th>
+        <th>Certificate</th>
       </tr>
     </thead>
     <tbody>
@@ -58,7 +59,8 @@
         	<td><font color="red">Fail</font></td>
         {% endif %}
         
-        <td><a href="{% url "student:result_report" pk=data.id %}">REPORT</td>
+        <td><a href="{% url "student:result_report_detailed" pk=data.id %}"><center><span class="fas fa-file"></span></center></td>
+        <td><a href="{% url "student:result_report" pk=data.id %}">Certificate</td>
       </tr>
      {% endfor %}
     {% endif %}
