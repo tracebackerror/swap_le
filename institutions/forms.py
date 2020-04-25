@@ -4,7 +4,9 @@ from django.contrib.auth.models import User
 from staff.models import Staff
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.admin import widgets
-
+from localflavor.in_.forms import INStateSelect
+from django_countries.widgets import CountrySelectWidget
+from django_countries.fields import CountryField
 
 class StaffProfileForm(forms.ModelForm):
 
@@ -21,6 +23,25 @@ class UserEditForm(forms.ModelForm):
         exclude = []
         
 class InstitutionsEditForm(forms.ModelForm):
+    institute_state = forms.CharField(widget = INStateSelect,required = True,label = "State")
+    institute_name = forms.CharField(widget = forms.TextInput,required = True,label = "Institution Name")
+    email =  forms.EmailField(widget = forms.EmailInput,label = "Email",required = False)
+    username = forms.CharField(widget = forms.TextInput,required = True,label = "Institution Username", help_text= " " )
+    institute_contact_mobile = forms.CharField(widget = forms.TextInput, min_length=10, max_length=10,required = True,label = "Contact Number")
+    institute_contact_landline = forms.CharField(widget = forms.TextInput, min_length=10, max_length=10, required = False, label = "Landline Number")
+    institute_address = forms.CharField(widget = forms.TextInput,required = True,label = "Address") 
+    institute_city = forms.CharField(widget = forms.TextInput,required = True,label = "City")
+    institute_state = forms.CharField(widget = INStateSelect,required = True,label = "State")
+    #institute_country = forms.CharField(widget = forms.TextInput,required = True,label = "Country")
+    institute_country = CountryField().formfield()
+    
+    def __init__(self,*args, **kwargs):
+        super(InstitutionsEditForm, self).__init__(*args, **kwargs)
+        
+        for fieldname in [ 'username', ]:
+            self.fields[fieldname].help_text = None
+            
+        
     class Meta:
         model = Institutions
         fields = ('__all__')
@@ -29,6 +50,7 @@ class InstitutionsEditForm(forms.ModelForm):
 class InstitutionLoginForm(forms.Form):
     username = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput) 
+    
     
     
 class StaffCreateForm(UserCreationForm):
@@ -46,12 +68,13 @@ class InstitutionRegistrationForm(UserCreationForm):
     institute_name = forms.CharField(widget = forms.TextInput,required = True,label = "Institution Name")
     email =  forms.EmailField(widget = forms.EmailInput,label = "Email",required = False)
     username = forms.CharField(widget = forms.TextInput,required = True,label = "Institution Username")
-    institute_contact_mobile = forms.CharField(widget = forms.NumberInput,required = True,label = "Contact Number")
-    institute_contact_landline = forms.CharField(widget = forms.NumberInput,required = False, label = "Landline Number")
+    institute_contact_mobile = forms.CharField(widget = forms.TextInput,min_length=10, max_length=10,required = True,label = "Contact Number")
+    institute_contact_landline = forms.CharField(widget = forms.TextInput, min_length=10, max_length=10, required = False, label = "Landline Number")
     institute_address = forms.CharField(widget = forms.TextInput,required = True,label = "Address") 
     institute_city = forms.CharField(widget = forms.TextInput,required = True,label = "City")
-    institute_state = forms.CharField(widget = forms.TextInput,required = True,label = "State")
-    institute_country = forms.CharField(widget = forms.TextInput,required = True,label = "Country")
+    institute_state = forms.CharField(widget = INStateSelect,required = True,label = "State")
+    #institute_country = forms.CharField(widget = forms.TextInput,required = True,label = "Country")
+    institute_country = CountryField().formfield()
     
     def __init__(self,*args, **kwargs):
         super(InstitutionRegistrationForm, self).__init__(*args, **kwargs)
@@ -59,7 +82,8 @@ class InstitutionRegistrationForm(UserCreationForm):
         for fieldname in [ 'password1', 'password2']:
             self.fields[fieldname].help_text = None
             
-            
+        self.fields['institute_contact_landline'].required = False
+        
     def clean_institute_contact_mobile(self):
         data = self.cleaned_data['institute_contact_mobile']
         if len(str(data)) != 10:
@@ -70,4 +94,5 @@ class InstitutionRegistrationForm(UserCreationForm):
         model=User
         fields = ['username','first_name','last_name','email','password1','password2']
         
+        #widgets = {'institute_country': CountrySelectWidget()}
     

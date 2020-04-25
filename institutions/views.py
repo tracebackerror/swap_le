@@ -65,8 +65,9 @@ def institute_login(request):
 @permission_required('institutions.is_institute',login_url="/institutions/login/")
 @login_required
 def edit(request):
+    
     if request.method == 'POST':
-
+        
         user_form = UserEditForm(instance = request.user,
                         data=request.POST)
 
@@ -321,7 +322,7 @@ class InstitutionRegistration(FormView):
         assign_perm('institutions.is_institute', user_obj)
         user_obj.save()
         institution_obj = Institutions()
-
+        
         institution_obj.user = user_obj
         institution_obj.institute_name = self.request.POST['institute_name']
         institution_obj.institute_address = self.request.POST['institute_address']

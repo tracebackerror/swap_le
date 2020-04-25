@@ -63,6 +63,8 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'easy_pdf',
     'django_extensions',
+    'localflavor',
+    'django_countries',
 ]
 
 GRAPH_MODELS = {
@@ -71,7 +73,7 @@ GRAPH_MODELS = {
 }
 
 MIDDLEWARE = [
-    #'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

@@ -4,7 +4,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from institutions.models import Institutions
 from staff.models import Staff
-
+from localflavor.in_.forms import INStateSelect
+from django_countries.widgets import CountrySelectWidget
 
 class StudentAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):

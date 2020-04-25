@@ -1,3 +1,5 @@
+django-countries
+django-localflavor
 pandas
 asgiref==3.2.7
 django-extensions

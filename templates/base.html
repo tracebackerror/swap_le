@@ -52,7 +52,7 @@
 									Staff
 								</a>
 								<ul class="navbar-nav mr-auto">
-									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+									<div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdown">
 										<li class="dropdown-item" > <a  href ={% url "staff:dashboard" %}> Dashboard</a> </li>
 										<li class="dropdown-item" > <a  href ={% url "institutions:manage_staff" %}> Manage Staff</a> </li>
 										<li class="dropdown-item" > <a  href ={% url "institutions:create_institution_staff" %}> Add Staff</a> </li>
@@ -163,7 +163,13 @@
 						<ul class="navbar-nav nav-flex-icons">
 							{% if request.user.is_authenticated %} 
 							<li class="nav-item">
-								<a class="nav-link" href="#">{{ request.user.get_full_name|title }}</a>
+								<a class="nav-link" href="#">
+								{% if request.user.is_authenticated and perms.staff.is_staff or request.user.is_authenticated and perms.institutions.is_institute %} 
+									{{ request.user.institutions.institute_name|title }} 
+								{% else %}
+									{{ request.user.get_full_name|title }}
+								{% endif %}
+								</a>
 							</li>
 							<li class="nav-item">
 								<a class="nav-link" href="{% url "institutions:logout" %}">Log Out<i class="fas fa-sign-out-alt"></i></a>

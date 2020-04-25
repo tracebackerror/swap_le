@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.conf import settings
-
+from django_countries.fields import CountryField
 # Create your models here.
 
 class InstitutionsManager(models.Manager):
@@ -27,7 +27,7 @@ class Institutions(models.Model):
     institute_address = models.CharField(max_length=200, null = False)
     institute_city = models.CharField(max_length=20, null = False)
     institute_state = models.CharField(max_length=20, null = False)
-    institute_country = models.CharField(max_length=20, null = False)
+    institute_country = CountryField(blank_label='(select country)')
 
     institute_created = models.DateTimeField(auto_now_add=True)
     institute_last_updated = models.DateTimeField(auto_now=True)
