@@ -11,13 +11,30 @@
  
  <div class="container">
 	<div class="row">
-	   <div class="col-md-6">
+	   <div class="col-md-12">
+	   <details>
+		  <summary>Usage Summary.</summary>
+		  <ul class="ul list-style">
+		  <li>
+			
+		  Assesment - <strong class="strong">{{current_details.li_current_assesments}}/{{current_details.li_max_assesments}}</strong></li>
+		  <li>Staff - <strong class="strong">{{current_details.li_current_assesments}}/{{current_details.li_max_assesments}}</strong></li>
+		  <li >Student - <strong class="strong">{{current_details.li_current_assesments}}/{{current_details.li_max_students}}</strong></li>
+		  <li >Key - {{ current_details.li_key}}</li>
+		  <li >Status - {% if current_details.li_current_status == 'acti'%}<span class="badge" style="color:#000!important;">Active</span></a>{% else %} <span class="badge" style="color:#000!important;">Expired</span></a>{% endif %}</li>
+		  <li >License Expiration - {{current_details.li_expiration_date}}</li>
+		  </ul>
+		</details>
 		<table>
 			{{  current_details.as_table }}
 		</table>
 	   </div>
-
+	</div>
+	<br>
+	<div class="row">
 	   <div class="col-md-6">
+		<div >Gender Diversity :</div>
+	   
 		<div id="canvas-holder" class="border border-dark">
 			<canvas id="pie-chart"></canvas>
 		</div>
