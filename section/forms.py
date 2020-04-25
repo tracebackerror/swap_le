@@ -1,6 +1,7 @@
 from django import forms
 from .models import Section
 from assesments.models import Assesment, Question
+
 class AddQuestionSectionForm(forms.ModelForm):
     name = forms.CharField(widget = forms.TextInput(),required = True, label="Section Name")
     

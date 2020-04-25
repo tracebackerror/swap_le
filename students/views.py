@@ -88,7 +88,7 @@ class InstitutionStudentLoginView(LoginView):
         password = self.request.POST.get('password', '')
         
         user = User.objects.filter(username=username).first()
-        if user.is_active == False:
+        if user and user.is_active == False:
             messages.add_message(self.request, messages.ERROR, 'Your Account is Not ACTIVE. Please Contact Us With Your Registered Staff')
         
         return super(InstitutionStudentLoginView, self).post(request, *args, **kwargs)

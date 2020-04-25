@@ -19,13 +19,13 @@ urlpatterns = [
     url(r'^create-assessment/$', assessment_create_by_staff, name='assessment_create_by_staff'),
     
     url(r'^change/(?P<questionid>\w{0,15})/edit/$', ManageSingleQuestionUpdateView.as_view(), name='assesment_manage_update_question'),
-    url(r'^(?P<assesmentid>\w{0,15})/change/question/add/$', add_section, name='assesment_manage_add_question'),
+    url(r'^(?P<assesmentid>\w{0,15})/change/question/add/$', ManageSingleQuestionAddView.as_view(), name='assesment_manage_add_question'),
     url(r'^(?P<assesmentid>\w{0,15})/change/question/review/$', ReviewAllSqaView.as_view(), name='assesment_manage_review_sqa_question'),
     
     #section
-    url(r'^(?P<assesmentid>\w{0,15})/question-section/add/$',AddQuestionSection.as_view(),name="add_question_section"),
+    url(r'^(?P<assesmentid>\w{0,15})/section/add/$',AddQuestionSection.as_view(),name="add_question_section"),
     #url(r'^(?P<assesmentid>\w{0,15})/question-section/add/$',add_section,name="add_question_section"),
-    url(r'^question-section/', include('section.urls', namespace='section', )),
+    url(r'^section/', include('section.urls', namespace='section', )),
     
     #Result Publish
     url(r'^(?P<assesmentid>\w{0,15})/change/publish-all-results$', PublishAllResults, name='publish_all_results'),

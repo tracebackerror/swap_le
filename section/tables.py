@@ -6,7 +6,8 @@ import itertools
 class ManageSectionTable(tables.Table):
     
     
-    action= tables.TemplateColumn('<div class="row"><div class="col-md-6"><a alt="edit" class="btn-link"  href="{% url "staff:assesments:section:edit_question_section" assesmentid=record.linked_assessment.pk pk=record.pk %} "><center><span class="fas fa-cogs "></span></center></a></a> </div> <div class="col-md-6"> <a href="{% url "staff:assesments:section:delete_question_section" pk=record.pk %} "><center><span class="fas fa-trash-alt"></span></center></a></div></div>')
+    edit= tables.TemplateColumn('<div class="col-md-12"><a alt="edit" class="btn-link"  href="{% url "staff:assesments:section:edit_question_section" assesmentid=record.linked_assessment.pk pk=record.pk %} "><center><span class="fas fa-cogs "></span></center></a> </div> ', verbose_name=" ", orderable=False)
+    action= tables.TemplateColumn('<div class="col-md-12"> <a href="{% url "staff:assesments:section:delete_question_section" pk=record.pk %} "><center><span class="fas fa-trash-alt"></span></center></a></div></div>', verbose_name=" ", orderable=False)
     
     #manage_section= tables.TemplateColumn('<a href="{% url "staff:assesments:section:manage_question_section" pk=record.pk assesmentid=record.linked_assessment.pk %}">Manage</a>')
     
