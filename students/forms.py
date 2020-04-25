@@ -6,7 +6,7 @@ from institutions.models import Institutions
 from staff.models import Staff
 from localflavor.in_.forms import INStateSelect
 from django_countries.widgets import CountrySelectWidget
-
+from utility.swaple_constants import COURSE_CHOICES
 class StudentAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(StudentAdminForm, self).__init__(*args, **kwargs)
@@ -26,13 +26,13 @@ class StaffOptionForStudentRegistration(forms.ModelChoiceField):
          return obj.get_staff_name()
          
 class StudentRegistrationForm(UserCreationForm):
-
+    
     institution_name = StudentOptionForStudentRegistration(queryset=Institutions.objects.all(),label="Institutions Name",required=True)
     staffuser = StaffOptionForStudentRegistration(queryset=Staff.objects.all(),label="Staff Name",required=True)
     first_name = forms.CharField(widget=forms.TextInput,required=True)
     last_name = forms.CharField(widget=forms.TextInput,required=True)
     email = forms.EmailField(widget=forms.EmailInput,required=True)
-    standard = forms.CharField(widget=forms.TextInput,required=True)
+    standard = forms.CharField(widget=forms.Select(choices=COURSE_CHOICES),required=True)
     address = forms.CharField(widget=forms.Textarea,required=True)
     student_contact_no = forms.CharField(required=True, min_length=10, max_length=10)
     parent_contact_no = forms.CharField(required=False, min_length=10, max_length=10)

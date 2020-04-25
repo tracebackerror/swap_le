@@ -148,7 +148,7 @@ def institute_staff_create(request):
 @login_required(login_url="/institutions/login/")
 def institute_staff_delete(request, username):
     information = ''
-    current_institute = Institutions.objects.filter(user = request.user)
+    current_institute = Institutions.objects.filter(user = request.user).first()
     license_institute = License.objects.get(li_institute = current_institute)
     if request.method == 'GET' and request.user.institutions.user_type == 'institution':
 

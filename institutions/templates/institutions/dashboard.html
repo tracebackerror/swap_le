@@ -6,18 +6,8 @@
 
 
 {% block content %}
-<div class="">
   <h1>Dashboard</h1>
-  
- </div>
- <div id="user_message_display">
-		{% for message in messages %}
-				<div class="alert alert-success" role="alert">
-					{{ message|safe }}
-				</div>  
-		{% endfor %}
-	</div>
- <br>
+ 
  
  <div class="container">
 	<div class="row">
@@ -56,12 +46,12 @@
 		
 	</div>
 	<div class="row">
-		<div class="col-md-12 ">
-			<div align="center">
-				 <div style="width:50%">
+		<div class="col-sm-12 col-md-12">
+			<center>
+				 <div style="">
 					<canvas id="time-series-graph"></canvas>
 				 </div>
-			 </div>
+			 </center>
 	</div>
 	
 	

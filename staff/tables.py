@@ -6,17 +6,27 @@ from students.models import Student
 from django_tables2 import A
 from django.utils.translation import ugettext_lazy as _
 
+class CustomTemplateColumnEscapeAdmin(tables.TemplateColumn):
+    
+    def render(self, record, table, value, bound_column, **kwargs):
+        
+        if record.staffuser.username == record.institute.user.username:
+            return format_html('<center><i class="fas fa-user-shield "></i></center>')
+        return super(CustomTemplateColumnEscapeAdmin, self).render(record, table, value, bound_column, **kwargs)
 
 class StaffTable(tables.Table):
+    edit_button_html = '<a href=" {% url "institutions:edit_institution_staff" username=record.staffuser  %} "  ><center><span class="fas fa-edit "></span></center></a>'
+    delete_button_html = '<a href=" {% url "institutions:delete_institution_staff" username=record.staffuser  %}" ><center><span class="fas fa-trash-alt"></span></center></a>'
+    edit_staff = tables.TemplateColumn(edit_button_html, orderable=False) 
+    delete_staff = CustomTemplateColumnEscapeAdmin(delete_button_html, orderable=False)
     
-    edit_staff = tables.TemplateColumn('<a href=" {% url "institutions:edit_institution_staff" username=record.staffuser  %} "  ><center><span class="fas fa-edit "></span></center></a>')
-    delete_staff = tables.TemplateColumn('<a href=" {% url "institutions:delete_institution_staff" username=record.staffuser  %}" ><center><span class="fas fa-trash-alt"></span></center></a>')
     email_student = tables.Column(accessor='staffuser.email',
                           verbose_name='Email')
     first_name = tables.Column(accessor='staffuser.first_name',
                           verbose_name='First Name')
     last_name = tables.Column(accessor='staffuser.last_name',
                           verbose_name='Last Name')
+    
     
     def __init__(self, *args, **kwargs):
         super(StaffTable, self).__init__(*args, **kwargs)
