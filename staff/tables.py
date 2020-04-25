@@ -9,7 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 
 class StaffTable(tables.Table):
     
-    edit_staff = tables.TemplateColumn('<a href=" {% url "institutions:edit_institution_staff" username=record.staffuser  %} "  ><center><span class="fas fa-edit"></span></center></a>')
+    edit_staff = tables.TemplateColumn('<a href=" {% url "institutions:edit_institution_staff" username=record.staffuser  %} "  ><center><span class="fas fa-edit "></span></center></a>')
     delete_staff = tables.TemplateColumn('<a href=" {% url "institutions:delete_institution_staff" username=record.staffuser  %}" ><center><span class="fas fa-trash-alt"></span></center></a>')
     email_student = tables.Column(accessor='staffuser.email',
                           verbose_name='Email')
@@ -55,6 +55,12 @@ class StudentTable(tables.Table):
         self.counter = itertools.count()
     def render_first_name(self,value):
         return value
+    
+    def render_gender(self,value):
+        if value.lower() == "male":
+            return format_html('<div class="col-md-12"><center><i class="fa fa-male fa-lg" aria-hidden="true"></i></center></div>', value)
+        else:
+            return format_html('<div class="col-md-12"><center><i class="fa fa-female fa-lg" aria-hidden="true"></i></center></div>', value)
     
     def render_last_name(self,value):
         return value

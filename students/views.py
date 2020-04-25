@@ -44,6 +44,11 @@ from django.db.models import Sum
 
 from functools import wraps
 
+from swaple.settings import DEFAULT_FROM_EMAIL
+from django.core.mail import send_mail
+from django.utils.safestring import SafeString
+from django.utils.html import format_html
+
 class InstitutionStudentLoginView(LoginView):
     template_name = 'student/login.html'
 
@@ -294,6 +299,42 @@ class StudentRegistration(FormView):
         
         student_obj.save()
         user_obj.save()
+        
+        subject = 'Welcome to SwapLE - Digital Assesment Platform'
+        
+        institution_name = staff_obj.institute.institute_name
+        message = "Dear {}, \n\nWelcome! We are so glad to have you onboarded in your institution, {}.\n\n"
+        message += "{} is your current moderater. \n\n"
+        message += "Thank you,\n"
+        message += "{}\n{}\n{}\n{}"
+        message = message.format(self.request.POST['first_name'], 
+            institution_name.title(),
+            staff_obj.staffuser.get_full_name().title(),
+            staff_obj.staffuser.get_full_name().title(),
+            staff_obj.staffuser.email.lower(),
+            institution_name.title(),
+            staff_obj.institute.institute_address.title()
+            )
+           
+        html_message = "Dear {}, <br><br>Welcome! We are so glad to have you onboarded in your institution, <b>{}</b>.<br/><br/>"
+        html_message += "{} is your current moderater. <br/><br/>"
+        html_message += "Thank you,\n"
+        html_message += "{}<br/>{}<br/><br/><b>{}</b><br/>{}"
+        html_message +""
+        html_message = html_message.format(self.request.POST['first_name'], 
+            institution_name.title(),
+            staff_obj.staffuser.get_full_name().title(),
+            staff_obj.staffuser.get_full_name().title(),
+            staff_obj.staffuser.email.lower(),
+            institution_name.title(),
+            staff_obj.institute.institute_address.title(),
+            "",
+            
+            )
+        
+        send_mail(subject, 
+            message, DEFAULT_FROM_EMAIL, [self.request.POST['email']], fail_silently = True)
+            
         messages.add_message(self.request, messages.SUCCESS, 'Your Account Registered Successfully')
         return HttpResponseRedirect(self.get_success_url())
     
