@@ -171,7 +171,7 @@ def dashboard(request):
     current_institute = Institutions.objects.get(user__username=request.user)
     license_institute = License.objects.get(li_institute=current_institute)
 
-    license_form = LicenseViewForm(instance = license_institute)
+    #license_form = LicenseViewForm(instance = license_institute)
     
     #Total Male/Female Student Counting data(Pie Chart)
     total_male = Student.objects.filter(staffuser__institute = current_institute,gender='male').count()
@@ -185,9 +185,9 @@ def dashboard(request):
         if assessment_id:
             result_obj = Result.objects.filter(assesment__id = int(assessment_id)).order_by('id')
             assessment_obj = Assesment.objects.get(id = int(assessment_id))
-            return render(request, 'institutions/dashboard.html', {'section': 'dashboard', 'current_details': license_form,'total_male':total_male,'total_female':total_female,'result_obj':result_obj,'assessment_header':assessment_obj.header,'all_instituion_assessments':all_instituion_assessments})
+            return render(request, 'institutions/dashboard.html', {'section': 'dashboard', 'current_details': license_institute,'total_male':total_male,'total_female':total_female,'result_obj':result_obj,'assessment_header':assessment_obj.header,'all_instituion_assessments':all_instituion_assessments})
     
-    return render(request, 'institutions/dashboard.html', {'section': 'dashboard', 'current_details': license_form,'total_male':total_male,'total_female':total_female,'all_instituion_assessments':all_instituion_assessments})
+    return render(request, 'institutions/dashboard.html', {'section': 'dashboard', 'current_details': license_institute,'total_male':total_male,'total_female':total_female,'all_instituion_assessments':all_instituion_assessments})
 
 
 
