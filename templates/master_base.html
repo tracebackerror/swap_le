@@ -1,12 +1,11 @@
 {% load render_table from django_tables2 %}
 {% load static %}
-
- <html>
+<!doctype html>
+<html lang="en">
  <head> 
  	<title>{% block title %}{% endblock %}</title>  
  	{% include "master_static.html" %}
-    {% include "google_analytics.html" %}
-    {% include "google_adsense.html" %}
+    
  	{% block script %}{% endblock %}
  </head>
  
