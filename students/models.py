@@ -52,8 +52,8 @@ class Student(models.Model):
     
     standard = models.CharField(max_length=20,null=True)
     address = models.TextField(null=True)
-    student_contact_no = models.IntegerField(null=True)
-    parent_contact_no = models.IntegerField(null=True)
+    student_contact_no = models.CharField(null=True, max_length=20)
+    parent_contact_no = models.CharField(null=True, blank=True, max_length=20)
     gender = models.CharField(max_length = 10,null=True)
     
     

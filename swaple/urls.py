@@ -10,7 +10,7 @@ urlpatterns = [
     url(r'^institutions/', include('institutions.urls', namespace='institutions', )),
     url(r'^staff/', include('staff.urls', namespace='staff', )),
     url(r'^student/', include('students.urls', namespace='student', )),
-    url(r'^$', include('home.urls', namespace='home', )),
+    url(r'^', include('home.urls', namespace='home', )),
     url(r'^contactus/',contactus,name='contactus'),
     url(r'^google0f6eb0891016c158\.html$', TemplateView.as_view(template_name='google0f6eb0891016c158.html', content_type='text/plain')), 
    

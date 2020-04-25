@@ -5,6 +5,7 @@
 {% block title %}   Student Registration   {% endblock %}
 
 {% block content %} 
+
  <h1>Student Registration  </h1>
  <div id="user_message_display">
 		{% for message in messages %}
@@ -147,11 +148,28 @@
  </div>
  
  <script type="text/javascript">
- $('form').submit(function(e) {
-    $(':disabled').each(function(e) {
-        $(this).removeAttr('disabled');
-    })
+ 
+ 
+$( document ).ready(function() {
+    console.log( "ready!" );
+		
+	$('form').submit(function(e) {
+		$(':disabled').each(function(e) {
+			$(this).removeAttr('disabled');
+		})
+	});
+	$('body').on('keyup', '#id_student_contact_no', function() {
+		newval = $(this).val().replace(/[^0-9.]/g, "");
+		$(this).val(newval);
+	});
+
+	$('#id_student_contact_no, #id_parent_contact_no').keyup(function(){
+		newval = $(this).val().replace(/[^0-9.]/g, "");
+		$(this).val(newval);
+	 });
 });
+
+
  </script>
 {% endblock %}
 

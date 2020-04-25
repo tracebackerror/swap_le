@@ -33,8 +33,8 @@ class StudentRegistrationForm(UserCreationForm):
     email = forms.EmailField(widget=forms.EmailInput,required=True)
     standard = forms.CharField(widget=forms.TextInput,required=True)
     address = forms.CharField(widget=forms.Textarea,required=True)
-    student_contact_no = forms.IntegerField(widget=forms.NumberInput,required=True)
-    parent_contact_no = forms.IntegerField(widget=forms.NumberInput,required=True)
+    student_contact_no = forms.CharField(required=True, min_length=10, max_length=10)
+    parent_contact_no = forms.CharField(required=False, min_length=10, max_length=10)
     gender = forms.ChoiceField(widget=forms.RadioSelect(attrs={'style': 'width: 50px;'}),choices=(('male','Male'),('female','Female')))
     
     
@@ -45,8 +45,9 @@ class StudentRegistrationForm(UserCreationForm):
         
     def clean_parent_contact_no(self):
         data = self.cleaned_data['parent_contact_no']
+        '''
         if len(str(data)) != 10:
-            raise forms.ValidationError("Invalid Mobile Number : Enter 10 digit mobile number")
+            raise forms.ValidationError("Invalid Mobile Number : Enter 10 digit mobile number")'''
     
     def __init__(self,*args, **kwargs):
         super(StudentRegistrationForm, self).__init__(*args, **kwargs)
