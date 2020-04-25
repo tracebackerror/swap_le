@@ -7,7 +7,7 @@
 
 {% block title %}Assesment In Progress {% endblock %} {% block content %}
 
-
+<h1>Assesment In Progress:</h1>
 
 <div class="container" >
 	
@@ -20,7 +20,7 @@
 		
 		
 	</div>
-<h1>Assesment In Progress:</h1>
+
 
 
 {% if user.is_authenticated and request.user.student in assesment_object.subscriber_users.all %}
@@ -30,8 +30,10 @@
 	<thead>
 	<tr >
 		<td >Remaining Time:</td>
-		<td style="width:30%;"><div id="examtime" style="font-size:20;"></div></td>
-		<td >
+		<td style=""><div id="examtime" style="font-size:20;"></div></td>
+	</tr>
+	<tr>
+	<td colspan="2">
 			<input type="button" name="final_submit" value="Final Submit" class="btn btn-danger" data-toggle="modal" data-target="#modalForFinalExit"/>
 
 		</td>

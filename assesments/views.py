@@ -366,17 +366,18 @@ class AssessmentResultByStaff(LoginRequiredMixin, DetailView):
         q1 = ans_obj.values('alloted_marks', question_id = F('for_question__id') )
         q2 = Section.objects.filter(linked_assessment = curr_assessment).values('name', question_id = F('for_question__id')).exclude(question_id__isnull=True)
 
-        p1 =pd.DataFrame(q1)
+        p1 = pd.DataFrame(q1)
         p2 = pd.DataFrame(q2)
-
-        p1.question_id.astype('int') 
-        p2.question_id.astype('int') 
-        joined_marks_question_and_section = p1.merge(p2)
-        sum_df = joined_marks_question_and_section.groupby('name')['alloted_marks'].agg('sum')
+        if not (p1.empty or p2.empty):
+            p1.question_id.astype('int') 
+            p2.question_id.astype('int') 
+            joined_marks_question_and_section = p1.merge(p2)
+            sum_df = joined_marks_question_and_section.groupby('name')['alloted_marks'].agg('sum')
         
         
-        context['section_name'] = sum_df.to_dict()
-        
+            context['section_name'] = sum_df.to_dict()
+        else:
+            context['section_name'] = dict()
         return self.response_class(
             request = self.request,
             template = self.get_template_names(),

@@ -15,7 +15,7 @@
 {% if user.is_authenticated and request.user.student in assesment_object.subscriber_users.all %}
 <form action={% url 'student:assesments:process_assesment' %} method="POST">
 	
-<table  class="table borderless">
+<table  class="table borderless table-responsive">
 	<tr>
 		<th colspan=2>Assesment Detail Information</th>
 	</tr>

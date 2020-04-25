@@ -49,7 +49,7 @@ class Assesment(MetaInformationMixin, SoftDeletionModelMixin):
     
     privilege = models.CharField(max_length=14,
                                        choices=ASSESMENT_PRIVILEGE_CHOICES,
-                                       default='private')
+                                       default='public')
     
    
     is_exam_active = models.BooleanField(default=True, blank=True)

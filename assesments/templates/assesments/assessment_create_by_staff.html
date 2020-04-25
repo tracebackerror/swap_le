@@ -6,7 +6,14 @@
 
 {% block content %} 
   <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-
+<style>
+#scroll_questions {
+	 margin: auto;
+		height: 285px;
+		width: 300px;
+		overflow-y: auto; /* This changed */
+}
+</style>
  <h1>Create Assessment</h1>
 <div class="container" style="min-height:60%;">
 <div id="user_message_display">
@@ -94,7 +101,7 @@
 			</div>
 		</div>
 		<div class="form-row">
-			<em class="small em">The Assesesment will be visible to student only between the Assesment start to expired date. And having visibility to Public. </em>
+			<em class="small em">The Assesment will be visible to student only between the Assesment start to expired date. And having visibility to Public. </em>
 		</div>
 		<div class="form-row">
 		
@@ -103,7 +110,7 @@
 			</div>
 		</div>
 		<div class="form-row">
-			<div class="col-md-12 overflow-auto" style="height:200px; border: 1px solid #ccc; padding: 10px 10px;">
+			<div class="col-md-12 overflow-auto" id="scroll_questions" style="height:200px; border: 1px solid #ccc; padding: 10px 10px;">
 						{{ assessment_c_form.subscriber_users }}
 			</div>
 						

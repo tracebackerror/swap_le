@@ -5,7 +5,7 @@ from staff.models import Staff,StudentEnquiry
 from students.models import Student
 from django.forms import widgets
 from django.contrib.auth.forms import UserCreationForm
-
+from utility.swaple_constants import COURSE_CHOICES
 
 class StaffEditForm(forms.ModelForm):
     class Meta:
@@ -41,10 +41,10 @@ class StudentAddForm(UserCreationForm):
     first_name = forms.CharField(widget=forms.TextInput,required=True)
     last_name = forms.CharField(widget=forms.TextInput,required=True)
     email = forms.EmailField(widget=forms.EmailInput,required=True)
-    standard = forms.CharField(widget=forms.TextInput,required=True)
+    standard = forms.CharField(widget=forms.Select(choices=COURSE_CHOICES),required=True)
     address = forms.CharField(widget=forms.Textarea,required=True)
-    student_contact_no = forms.IntegerField(widget=forms.NumberInput,required=True)
-    parent_contact_no = forms.IntegerField(widget=forms.NumberInput,required=True)
+    student_contact_no = forms.CharField(required=True, min_length=10, max_length=10)
+    parent_contact_no = forms.CharField(required=False, min_length=10, max_length=10)
     gender = forms.ChoiceField(widget=forms.RadioSelect(attrs={'style': 'width: 50px;'}),choices=(('male','Male'),('female','Female')))
     
     def __init__(self,*args, **kwargs):
