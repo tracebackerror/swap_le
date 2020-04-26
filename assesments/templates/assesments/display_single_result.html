@@ -20,7 +20,7 @@
 	</div>
 	<br>
 
-		<div class="row">
+		
 			<div class="card">
 				<div class="card-body">
 					<h5 class="card-title">Examination Detailed Information: </h5>
@@ -30,7 +30,7 @@
 
 					<div class="row border-bottom my-1">
 						<div class="col-md-12">
-							<h5> Assesment Header: </h5>
+							<h5> Title: </h5>
 						</div>
 
 						<div class="col-md-12">
@@ -39,7 +39,7 @@
 					</div>
 					<div class="row border-bottom my-1">
 						<div class="col-md-12">
-							<h5> Assesment Description: </h5>
+							<h5> Description: </h5>
 						</div>
 						<div class="col-md-12">
 							<h6> {{object.assesment.brief}}</h6>
@@ -47,13 +47,13 @@
 					</div>
 					<div class="row border-bottom my-1">
 						<div class="col-md-3">
-							Assesment Date & Timing: 
+							Available From Date: 
 						</div>
 						<div class="col-md-3">
 							{{object.assesment.exam_start_date_time}}
 						</div>
 						<div class="col-md-3">
-							Assesment End Date & Timing: 
+							Available To End Date: 
 						</div>
 						<div class="col-md-3">
 							{{object.assesment.expired_on}}
@@ -61,6 +61,12 @@
 					</div>
 
 					<div class="row border-bottom my-1">
+						<div class="col-md-4">
+							Exam Duration: 
+						</div>
+						<div class="col-md-4">
+							{{object.assesment.duration_hours}} Hours {{object.assesment.duration_minutes}} Minutes
+						</div>
 						<div class="col-md-4">
 							Minimum Required Marks To Pass: 
 						</div>
@@ -71,8 +77,6 @@
 
 				</div>
 			</div>
-
-		</div>
 
 		<br/>
 
@@ -143,31 +147,64 @@
 				<div class="card ">
 					<div class="card-header">
 						<b>Question:</b> {{ single_answer.for_question.question_text|title }}
+						
 					</div>
 					<div class="card-body">
-						{% if single_answer.for_question.question_type == 'scq' or  question_type == 'mcq'%}
+						{% if single_answer.for_question.question_type == 'scq' or  single_answer.for_question.question_type == 'mcq'%}
 
 						<h5 class="card-title">Options: </h5>
-						<ul class="list-group list-group-flush">
+						<ul class="list-group list-styled	">
 							{% if single_answer.for_question.option_one|length > 0 %}
-							<li class="list-group-item">1-{{ single_answer.for_question.option_one }}</li>
+								
+							
+							<li class="list-group-item d-flex justify-content-between align-items-center">
+								<span class="badge badge-dark badge-pill">1</span>
+								<span class="col-md-11">{{ single_answer.for_question.option_one }}</span>
+							  </li>
 							{% endif %}
+							
 							{% if single_answer.for_question.option_two|length > 0 %}
-							<li class="list-group-item">2-{{ single_answer.for_question.option_two }}</li>
+							<li class="list-group-item d-flex justify-content-between align-items-center">
+								<span class="badge badge-dark badge-pill">2</span>
+								<span class="col-md-11">{{ single_answer.for_question.option_two }}</span>
+							  </li>
 							{% endif %}
 							{% if single_answer.for_question.option_three|length > 0 %}
-							<li class="list-group-item">3-{{ single_answer.for_question.option_three }}</li>
+							<li class="list-group-item d-flex justify-content-between align-items-center">
+								<span class="badge badge-dark badge-pill">3</span>
+								<span class="col-md-11">{{ single_answer.for_question.option_three }}</span>
+							  </li>
+							
 							{% endif %}
 							{% if single_answer.for_question.option_four|length > 0 %}
-							<li class="list-group-item">4-{{ single_answer.for_question.option_four }}</li>
+							<li class="list-group-item d-flex justify-content-between align-items-center">
+								<span class="badge badge-dark badge-pill">4</span>
+								<span class="col-md-11">{{ single_answer.for_question.option_four }}</span>
+							  </li>
 							{% endif %}
+							
 							{% if single_answer.for_question.option_five|length > 0 %}
-							<li class="list-group-item">5-{{ single_answer.for_question.option_five }}</li>
+							 <li class="list-group-item d-flex justify-content-between align-items-center">
+								<span class="badge badge-dark badge-pill">5</span>
+								<span class="col-md-11">{{ single_answer.for_question.option_five }}</span>
+							  </li>
 							{% endif %}
-							<li class="list-group-item"><h6 class="card-subtitle">Selected Choice - {{ single_answer.opted_choice|replace_literals}}</h6></li>
-							<li class="list-group-item"><h6 class="card-subtitle">Correct Choice - {{ single_answer.for_question.correct_options}}</h6></li>
+							<li class="list-group-item d-flex justify-content-between align-items-center">
+								<span class="col-sm-2 col-md-2 badge badge-primary badge-pill pull-left">{{ single_answer.opted_choice|replace_literals}}</span>
+								<span class="col-sm-10 col-md-10 pull-left">
+								Selected Choice
+								</span>
+							  </li>
+							 <li class="list-group-item d-flex justify-content-between align-items-center">
+								<span class="col-sm-2 col-md-2 badge badge-primary badge-pill pull-left">{{ single_answer.for_question.correct_options|replace_literals}}</span>
+								<span class="col-sm-10 col-md-10 pull-left">
+								Correct Answers
+								</span>
+							  </li>
+							
+							
 						</ul>
-						<p class="card-text">Marks Obtained</p>
+						<h5 class="card-text">Marks Obtained</h5>
 						{% else %}
 						<ul class="list-group list-group-flush">
 							<li class="list-group-item">{{ single_answer.written_answer}}</li>

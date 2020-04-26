@@ -216,6 +216,10 @@ class Answer(MetaInformationMixin, SoftDeletionModelMixin):
     opted_choice =  models.TextField(max_length=length_size)
     written_answer = models.TextField(null=True, blank=True)
     alloted_marks = models.FloatField(max_length=length_size)
+    
+    def __str__(self):
+        data = (self.for_question.question_text[:150] + '..') if len(self.for_question.question_text) > 75 else self.for_question.question_text
+        return 'Question - {}'.format(data)
      
 
     
