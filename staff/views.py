@@ -18,7 +18,11 @@ from django.contrib.auth.views import (PasswordResetView,PasswordResetDoneView, 
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import PermissionRequiredMixin,LoginRequiredMixin
 from guardian.shortcuts import assign_perm
+
 from django_tables2 import SingleTableView
+from django_tables2.views import SingleTableMixin
+from django_tables2.export.views import ExportMixin
+
 from django.utils.decorators import method_decorator
 from staff.tables import StudentTable
 from staff.forms import EnrollStudentsForm,StudentAddForm
@@ -128,7 +132,8 @@ class PasswordChangeDoneViewForStaff(PasswordChangeDoneView):
 
 
 
-class ManageStudentView(PermissionRequiredMixin, SingleTableView, ListView):
+class ManageStudentView(PermissionRequiredMixin, ExportMixin, SingleTableView, ListView):
+    export_name =  "Student Dataset"
     model = Student
     context_object_name = 'table'
     paginate_by = 20
@@ -153,6 +158,9 @@ class ManageStudentView(PermissionRequiredMixin, SingleTableView, ListView):
     
     def get_context_data(self, **kwargs):
         context = super(ManageStudentView, self).get_context_data(**kwargs)
+        context['allow_registration']=1 if self.request.user.staff.allowregistration else 0
+        context['auto_active_student']=1 if self.request.user.staff.auto_active_student else 0
+        
         return context
     
     
@@ -168,15 +176,7 @@ class ManageStudentView(PermissionRequiredMixin, SingleTableView, ListView):
         return super(ManageStudentView,self).get(request, *args, **kwargs)
     
     
-    def render_to_response(self, context, **response_kwargs):
-        context['allow_registration']=1 if self.request.user.staff.allowregistration else 0
-        context['auto_active_student']=1 if self.request.user.staff.auto_active_student else 0
-        return self.response_class(
-            request = self.request,
-            template = self.get_template_names(),
-            context = context,
-            **response_kwargs
-        )
+   
     
     
 @permission_required('staff.is_staff',login_url=reverse_lazy('staff:login'))

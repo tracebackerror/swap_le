@@ -27,6 +27,8 @@ from utility import swaple_constants
 
 import logging
 from django_tables2 import SingleTableView
+from django_tables2.export.export import TableExport
+from django_tables2 import RequestConfig
 from django.views.generic import ListView, DetailView, TemplateView, UpdateView
 
 from .models import Assesment, Question, Answer, Result
@@ -37,6 +39,9 @@ from django_filters.views import   FilterView
 
 from django_tables2.views import SingleTableMixin
 from django_tables2 import SingleTableView
+from django_tables2.export.views import ExportMixin
+
+
 from django.views.generic.base import TemplateResponseMixin, RedirectView
 
 from django.db.models import Sum, Q
@@ -312,7 +317,8 @@ class ManageSingleQuestionAddView(TemplateView):
         return context 
     
     
-class ManageAllAssesmentView(PermissionRequiredMixin, SingleTableMixin, FilterView):
+class ManageAllAssesmentView(PermissionRequiredMixin, ExportMixin, SingleTableMixin, FilterView ):
+    export_name =  "Assessment Dataset"
     model = Assesment
     context_object_name = 'table'
     paginate_by = 20
@@ -330,6 +336,7 @@ class ManageAllAssesmentView(PermissionRequiredMixin, SingleTableMixin, FilterVi
         #get_associated_staff = Staff.active.filter(staffuser=self.request.user)
         #self.queryset = Student.active.filter(staffuser = get_associated_staff)#active.filter(institute__user__exact=self.request.user)
         self.queryset = Assesment.soft_objects.filter(created_by=self.request.user)
+        
         return super(ManageAllAssesmentView, self).get_queryset()
 
     @method_decorator(login_decorator)
@@ -340,7 +347,13 @@ class ManageAllAssesmentView(PermissionRequiredMixin, SingleTableMixin, FilterVi
     
     def get_context_data(self, **kwargs):
         context = super(ManageAllAssesmentView, self).get_context_data(**kwargs)
-       
+        '''
+        RequestConfig(self.request).configure(self.table_class)
+
+        export_format = request.GET.get("_export", None)
+        if TableExport.is_valid_format(export_format):
+            exporter = TableExport(export_format, self.table_class)
+            return exporter.response("table.{}".format(export_format))'''
         return context
 
 

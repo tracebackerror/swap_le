@@ -30,6 +30,9 @@ from guardian.shortcuts import assign_perm
 from django.contrib.auth.decorators import permission_required
 
 from django_tables2 import SingleTableView
+from django_tables2.views import SingleTableMixin
+from django_tables2.export.views import ExportMixin
+
 from django.utils.decorators import method_decorator
 from fees.models import FeesInstallment
 from .filters import ViewFeesInstallmentFilter
@@ -248,7 +251,8 @@ def people(request):
     return render(request, 'institutions/staff.html', {'table': table})
 
 
-class InstitutionStaffView(PermissionRequiredMixin, SingleTableView, ListView):
+class InstitutionStaffView(PermissionRequiredMixin, ExportMixin, SingleTableView, ListView):
+    export_name =  "Staff Dataset"
     model = Staff
     context_object_name = 'table'
     paginate_by = 10

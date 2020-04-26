@@ -3,7 +3,7 @@ import itertools
 from django.utils.html import format_html
 from .models import Assesment, Question, Result
 from django_tables2 import A
-
+from django_tables2.export.views import ExportMixin
 from django.urls import reverse
 
 class ResultTable(tables.Table):
@@ -60,15 +60,17 @@ class QuestionTable(tables.Table):
         
         exclude = ('id', 'deleted_at','deleted_by','created_by','updated_by','created','updated', 'assesment_linked', 'question_image', 'option_one', 'option_two', 'option_three', 'option_four', 'option_five', 'correct_options', 'brief_answer' )
 
-class AssesmentTable(tables.Table):
+class AssesmentTable(ExportMixin, tables.Table):
+    export_formats = ['csv', 'xls', ]
     edit =tables.TemplateColumn('<div class="col-md-12"><a alt="edit" class="btn-link"  href="{% url "staff:assesments:assessment_edit_by_staff"  assesmentid=record.id  %} "><center><span class="fas fa-edit "></span></center></a> </div>', orderable=False)
     delete = tables.TemplateColumn('<div class="col-md-12"> <a href=" {% url "staff:assesments:assessment_delete_by_staff" assesmentid=record.id  %} "><center><span class="fas fa-trash-alt"></span></center></a></div>', orderable=False)
     manage = tables.TemplateColumn('<div class="col-md-12"><a href=" {% url "staff:assesments:assessment_manage_by_staff" assesmentid=record.id  %} "><span class="fas fa-cogs "></span></a></div>',orderable=False)
     
     
     #manage_assesment = tables.TemplateColumn('<form method="GET"  action="{%  url "staff:assesments:assessment_manage_by_staff" %}">  {% csrf_token %} <input type="hidden" name="examid" value={{record.id }}> <input class="btn btn-dark" type="submit" value="Manage"> </form>')
-    expired_on = tables.DateTimeColumn(accessor='expired_on', verbose_name='Expires On')
-    exam_start_date_time = tables.DateTimeColumn(accessor='exam_start_date_time', verbose_name='Available From')
+    expired_on = tables.DateTimeColumn(accessor='expired_on', verbose_name='Expires On', short=True, format='M d Y, h:i A')
+    header = tables.Column(accessor='header', verbose_name='Test/Assessment Title', )
+    exam_start_date_time = tables.DateTimeColumn(accessor='exam_start_date_time', verbose_name='Available From', short=True, format='M d Y, h:i A')
     def __init__(self, *args, **kwargs):
         super(AssesmentTable, self).__init__(*args, **kwargs)
         self.counter = itertools.count()
@@ -80,12 +82,12 @@ class AssesmentTable(tables.Table):
    
     class Meta:
         model = Assesment
-        sequence = ( 'header','brief','exam_start_date_time', 'expired_on', 'passing_marks','privilege')
+        sequence = ( 'header','brief','exam_start_date_time', 'expired_on', 'passing_marks','privilege', 'duration_hours', 'duration_minutes' ,'manage')
         # add class="paleblue" to <table> tag 
         attrs = {'class': 'paleblue'}
         # fields = ( 'institute',)
         exclude = ('id', 'brief', 'deleted_at','deleted_by','created', 'updated', 'created_by','updated_by','type','exam_start_type', 'is_exam_active')
-
+        
 
 
 class StudentAssesmentTable(tables.Table):

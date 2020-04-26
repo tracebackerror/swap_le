@@ -1,3 +1,4 @@
+tablib
 django-countries
 django-localflavor
 pandas

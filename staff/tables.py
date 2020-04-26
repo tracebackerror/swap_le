@@ -4,6 +4,7 @@ import itertools
 from django.utils.html import format_html
 from students.models import Student
 from django_tables2 import A
+from django_tables2.export.views import ExportMixin
 from django.utils.translation import ugettext_lazy as _
 
 class CustomTemplateColumnEscapeAdmin(tables.TemplateColumn):
@@ -14,7 +15,8 @@ class CustomTemplateColumnEscapeAdmin(tables.TemplateColumn):
             return format_html('<center><i class="fas fa-user-shield "></i></center>')
         return super(CustomTemplateColumnEscapeAdmin, self).render(record, table, value, bound_column, **kwargs)
 
-class StaffTable(tables.Table):
+class StaffTable(ExportMixin, tables.Table):
+    export_formats = ['csv', 'xls', ]
     edit_button_html = '<a href=" {% url "institutions:edit_institution_staff" username=record.staffuser  %} "  ><center><span class="fas fa-edit "></span></center></a>'
     delete_button_html = '<a href=" {% url "institutions:delete_institution_staff" username=record.staffuser  %}" ><center><span class="fas fa-trash-alt"></span></center></a>'
     edit_staff = tables.TemplateColumn(edit_button_html, orderable=False) 
@@ -44,8 +46,8 @@ class StaffTable(tables.Table):
 
 
 
-class StudentTable(tables.Table):
-    
+class StudentTable(ExportMixin, tables.Table):
+    export_formats = ['csv', 'xls', ]
     first_name = tables.Column(accessor='studentuser.first_name',
                                verbose_name='First Name', attrs={"th": {"class": "text-nowrap"}})
     last_name = tables.Column(accessor='studentuser.last_name',
