@@ -4,7 +4,7 @@
 {% load widget_tweaks %}
 {% block title %}Add a Question{% endblock %} {% block content %}
 
-<h3>Add a Question:</h3>
+<h1>Add a Question:</h1>
 
 
 {% if form_errors %}
@@ -30,7 +30,7 @@
 	<form enctype="multipart/form-data" method="POST" id="add_question_form">
 		{% csrf_token %}
 		<div class="row">
-			<div class="col-md-12"><h1 class="h1">Please use the below form for adding a Question :</h1></div>
+			<div class="col-md-12"><h3 >Please use the below form for adding a Question :</h3></div>
 		</div>
 		<div class="form-row">
 			<div class="form-group col-md-12">
