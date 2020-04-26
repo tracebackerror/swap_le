@@ -1,37 +1,98 @@
 {% extends "base.html" %}
-{% block title %}Log-in{% endblock %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% block title %}Insititute Login{% endblock %}
+
 {% block content %}
 
-  <h1><center>Log-in[Institution]</center></h1> 
-  <div class=" container centeredForm">
+<h1></h1> 
+ <style>
+ #box {
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: flex;
+  -ms-flex-align: center;
+  -ms-flex-pack: center;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
   
-	<div id="user_message_display">
+}
+</style> 
+ <div class=" container " id="box">
+	<form class="" action="{% url 'institutions:login' %}" method="post"> 
+	<div class="row" id="user_message_display">
 		{% for message in messages %}
 				<div class="alert alert-success" role="alert">
 					{{ message|safe }}
 				</div>  
 		{% endfor %}
 	</div>
+	<div class="row" >
+		<div class="col-md-12 text-center">
+			<i class='mb-4 fas fa-school' style='font-size:72px; color: #e91e63 !important;' width="72" height="72"></i>
+		
+		 </div>
+	</div>
+	<div class="row" >
+		<div class="col-md-12 text-center">
+			<h3>Institute Login</h3>
+		
+		 </div>
+	</div>
 
-  {% if form.errors %} 
-  <p>      Your username and password didn't match.       Please try again.    </p> 
-  {% else %}    
-  <p>Please, use the following form to log-in:</p> 
-  {% endif %}
+	<div class="row" >
+		<div class="col-md-12">
+		  {% if form.errors %} 
+			<p class="p">      Your username and password didn't match.       Please try again.    </p> 
+		  {% else %}    
+			<p class="p">Please, use the following form to log-in:</p> 
+		  {% endif %}
+		 </div>
+	</div>
+	
+	
+	<div class="row"> 
+		<div class="col-md-12">
+			{% csrf_token %}
+		</div>
+	</div>
+	<div class="row"> 
+		<div class="col-sm-12 col-md-12">
+			{{ form.username|as_crispy_field }}
+		</div>
+	</div>
+	<div class="row"> 
+		<div class="col-sm-12 col-md-12">
+			{{ form.password|as_crispy_field }}
+		</div>
+	</div>
+	<div class="row"> 
+		<div class="col-sm-12 col-md-12">
+			<input type="hidden" name="next" value="/institutions/" /> 
+		</div>
+	</div>
+	<div class="row"> 
+		<div class="col-sm-12 col-md-12 text-center">
+			<input  type="submit" value="Log-in" class="btn btn-danger">
+		</div>
+	</div>
+	<div class="row"> 
+		<div class="col-sm-12 col-md-6">
+			<a href="{% url 'institutions:password_reset' %}">Forgot Password?</a> 
+		</div>
+		<div class="col-sm-12 col-md-6">
+			<a href="{% url 'institutions:institution_registration' %}">Register Your Account Here!</a>
+		</div>
+	</div>
 
 
- <div class="login-form"> 
- <form class="login-form" action="{% url 'institutions:login' %}" method="post"> 
- 
- 	{{ form.as_p }}     
- 	{% csrf_token %}
-     
- <input type="hidden" name="next" value="/institutions/" />   
- <p><input type="submit" value="Log-in" class="btn btn-danger"></p>&nbsp;
-<a href="{% url 'institutions:password_reset' %}">Forgot Password?</a> <br>&nbsp;
-<a href="{% url 'institutions:institution_registration' %}">Register Your Account Here!</a>
- </form>  </div>
- 
+
+   
+ </form>
  </div>
 
 {% endblock %} 
