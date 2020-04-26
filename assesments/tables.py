@@ -50,12 +50,19 @@ class ResultTable(tables.Table):
 class QuestionTable(tables.Table):
     
     action = tables.TemplateColumn(' <div class="row"> <div class="col-md-6"> <a href=" {% url "staff:assesments:assessment_question_delete" assesmentid=record.assesment_linked.pk questionid=record.pk  %} "><center><span class="fas fa-trash-alt"></span></center></a></div></div>')
-    
+    question_type = tables.Column(accessor='question_type', orderable=False, verbose_name="Type")
     def __init__(self, *args, **kwargs):
         super(QuestionTable, self).__init__(*args, **kwargs)
         self.counter = itertools.count()
     
-    
+    def render_question_type(self, value):
+        
+        if value.lower() == "multiple choice":
+            return format_html('<center><i class="fas fa-check-square" aria-hidden="true"></i></center>')
+        elif value.lower() == "single choice":
+            return format_html('<center><i class="fas fa-dot-circle " aria-hidden="true"></i></center>')
+        
+        return format_html('<center><i class="fas fa-pencil-alt" aria-hidden="true"></i></center>')
         
     def render_question_text(self,value):
         return (value[:75] + '..') if len(value) > 75 else value

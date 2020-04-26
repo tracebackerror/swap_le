@@ -1,3 +1,6 @@
+pyyaml
+ua-parser
+user-agents
 django-user-agents
 django-bootstrap4
 xlrd

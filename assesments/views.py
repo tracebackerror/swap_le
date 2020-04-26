@@ -488,8 +488,16 @@ class ManageSingleAsessment(SingleTableView):
     def get_context_data(self, **kwargs):
         context = super(ManageSingleAsessment, self).get_context_data(**kwargs)
         self.result_queryset = Result.objects.filter(assesment__exact = self.assesment_number_to_retrieve).order_by('pk')
-        context['table_result'] =  ResultTable(self.result_queryset, assesmentid=self.kwargs['assesmentid'])
         
+        
+        result_table =  ResultTable(self.result_queryset, assesmentid=self.kwargs['assesmentid'])
+        
+        if self.request.user_agent.is_mobile:
+            result_table.exclude += ('exam_taken_date_time', 'total_question', 'total_attempted', 'publish_result', 'assesment_submitted')
+            context['table_result']  = result_table
+            
+        else:
+            context['table_result'] = result_table
         self.section_queryset = Section.objects.filter(linked_assessment__id = self.assesment_number_to_retrieve).order_by('pk')
         table_section = ManageSectionTable(self.section_queryset)
         #table_section.paginate(page=self.request.GET.get('page', 1), per_page=1)

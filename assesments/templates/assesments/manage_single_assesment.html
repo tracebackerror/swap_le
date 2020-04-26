@@ -2,7 +2,7 @@
 {% extends "base.html" %}
 {% load render_table from django_tables2 %}
 
-{% block title %}   Manage Single Assesment  {% endblock %}
+{% block title %}   Manage Single Assessment  {% endblock %}
 
 
 {% block content %} 
@@ -71,7 +71,7 @@
 	<div class="row">
 
 		<form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'staff:assesments:assesment_manage_add_question' request.resolver_match.kwargs.assesmentid %}">
-			<button class="btn btn-default " type="submit">Add Question</button>
+			<button class="btn btn-default " type="submit"><i class="fa fa-question-circle" aria-hidden="true"></i> Add Question</button>
 		</form>
 		
 	</div>
@@ -100,7 +100,7 @@
 
     <form class="form-inline my-2 my-lg-0" method="GET" action="{% url "staff:assesments:add_question_section" request.resolver_match.kwargs.assesmentid %}">
      
-      <button class="btn btn-default " type="submit">Add Question Section</button>
+      <button class="btn btn-default " type="submit"><i class="fa fa-area-chart" aria-hidden="true"></i> Add Question Section</button>
     </form>
     
  </div>
@@ -121,9 +121,9 @@
 
     <form class="form-inline my-2 my-lg-0" method="GET" action="{% url "staff:assesments:publish_all_results" request.resolver_match.kwargs.assesmentid %}">
       {% if flag %}
-      	<button class="btn btn-default " type="submit">Publish All Results</button>
+      	<button class="btn btn-default " type="submit"><i class="fas fa-paper-plane" aria-hidden="true"></i>  Publish All Results</button>
       {% else %}
-      	<button class="btn btn-default " type="submit">Un-Publish All Results</button>
+      	<button class="btn btn-default " type="submit"><i class="fas fa-link" aria-hidden="true"></i> Un-Publish All Results</button>
       {% endif %}
     </form>
     

@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     'localflavor',
     'django_countries',
     'bootstrap4',
+    'django_user_agents',
 ]
 
 GRAPH_MODELS = {
@@ -83,6 +84,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
+    'django_user_agents.middleware.UserAgentMiddleware',
 ]
 
 ROOT_URLCONF = 'swaple.urls'
