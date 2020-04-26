@@ -204,6 +204,12 @@
    });
    */
    
+   $('#id_privilege').on('change', function() {
+	  if( this.value == 'private'){
+		alert("Please note if you make assessment Private, Student will not be able to see it.");
+	  }
+	});
+   
    
  });
  </script>
