@@ -1,3 +1,5 @@
+django-user-agents
+django-bootstrap4
 xlrd
 tablib[all]
 django-countries

@@ -74,7 +74,7 @@ class SoftDeletionModelMixin(models.Model):
         abstract = True
 
     
-    def delete(self,user):
+    def soft_delete(self,user):
         self.deleted_at = timezone.now()
         self.deleted_by= user
         self.save()

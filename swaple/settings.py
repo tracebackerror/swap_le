@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'localflavor',
     'django_countries',
+    'bootstrap4',
 ]
 
 GRAPH_MODELS = {

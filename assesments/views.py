@@ -114,7 +114,7 @@ class ReviewAllSqaView(TemplateView):
         
         
         assesment_to_submit = self.kwargs['assesmentid']
-        fetch_appropriate_result = Result.soft_objects.filter(assesment__id = assesment_to_submit)
+        fetch_appropriate_result = Result.objects.filter(assesment__id = assesment_to_submit)
         
         if fetch_appropriate_result.exists():
             get_assesment_obj_to_update = fetch_appropriate_result[0]
@@ -171,7 +171,7 @@ class GenerateAssesmentResultView(TemplateView):
         
         '''
         assesment_to_submit = self.request.session.get('assesment_to_undertake')
-        fetch_appropriate_result = Result.soft_objects.filter(assesment__id = assesment_to_submit, registered_user = self.request.user.student)
+        fetch_appropriate_result = Result.objects.filter(assesment__id = assesment_to_submit, registered_user = self.request.user.student)
         
         if fetch_appropriate_result.exists():
             get_assesment_obj_to_update = fetch_appropriate_result[0]
@@ -250,7 +250,7 @@ class ManageSingleQuestionAddView(TemplateView):
     @method_decorator(login_decorator)
     def post(self, request, *args, **kwargs):
         if 'assesmentid' in self.kwargs:
-            assesment_to_add_question= Assesment.soft_objects.get(id = self.kwargs['assesmentid'])
+            assesment_to_add_question= Assesment.objects.get(id = self.kwargs['assesmentid'])
         
         
         question_form = QuestionForm(data = request.POST or None,
@@ -280,7 +280,7 @@ class ManageSingleQuestionAddView(TemplateView):
             question_obj.save()
             
             # Processing Existing Result Set to Update the Details
-            fetch_appropriate_result = Result.soft_objects.filter(assesment__id = int(self.kwargs['assesmentid']))
+            fetch_appropriate_result = Result.objects.filter(assesment__id = int(self.kwargs['assesmentid']))
         
             if fetch_appropriate_result.exists():
                 for each_assesment_result in fetch_appropriate_result:
@@ -335,7 +335,7 @@ class ManageAllAssesmentView(PermissionRequiredMixin, ExportMixin, SingleTableMi
     def get_queryset(self):
         #get_associated_staff = Staff.active.filter(staffuser=self.request.user)
         #self.queryset = Student.active.filter(staffuser = get_associated_staff)#active.filter(institute__user__exact=self.request.user)
-        self.queryset = Assesment.soft_objects.filter(created_by=self.request.user)
+        self.queryset = Assesment.objects.filter(created_by=self.request.user)
         
         return super(ManageAllAssesmentView, self).get_queryset()
 
@@ -416,12 +416,12 @@ class ManageStudentAssesmentView(SingleTableView, ListView):
         #self.queryset = Student.active.filter(staffuser = get_associated_staff)#active.filter(institute__user__exact=self.request.user)
         student_obj = Student.objects.get(studentuser = self.request.user)
         
-        #self.queryset = Assesment.soft_objects.filter(subscriber_users = student_obj, privilege='public').filter(Q(result__assesment_submitted=False) |  Q(result__isnull=True))
-        all_user_linked_assesment = Assesment.soft_objects.filter(subscriber_users = student_obj, privilege='public')
+        #self.queryset = Assesment.objects.filter(subscriber_users = student_obj, privilege='public').filter(Q(result__assesment_submitted=False) |  Q(result__isnull=True))
+        all_user_linked_assesment = Assesment.objects.filter(subscriber_users = student_obj, privilege='public')
         all_user_linked_assesment_filter_exam_date = all_user_linked_assesment.filter(exam_start_date_time__lte= timezone.datetime.now(), expired_on__gte= timezone.datetime.now())
 
         if all_user_linked_assesment_filter_exam_date.exists():
-            all_user_linked_result = Result.soft_objects.filter(registered_user=student_obj).filter(assesment_submitted=True)
+            all_user_linked_result = Result.objects.filter(registered_user=student_obj).filter(assesment_submitted=True)
             if all_user_linked_result.exists():
                 self.queryset = all_user_linked_assesment_filter_exam_date.exclude(result__in = all_user_linked_result )
             else:
@@ -444,7 +444,7 @@ class ManageStudentAssesmentView(SingleTableView, ListView):
         assesment_initiate_flag = self.request.POST.get('start_assesment_boolean', None)
         
         examid = self.request.POST.get('examid', None)
-        assesment_to_undertake = Assesment.soft_objects.get(id = int(examid))
+        assesment_to_undertake = Assesment.objects.get(id = int(examid))
         self.request.session['assesment_to_undertake'] = examid    
         return render(self.request, 'assesments/exam_start_intro_page.html', {
             'assesment_object': assesment_to_undertake,
@@ -478,7 +478,7 @@ class ManageSingleAsessment(SingleTableView):
         #self.queryset = Student.active.filter(staffuser = get_associated_staff)#active.filter(institute__user__exact=self.request.user)
         queryset = super(ManageSingleAsessment, self).get_queryset()
         self.assesment_number_to_retrieve = self.kwargs.get('assesmentid', None)
-        self.queryset = Question.soft_objects.filter(assesment_linked__exact = self.assesment_number_to_retrieve).order_by('pk')
+        self.queryset = Question.objects.filter(assesment_linked__exact = self.assesment_number_to_retrieve).order_by('pk')
         return self.queryset
     
     @method_decorator(login_decorator)
@@ -487,7 +487,7 @@ class ManageSingleAsessment(SingleTableView):
     
     def get_context_data(self, **kwargs):
         context = super(ManageSingleAsessment, self).get_context_data(**kwargs)
-        self.result_queryset = Result.soft_objects.filter(assesment__exact = self.assesment_number_to_retrieve).order_by('pk')
+        self.result_queryset = Result.objects.filter(assesment__exact = self.assesment_number_to_retrieve).order_by('pk')
         context['table_result'] =  ResultTable(self.result_queryset, assesmentid=self.kwargs['assesmentid'])
         
         self.section_queryset = Section.objects.filter(linked_assessment__id = self.assesment_number_to_retrieve).order_by('pk')
@@ -528,7 +528,7 @@ class ProcesStudentAssesmentView(DetailView):
 
     def get_queryset(self):
         student_obj = Student.objects.get(studentuser = self.request.user)
-        self.queryset = Assesment.soft_objects.filter(subscriber_users = student_obj)
+        self.queryset = Assesment.objects.filter(subscriber_users = student_obj)
         return super(ProcesStudentAssesmentView, self).get_queryset()
 
     @method_decorator(login_decorator)
@@ -550,11 +550,11 @@ class ProcesStudentAssesmentView(DetailView):
             page_of_question = int(self.request.POST.get('nextpage', 1))
             
             if asses_unfiltered and eval(asses_unfiltered):
-                assesment_to_undertake = Assesment.soft_objects.get(id = eval(asses_unfiltered))
+                assesment_to_undertake = Assesment.objects.get(id = eval(asses_unfiltered))
                 
                 if self.request.user.student in assesment_to_undertake.subscriber_users.all():
                     ''' Getting Next Question'''
-                    fetch_all_linked_question = Question.soft_objects.filter(assesment_linked = assesment_to_undertake).order_by('pk')
+                    fetch_all_linked_question = Question.objects.filter(assesment_linked = assesment_to_undertake).order_by('pk')
                     total_question_on_single_page = 1
                     
                     paginator = Paginator(fetch_all_linked_question, total_question_on_single_page)
@@ -572,7 +572,7 @@ class ProcesStudentAssesmentView(DetailView):
                     ''' Log the Answer in Database '''
                     question_type = self.request.POST.get('question_type', None)
                     
-                    result_of_assesment = Result.soft_objects.filter(assesment = assesment_to_undertake, registered_user = self.request.user.student
+                    result_of_assesment = Result.objects.filter(assesment = assesment_to_undertake, registered_user = self.request.user.student
                     )
                     
                     if len(result_of_assesment)  == 0:
@@ -613,8 +613,8 @@ class ProcesStudentAssesmentView(DetailView):
                     
                     if question_type and question_type in all_question_types:
                         pk_of_question = self.request.POST.get('question_id')
-                        question_obj = Question.soft_objects.filter(assesment_linked = assesment_to_undertake, pk = pk_of_question)
-                        get_the_answer_obj = Answer.soft_objects.filter(for_result = self.create_result_instance, for_question__in = question_obj)
+                        question_obj = Question.objects.filter(assesment_linked = assesment_to_undertake, pk = pk_of_question)
+                        get_the_answer_obj = Answer.objects.filter(for_result = self.create_result_instance, for_question__in = question_obj)
                         
                         if len(get_the_answer_obj) == 0:
                             get_the_answer_obj = Answer()
@@ -651,7 +651,7 @@ class ProcesStudentAssesmentView(DetailView):
                     if len(page_question_obj) == 0 :
                         messages.add_message(self.request, messages.SUCCESS,  'Assessment Test Is Not Having Any Single Question To Answer. ')
                         return redirect(reverse_lazy("staff:assesments:manage_student_assesment"))
-                    get_the_current_answer_obj = Answer.soft_objects.filter(for_result = self.create_result_instance, for_question = page_question_obj[0])
+                    get_the_current_answer_obj = Answer.objects.filter(for_result = self.create_result_instance, for_question = page_question_obj[0])
                         
                     if len(get_the_current_answer_obj) == 0:
                             get_the_current_answer_obj = Answer()
@@ -686,7 +686,7 @@ class ProcesStudentAssesmentView(DetailView):
         else:
             '''
             examid = self.request.POST.get('examid', None)
-            assesment_to_undertake = Assesment.soft_objects.get(id = int(examid))
+            assesment_to_undertake = Assesment.objects.get(id = int(examid))
             
             return render(self.request, 'assesments/exam_start_intro_page.html', {
             'assesment_object': assesment_to_undertake,
@@ -730,9 +730,9 @@ def assessment_delete_by_staff(request, assesmentid):
             information = 'Are you sure you want to delete assessmentid {} ?'.format(str(assesmentid))
         elif request.method == 'POST' and request.user.staff.user_type == 'staff':
             staff_obj = Staff.objects.get(staffuser__username=request.user)
-            assesment_obj = Assesment.soft_objects.get(id__exact=assesmentid)
+            assesment_obj = Assesment.objects.get(id__exact=assesmentid)
             if assesment_obj.created_by == request.user:
-                assesment_obj.delete(request.user)
+                assesment_obj.delete()
                 
                 messages.add_message(request, messages.SUCCESS,  'Assessment Test Deleted Successfully. ')
                 return redirect(reverse_lazy("staff:assesments:manage_all_assesment"))
@@ -764,7 +764,7 @@ def assessment_edit_by_staff(request, assesmentid):
         if assesment_form.is_valid():
             assesment_form.save()
                     
-            fetch_appropriate_result = Result.soft_objects.filter(assesment__id = int(assesmentid))
+            fetch_appropriate_result = Result.objects.filter(assesment__id = int(assesmentid))
         
             if fetch_appropriate_result.exists():
                 for each_assesment_result in fetch_appropriate_result:
@@ -833,7 +833,7 @@ def assessment_question_delete(request, assesmentid, questionid ):
         question_obj = Question.objects.get(pk=questionid)
         if question_obj.created_by == request.user:
             #question_obj.delete(request.user)
-            question_obj.hard_delete()
+            question_obj.delete()
             
             messages.add_message(request, messages.SUCCESS,  'Question Deleted Successfully. ')
             return redirect(reverse_lazy("staff:assesments:assessment_manage_by_staff", kwargs={'assesmentid': assesmentid}))

@@ -36,9 +36,13 @@
 <div class="container">
 <div id="user_message_display">
 		{% for message in messages %}
-				<div class="alert alert-success" role="alert">
-					{{ message|safe }}
-				</div>  
+				<div class="row col-md-12">
+				<a class="btn btn-success waves-effect waves-light" role="button">
+				 <code>{{ message|safe }}</code>
+				
+				</a>
+				</div>
+			
 		{% endfor %}
 	</div>
 	<div class="row">

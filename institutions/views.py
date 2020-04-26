@@ -63,7 +63,7 @@ def institute_login(request):
         institute_form = InstitutionLoginForm()
         institution_form = InstitutionsEditForm(instance=request.user.institutions)
         return render(request, 'institutions/login.html', {'form': institute_form})
-    pass
+    
     
 @permission_required('institutions.is_institute',login_url="/institutions/login/")
 @login_required
@@ -133,12 +133,14 @@ def institute_staff_create(request):
             profile_form.staffuser = user
             profile_form.full_clean()  # Manually clean the form this time. It is implicitly called by "is_valid()" method
 
-            license_institute.li_current_staff += 1
-            license_institute.save()
+            
             profile_form.save()  # Gracefully save the form
-            messages.add_message(request, messages.SUCCESS, 'Staff Profile Added Successfully')
+            messages.add_message(request, messages.SUCCESS, 'Staff {} Added Successfully'.format(request.POST['username']))
+            return redirect(reverse_lazy("institutions:manage_staff"))
+        '''
         else:
             messages.add_message(request, messages.INFO, str(user_form.errors.as_ul()))
+        '''
     else:
         user_form = StaffCreateForm()
         # profile_form = StaffProfileForm()
@@ -152,17 +154,16 @@ def institute_staff_create(request):
 def institute_staff_delete(request, username):
     information = ''
     current_institute = Institutions.objects.filter(user = request.user).first()
-    license_institute = License.objects.get(li_institute = current_institute)
     if request.method == 'GET' and request.user.institutions.user_type == 'institution':
 
         information = 'Are you sure you want to delete {} ?'.format(str(username))
     elif request.method == 'POST' and request.user.institutions.user_type == 'institution':
         staff_obj = Staff.objects.get(staffuser__username=username)
-        staff_obj.deleted = 'Y'
-        license_institute.li_current_staff -= 1
-        license_institute.save()
-        staff_obj.save()
+        staff_obj.delete()
+        
         information = 'Staff Deleted Successfully. '
+        messages.add_message(request, messages.SUCCESS, information)
+        return redirect(reverse_lazy("institutions:manage_staff"))
 
     return render(request, 'institutions/staff_delete.html', {'information': [information]})
 
@@ -173,8 +174,16 @@ from licenses.forms import LicenseViewForm
 def dashboard(request):
     current_institute = Institutions.objects.get(user__username=request.user)
     license_institute = License.objects.get(li_institute=current_institute)
-
+    
+    #License Metrics Update
+    student_count = Student.objects.filter(staffuser__institute = current_institute).count()
+    staff_count = Staff.objects.filter(institute = current_institute).count()
+    assesment_count = Assesment.objects.filter(created_by__username__in = Staff.objects.filter(institute = current_institute).values('staffuser__username')).count()
+    License.objects.filter(li_institute=current_institute).update(li_current_staff = staff_count, li_current_students=student_count, li_current_assesments=assesment_count)
+    
+    
     #license_form = LicenseViewForm(instance = license_institute)
+    
     
     #Total Male/Female Student Counting data(Pie Chart)
     total_male = Student.objects.filter(staffuser__institute = current_institute,gender='male').count()

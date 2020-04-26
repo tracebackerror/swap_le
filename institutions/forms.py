@@ -58,7 +58,11 @@ class StaffCreateForm(UserCreationForm):
     last_name = forms.CharField(widget=forms.TextInput,required=True)
     email = forms.EmailField(widget=forms.EmailInput,required=True)
     
-    
+    def __init__(self,*args, **kwargs):
+        super(StaffCreateForm, self).__init__(*args, **kwargs)
+        
+        for fieldname in [ 'password1', 'password2', 'username']:
+                self.fields[fieldname].help_text = None
     class Meta:
         model=User
         fields = ['username','first_name','last_name','email','password1','password2']

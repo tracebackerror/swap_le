@@ -22,6 +22,11 @@ class ResultTable(tables.Table):
     publish_result = tables.BooleanColumn(accessor='publish_result', verbose_name='Published')
     registered_user = tables.Column(accessor='registered_user', verbose_name='Student')
     
+    def render_result_passed(self, value):
+        if value :
+            return format_html('<center><i class="fa fa-graduation-cap" aria-hidden="true"></i></center>')
+        return format_html('<center><i class="fa fa-window-minimize" aria-hidden="true"></i></center>')
+    
     def render_review_sqa(self, record):
         url = reverse('staff:assesments:assesment_manage_review_sqa_question',kwargs={'assesmentid': self.assesmentid})
         return format_html('<a href="{}"><span class="fas fa-comments">Validate Score</span></a>', url)
@@ -75,7 +80,11 @@ class AssesmentTable(ExportMixin, tables.Table):
         super(AssesmentTable, self).__init__(*args, **kwargs)
         self.counter = itertools.count()
 
-    
+    def render_privilege(self, value):
+        if value.lower() == "public":
+            return format_html('<i class="fas fa-unlock" ></i>')
+        return format_html('<i class="fas fa-lock"></i>')
+        
 
     def render_brief(self,value):
         return (value[:75] + '..') if len(value) > 75 else value

@@ -18,8 +18,8 @@
 		  <li>
 			
 		  Assesment - <strong class="strong">{{current_details.li_current_assesments}}/{{current_details.li_max_assesments}}</strong></li>
-		  <li>Staff - <strong class="strong">{{current_details.li_current_assesments}}/{{current_details.li_max_assesments}}</strong></li>
-		  <li >Student - <strong class="strong">{{current_details.li_current_assesments}}/{{current_details.li_max_students}}</strong></li>
+		  <li>Staff - <strong class="strong">{{current_details.li_current_staff}}/{{current_details.li_max_staff}}</strong></li>
+		  <li >Student - <strong class="strong">{{current_details.li_current_students}}/{{current_details.li_max_students}}</strong></li>
 		  <li >Key - {{ current_details.li_key}}</li>
 		  <li >Status - {% if current_details.li_current_status == 'acti'%}<span class="badge" style="color:#000!important;">Active</span></a>{% else %} <span class="badge" style="color:#000!important;">Expired</span></a>{% endif %}</li>
 		  <li >License Expiration - {{current_details.li_expiration_date}}</li>
@@ -50,14 +50,14 @@
 				 {% csrf_token %}
 				 <div class="row">
 						 <div class="col-md-8">
-							<select name="assessment_id" class="form-control align-middle" data-live-search="true">
+							<select  style="height:100%" id="assessment_id" name="assessment_id" class="form-control align-middle" data-live-search="true">
 							<option value="">Please Select The Test/Assessment</option>
 							 {% for data in all_instituion_assessments %}
 							  <option value="{{data.id}}">{{ data.header }}</option>
 							  {% endfor %}
 							</select>
 						</div>
-						<div class="col-md-4">   <button class="btn btn-success" >Filter</button></div>
+						<div class="col-md-4">   <button class="btn btn-success" id="search_results">Search  Result</button></div>
 				</div>
 			</form>
 		</div>
@@ -78,6 +78,8 @@
 	</div>
 
  </div>
+ 
+ 
 
  
  
@@ -92,7 +94,12 @@
 		studentUsername.push("{{data.registered_user.studentuser.username}}")
 		studentMarks.push({{data.obtained_marks}})
 	{% endfor %}
-	
+	$('#search_results').on('click', function() {
+	  if( $("#assessment_id").val().length == 0){
+		alert("Please select valid assessment/test.");
+	  }
+	});
+   
 
 </script>
 	

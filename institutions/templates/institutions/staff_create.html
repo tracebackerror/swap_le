@@ -1,10 +1,11 @@
-
 {% extends "base.html" %}
-{% block title %}   Add a Staff account   {% endblock %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% block title %}   Add Staff Account   {% endblock %}
 
 
 {% block content %} 
- <h1>Add a Staff account</h1>
+ <center><h1>Add Staff Account</h1></center>
  <div id="user_message_display">
 		{% for message in messages %}
 				<div class="alert alert-success" role="alert">
@@ -13,12 +14,41 @@
 		{% endfor %}
 	</div>
  <div class="container" style="min-height:50%"> 
-	 <p>You can create a staff account using the following form:</p>
+	<div class="row">
+		<h3 >You can create a staff account using the following form:</h3>
+	 </div>
+	 
 	 <form action="." method="post" enctype="multipart/form-data">
-		 {{ user_form.as_p}}
-
+		 
 		 {% csrf_token %}
-	 <p><input type="submit" class="btn btn-success" value="Save changes"></p>
+		 <div class="form-row">
+				<div class="form-group col-md-4">
+					{{ user_form.username|as_crispy_field}}
+				</div>
+				<div class="form-group col-md-4">
+					{{ user_form.first_name|as_crispy_field}}
+				</div>
+				<div class="form-group col-md-4">
+					{{ user_form.last_name|as_crispy_field}}
+				</div>
+		</div>
+		<div class="form-row">
+				<div class="form-group col-md-4">
+					{{ user_form.email|as_crispy_field}}
+				</div>
+				<div class="form-group col-md-4">
+					{{ user_form.password1|as_crispy_field}}
+				</div>
+				<div class="form-group col-md-4">
+					{{ user_form.password2|as_crispy_field}}
+				</div>
+		</div>
+		<div class="form-row">
+				<div class="form-group col-md-4">
+					<input type="submit" class="btn btn-success" value="Create Staff"
+				</div>
+				
+		</div>
 	 
 	 </form>
 </div>

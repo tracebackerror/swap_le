@@ -46,7 +46,7 @@ class AddQuestionSection(SuccessMessageMixin, FormView):
         section_obj_to_add.save()
         form.save_m2m()
         
-        messages.add_message(self.request, messages.SUCCESS, 'Question Section Created!')
+        messages.add_message(self.request, messages.SUCCESS, 'Section {} was added successfully'.format(self.request.POST.get('name')))
         return HttpResponseRedirect(self.get_success_url(assesmentid))
     
     def get_success_url(self,assesmentid):

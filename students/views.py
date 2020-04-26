@@ -108,11 +108,11 @@ def dashboard(request):
     pending_obj = Result.objects.filter(publish_result = False, registered_user = student_obj).count()
     total_live_assessment, live_asessment = None, None
     
-    all_user_linked_assesment = Assesment.soft_objects.filter(subscriber_users = student_obj, privilege='public')
+    all_user_linked_assesment = Assesment.objects.filter(subscriber_users = student_obj, privilege='public')
     all_user_linked_assesment_filter_exam_date = all_user_linked_assesment.filter(exam_start_date_time__lte= make_aware(timezone.datetime.now()), expired_on__gte= make_aware(timezone.datetime.now()))
 
     if all_user_linked_assesment_filter_exam_date.exists():
-        all_user_linked_result = Result.soft_objects.filter(registered_user=student_obj).filter(assesment_submitted=True)
+        all_user_linked_result = Result.objects.filter(registered_user=student_obj).filter(assesment_submitted=True)
         if all_user_linked_result.exists():
             live_asessment = all_user_linked_assesment_filter_exam_date.exclude(result__in = all_user_linked_result )
         else:
