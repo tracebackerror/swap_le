@@ -379,15 +379,11 @@
 
           <div class="col-lg-3 col-md-4">
             <div class="info">
-              <div>
-                <i class="ion-ios-location-outline"></i>
-                <p>SwapLE Digital Learning Platform</p>
-				<p>For Business Queries :- admin@swaple.in</p>
-              </div>
-
+              
               <div>
                 <i class="ion-ios-email-outline"></i>
                 <p>swapledigital@gmail.com</p> 
+				<p>For Business Queries :- admin@swaple.in</p>
               </div>
 
               <div>
@@ -400,11 +396,18 @@
 
        <div class="col-lg-5 col-md-8">
             <div class="form">
+			 
               <div id="sendmessage">Your message has been sent. Thank you!</div>
               <div id="errormessage"></div>
               <form action="{% url "contactus" %}" method="get">
               {% csrf_token %}
+			  <div class="form-row">
+				<div class="form-group col-md-12">
+					<p class="">Contact Us</p>
+					</div>
+				</div>
                 <div class="form-row">
+					
                   <div class="form-group col-lg-6">
                     <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required data-rule="minlen:4" data-msg="Please enter at least 4 chars" />
                     <div class="validation"></div>
