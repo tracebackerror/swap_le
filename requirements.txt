@@ -1,4 +1,5 @@
-tablib
+xlrd
+tablib[all]
 django-countries
 django-localflavor
 pandas
