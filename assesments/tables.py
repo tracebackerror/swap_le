@@ -142,4 +142,4 @@ class StudentAssesmentTable(tables.Table):
         # add class="paleblue" to <table> tag 
         attrs = {'class': 'paleblue'}
         # fields = ( 'institute',)
-        exclude = ('id', 'deleted_at','brief', 'privilege','deleted_by','created_by','updated_by','type','exam_start_type', 'polymorphic_ctype','created','updated','slug','is_exam_active')
+        exclude = ('id', 'deleted_at','brief', 'privilege','deleted_by','created_by','updated_by','type', 'exam_start_date_time','exam_start_type', 'polymorphic_ctype','created','updated','slug','is_exam_active')

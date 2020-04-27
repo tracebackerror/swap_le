@@ -418,7 +418,7 @@ class ManageStudentAssesmentView(SingleTableView, ListView):
         
         #self.queryset = Assesment.objects.filter(subscriber_users = student_obj, privilege='public').filter(Q(result__assesment_submitted=False) |  Q(result__isnull=True))
         all_user_linked_assesment = Assesment.objects.filter(subscriber_users = student_obj, privilege='public')
-        all_user_linked_assesment_filter_exam_date = all_user_linked_assesment.filter(exam_start_date_time__lte= timezone.datetime.now(), expired_on__gte= timezone.datetime.now())
+        all_user_linked_assesment_filter_exam_date = all_user_linked_assesment.filter(exam_start_date_time__gte = timezone.now(), expired_on__lte= timezone.now())
 
         if all_user_linked_assesment_filter_exam_date.exists():
             all_user_linked_result = Result.objects.filter(registered_user=student_obj).filter(assesment_submitted=True)
