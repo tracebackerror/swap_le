@@ -1,3 +1,4 @@
+django-tz-detect
 pyyaml
 ua-parser
 user-agents

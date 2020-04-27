@@ -13,5 +13,6 @@ urlpatterns = [
     url(r'^', include('home.urls', namespace='home', )),
     url(r'^contactus/',contactus,name='contactus'),
     url(r'^google0f6eb0891016c158\.html$', TemplateView.as_view(template_name='google0f6eb0891016c158.html', content_type='text/plain')), 
+     url(r'^tz_detect/', include('tz_detect.urls')),
    
 ]

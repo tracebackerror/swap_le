@@ -419,8 +419,8 @@ class ManageStudentAssesmentView(SingleTableView, ListView):
         #self.queryset = Assesment.objects.filter(subscriber_users = student_obj, privilege='public').filter(Q(result__assesment_submitted=False) |  Q(result__isnull=True))
         all_user_linked_assesment = Assesment.objects.filter(subscriber_users = student_obj, privilege='public')
         #all_user_linked_assesment_filter_exam_date = all_user_linked_assesment.filter(exam_start_date_time__lte= timezone.localtime(timezone.now()), expired_on__gte= timezone.localtime(timezone.now()))
-        all_user_linked_assesment_filter_exam_date = all_user_linked_assesment.filter(exam_start_date_time__lte= timezone.localtime(timezone.now()), expired_on__gte= timezone.localtime(timezone.now()))
-
+        all_user_linked_assesment_filter_exam_date = all_user_linked_assesment.filter(exam_start_date_time__lte= timezone.datetime.now(), expired_on__gte=  timezone.datetime.now())
+        
         if all_user_linked_assesment_filter_exam_date.exists():
             all_user_linked_result = Result.objects.filter(registered_user=student_obj).filter(assesment_submitted=True)
             if all_user_linked_result.exists():
@@ -761,10 +761,11 @@ def assessment_edit_by_staff(request, assesmentid):
     messages.get_messages(request).used = True
     date_time_format = "%d/%m/%Y %H:%M"
     if request.method == 'POST':
-        expired_on = make_aware(datetime.strptime(request.POST['expired_on'], date_time_format))
-        exam_start_date_time = make_aware(datetime.strptime(request.POST['exam_start_date_time'], date_time_format))
+        '''
+        expired_on = datetime.strptime(request.POST['expired_on'], date_time_format)
+        exam_start_date_time = datetime.strptime(request.POST['exam_start_date_time'], date_time_format)
         total_exam_duration_val = str(expired_on - exam_start_date_time)
-        
+        '''
         asses_obj = Assesment.objects.get(id=assesmentid) 
         
         assesment_form = AssessmentForm( instance=asses_obj, request=request,
