@@ -2,6 +2,8 @@
 {% extends "base.html" %}
 {% load render_table from django_tables2 %}
 
+{% load export_url from django_tables2 %}
+
 {% block title %}   Manage Single Assessment  {% endblock %}
 
 
@@ -28,12 +30,40 @@
 	}
 	</style>
 	
-<h1>Manage Single Assesment</h1>
+<h1>Manage Single Assessment</h1>
 
 <br>
 <!-- ------------------- Student Assessment Bubble Progress Bar ------------------- -->
 
 <div class="container">
+<div class="row">
+	<button type="button" class="col-sm-12 col-md-12 " data-toggle="collapse" data-target="#main_assesment_description" aria-expanded="false" aria-controls="main_assesment_description">
+		  {% if assesment.privilege == 'public'%}
+			<i class="fa fa-unlock" ></i> 
+		  {% elif assesment.privilege == 'private'%}
+			<i class="fa fa-lock" ></i> 
+		  {% endif %}
+		  <span class="badge badge-dark badge-pill "><i class="fa fa-magic" aria-hidden="true"></i> {{assesment.passing_marks}} Min Marks</span>	
+		   <span class="badge badge-danger "><i class="fa fa-hourglass" aria-hidden="true"></i> {{assesment.exam_start_date_time}}</span> <span class="badge badge-danger"><i class="fa fa-hourglass-o" aria-hidden="true"></i> {{assesment.expired_on}}</span> <span class="badge badge-info"><i class="fa fa-clock-o" aria-hidden="true"></i> {{assesment.duration_minutes}} Hour</span>  <span class="badge badge-info"><i class="fa fa-clock-o" aria-hidden="true"></i> {{assesment.duration_hours}} Minutes</span> 
+		  
+	</button>
+	<div class="collapse" id="main_assesment_description">
+	  <div class="card card-body">
+		<strong>Manage Single Assesment allows you to add question to your assessment, divide question into multiple sections and visualize the results from the single page.  	</strong> 
+		<br>
+		<p style="">
+			<strong> Title:  </strong> {{assesment.header}} <br>
+			<strong> Brief:  </strong> {{assesment.brief}}
+		
+		</p>
+		
+		
+	  </div>
+	  <div class="card-footer text-muted">
+		<center><a href="{% url "staff:assesments:assessment_edit_by_staff"  assesmentid=assesment.id  %}" class="card-link btn btn-success"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a></center>
+	  </div>
+	</div>
+</div>
 <div id="user_message_display">
 		{% for message in messages %}
 				<div class="row col-md-12">
@@ -76,7 +106,16 @@
 		
 	</div>
 	<div class="row">
-		<h4 >Questions : </h4>
+	
+		<button type="button" class="col-sm-12 col-md-12 " data-toggle="collapse" data-target="#question_description" aria-expanded="false" aria-controls="question_description">
+			  <h5>Question   <span class="badge badge-dark pull-right"> Total  {{table.rows|length}} </h5></span>
+			</button>
+		<div class="collapse" id="question_description">
+		  <div class="card card-body">
+			<p>Question allows you to add three specific type of question in assessment. You choose between multiple choice, single choice or text based question. If you added any text based question you will be required to provide score/marks to it using " <i class="fas fa-comments" aria-hidden="true"></i> Validate Score" in results.
+			Symbol : <i class="fa fa-dot-circle " aria-hidden="true"></i> Single Choice Question <i class="fas fa-check-square " aria-hidden="true"></i> Multiple Choice Question <i class="fas fa-pencil-alt" aria-hidden="true"></i> Text Question <span class="fas fa-trash-alt" aria-hidden="true"></span> Delete this current section.</p>
+		  </div>
+		</div>
 	</div>
 	<div class="row">
 		{% render_table table  %}
@@ -98,7 +137,7 @@
 
   <div class="row">
 
-    <form class="form-inline my-2 my-lg-0" method="GET" action="{% url "staff:assesments:add_question_section" request.resolver_match.kwargs.assesmentid %}">
+    <form class="" method="GET" action="{% url "staff:assesments:add_question_section" request.resolver_match.kwargs.assesmentid %}">
      
       <button class="btn btn-default " type="submit"><i class="fa fa-area-chart" aria-hidden="true"></i> Add Question Section</button>
     </form>
@@ -106,9 +145,18 @@
  </div>
  
  
- <div class="row">
- <p> Linked Question Section</p><br>
- </div>
+<div class="row">
+	
+	<button type="button" class="col-sm-12 col-md-12 " data-toggle="collapse" data-target="#section_description" aria-expanded="false" aria-controls="section_description">
+		  <h5>Section   <span class="badge badge-dark pull-right"> Total  {{table_section.rows|length}} </h5></span>
+		</button>
+	<div class="collapse" id="section_description">
+	  <div class="card card-body">
+		<p>Section allows you to assign your question into group of categories for section-wise result visualization. Get started by creating a section and adding few question through <span class="fas fa-cogs" aria-hidden="true"></span> manage section option.
+		Symbol : <i class="fa fa-cogs" aria-hidden="true"></i> Allows to edit and add question into this section <span class="fas fa-trash-alt" aria-hidden="true"></span> Delete this current section.</p>
+	  </div>
+	</div>
+</div>
  
  <div class="row">
  {% render_table table_section  %}
@@ -116,22 +164,59 @@
  
  <br>
   
+  
  <!-- Publish All Results  -->
-   <div class="row">
-
-    <form class="form-inline my-2 my-lg-0" method="GET" action="{% url "staff:assesments:publish_all_results" request.resolver_match.kwargs.assesmentid %}">
-      {% if flag %}
-      	<button class="btn btn-default " type="submit"><i class="fas fa-paper-plane" aria-hidden="true"></i>  Publish All Results</button>
-      {% else %}
-      	<button class="btn btn-default " type="submit"><i class="fas fa-link" aria-hidden="true"></i> Un-Publish All Results</button>
-      {% endif %}
-    </form>
+ <form class="" method="GET" action="{% url "staff:assesments:publish_all_results" request.resolver_match.kwargs.assesmentid %}">
+		
+ <div class="row">
+	
+	
+    <div class = " col-md-4">
+			{% if flag %}
+			<button class="btn btn-default " type="submit"><i class="fas fa-paper-plane" aria-hidden="true"></i>  Publish All Results</button>
+		  {% else %}
+			<button class="btn btn-default " type="submit"><i class="fas fa-link" aria-hidden="true"></i> Un-Publish All Results</button>
+		  {% endif %}
+		</div>
     
- </div>
- 
+</div>
+</form>
+	<!--
+	<div class = "col-sm-3 col-md-4">
+				<a class="btn btn-info"  role="button">
+					 <code>Download Data <i class="fa fa-arrow-right" aria-hidden="true"></i></code>
+					
+				</a>
+				{% for format in table_result.export_formats %}
+				
+				<a class="btn btn-primary"  role="button" href="{% export_url format %}">
+					 <code>.{{ format }}</code>
+					
+				</a>
+				
+				{% endfor %}
+	</div>
+	-->
  
  <div class="row">
-  <p> Linked Results</p>
+	<button type="button" class="col-sm-12 col-md-12 " data-toggle="collapse" data-target="#result_description" aria-expanded="false" aria-controls="result_description">
+		  <h5> Assessment Linked Result   <span class="badge badge-dark pull-right">Total  {{table_result.rows|length}}</h5></span>
+		</button>
+	<div class="collapse" id="result_description">
+	  <div class="card card-body">
+		<p>Manage all the result of your institute assessment from this single place. If you have added any <strong>Descriptive Question</strong> you can give it score through "Validate Score" option.
+		Symbol : <i class="fa fa-graduation-cap" aria-hidden="true"></i> Examination Cleared <span class="fas fa-comments" aria-hidden="true"></span> Assess the descriptive question answers and give marks. <span class="fas fa-file" aria-hidden="true"></span> Result report card of individual student.</p>
+	  </div>
+	</div>
+</div>
+
+   
+
+ <div class="row">
+			
+		</div>
+ <div class="row">
+  
   {% render_table table_result  %}
   
  </div>

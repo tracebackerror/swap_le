@@ -22,14 +22,15 @@
   
 }
 </style> 
- <div class=" container " id="box">
-	<form class="" action="{% url 'staff:login' %}" method="post"> 
-	<div class="row" id="user_message_display">
-		{% for message in messages %}
+{% for message in messages %}
 				<div class="alert alert-success" role="alert">
 					{{ message|safe }}
 				</div>  
 		{% endfor %}
+ <div class=" container " id="box">
+	<form class="" action="{% url 'staff:login' %}" method="post"> 
+	<div class="row" id="user_message_display">
+		
 	</div>
 	<div class="row" >
 		<div class="col-md-12 text-center">
