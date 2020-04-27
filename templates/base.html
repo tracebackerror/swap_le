@@ -101,15 +101,15 @@
 							</li>
 							<li class="nav-item dropdown">
 								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									Test / Assesment
+									Test / Assessment
 								</a>
 								<ul class="navbar-nav mr-auto">
 									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 										{% if request.user.is_authenticated and perms.staff.is_staff or request.user.is_authenticated and perms.institutions.is_institute %}
-										<li class="dropdown-item" > <a  href ={% url "staff:assesments:manage_all_assesment" %}> Manage Assesment</a> </li>
+										<li class="dropdown-item" > <a  href ={% url "staff:assesments:manage_all_assesment" %}> Manage Assessment</a> </li>
 										<li class="dropdown-item" > <a  href ={% url "staff:assesments:assessment_create_by_staff" %}>  Create Assessment</a> </li>
 										{% else %}
-										<li class="dropdown-item" > <a href ={% url "student:assesments:manage_student_assesment" %}> Live Assesment </a> </li>
+										<li class="dropdown-item" > <a href ={% url "student:assesments:manage_student_assesment" %}> Live Assessment </a> </li>
 										<li class="dropdown-item" > <a href ={% url "student:result" %}> Results </a> </li>
 										{% endif %}	
 

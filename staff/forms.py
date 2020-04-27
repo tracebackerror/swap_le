@@ -58,11 +58,6 @@ class StudentAddForm(UserCreationForm):
         if len(str(data)) != 10:
             raise forms.ValidationError("Invalid Mobile Number : Enter 10 digit mobile number")
         
-    def clean_parent_contact_no(self):
-        data = self.cleaned_data['parent_contact_no']
-        if len(str(data)) != 10:
-            raise forms.ValidationError("Invalid Mobile Number : Enter 10 digit mobile number")
-        
     class Meta:
         model=User
         fields = ['username','first_name','last_name','email','password1','password2']
