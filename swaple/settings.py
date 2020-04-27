@@ -67,7 +67,7 @@ INSTALLED_APPS = [
     'django_countries',
     'bootstrap4',
     'django_user_agents',
-    'tz_detect',
+    #'tz_detect',
 ]
 
 GRAPH_MODELS = {
@@ -87,9 +87,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     
     'django_user_agents.middleware.UserAgentMiddleware',
-    'tz_detect.middleware.TimezoneMiddleware',
+    #'tz_detect.middleware.TimezoneMiddleware',
 ]
-TZ_DETECT_COUNTRIES = ( 'US', 'IN', 'JP', 'BR', 'RU', 'DE', 'FR', 'GB', 'CN',)
+#TZ_DETECT_COUNTRIES = ( 'US', 'IN', 'JP', 'BR', 'RU', 'DE', 'FR', 'GB', 'CN',)
 ROOT_URLCONF = 'swaple.urls'
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 TEMPLATES = [
@@ -147,7 +147,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata''
 
 USE_I18N = True
 
