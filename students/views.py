@@ -300,7 +300,7 @@ class StudentRegistration(FormView):
         student_obj.save()
         user_obj.save()
         
-        subject = 'Welcome to SwapLE - Digital Assesment Platform'
+        subject = 'Welcome to Swaple - Digital Assesment Platform'
         
         institution_name = staff_obj.institute.institute_name
         message = "Dear {}, \n\nWelcome! We are so glad to have you onboarded in your institution, {}.\n\n"

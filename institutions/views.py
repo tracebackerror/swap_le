@@ -44,6 +44,13 @@ from assesments.models import Result,Assesment
 from datetime import datetime,timedelta
 import random, string
 
+from swaple.settings import DEFAULT_FROM_EMAIL
+from django.core.mail import send_mail
+from django.utils.safestring import SafeString
+from django.utils.html import format_html
+
+from django.utils import timezone
+
 def institute_login(request):
     if request.method == 'POST':
         posted_form_data = InstitutionLoginForm(request.POST)
@@ -350,7 +357,7 @@ class InstitutionRegistration(FormView):
         
         license_obj.li_institute = institution_obj
         license_obj.li_key = ''.join(random.choices(string.ascii_uppercase + string.digits, k=16))
-        license_obj.li_expiration_date = datetime.now() + timedelta(days=10*365)
+        license_obj.li_expiration_date = timezone.now() + timedelta(days=10*365)
         license_obj.li_max_staff = 50
         license_obj.li_max_students = 500
         license_obj.li_max_assesments = 1000
@@ -371,6 +378,23 @@ class InstitutionRegistration(FormView):
         profile_form.save()  # Gracefully save the form
         
         messages.add_message(self.request, messages.SUCCESS, 'Your Account Registered Successfully')
+        
+        subject = 'Welcome to Swaple - Digital Assesment Platform'
+        message = "Dear Sir/Madam, \n\nWelcome to Swaple Digital Assessment Platform. We are so glad to have your institute {} onboarded.\n\n"
+        message += "The next step is to add few staff, students and create Assessment. \n\n"
+        message += "For any assistance our team is ready to assist you. Please find our team details in signature \n\n"
+        message += "Thank you,\n"
+        message += "{}\nSupport: {}\nBusiness: {}\n{}"
+        message = message.format( 
+            self.request.POST['institute_name'].title(),
+            "Team Swaple".title(),
+            "swapledigital@gmail.com".lower(),
+            "admin@swaple.in".lower(),
+            "www.swaple.in".lower(),
+            )
+        #import pdb; pdb.set_trace();
+        send_mail(subject, message, DEFAULT_FROM_EMAIL, [self.request.POST['email']], fail_silently = True)
+            
         return HttpResponseRedirect(self.get_success_url())
     
     

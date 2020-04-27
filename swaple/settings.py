@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'django_countries',
     'bootstrap4',
     'django_user_agents',
+    'import_export',
     #'tz_detect',
 ]
 

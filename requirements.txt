@@ -1,3 +1,4 @@
+django-import-export
 django-tz-detect
 pyyaml
 ua-parser
