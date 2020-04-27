@@ -6,8 +6,8 @@ from django_tables2 import A
 from django_tables2.export.views import ExportMixin
 from django.urls import reverse
 
-class ResultTable(tables.Table):
-    
+class ResultTable(ExportMixin, tables.Table):
+    export_formats = ['csv', 'xls', ]
     
     #review_sqa = tables.LinkColumn('reviewsqa', text='Review Descriptive Answer')
     review_sqa = tables.TemplateColumn('<a href="{% url "staff:assesments:assesment_manage_review_sqa_question"  assesmentid=self.request.GET.assesmentid %}"><span class="fas fa-comments"></span></a>', verbose_name="Validate Descriptive Answer")

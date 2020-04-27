@@ -358,6 +358,7 @@ class ManageAllAssesmentView(PermissionRequiredMixin, ExportMixin, SingleTableMi
 
 
 class AssessmentResultByStaff(LoginRequiredMixin, DetailView):
+    
     model = Result
     template_name = 'assesments/display_single_result.html'
     login_decorator = login_required(login_url=reverse_lazy('staff:login'))
@@ -459,7 +460,8 @@ class ManageStudentAssesmentView(SingleTableView, ListView):
         return context 
     
     
-class ManageSingleAsessment(SingleTableView):
+class ManageSingleAsessment(ExportMixin, SingleTableView):
+    export_name =  "Result"
     model = Question
     context_object_name = 'table'
     paginate_by = 20
@@ -492,7 +494,7 @@ class ManageSingleAsessment(SingleTableView):
         
         
         result_table =  ResultTable(self.result_queryset, assesmentid=self.kwargs['assesmentid'])
-        
+        context['assesment'] = Assesment.objects.get(id = self.kwargs['assesmentid'])
         if self.request.user_agent.is_mobile:
             result_table.exclude += ('exam_taken_date_time', 'total_question', 'total_attempted', 'publish_result', 'assesment_submitted')
             context['table_result']  = result_table
