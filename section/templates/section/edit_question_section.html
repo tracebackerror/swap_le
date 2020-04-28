@@ -61,7 +61,7 @@ label {
 		</div>
 	<div class="form-row">
 			
-			<div class="col-md-12 overflow-auto" id="manage_questions" style="height:200px; border: 1px solid #ccc; padding: 10px 10px;">
+			<div class="col-md-12 overflow-auto" id="manage_questions" style="height:200px; border: 1px solid #ccc; padding: 10px 10px; overflow-y: auto;">
 					{% for question in form.for_question %}
 							{{ question }}
 					{% endfor %}

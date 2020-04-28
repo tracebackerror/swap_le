@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 
-{% block title %}   Create Assessment   {% endblock %}
+{% block title %}  Create or Edit Assessment   {% endblock %}
 
 {% block content %} 
   <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
@@ -24,7 +24,7 @@
 		{% endfor %}
 	</div>
 	<div class="row">
-		<h3 >You can Create your Assessment using the following form:</h3>
+		<h3 >You can create or edit your Assessment using the following form:</h3>
 	 </div>
 	 
 
@@ -110,8 +110,12 @@
 			</div>
 		</div>
 		<div class="form-row">
-			<div class="col-md-12 overflow-auto" id="scroll_questions" style="height:200px; border: 1px solid #ccc; padding: 10px 10px;">
-						{{ assessment_c_form.subscriber_users }}
+			
+			<div class="col-md-12 overflow-auto" id="manage_questions" style="height:200px; border: 1px solid #ccc; padding: 10px 10px; overflow-y: auto;">
+					{% for subscriber_users in assessment_c_form.subscriber_users %}
+							{{ subscriber_users }}
+					{% endfor %}
+						
 			</div>
 						
 		</div>
@@ -138,7 +142,8 @@
     });
 	$("#expiredon").datetimepicker({
       format: 'DD/MM/YYYY HH:mm',
-	  date: moment( '{{assessment_c_form.expired_on.value|date:'d/m/Y H:i' }}', 'DD/MM/YYYY HH:mm') 
+	  date: moment( '{{assessment_c_form.expired_on.value|date:'d/m/Y H:i' }}', 'DD/MM/YYYY HH:mm') ,
+	  minDate: new Date()
     });
 	/*
 	
