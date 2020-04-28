@@ -201,7 +201,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'saffronspice8@gmail.com'
 EMAIL_HOST_PASSWORD = 'Shiv@1234s'
-DEFAULT_FROM_EMAIL = "SwapLE Support <noreply@swaple.com>"
+DEFAULT_FROM_EMAIL = "Swaple Support <noreply@swaple.com>"
 
 
 

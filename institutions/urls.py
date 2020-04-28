@@ -21,7 +21,8 @@ urlpatterns = [
     url(r'^manage/staff/create/$', institute_staff_create, name='create_institution_staff'),
     
     #password reset through email
-    url(r'^password_reset/$',InstitutionPasswordResetView.as_view(),name='password_reset'),
+    #url(r'^password_reset/$',InstitutionPasswordResetView.as_view(),name='password_reset'),
+    url(r'^password_reset/$',ResetPasswordRequestView.as_view(),name='password_reset'),
     url(r'^password_reset/done/$',InstitutionPasswordResetDoneView.as_view(),name='password_reset_done'),
     url(r'^reset/done/$',InstitutionPasswordResetCompleteView.as_view(),name='password_reset_complete'),
     url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',

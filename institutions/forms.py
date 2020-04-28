@@ -100,3 +100,4 @@ class InstitutionRegistrationForm(UserCreationForm):
         
         #widgets = {'institute_country': CountrySelectWidget()}
     
+    
