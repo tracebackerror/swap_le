@@ -36,6 +36,7 @@
 <!-- ------------------- Student Assessment Bubble Progress Bar ------------------- -->
 
 <div class="container">
+
 <div class="row">
 	<button type="button" class="col-sm-12 col-md-12 " data-toggle="collapse" data-target="#main_assesment_description" aria-expanded="false" aria-controls="main_assesment_description">
 		  {% if assesment.privilege == 'public'%}
@@ -66,13 +67,12 @@
 </div>
 <div id="user_message_display">
 		{% for message in messages %}
-				<div class="row col-md-12">
-				<a class="btn btn-success waves-effect waves-light" role="button">
-				 <code>{{ message|safe }}</code>
-				
-				</a>
+				<div class="alert alert-warning alert-dismissible fade show" role="alert">
+					{{ message|safe }}
+				  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				  </button>
 				</div>
-			
 		{% endfor %}
 	</div>
 	<div class="row">

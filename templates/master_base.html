@@ -13,7 +13,11 @@
  
  {% block menu %}{% endblock %}
  
- 
+ {% block warnings_messages %}
+	
+ {% endblock %}
+ 		
+		
  {% if messages %}
  <div id="userDisplayMessage">
  	<ul class="messages" >    
@@ -55,6 +59,10 @@
  <script type="text/javascript">
  
  $(document).ready(function(){
+	$('.alert').alert();
+	$(".alert").fadeTo(15000, 500).slideUp(500, function(){
+		$(".alert").slideUp(500);
+	});
  	var checkWhetherMessageExists = 0;
  	checkWhetherMessageExists = $("#userDisplayMessage").length > 0;
  	

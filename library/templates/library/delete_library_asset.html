@@ -3,11 +3,14 @@
 
 {% if messages %}
  <div id="userDisplayMessage">
- 	<ul class="messages" >    
- 		{% for message in messages %}
- 		      <li class="{{ message.tags }}">        {{ message|safe }}          </li>
- 		{% endfor %}
-   </ul>
+ 	{% for message in messages %}
+				<div class="alert alert-warning alert-dismissible fade show" role="alert">
+					{{ message|safe }}
+				  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				  </button>
+				</div>
+		{% endfor %}
  </div>
  {% endif %}
 

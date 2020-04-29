@@ -23,9 +23,12 @@
 }
 </style> 
 {% for message in messages %}
-				<div class="alert alert-success" role="alert">
+				<div class="alert alert-warning alert-dismissible fade show" role="alert">
 					{{ message|safe }}
-				</div>  
+				  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				  </button>
+				</div>
 		{% endfor %}
  <div class=" container " id="box">
 	<form class="" action="{% url 'staff:login' %}" method="post"> 

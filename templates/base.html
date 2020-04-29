@@ -197,7 +197,23 @@
 
 
 
-
+		
+			
+				<div class="container-fluid">
+					{% for message in messages %}
+					<div class="row">
+								<div class="alert alert-warning alert-dismissible fade show" role="alert">
+									{{ message|safe }}
+									<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>  
+								
+					</div>		  
+					{% endfor %}
+				 </div>
+			
+		
 
 
 
@@ -236,6 +252,10 @@
 <script type="text/javascript">
 
 	$(document).ready(function(){
+		$('.alert').alert();
+		$(".alert").fadeTo(15000, 500).slideUp(500, function(){
+			$(".alert").slideUp(500);
+		});
 	/*
 	//Dialog Modal For Message Popup
 	var checkWhetherMessageExists = 0;

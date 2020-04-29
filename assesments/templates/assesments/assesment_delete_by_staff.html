@@ -8,22 +8,26 @@
 <h1>Delete Assessments</h1>
 <div id="user_message_display">
 	{% for message in messages %}
-	<div class="alert alert-success" role="alert">
-		{{ message|safe }}
-	</div>  
-	{% endfor %}
+				<div class="alert alert-warning alert-dismissible fade show" role="alert">
+					{{ message|safe }}
+				  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				  </button>
+				</div>
+		{% endfor %}
 </div>
 
 
 <div class="container">
 	<div class="row">
-		{% if information %}  
-			<ul class="information">    
-			{% for message in information %}     
-				<li class="warning">        {{ message|safe }}      </li>    
-			{% endfor %}  
-			</ul> 
-		{% endif %}
+				{% for message in messages %}
+				<div class="alert alert-warning alert-dismissible fade show" role="alert">
+					{{ message|safe }}
+				  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				  </button>
+				</div>
+		{% endfor %}
 	</div>
 
 

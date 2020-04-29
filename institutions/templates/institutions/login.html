@@ -22,10 +22,22 @@
   
 }
 </style> 
+ {% if form.errors %} 
+	 <div class="alert alert-warning alert-dismissible fade show" role="alert">
+						<p class="p">      Your username and password didn't match.       Please try again.    </p> 
+					  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					  </button>
+					</div>
+			
+		  {% endif %}    
 {% for message in messages %}
-				<div class="alert alert-success" role="alert">
+				<div class="alert alert-warning alert-dismissible fade show" role="alert">
 					{{ message|safe }}
-				</div>  
+				  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				  </button>
+				</div>
 		{% endfor %}
  <div class=" container " id="box">
 	<form class="" action="{% url 'institutions:login' %}" method="post"> 
@@ -45,11 +57,9 @@
 
 	<div class="row" >
 		<div class="col-md-12">
-		  {% if form.errors %} 
-			<p class="p">      Your username and password didn't match.       Please try again.    </p> 
-		  {% else %}    
+		 
 			<p class="p">Please, use the following form to log-in:</p> 
-		  {% endif %}
+		
 		 </div>
 	</div>
 	
