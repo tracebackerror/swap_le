@@ -50,7 +50,23 @@
 			
 			{% endfor %}
 		</div>
-
+<div class="row">
+	
+		<button type="button" class="col-sm-12 col-md-12 " data-toggle="collapse" data-target="#manage_all_assesment" aria-expanded="false" aria-controls="manage_all_assesment">
+			  <h5>Manage All Assesment   <span class="badge badge-dark pull-right"> Total  {{table.rows|length}} </h5></span>
+			</button>
+		<div class="collapse" id="manage_all_assesment">
+		  <div class="card card-body">
+			<p>Manage all your assessment from this single page. Get started by creating a Assesment and adding few Question and Student in it. All your Assesment will be available to Student between start and end of the exam date time and  having visibility <strong>Public</strong>.
+			<br/>Symbol : 
+			<br/> <i class="fa fa-lock " aria-hidden="true"></i> Visibility Private - This type assessment will not be visible to Student 
+			<br/><i class="fas fa-unlock " aria-hidden="true"></i> Visibility Public - This type Assesment will be visible for Student to take exams.</p>
+			<br/><i class="fas fa-cogs " aria-hidden="true"></i> Manage your Assesment here by adding questions, section and viewing results.</p>
+			<br/><i class="fas fa-edit " aria-hidden="true"></i>From here you can edit the Meta information and Add more students to your Assessment.</p>
+			<br/><i class="fas fa-trash-alt" aria-hidden="true"></i>Delete. Note Once deleted you will not be able to restore your Assessment data.</p>
+		  </div>
+		</div>
+	</div>
  <div class="row">
   {% render_table table  %}
 </div>
