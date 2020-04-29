@@ -11,6 +11,12 @@ from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field, F
 from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions
 from django.template.defaultfilters import default
 
+# Grouping Field M2M
+from functools import partial
+from itertools import groupby
+from operator import attrgetter
+from django.forms.models import ModelChoiceIterator, ModelChoiceField
+
 
 class QuestionForm(forms.ModelForm):
     question_image = forms.ImageField(required=False)
@@ -78,6 +84,80 @@ class CustomOptionsForAssesment(forms.ModelMultipleChoiceField):
     def label_from_instance(self, obj):
          return obj.get_student_name_for_staff()
         
+class GroupedModelChoiceIterator(ModelChoiceIterator):
+    def __init__(self, field, groupby):
+        self.groupby = groupby
+        super().__init__(field)
+
+    def __iter__(self):
+        if self.field.empty_label is not None:
+            yield ("", self.field.empty_label)
+        queryset = self.queryset
+        # Can't use iterator() when queryset uses prefetch_related()
+        if not queryset._prefetch_related_lookups:
+            queryset = queryset.iterator()
+        for group, objs in groupby(queryset, self.groupby):
+            yield (group, [self.choice(obj) for obj in objs])
+
+    
+       
+class GroupedModelChoiceField(ModelChoiceField):
+    def __init__(self, *args, choices_groupby, **kwargs):
+        if isinstance(choices_groupby, str):
+            choices_groupby = attrgetter(choices_groupby)
+        elif not callable(choices_groupby):
+            raise TypeError('choices_groupby must either be a str or a callable accepting a single argument')
+        self.iterator = partial(GroupedModelChoiceIterator, groupby=choices_groupby)
+        super().__init__(*args, **kwargs)
+    
+    def to_python(self, value):
+        #import pdb; pdb.set_trace()
+        value = [ student_data for student_data in value if student_data]
+        try:
+            value = super(GroupedModelChoiceField, self).to_python(value)
+            import pdb; pdb.set_trace()
+        except Exception as e:
+            
+            #key = self.to_field_name or 'pk'
+            
+            #value = self.queryset.get(**{'pk': value})
+            value = self.queryset.filter(pk__in = value)
+            if not value.exists():
+               raise ValidationError(self.error_messages['invalid_choice'], code='invalid_choice')
+            '''else:
+               value= value.first()'''
+        #import pdb; pdb.set_trace()       
+        return value
+        
+    def prepare_value(self, value):
+        #import pdb; pdb.set_trace()
+        
+        if  type(value) == Student:
+            return value.pk
+        elif value and len(value) > 0:
+            v = [selected.pk for selected in value]
+            '''
+            if self.to_field_name:
+                return value.serializable_value(self.to_field_name)
+            else:
+                return value.pk'''
+                
+            return v
+        return super().prepare_value(value)
+    def has_changed(self, initial, data):
+        #import pdb; pdb.set_trace()
+        if self.disabled:
+            return False
+        if initial is None:
+            initial = []
+        if data is None:
+            data = []
+        if len(initial) != len(data):
+            return True
+        initial_set = {str(value) for value in self.prepare_value(initial)}
+        data_set = {str(value) for value in data}
+        return data_set != initial_set 
+
         
 class AssessmentForm(forms.ModelForm):
     DURATION_HOURS_CHOICES = [
@@ -110,11 +190,19 @@ class AssessmentForm(forms.ModelForm):
                                )
     
     
-    subscriber_users = CustomOptionsForAssesment(queryset = Student.objects.filter(id=1),
-                                                      widget=forms.CheckboxSelectMultiple())
-    
-    
-    
+    subscriber_users = GroupedModelChoiceField(
+                                queryset=Student.objects.none(), 
+                                choices_groupby='staffuser',
+                                widget= forms.SelectMultiple
+                                )   
+    '''
+    def clean_subscriber_users(self):
+        student = self.cleaned_data['subscriber_users']
+        
+        import pdb; pdb.set_trace()
+        #forms.ValidationError("By Pass Validation")
+        return student
+    '''
     class Meta:
         model = Assesment
         
@@ -148,7 +236,8 @@ class AssessmentForm(forms.ModelForm):
         # If you pass FormHelper constructor a form instance
         # It builds a default layout with all its fields
         #self.helper = FormHelper(self)
-        self.fields["subscriber_users"].queryset = Student.active.filter(staffuser__institute = self.request.user.staff.institute)   
+        #self.fields["subscriber_users"].queryset = Student.active.filter(staffuser__institute = self.request.user.staff.institute)   
+        self.fields["subscriber_users"].queryset = Student.active.filter(staffuser__institute = self.request.user.staff.institute).exclude(staffuser=None) 
          
 class AssessmentCreationForm(forms.ModelForm):
     DURATION_HOURS_CHOICES = [
@@ -180,8 +269,11 @@ class AssessmentCreationForm(forms.ModelForm):
                                                           
                                )
 
-    subscriber_users = CustomOptionsForAssesment(queryset = Student.objects.filter(id=1),
-                                                      widget=forms.CheckboxSelectMultiple())
+    subscriber_users = GroupedModelChoiceField(
+                                queryset=Student.objects.none(), 
+                                choices_groupby='staffuser',
+                                widget= forms.SelectMultiple
+                                )
     
     class Meta:
         model = Assesment
@@ -212,7 +304,8 @@ class AssessmentCreationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop("request")
         super(AssessmentCreationForm, self).__init__(*args, **kwargs)
-        self.fields["subscriber_users"].queryset = Student.active.filter(staffuser__institute = self.request.user.staff.institute)    
+        #self.fields["subscriber_users"].queryset = Student.active.filter(staffuser__institute = self.request.user.staff.institute)    
+        self.fields["subscriber_users"].queryset = Student.active.filter(staffuser__institute = self.request.user.staff.institute).exclude(staffuser=None)   
     
     
     

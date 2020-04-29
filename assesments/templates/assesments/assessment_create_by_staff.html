@@ -13,6 +13,18 @@
 		width: 300px;
 		overflow-y: auto; /* This changed */
 }
+
+  	ul {
+	  list-style-type: none;
+	}
+	  .bootstrap-select.btn-group.show-tick .dropdown-menu li.selected a span.check-mark{
+		position: absolute;
+		display: inline-block;
+		left: 5px !important; //changed from right:15
+		
+		margin-top: 5px;
+	}
+
 </style>
  <h1>Create Assessment</h1>
 <div class="container" style="min-height:60%;">
@@ -62,7 +74,7 @@
 		<div class="form-row">
 						
 			<div class="form-group col-md-4">
-				<label>Assesment available from: </label>
+				<label>Assessment available from: </label>
 				<div class="input-group date" id="datetimepicker1" data-target-input="nearest">
 				  {{ assessment_c_form.exam_start_date_time  }}
 				  <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
@@ -101,25 +113,19 @@
 			</div>
 		</div>
 		<div class="form-row">
-			<em class="small em">The Assesment will be visible to student only between the Assesment start to expired date. And having visibility to Public. </em>
+			<em class="small em">The Assessment will be visible to student only between the Assessment start to expired date. And having visibility to Public. </em>
 		</div>
 		<div class="form-row">
 		
-			<div class="form-group col-md-12 " style="">
-			<label >Please select the student which you want to subscribe: </label>
+			<div class="col-md-12 " style="">
+				<label >Please select the student which you want to subscribe to this Assessment: </label>
+			</div>
+			<div class="row" id="student_selected" style="width:80%">
+				<div class="col-md-12">{{ assessment_c_form.subscriber_users }}</div>	
 			</div>
 		</div>
-		<div class="form-row">
-			
-			<div class="col-md-12 overflow-auto" id="manage_questions" style="height:200px; border: 1px solid #ccc; padding: 10px 10px; overflow-y: auto;">
-					{% for subscriber_users in assessment_c_form.subscriber_users %}
-							{{ subscriber_users }}
-					{% endfor %}
-						
-			</div>
-						
-		</div>
-			
+		
+	
 		
 	    
 	     
@@ -128,14 +134,29 @@
  </div>
  
  
-  
-<style type="text/css">
-	ul {
-	  list-style-type: none;
-	}
-</style> 
 <script type="text/javascript">
  $(document).ready(function(){	
+	
+	$.fn.selectpicker.Constructor.BootstrapVersion = '4';
+
+	$('#id_subscriber_users').selectpicker({
+		liveSearch: false,
+		countSelectedText: 'Students {0}/{1}',
+		actionsBox: true,
+		selectedTextFormat: 'count > 1',
+		
+		style : 'btn-light',
+		styleBase : 'btn',
+		
+		size:5,
+		container: 'body',
+		
+		
+	});
+	$('.selectpicker').addClass('col-sm-11').selectpicker('setStyle');
+	
+	
+	
 	$("#datetimepicker1").datetimepicker({
       format: 'DD/MM/YYYY HH:mm',
 	  date: moment( '{{assessment_c_form.exam_start_date_time.value|date:'d/m/Y H:i' }}', 'DD/MM/YYYY HH:mm') 

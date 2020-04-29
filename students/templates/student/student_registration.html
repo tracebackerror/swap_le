@@ -15,16 +15,29 @@
 		{% endfor %}
 	</div>
  <div class="container" style="min-height:60%">
- <div class="row">
-	<h3 >Please fill all the details for Student account:</h3>
- </div>
  
  
  <form action="." method="post" enctype="multipart/form-data">
  	 {% csrf_token %}
+	 <br/>
+	 <div class="row">
+		<div class="col-md-12 text-center">
+			<i class="mb-4 fas fa-book-reader" style="font-size:72px; color: #e91e63 !important;" width="72" height="72" aria-hidden="true"></i>
+		
+		 </div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<h3>Student Registration</h3>
+		
+		 </div>
+	</div>
+	<div class="row">
+		<h5>Please fill all the details for Student account:</h5>
+	 </div>
+	 
  	 <div class="form-row">
-	
-			
+		
 			<div class="form-group col-md-4">
 				<label for="brief_answer">{{"Please select your Institution/School Name:"}}*</label>
 					<div class="input-group">
