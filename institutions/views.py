@@ -75,6 +75,74 @@ from django.contrib.auth.models import User
 from django.db.models.query_utils import Q
 
 from django import forms
+from django.contrib.auth import (REDIRECT_FIELD_NAME, login as auth_login,
+    logout as auth_logout, get_user_model, update_session_auth_hash)
+    
+class SetPasswordForm(forms.Form):
+    """
+    A form that lets a user change set their password without entering the old
+    password
+    """
+    error_messages = {
+        'password_mismatch': ("The two password fields didn't match."),
+        }
+    new_password1 = forms.CharField(label=("New password"),
+                                    widget=forms.PasswordInput)
+    new_password2 = forms.CharField(label=("New password confirmation"),
+                                    widget=forms.PasswordInput)
+
+    def clean_new_password2(self):
+        password1 = self.cleaned_data.get('new_password1')
+        password2 = self.cleaned_data.get('new_password2')
+        if password1 and password2:
+            if password1 != password2:
+                raise forms.ValidationError(
+                    self.error_messages['password_mismatch'],
+                    code='password_mismatch',
+                    )
+        return password2
+
+class InstitutionPasswordResetView(PasswordResetView):
+    template_name = 'institutions/password_reset_form.html'
+    email_template_name= 'institutions/password_reset_email.html'
+    success_url = reverse_lazy('institutions:password_reset_done')
+
+class PasswordResetConfirmView(FormView):
+    template_name = 'institutions/password_reset_confirm.html'
+    email_template_name= 'institutions/password_reset_email.html'
+    success_url = reverse_lazy('institutions:login')
+    form_class = SetPasswordForm
+
+    def post(self, request, uidb64=None, token=None, *arg, **kwargs):
+        """
+        View that checks the hash in a password reset link and presents a
+        form for entering a new password.
+        """
+        UserModel = get_user_model()
+        form = self.form_class(request.POST)
+        assert uidb64 is not None and token is not None  # checked by URLconf
+        try:
+            uid = urlsafe_base64_decode(uidb64)
+            user = UserModel._default_manager.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, UserModel.DoesNotExist):
+            user = None
+
+        if user is not None and default_token_generator.check_token(user, token):
+            if form.is_valid():
+                new_password= form.cleaned_data['new_password2']
+                user.set_password(new_password)
+                user.save()
+                messages.success(request, 'Password has been reset.')
+                return self.form_valid(form)
+            else:
+                messages.error(request, 'Password reset has not been unsuccessful.')
+                return self.form_invalid(form)
+        else:
+            messages.error(request,'The reset password link is no longer valid.')
+            return self.form_invalid(form)
+            
+
+            
 class PasswordResetRequestForm(forms.Form):
     #We are not using EmailField on purpose
     #because you want to treat it
@@ -86,7 +154,8 @@ class PasswordResetRequestForm(forms.Form):
 class ResetPasswordRequestView(FormView):
     template_name = 'institutions/password_reset_form.html'
     email_template_name= 'institutions/password_reset_email.html'
-    success_url = reverse_lazy('institutions:password_reset_done')
+    success_url = reverse_lazy("institutions:login")
+    subject_template_name = 'institutions/password_reset_subject.txt'
     
     form_class = PasswordResetRequestForm
 
@@ -124,18 +193,19 @@ class ResetPasswordRequestView(FormView):
                             'token': default_token_generator.make_token(user),
                             'protocol': 'https',
                             }
-                        subject_template_name='institutions/password_reset_subject.txt'
+                        
                         # copied from django/contrib/admin/templates/registration/password_reset_subject.txt to templates directory
-                        email_template_name='institutions/password_reset_email.html'
+                        
                         # copied from django/contrib/admin/templates/registration/password_reset_email.html to templates directory
-                        subject = loader.render_to_string(subject_template_name, c)
+                        
+                        subject = loader.render_to_string(self.subject_template_name, c)
                         # Email subject *must not* contain newlines
                         subject = ''.join(subject.splitlines())
-                        email = loader.render_to_string(email_template_name, c)
+                        email = loader.render_to_string(self.email_template_name, c)
                         send_mail(subject, email, DEFAULT_FROM_EMAIL , [user.email], fail_silently=False)
                 result = self.form_valid(form)
                 messages.success(request, 'An email has been sent to ' + data +". Please check its inbox to continue reseting password.")
-                return redirect(reverse_lazy("institutions:login"))
+                return redirect(self.success_url)
             result = self.form_invalid(form)
             messages.error(request, 'No user is associated with this email address.')
             return result
@@ -155,16 +225,16 @@ class ResetPasswordRequestView(FormView):
                         'token': default_token_generator.make_token(user),
                         'protocol': 'https',
                         }
-                    subject_template_name='institutions/password_reset_subject.txt'
-                    email_template_name='institutions/password_reset_email.html'
-                    subject = loader.render_to_string(subject_template_name, c)
+                    
+                   
+                    subject = loader.render_to_string(self.subject_template_name, c)
                     # Email subject *must not* contain newlines
                     subject = ''.join(subject.splitlines())
-                    email = loader.render_to_string(email_template_name, c)
+                    email = loader.render_to_string(self.email_template_name, c)
                     send_mail(subject, email, DEFAULT_FROM_EMAIL , [user.email], fail_silently=False)
                 result = self.form_valid(form)
                 messages.success(request, 'Email has been sent to ' + data +"'s email address. Please check its inbox to continue reseting password.")
-                return redirect(reverse_lazy("institutions:login"))
+                return redirect(self.success_url)
             result = self.form_invalid(form)
             messages.error(request, 'This username does not exist in the system.')
             return result

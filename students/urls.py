@@ -3,8 +3,8 @@ from django.contrib.auth.views import LoginView, LogoutView, logout_then_login, 
 #from .views import InstitutionStudentLoginView, dashboard, edit, PasswordChangeViewForStudent, PasswordChangeDoneViewForStudent
 from .views import *
 from assesments.views import AssessmentResultByStaff
-#, dashboard, edit, delete_institution_staff_student, PasswordChangeViewForStaff, PasswordChangeDoneViewForStaff, ManageStudentView
 
+from institutions.views import ResetPasswordRequestView
 
 
 app_name='student'
@@ -19,7 +19,7 @@ urlpatterns = [
     url(r'^', include('assesments.urls', namespace='assesments', )),
     
     #password reset through email
-    url(r'^password_reset/$',StudentPasswordResetView.as_view(),name='password_reset'),
+    url(r'^password_reset/$',ResetPasswordRequestView.as_view(success_url = reverse_lazy("student:login")),name='password_reset'),
     url(r'^password_reset/done/$',StudentPasswordResetDoneView.as_view(),name='password_reset_done'),
     url(r'^reset/done/$',StudentPasswordResetCompleteView.as_view(),name='password_reset_complete'),
     url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
