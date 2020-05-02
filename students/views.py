@@ -49,6 +49,13 @@ from django.core.mail import send_mail
 from django.utils.safestring import SafeString
 from django.utils.html import format_html
 
+from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.views import LogoutView   
+
+class StudentLogout(SuccessMessageMixin, LogoutView):
+    next_page = reverse_lazy('student:login')
+    success_message = 'You are succesfully logged out.'
+    
 class InstitutionStudentLoginView(LoginView):
     template_name = 'student/login.html'
 

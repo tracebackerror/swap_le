@@ -15,7 +15,7 @@ from staff.forms import StudentEditForm,StudentUserEditForm,CreateStudentEnquiry
 from licenses.models import License
 from django.contrib.auth.models import User
 from django.contrib.auth.views import (PasswordResetView,PasswordResetDoneView, PasswordResetConfirmView ,PasswordResetCompleteView)
-from django.urls import reverse_lazy
+
 from django.contrib.auth.mixins import PermissionRequiredMixin,LoginRequiredMixin
 from guardian.shortcuts import assign_perm
 
@@ -34,8 +34,12 @@ from .filters import StudentEnquiryFilter
 from django_filters.views import FilterView
 from django.urls import reverse
 
+from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.views import LogoutView   
 
-
+class StaffLogout(SuccessMessageMixin, LogoutView):
+    next_page = reverse_lazy('staff:login')
+    success_message = 'You are succesfully logged out.'
 
 class InstitutionStaffLoginView(LoginView):
     template_name = 'staff/login.html'

@@ -8,6 +8,9 @@ from localflavor.in_.forms import INStateSelect
 from django_countries.widgets import CountrySelectWidget
 from django_countries.fields import CountryField
 
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit
+
 class StaffProfileForm(forms.ModelForm):
 
     class Meta:
@@ -49,8 +52,12 @@ class InstitutionsEditForm(forms.ModelForm):
 
 class InstitutionLoginForm(forms.Form):
     username = forms.CharField()
+    
     password = forms.CharField(widget=forms.PasswordInput) 
     
+    def __init__(self, *args, **kwargs):
+        
+        super(InstitutionLoginForm, self).__init__(*args, **kwargs)
     
     
 class StaffCreateForm(UserCreationForm):

@@ -78,6 +78,13 @@ from django import forms
 from django.contrib.auth import (REDIRECT_FIELD_NAME, login as auth_login,
     logout as auth_logout, get_user_model, update_session_auth_hash)
     
+from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.views import LogoutView   
+
+class InstituteLogout(SuccessMessageMixin, LogoutView):
+    next_page = reverse_lazy('institutions:login')
+    success_message = 'You are succesfully logged out.'
+    
 class SetPasswordForm(forms.Form):
     """
     A form that lets a user change set their password without entering the old

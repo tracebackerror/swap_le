@@ -13,7 +13,7 @@ urlpatterns = [
     url(r'^login/',  InstitutionStudentLoginView.as_view(), name='login'),
     url(r'^$', dashboard, name='dashboard'),
     url(r'^edit/$', edit, name="edit"),
-    url(r'^logout/$',  LogoutView.as_view(template_name='student/logged_out.html'), name='logout'),
+    url(r'^logout/$',  StudentLogout.as_view(), name='logout'),
     url(r'^password-change/$',PasswordChangeViewForStudent.as_view(), name='password_change'),
     url(r'^password-change/done/$',PasswordChangeDoneViewForStudent.as_view(), name='password_change_done'),
     url(r'^', include('assesments.urls', namespace='assesments', )),

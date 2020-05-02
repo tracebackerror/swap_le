@@ -10,7 +10,7 @@ app_name='staff'
 urlpatterns = [
     url(r'^login/',  InstitutionStaffLoginView.as_view(), name='login'),
     url(r'^$', dashboard, name='dashboard'),
-    url(r'^logout/$',  LogoutView.as_view(template_name='staff/logged_out.html'), name='logout'),
+    url(r'^logout/$',  StaffLogout.as_view(), name='logout'),
     url(r'^edit/$', edit, name="edit"),
     url(r'^password-change/$',PasswordChangeViewForStaff.as_view(), name='password_change'),
     url(r'^password-change/done/$',PasswordChangeDoneViewForStaff.as_view(), name='password_change_done'),
