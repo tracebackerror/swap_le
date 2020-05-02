@@ -787,10 +787,13 @@ def assessment_edit_by_staff(request, assesmentid):
                     
                     sum_of_marks = get_assesment_obj_to_update.assesment.question_set.aggregate(sum_of_marks = Sum('max_marks'))
                     get_assesment_obj_to_update.total_marks  = sum_of_marks['sum_of_marks']
-                    
                     obtained_marks_calculate = get_assesment_obj_to_update.answer_set.aggregate(answer_obtained_marks = Sum('alloted_marks'))
-                    get_assesment_obj_to_update.obtained_marks = obtained_marks_calculate.get('answer_obtained_marks')
-                    get_assesment_obj_to_update.result_passed = obtained_marks_calculate.get('answer_obtained_marks') >= get_assesment_obj_to_update.assesment.passing_marks  
+                    if obtained_marks_calculate.get('answer_obtained_marks'):
+                        get_assesment_obj_to_update.obtained_marks = obtained_marks_calculate.get('answer_obtained_marks')
+                        get_assesment_obj_to_update.result_passed = obtained_marks_calculate.get('answer_obtained_marks') >= get_assesment_obj_to_update.assesment.passing_marks  
+                    else:
+                        get_assesment_obj_to_update.obtained_marks = 0
+                        get_assesment_obj_to_update.result_passed = False
                     get_assesment_obj_to_update.save()
 
                 

@@ -56,6 +56,8 @@ class Student(models.Model):
     parent_contact_no = models.CharField(null=True, blank=True, max_length=20)
     gender = models.CharField(max_length = 10,null=True)
     
+    def get_fields(self):
+        return [(field.name, field.value_to_string(self)) for field in Student._meta.fields]
     
     class Meta:
         ordering = ('created',)

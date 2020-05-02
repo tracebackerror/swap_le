@@ -1,0 +1,140 @@
+{% load django_tables2 %}
+{% load i18n %}
+
+{% block table-wrapper %}
+
+    {% block table %}
+		{% if table.page and table.paginator.num_pages > 1 %}
+	<nav aria-label="Table navigation">
+            <ul class="pagination justify-content-center">
+            {% if table.page.has_previous %}
+                <li class="previous page-item">
+                    <a href="{% querystring table.prefixed_page_field=table.page.previous_page_number %}" class="page-link">
+                        <span aria-hidden="true">&laquo;</span>
+                        {% trans 'previous' %}
+                    </a>
+                </li>
+			{% endif %}
+			{% if table.page.has_previous or table.page.has_next %}
+				{% for p in table.page|table_page_range:table.paginator %}
+                <li class="page-item{% if table.page.number == p %} active{% endif %}">
+                    <a class="page-link" {% if p != '...' %}href="{% querystring table.prefixed_page_field=p %}"{% endif %}>
+                        {{ p }}
+                    </a>
+                </li>
+				{% endfor %}
+			{% endif %}
+            {% if table.page.has_next %}
+                <li class="next page-item">
+                    <a href="{% querystring table.prefixed_page_field=table.page.next_page_number %}" class="page-link">
+                        {% trans 'next' %}
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+		
+	
+        {% block table.tbody %}
+		
+			<div class="card-columns">
+            {% for row in table.paginated_rows %}
+					
+					
+                    {% block table.tbody.row %}
+						<div  class="card mb-3 text-center ""  style="max-width: 400px;">
+									<div class="card-header">
+										<h5 class="card-title">{{ row.record.header }} </h5>
+										<ul class="nav nav-pills card-header-pills justify-content-center">
+										  <li class="nav-item">
+											<i class="fa fa-scissors" aria-hidden="true"></i> {{row.record.passing_marks}} Minimum Marks
+										  </li>
+										  <li class="nav-item">
+											&nbsp;<i class="fa fa-clock-o" aria-hidden="true"></i> {{row.record.duration_hours}} Hour
+										  </li>
+										  <li class="nav-item">
+											 &nbsp;<i class="fa fa-clock-o" aria-hidden="true"></i> {{assesment.duration_minutes}} Minutes
+										  </li>
+										</ul>
+									</div>
+									<div class="card-body">
+										
+										
+										<p class="card-text">{{ row.record.brief|truncatechars:300 }}</p>
+										{{row.record.take_assesment}}</p>
+										<form method="POST"  action=".">  
+										{% csrf_token %} 
+											<input type="hidden" name="examid" value={{ row.record.id }}> 
+											<p class="card-text"><input type="submit" class="btn btn-primary " value="Take Exam" /> </p>
+										</form>
+										 
+									</div>
+									
+							
+									 <div class="card-footer text-muted">
+										
+										<i class="fa fa-hourglass" aria-hidden="true"></i> {{row.record.exam_start_date_time}}
+										<i class="fa fa-hourglass-o" aria-hidden="true"></i> {{ row.record.expired_on }}
+									 </div>
+							
+						
+						
+						</div>
+                    {% endblock table.tbody.row %}
+                {% empty %}
+                    {% if table.empty_text %}
+                    {% block table.tbody.empty_text %}
+                        <div class="col-sm-12 col-md-12">{{ table.empty_text }}</div>
+                    {% endblock table.tbody.empty_text %}
+                    {% endif %}
+            {% endfor %}
+			</div> 
+        {% endblock table.tbody %}
+			
+    {% endblock table %}
+
+    {% block pagination %}
+        {% if table.page and table.paginator.num_pages > 1 %}
+		
+        <nav aria-label="Table navigation">
+            <ul class="pagination justify-content-center">
+            {% if table.page.has_previous %}
+                {% block pagination.previous %}
+                <li class="previous page-item">
+                    <a href="{% querystring table.prefixed_page_field=table.page.previous_page_number %}" class="page-link">
+                        <span aria-hidden="true">&laquo;</span>
+                        {% trans 'previous' %}
+                    </a>
+                </li>
+                {% endblock pagination.previous %}
+            {% endif %}
+            {% if table.page.has_previous or table.page.has_next %}
+            {% block pagination.range %}
+            {% for p in table.page|table_page_range:table.paginator %}
+                <li class="page-item{% if table.page.number == p %} active{% endif %}">
+                    <a class="page-link" {% if p != '...' %}href="{% querystring table.prefixed_page_field=p %}"{% endif %}>
+                        {{ p }}
+                    </a>
+                </li>
+            {% endfor %}
+            {% endblock pagination.range %}
+            {% endif %}
+            {% if table.page.has_next %}
+                {% block pagination.next %}
+                <li class="next page-item">
+                    <a href="{% querystring table.prefixed_page_field=table.page.next_page_number %}" class="page-link">
+                        {% trans 'next' %}
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                {% endblock pagination.next %}
+            {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    {% endblock pagination %}
+
+
+{% endblock table-wrapper %}

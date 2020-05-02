@@ -6,6 +6,9 @@
 
 
 {% block content %} 
+<style type="text/css">
+
+</style>
  <h1>Live Assesment</h1>
  <div id="user_message_display">
 		{% for message in messages %}
@@ -17,9 +20,14 @@
 				</div>
 		{% endfor %}
 	</div>
- <div class="container" style="min-height:60%;">
+<br/>
+ <div class="container" style="min-height:60%;" >
+	{% if request.user_agent.is_pc %}
+		{% render_table table   %}
+	{% else %}
+		{% render_table table  'boostrap4cards_dj_tables2.html' %}
+	{% endif %}
  
-  {% render_table table  %}
  </div>
 {% endblock %}
 

@@ -138,8 +138,9 @@ class StudentAssesmentTable(tables.Table):
    
     class Meta:
         model = Assesment
-        sequence = ( 'header','exam_start_date_time','passing_marks','privilege','expired_on')
+        sequence = ( 'header','exam_start_date_time','passing_marks','privilege','expired_on', 'brief')
         # add class="paleblue" to <table> tag 
-        attrs = {'class': 'paleblue'}
+        #attrs = {'class': 'paleblue'}
         # fields = ( 'institute',)
-        exclude = ('id', 'deleted_at','brief', 'privilege','deleted_by','created_by','updated_by','type', 'exam_start_date_time','exam_start_type', 'polymorphic_ctype','created','updated','slug','is_exam_active')
+        exclude = ( 'deleted_at', 'privilege','deleted_by','created_by','updated_by','type', 'exam_start_date_time','exam_start_type', 'polymorphic_ctype','created','updated','slug','is_exam_active')
+        
