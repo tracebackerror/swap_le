@@ -110,7 +110,7 @@ Local Time:  {{result_object.exam_taken_date_time|localtime }}
     {% for question in all_question_to_answer %}
     <input type="hidden" value={{question.pk}} name="question_id">
 	<tr>
-      <th style="width:10%;">Question</th>
+      <th style="width:10%;">Question {{ all_question_to_answer.number}}</th>
       <th>{{ question.question_text }}</th>
     </tr>
     
