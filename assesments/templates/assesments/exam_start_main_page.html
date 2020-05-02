@@ -473,7 +473,14 @@ var x = setInterval(function() {
 
 })(window);
 
-
+$(document).ready(function(){
+    $(this).bind("contextmenu", function(e) {
+        e.preventDefault();
+    });
+	$('textarea').on("cut copy paste",function(e) {
+      e.preventDefault();
+   });
+});
 </script>
 
 {% endblock %}
