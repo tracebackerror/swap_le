@@ -6,6 +6,8 @@ from utility.mixin import MetaInformationMixin, SoftDeletionModelMixin
 from students.models import Student
 from datetime import datetime, timedelta
 
+from autoslug import AutoSlugField
+
 
 
 class AssesmentManager(models.Manager):
@@ -31,6 +33,7 @@ class Assesment(MetaInformationMixin, SoftDeletionModelMixin):
 
 
     header = models.CharField(max_length=150)
+    slug = AutoSlugField(populate_from='header', unique = True)
     '''
     slug = models.SlugField(max_length=140,
                             unique=True,

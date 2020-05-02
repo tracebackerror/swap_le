@@ -12,6 +12,7 @@ class QuestionInline(admin.TabularInline):
     
 class AssesmentAdmin(admin.ModelAdmin):
     #fieldsets = [ (None, {'fields': ['title'}) ]
+    list_display = ('slug', 'header', 'exam_start_date_time', 'exam_start_type', 'expired_on', 'passing_marks', 'privilege' , 'type', 'duration_hours', 'duration_minutes' )
     inlines = [ QuestionInline ]
     
 

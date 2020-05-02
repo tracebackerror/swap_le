@@ -1,4 +1,5 @@
 django-import-export
+django-autoslug
 django-tz-detect
 pyyaml
 ua-parser
