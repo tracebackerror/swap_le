@@ -6,6 +6,15 @@
 
 {% block content %} 
  <h1>Institution Registration  </h1>
+ {% if form.errors %} 
+	 <div class="alert alert-warning alert-dismissible fade show" role="alert">
+						<p class="p">     Please fill all the Institute data correctly.    </p> 
+					  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					  </button>
+					</div>
+			
+		  {% endif %}   
  <div id="user_message_display">
 		{% for message in messages %}
 				<div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -89,4 +98,11 @@
  	
 
  </div>
+ 
+ <script type="text/javascript">
+ $('body').on('keyup', '#id_institute_contact_mobile', function() {
+		newval = $(this).val().replace(/[^0-9.]/g, "");
+		$(this).val(newval);
+	})
+ </script>
 {% endblock %}

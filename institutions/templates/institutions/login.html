@@ -38,8 +38,9 @@
 					<span aria-hidden="true">&times;</span>
 				  </button>
 				</div>
-		{% endfor %}
+{% endfor %}
  <div class=" container " id="box">
+	
 	<form class="" action="{% url 'institutions:login' %}" method="post"> 
 	
 	<div class="row" >
@@ -64,12 +65,14 @@
 	</div>
 	
 	
+	
 	<div class="row"> 
 		<div class="col-md-12">
 			{% csrf_token %}
 		</div>
 	</div>
 	<div class="row"> 
+		
 		<div class="col-sm-12 col-md-12">
 			{{ form.username|as_crispy_field }}
 		</div>
