@@ -16,9 +16,10 @@ class StaffAdmin(admin.ModelAdmin):
     inlines = [ StudentInline, ]
     
     
+    
 class StudentAdmin(admin.ModelAdmin):
     form = StudentAdminForm
-
+    list_display = ('studentuser', 'staffuser', 'user_type', 'standard', 'address', 'student_contact_no', 'parent_contact_no', 'gender',)
 admin.site.unregister(Staff)
 admin.site.register(Staff,StaffAdmin)    
 admin.site.register(Student,StudentAdmin)
