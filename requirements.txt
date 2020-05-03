@@ -1,6 +1,7 @@
 django-import-export
 django-meta
 django-taggit
+django-autocomplete-light
 django-autoslug
 django-tz-detect
 pyyaml
