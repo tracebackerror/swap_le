@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     'bootstrap4',
     'django_user_agents',
     'import_export',
+    'meta',
     #'tz_detect',
 ]
 

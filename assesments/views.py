@@ -400,6 +400,33 @@ class AssessmentResultByStaff(LoginRequiredMixin, DetailView):
         )
     
 
+class StartIntroStudentAssesmentView( DetailView):
+    model = Assesment
+    
+    slug_field = 'slug'
+    template_name = 'assesments/exam_start_intro_page.html'
+    context_object_name = "assesment_object"
+    
+    login_decorator = login_required(login_url=reverse_lazy('student:login'))
+    @method_decorator(login_decorator)
+    def dispatch(self, *args, **kwargs):
+        return super(StartIntroStudentAssesmentView, self).dispatch(*args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        context = super(StartIntroStudentAssesmentView, self).get_context_data(**kwargs)
+        context['meta'] = self.get_object().as_meta(self.request)
+        return context
+    '''
+    pk_url_kwarg = 'assesmentid'
+    paginate_by = 1
+    
+    http_method_names = ['get', 'post']
+    
+    
+       
+     '''
+    
+    
 class ManageStudentAssesmentView(SingleTableView, ListView):
     model = Assesment
     context_object_name = 'table'
@@ -421,6 +448,8 @@ class ManageStudentAssesmentView(SingleTableView, ListView):
         all_user_linked_assesment = Assesment.objects.filter(subscriber_users = student_obj, privilege='public')
         #all_user_linked_assesment_filter_exam_date = all_user_linked_assesment.filter(exam_start_date_time__lte= timezone.localtime(timezone.now()), expired_on__gte= timezone.localtime(timezone.now()))
         all_user_linked_assesment_filter_exam_date = all_user_linked_assesment.filter(exam_start_date_time__lte= timezone.datetime.now(), expired_on__gte=  timezone.datetime.now())
+        
+        
         
         if all_user_linked_assesment_filter_exam_date.exists():
             all_user_linked_result = Result.objects.filter(registered_user=student_obj).filter(assesment_submitted=True)
@@ -444,19 +473,18 @@ class ManageStudentAssesmentView(SingleTableView, ListView):
     @method_decorator(login_decorator)
     def post(self, *args, **kwargs):
         assesment_initiate_flag = self.request.POST.get('start_assesment_boolean', None)
-        
         examid = self.request.POST.get('examid', None)
         assesment_to_undertake = Assesment.objects.get(id = int(examid))
+        #self.request.context['meta'] = assesment_to_undertake.as_meta(self.request)
         self.request.session['assesment_to_undertake'] = examid    
-        return render(self.request, 'assesments/exam_start_intro_page.html', {
-            'assesment_object': assesment_to_undertake,
-            })#, content_type='application/xhtml+xml')
+        return redirect(reverse_lazy("staff:assesments:student_assesment_intro", kwargs={'assesmentid': examid}))
             
     
     
     def get_context_data(self, **kwargs):
         context = super(ManageStudentAssesmentView, self).get_context_data(**kwargs)
-       
+        examid = self.request.POST.get('examid', None)
+        
         return context 
     
     
@@ -490,6 +518,7 @@ class ManageSingleAsessment(ExportMixin, SingleTableView):
     
     def get_context_data(self, **kwargs):
         context = super(ManageSingleAsessment, self).get_context_data(**kwargs)
+        
         self.result_queryset = Result.objects.filter(assesment__exact = self.assesment_number_to_retrieve).order_by('pk')
         
         

@@ -7,7 +7,7 @@ from students.models import Student
 from datetime import datetime, timedelta
 
 from autoslug import AutoSlugField
-
+from meta.models import ModelMeta
 
 
 class AssesmentManager(models.Manager):
@@ -16,7 +16,7 @@ class AssesmentManager(models.Manager):
                 .filter(deleted='N')
 
 
-class Assesment(MetaInformationMixin, SoftDeletionModelMixin):
+class Assesment(MetaInformationMixin, SoftDeletionModelMixin, ModelMeta):
     ASSESMENT_START_TYPE_CHOICES = (
         ('auto', 'Automatic'),
         ('manual', 'Manually'),
@@ -69,7 +69,16 @@ class Assesment(MetaInformationMixin, SoftDeletionModelMixin):
     duration_minutes = models.IntegerField(null=True)
     
     
+    _metadata = {
+        'title': 'header',
+        'description': 'brief',
+        'author': 'get_assessment_author'
         
+    } 
+    
+    def get_assessment_author(self):
+        if self.created_by:
+            return self.created_by.get_full_name()
     class Meta:
         ordering = ('created',)
         

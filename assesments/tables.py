@@ -109,7 +109,7 @@ class AssesmentTable(ExportMixin, tables.Table):
 class StudentAssesmentTable(tables.Table):
     
     
-    take_assesment = tables.TemplateColumn('<form method="POST"  action=".">  {% csrf_token %} <input type="hidden" name="examid" value={{record.id }}> <input type="submit" class="btn btn-dark" value="Take Exam"> </form>')
+    take_assesment = tables.TemplateColumn(' <a  href="{% url "staff:assesments:student_assesment_intro" slug=record.slug %}" class="btn btn-dark" > Take Exam</a></form>')
     
     '''
     completed = tables.BooleanColumn(empty_values=(),

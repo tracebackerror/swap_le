@@ -1,4 +1,11 @@
-{% extends "base.html" %} {% block title %}DashBoard Student{% endblock %} {% block content %}
+{% extends "base.html" %}
+
+
+{% block title %} {{assesment_object.header}}{% endblock %} {% block content %}
+{% block more_meta_tags %}
+ <meta name="author" content="{{assesment_object.created_by.get_full_name|default:assesment_object.created_by.username}}">
+ <meta name="title" content="{{assesment_object.header}}">
+{% endblock %}
 
 <h1> </h1>
 <div class="container" style="min-height:60%;">

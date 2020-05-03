@@ -2,16 +2,17 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
+{% load meta %}
 
-
-<html> <head> 
+<html> <head {% meta_namespaces %} > 
 		{%  include 'master_static.html' %}
 		{% include "google_analytics.html" %}
 		{% include "google_adsense.html" %}
-
+		
 		<title>{% block title %}{% endblock %}</title>  
+		{% block more_meta_tags %}{% endblock %}
 		<link href="{% static "css/base.css" %}" rel="stylesheet">
-			<link rel="stylesheet" href="{% static 'django_tables2/themes/paleblue/css/screen.css' %}" />
+		<link rel="stylesheet" href="{% static 'django_tables2/themes/paleblue/css/screen.css' %}" />
 
 			<style type="text/css">
 				.centeredForm {
@@ -24,6 +25,8 @@
 				}
 				}
 			</style>
+			{% include "meta/meta.html" %}
+			
 		</head> <body>
 
 
