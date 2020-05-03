@@ -581,7 +581,6 @@ class ProcesStudentAssesmentView(DetailView):
     def _process_assesment(self, *args, **kwargs):
         get_the_answer_obj = None
         page_question_obj = None
-        import pdb;pdb.set_trace();
         if 'start_assesment_boolean' in self.request.POST.keys():
             assesment_initiate_flag = eval(self.request.POST.get('start_assesment_boolean', None))
         elif '_assesment_initiate_flag' in self.request.session.keys():
@@ -879,7 +878,7 @@ def assessment_create_by_staff(request):
             #import pdb;pdb.set_trace();
             #messages.success(request, 'Assessment Updated Successfully')
             messages.add_message(request, messages.SUCCESS, 'Assessment Created Successfully')
-            return redirect(reverse_lazy("staff:assesments:manage_all_assesment"))
+            return redirect(reverse_lazy("staff:assesments:assessment_manage_by_staff", kwargs ={ 'assesmentid' : saved_new_assesment.id }))
             
     else:
         assesment_creation_form = AssessmentCreationForm(request= request)

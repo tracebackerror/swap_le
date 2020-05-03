@@ -154,42 +154,99 @@
 					</div>
 					<div class="card-body">
 						{% if single_answer.for_question.question_type == 'scq' or  single_answer.for_question.question_type == 'mcq'%}
-
+						
+						
 						<h5 class="card-title">Options: </h5>
 						<ul class="list-group list-styled	">
 							{% if single_answer.for_question.option_one|length > 0 %}
 								
 							
-							<li class="list-group-item d-flex justify-content-between align-items-center">
-								<span class="badge badge-dark badge-pill">1</span>
-								<span class="col-md-11">{{ single_answer.for_question.option_one }}</span>
-							  </li>
+								
+								<li class="list-group-item d-flex {% if '1' in single_answer.opted_choice %} bg-light{% endif %} justify-content-between align-items-center">
+									
+										<span class="badge badge-dark badge-pill">1</span>
+										{% if "1" in single_answer.for_question.correct_options %}
+											<i class="fa fa-check" aria-hidden="true"></i>
+										{% endif %}
+										{% if "1" in single_answer.opted_choice and   "1" not in  single_answer.for_question.correct_options  %}
+											<i class="fa fa-times" aria-hidden="true"></i>
+										{% endif %}
+									
+									<span class="col-md-11">{{ single_answer.for_question.option_one }}</span>
+									{% if "1" in  single_answer.opted_choice %}
+										<i class="fa fa-user pull-right" aria-hidden="true"></i>
+									{% endif %}
+								  </li>
+							
 							{% endif %}
 							
 							{% if single_answer.for_question.option_two|length > 0 %}
-							<li class="list-group-item d-flex justify-content-between align-items-center">
+							<li class="list-group-item d-flex {% if '2' in single_answer.opted_choice %} bg-light{% endif %} justify-content-between align-items-center">
+								
 								<span class="badge badge-dark badge-pill">2</span>
+								{% if "2" in single_answer.for_question.correct_options %}
+										<i class="fa fa-check" aria-hidden="true"></i>
+								{% endif %}
+								{% if "2" in single_answer.opted_choice and   "2" not in  single_answer.for_question.correct_options  %}
+												<i class="fa fa-times" aria-hidden="true"></i>
+								
+								{% endif %}
 								<span class="col-md-11">{{ single_answer.for_question.option_two }}</span>
+								{% if "2" in  single_answer.opted_choice %}
+										<i class="fa fa-user pull-right" aria-hidden="true"></i>
+									{% endif %}
+								
 							  </li>
 							{% endif %}
 							{% if single_answer.for_question.option_three|length > 0 %}
-							<li class="list-group-item d-flex justify-content-between align-items-center">
+							<li class="list-group-item d-flex {% if '3' in single_answer.opted_choice %} bg-light{% endif %} justify-content-between align-items-center">
 								<span class="badge badge-dark badge-pill">3</span>
+								{% if "3" in single_answer.for_question.correct_options %}
+										<i class="fa fa-check" aria-hidden="true"></i>
+								{% endif %}
+								{% if "3" in single_answer.opted_choice and   "3" not in  single_answer.for_question.correct_options  %}
+										<i class="fa fa-times" aria-hidden="true"></i>
+								
+								{% endif %}
+								
 								<span class="col-md-11">{{ single_answer.for_question.option_three }}</span>
+								{% if "3" in  single_answer.opted_choice %}
+										<i class="fa fa-user pull-right" aria-hidden="true"></i>
+									{% endif %}
 							  </li>
 							
 							{% endif %}
 							{% if single_answer.for_question.option_four|length > 0 %}
-							<li class="list-group-item d-flex justify-content-between align-items-center">
+							<li class="list-group-item d-flex {% if '4' in single_answer.opted_choice %} bg-light{% endif %} justify-content-between align-items-center">
 								<span class="badge badge-dark badge-pill">4</span>
+								{% if "4" in single_answer.for_question.correct_options %}
+										<i class="fa fa-check" aria-hidden="true"></i>
+								{% endif %}
+								{% if "4" in single_answer.opted_choice and   "4" not in  single_answer.for_question.correct_options  %}
+										<i class="fa fa-times" aria-hidden="true"></i>
+								{% endif %}
+								
 								<span class="col-md-11">{{ single_answer.for_question.option_four }}</span>
+								{% if "4" in  single_answer.opted_choice %}
+										<i class="fa fa-user pull-right" aria-hidden="true"></i>
+									{% endif %}
 							  </li>
 							{% endif %}
 							
 							{% if single_answer.for_question.option_five|length > 0 %}
-							 <li class="list-group-item d-flex justify-content-between align-items-center">
+							 <li class="list-group-item d-flex {% if '5' in single_answer.opted_choice %} bg-light{% endif %} justify-content-between align-items-center">
 								<span class="badge badge-dark badge-pill">5</span>
+								{% if "5" in single_answer.for_question.correct_options %}
+										<i class="fa fa-check" aria-hidden="true"></i>
+								{% endif %}
+								{% if "5" in single_answer.opted_choice and   "5" not in  single_answer.for_question.correct_options  %}
+										<i class="fa fa-times" aria-hidden="true"></i>
+								{% endif %}
+								
 								<span class="col-md-11">{{ single_answer.for_question.option_five }}</span>
+								{% if "5" in  single_answer.opted_choice %}
+										<i class="fa fa-user pull-right" aria-hidden="true"></i>
+									{% endif %}
 							  </li>
 							{% endif %}
 							<li class="list-group-item d-flex justify-content-between align-items-center">
