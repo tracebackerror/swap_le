@@ -4,7 +4,12 @@
 {% block title %} {{assesment_object.header}}{% endblock %} {% block content %}
 {% block more_meta_tags %}
  <meta name="author" content="{{assesment_object.created_by.get_full_name|default:assesment_object.created_by.username}}">
- <meta name="title" content="{{assesment_object.header}}">
+ <meta name="title" content="{{assesment_object.header|title}}">
+ <meta name="keywords" content="{{assesment_object.tags.all |join:","}}">
+ 
+
+ 
+  
 {% endblock %}
 
 <h1> </h1>
@@ -23,7 +28,7 @@
 <h3>Please Read the Below Assesment Instruction Carefully:</h3>
 
 {% if user.is_authenticated and request.user.student in assesment_object.subscriber_users.all %}
-<form action={% url 'student:assesments:process_assesment' %} method="POST">
+<form action={% url 'student:assesments:process_assesment'  %} method="POST">
 	
 <table  class="table borderless table-responsive">
 	<tr>

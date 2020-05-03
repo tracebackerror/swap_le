@@ -6,6 +6,8 @@
 
 {% block content %} 
   <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/js/select2.full.min.js" integrity="sha256-vucLmrjdfi9YwjGY/3CQ7HnccFSS/XRS1M/3k/FDXJw=" crossorigin="anonymous"></script>4
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/css/select2.min.css" integrity="sha256-FdatTf20PQr/rWg+cAKfl6j4/IY3oohFAJ7gVC3M34E=" crossorigin="anonymous" />
 <style>
 #scroll_questions {
 	 margin: auto;
@@ -128,6 +130,14 @@
 			</div>
 		</div>
 		
+		<div class="form-row">
+		
+			
+			<div class="col-md-12" >
+				{{ assessment_c_form.tags|as_crispy_field }}
+			</div>
+		</div>
+		
 	
 		
 	    
@@ -139,7 +149,41 @@
  
 <script type="text/javascript">
  $(document).ready(function(){	
+	// In your Javascript (external .js resource or <script> tag)
+
+    $('#id_tags').select2({
+		tags: true,
+		placeholder: 'Write some keywords for better search',
+		tokenSeparators: [',', ' '],
+		minimumInputLength: 3,
+		multiple: true,
+		ajax: {
+			url: '/staff/manage/autocomplete/',
+			dataType: 'json',
+			
+			// Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+		  }
+	});
 	
+	var tagsSelect = $('#id_tags');
+	$.ajax({
+		type: 'GET',
+		url: '/staff/manage/autocomplete/',
+	}).then(function (data) {
+		// create the option and append to Select2
+		var option = new Option(data.full_name, data.id, true, true);
+		tagsSelect.append(option).trigger('change');
+
+		// manually trigger the `select2:select` event
+		tagsSelect.trigger({
+			type: 'select2:select',
+			params: {
+				data: data
+			}
+		});
+	});
+
+
 	$.fn.selectpicker.Constructor.BootstrapVersion = '4';
 
 	$('#id_subscriber_users').selectpicker({

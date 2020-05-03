@@ -17,6 +17,7 @@ from itertools import groupby
 from operator import attrgetter
 from django.forms.models import ModelChoiceIterator, ModelChoiceField
 
+from dal import autocomplete
 
 class QuestionForm(forms.ModelForm):
     question_image = forms.ImageField(required=False)
@@ -222,7 +223,9 @@ class AssessmentForm(forms.ModelForm):
             
             'passing_marks'         : forms.NumberInput(attrs={'class':'form-control',}),
             'privilege'             : forms.Select(attrs={'class':'custom-select custom-select-md mb-3', 'data-toggle':"tooltip", 'data-placement':"right", 'title':"<h5>Public: Assesment Visibile to Students \n Private and Protected: Only To Staff</h3>"}),
-            
+            'tags': autocomplete.TaggitSelect2(
+                'staff:assesments:tag_autocomplete'
+            )
 
         }
         initial = {
@@ -239,7 +242,7 @@ class AssessmentForm(forms.ModelForm):
         #self.fields["subscriber_users"].queryset = Student.active.filter(staffuser__institute = self.request.user.staff.institute)   
         self.fields["subscriber_users"].queryset = Student.active.filter(staffuser__institute = self.request.user.staff.institute).exclude(staffuser=None) 
          
-class AssessmentCreationForm(forms.ModelForm):
+class AssessmentCreationForm(autocomplete.FutureModelForm):
     DURATION_HOURS_CHOICES = [
         (i,i) for i in range(0,24)
         ]
@@ -294,7 +297,9 @@ class AssessmentCreationForm(forms.ModelForm):
             
             'passing_marks'         : forms.NumberInput(attrs={'class':'form-control',}),
             'privilege'             : forms.Select(attrs={'class':'custom-select custom-select-md mb-3', 'data-toggle':"tooltip", 'data-placement':"right", 'title':"Public: Assessment Visible to Students. \n\n Private and Protected: Assessment Visible Only To Staff"}),
-            
+            'tags': autocomplete.TaggitSelect2(
+                'staff:assesments:tag_autocomplete'
+            )
                    
             
         }    

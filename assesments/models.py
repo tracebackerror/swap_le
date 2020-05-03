@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 
 from autoslug import AutoSlugField
 from meta.models import ModelMeta
+from taggit.managers import TaggableManager
 
 
 class AssesmentManager(models.Manager):
@@ -68,6 +69,7 @@ class Assesment(MetaInformationMixin, SoftDeletionModelMixin, ModelMeta):
     duration_hours = models.IntegerField(null=True)
     duration_minutes = models.IntegerField(null=True)
     
+    tags = TaggableManager()
     
     _metadata = {
         'title': 'header',

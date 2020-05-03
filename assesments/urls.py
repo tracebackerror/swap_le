@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^live/$', ManageStudentAssesmentView.as_view(), name='manage_student_assesment'),
     url(r'^live/(?P<slug>[\w-]+)$', StartIntroStudentAssesmentView.as_view(), name='student_assesment_intro'),
     url(r'^process/$', ProcesStudentAssesmentView.as_view(), name='process_assesment'),
+    url(r'^process/$', ProcesStudentAssesmentView.as_view(), name='process_assesment_no_arg'),
     url(r'^(?P<assesmentid>\w{0,15})/delete/$', assessment_delete_by_staff, name='assessment_delete_by_staff'),
     url(r'^(?P<assesmentid>\w{0,15})/finish/$', GenerateAssesmentResultView.as_view(), name='assesment_finished_by_student'),
 
@@ -30,5 +31,12 @@ urlpatterns = [
     
     #Result Publish
     url(r'^(?P<assesmentid>\w{0,15})/change/publish-all-results$', PublishAllResults, name='publish_all_results'),
+    
+    #Tag
+    url(
+        r'^autocomplete/$',
+        TagAutocomplete.as_view(),
+        name='tag_autocomplete',
+    ),
     
    ]

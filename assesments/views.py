@@ -58,6 +58,9 @@ from base64 import b64encode
 from django.template.defaulttags import register
 import pandas as pd
 
+from dal import autocomplete
+from taggit.models import Tag
+
 class ReviewAllSqaView(TemplateView):
     model = Answer
     template_name = 'assesments/review_all_sqa.html'
@@ -557,7 +560,7 @@ class ManageSingleAsessment(ExportMixin, SingleTableView):
     
 class ProcesStudentAssesmentView(DetailView):
     model = Assesment
-    context_object_name = 'table'
+    context_object_name = "assesment_object"
     paginate_by = 3
     template_name = 'assesments/manage_student_assesment.html'
     http_method_names = ['get', 'post']
@@ -578,13 +581,15 @@ class ProcesStudentAssesmentView(DetailView):
     def _process_assesment(self, *args, **kwargs):
         get_the_answer_obj = None
         page_question_obj = None
-        
+        import pdb;pdb.set_trace();
         if 'start_assesment_boolean' in self.request.POST.keys():
             assesment_initiate_flag = eval(self.request.POST.get('start_assesment_boolean', None))
         elif '_assesment_initiate_flag' in self.request.session.keys():
             assesment_initiate_flag = self.request.session.get('_assesment_initiate_flag')
              
         if assesment_initiate_flag:
+            if self.request.POST.get('assesment_obj', None):
+                self.request.session['assesment_to_undertake'] = self.request.POST['assesment_obj']
             self.request.session['_assesment_initiate_flag'] = assesment_initiate_flag
             asses_unfiltered = self.request.session.get('assesment_to_undertake', None)
             page_of_question = int(self.request.POST.get('nextpage', 1))
@@ -647,6 +652,7 @@ class ProcesStudentAssesmentView(DetailView):
                         self.create_result_instance.obtained_marks = obtained_marks_calculate.get('answer_obtained_marks')
                         self.create_result_instance.result_passed = obtained_marks_calculate.get('answer_obtained_marks') >= self.create_result_instance.assesment.passing_marks  
                         self.create_result_instance.save()
+
                         messages.success(self.request, 'Alloted Time Over: Assesment Test Has Been Submitted')
                         return redirect('student:dashboard')
                         
@@ -714,15 +720,16 @@ class ProcesStudentAssesmentView(DetailView):
                     for question in fetch_all_linked_question:
                         if(question.question_image):
                             question_image_obj[question.id] = question.question_image
-    
-                        
+                       
                     return render(self.request, 'assesments/exam_start_main_page.html', {
                         'assesment_object': assesment_to_undertake,
                         'all_question_to_answer':page_question_obj,
                         'get_the_answer_obj':get_the_current_answer_obj,
                         'result_object':self.create_result_instance,
                         'question_image_obj':question_image_obj,
+                        
                         })
+                    
         else:
             '''
             examid = self.request.POST.get('examid', None)
@@ -734,7 +741,9 @@ class ProcesStudentAssesmentView(DetailView):
             '''
             pass
         
-        
+    def get_success_url(self, **kwargs):         
+        import pdb; pdb.set_trace()
+        return reverse_lazy('staff:assesments:process_assesment', kwargs = self.kwargs)
     @register.filter
     def get_item(dictionary, key):
         return dictionary.get(key)
@@ -838,6 +847,16 @@ def assessment_edit_by_staff(request, assesmentid):
     
 
 
+
+class TagAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        # Don't forget to filter out results depending on the visitor !
+        qs = Tag.objects.all()
+
+        if self.q:
+            qs = qs.filter(name__istartswith=self.q)
+
+        return qs
 
 @permission_required('staff.is_staff',login_url=reverse_lazy('staff:login'))
 @login_required(login_url=reverse_lazy('staff:login'))
