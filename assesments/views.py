@@ -827,8 +827,8 @@ class ProcessOpenAssesmentView(DetailView):
                     
                     if len(get_the_answer_obj) == 0:
                         get_the_answer_obj = Answer()
-                        get_the_answer_obj.created_by = self.request.user
-                        get_the_answer_obj.updated_by = self.request.user
+                        get_the_answer_obj.created_by = result_for_student_user
+                        get_the_answer_obj.updated_by = result_for_student_user
                         get_the_answer_obj.for_result = self.create_result_instance
                         get_the_answer_obj.for_question = question_obj[0]
                         #get_the_answer_obj.save()
