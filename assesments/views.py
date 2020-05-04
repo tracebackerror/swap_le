@@ -810,7 +810,7 @@ class ProcessOpenAssesmentView(DetailView):
                     self.create_result_instance.save()
 
                     messages.success(self.request, 'Alloted Time Over: Assesment Test Has Been Submitted')
-                    return redirect(reverse('staff:assesments:assessment_open_result_by_staff', kwargs= {'slug': get_assesment_obj_to_update.assesment.slug, 'pk': get_assesment_obj_to_update.pk}))
+                    return redirect(reverse('staff:assesments:assessment_open_result_by_staff', kwargs= {'slug': self.create_result_instance.assesment.slug, 'pk': self.create_result_instance.pk}))
                     
                 
                 if question_type and question_type in all_question_types:
