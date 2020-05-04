@@ -711,7 +711,7 @@ class ProcessOpenAssesmentView(DetailView):
         if 'start_assesment_boolean' in self.request.POST.keys():
             assesment_initiate_flag = eval(self.request.POST.get('start_assesment_boolean', None))
             time_obj= timezone.now()
-            self.request.session['exam_start_time'] = timezone.datetime.now().strftime("%d/%m/%Y %H:%M")
+            self.request.session['exam_start_time'] = time_obj.strftime("%d/%m/%Y %H:%M")
             self.request.session['exam_start_time_year'] = time_obj.year
             self.request.session['exam_start_time_month'] = time_obj.month
             self.request.session['exam_start_time_day'] = time_obj.day
@@ -771,8 +771,14 @@ class ProcessOpenAssesmentView(DetailView):
                 if len(result_of_assesment)  == 0:
                     self.create_result_instance = Result()
                     #exam_taken_date_time use for exam time
-                    
-                    self.create_result_instance.exam_taken_date_time = timezone.datetime.strptime(self.request.session['exam_start_time'], "%d/%m/%Y %H:%M").replace(tzinfo=None)
+                    time_obj= timezone.now()
+                    self.request.session['exam_start_time'] = time_obj.strftime("%d/%m/%Y %H:%M")
+                    self.request.session['exam_start_time_year'] = time_obj.year
+                    self.request.session['exam_start_time_month'] = time_obj.month
+                    self.request.session['exam_start_time_day'] = time_obj.day
+                    self.request.session['exam_start_time_hour'] = time_obj.hour
+                    self.request.session['exam_start_time_minute'] = time_obj.minute
+                    self.create_result_instance.exam_taken_date_time = time_obj
                     self.create_result_instance.assesment = assesment_to_undertake
                     self.create_result_instance.registered_user = result_for_student_user.student
                     self.create_result_instance.created_by = result_for_student_user
