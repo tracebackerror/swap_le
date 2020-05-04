@@ -787,6 +787,7 @@ class ProcessOpenAssesmentView(DetailView):
                 else:
                     self.create_result_instance = result_of_assesment[0]
                 
+                '''
                 if len(result_of_assesment)  == 0:
                     difference =  timezone.now() -  timezone.now() 
                 else:
@@ -817,7 +818,7 @@ class ProcessOpenAssesmentView(DetailView):
 
                     messages.success(self.request, 'Alloted Time Over: Assesment Test Has Been Submitted')
                     return redirect(reverse('staff:assesments:assessment_open_result_by_staff', kwargs= {'slug': self.create_result_instance.assesment.slug, 'pk': self.create_result_instance.pk}))
-                    
+                '''    
                 
                 if question_type and question_type in all_question_types:
                     pk_of_question = self.request.POST.get('question_id')
