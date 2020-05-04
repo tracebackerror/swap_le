@@ -106,7 +106,7 @@ Local Time:  {{result_object.exam_taken_date_time|localtime }}
 		
 
 
-<form action="{% url 'student:assesments:process_open_assesment' %}" method="POST" id="questionProcessingForm">
+<form action="{% url 'student:assesments:process_open_assesment' %}" method="GET" id="questionProcessingForm">
 
 {% if get_the_answer_obj %} 
 	{% if get_the_answer_obj.for_question.question_type|lower == "scq"  or get_the_answer_obj.for_question.question_type|lower == "mcq" %}
@@ -321,7 +321,7 @@ Local Time:  {{result_object.exam_taken_date_time|localtime }}
 
 
 {% endif %}
-{%csrf_token%}
+
 
 
 </form>

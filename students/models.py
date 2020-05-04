@@ -66,7 +66,10 @@ class Student(models.Model):
         return "{} {} ({}) <- {}".format(self.studentuser.first_name, self.studentuser.last_name, self.studentuser.username, self.staffuser.staffuser.username)
     
     def get_name_registered_student(self):
-        return "{},{}".format(self.studentuser.first_name.title(), self.studentuser.last_name.title())
+        if self.studentuser and not self.studentuser.first_name.title() and self.studentuser.last_name.title():
+            return "{},{}".format(self.studentuser.first_name.title(), self.studentuser.last_name.title())
+        else:
+            return "{}".format(self.studentuser)
         
     def __str__(self):
        return self.get_name_registered_student()
