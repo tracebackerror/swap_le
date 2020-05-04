@@ -9,10 +9,21 @@ urlpatterns = [
     url(r'^assesment/$', ManageAllAssesmentView.as_view(), name='manage_all_assesment'),
     url(r'^live/$', ManageStudentAssesmentView.as_view(), name='manage_student_assesment'),
     url(r'^live/(?P<slug>[\w-]+)$', StartIntroStudentAssesmentView.as_view(), name='student_assesment_intro'),
+    
+    #url(r'^open/(?P<assesmentid>\w{0,15})/finish/$', GenerateAssesmentResultView.as_view(), name='assesment_open_finished_by_student'),
+    #OPEN EXAM
+    url(r'^open/$', ManageOpenAssesmentView.as_view(), name='manage_open_assesment'),
+    url(r'^open/(?P<slug>[\w-]+)$', OpenIntroStudentAssesmentView.as_view(), name='open_assesment_intro'),
+    url(r'^open/process/$', ProcessOpenAssesmentView.as_view(), name='process_open_assesment'),
+    url(r'^open/(?P<slug>[\w-]+)/finish/$', GenerateOpenAssesmentResultView.as_view(), name='assesment_open_finished_by_student'),
+    url(r'^open/(?P<slug>[\w-]+)/result/(?P<pk>\w{0,15})$', AssessmentOpenResultByStaff.as_view(), name='assessment_open_result_by_staff'),
+    
+    
+    #PUBLIC EXAM
     url(r'^process/$', ProcesStudentAssesmentView.as_view(), name='process_assesment'),
-    url(r'^process/$', ProcesStudentAssesmentView.as_view(), name='process_assesment_no_arg'),
     url(r'^(?P<assesmentid>\w{0,15})/delete/$', assessment_delete_by_staff, name='assessment_delete_by_staff'),
     url(r'^(?P<assesmentid>\w{0,15})/finish/$', GenerateAssesmentResultView.as_view(), name='assesment_finished_by_student'),
+    
 
     url(r'^(?P<assesmentid>\w{0,15})/edit/$', assessment_edit_by_staff, name='assessment_edit_by_staff'),
     url(r'^(?P<assesmentid>\w{0,15})/edit/(?P<questionid>\w{0,15})/delete/$', assessment_question_delete, name='assessment_question_delete'),

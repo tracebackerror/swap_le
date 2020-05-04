@@ -1,0 +1,370 @@
+{% extends "base.html" %}
+{%load literal_eval%}
+{% load static %}
+
+
+{% block title %}Student Result {% endblock %}
+
+{% block content %}
+
+<div class="container" style="min-height:60%;">
+<div id="user_message_display">
+		{% for message in messages %}
+				<div class="alert alert-warning alert-dismissible fade show" role="alert">
+					{{ message|safe }}
+				  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				  </button>
+				</div>
+		{% endfor %}
+	</div>
+	<div class="row">
+		<h1>Below is the Result of Student:</h1>
+	</div>
+	<br>
+
+		
+			<div class="card">
+				<div class="card-body">
+					<h5 class="card-title">Examination Detailed Information: </h5>
+					<h6 class="card-subtitle mb-2 text-muted">
+						Result linked to {{object.registered_user.user_type|title}} with username {{object.registered_user.studentuser.username}} and First and Last Name as {{object.registered_user.studentuser.first_name|upper}}  {{object.registered_user.studentuser.last_name|upper}} having mailing address as  {{object.registered_user.studentuser.email}} 
+					</h6>
+
+					<div class="row border-bottom my-1">
+						<div class="col-md-12">
+							<h5> Title: </h5>
+						</div>
+
+						<div class="col-md-12">
+							<h6> {{object.assesment.header}}</h6>
+						</div>
+					</div>
+					<div class="row border-bottom my-1">
+						<div class="col-md-12">
+							<h5> Description: </h5>
+						</div>
+						<div class="col-md-12">
+							<h6> {{object.assesment.brief}}</h6>
+						</div>
+					</div>
+					<div class="row border-bottom my-1">
+						<div class="col-md-3">
+							Available From Date: 
+						</div>
+						<div class="col-md-3">
+							{{object.assesment.exam_start_date_time}}
+						</div>
+						<div class="col-md-3">
+							Available To End Date: 
+						</div>
+						<div class="col-md-3">
+							{{object.assesment.expired_on}}
+						</div>
+					</div>
+
+					<div class="row border-bottom my-1">
+						<div class="col-md-4">
+							Exam Duration: 
+						</div>
+						<div class="col-md-4">
+							{{object.assesment.duration_hours}} Hours {{object.assesment.duration_minutes}} Minutes
+						</div>
+						<div class="col-md-4">
+							Minimum Required Marks To Pass: 
+						</div>
+						<div class="col-md-3">
+							{{object.assesment.passing_marks}}
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+		<br/>
+
+
+		<div class="card">
+			<div class="card-body">
+				<h5 class="card-title">Summary: </h5>
+				<h6 class="card-subtitle mb-2 text-muted">Result Overview</h6>
+				<div class="row border-bottom my-1">
+					<div class="col-md-3">
+						Taken Date Time: 
+					</div>
+					<div class="col-md-3">
+						{{object.exam_taken_date_time}}
+					</div>
+
+					<div class="col-md-3 ">
+						Result:
+					</div>
+					<div class="col-md-3 ">
+						{{object.result_passed|yesno:"Pass,Fail"}}
+					</div>
+				</div>
+				<div class="row border-bottom my-1">
+					<div class="col-md-2">
+						Total Question: 
+					</div>
+					<div class="col-md-1">
+						{{object.total_question}}
+					</div>
+					<div class="col-md-2">
+						Attempted Question: 
+					</div>
+					<div class="col-md-1">
+						{{object.total_attempted}}
+					</div>
+					<div class="col-md-2">
+						Total Marks: 
+					</div>
+					<div class="col-md-1">
+						{{object.total_marks}}
+					</div>
+					<div class="col-md-2">
+						Obtained Marks: 
+					</div>
+					<div class="col-md-1">
+						{{object.obtained_marks}}
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2">
+						Status: 
+					</div>
+					<div class="col-md-10">
+						{{object.assesment_submitted|yesno:"Student Has Completed The Assesment,Assesment is in Progress"}}
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<br/>
+		{% for single_answer in object.answer_set.all %}
+		{{ ans.pk }}
+		<div class="row my-3	">
+			<div class="col-md-12">
+			<div class="card">
+				<div class="card ">
+					<div class="card-header">
+						<b>Question:</b> {{ single_answer.for_question.question_text|title }}
+						
+					</div>
+					<div class="card-body">
+						{% if single_answer.for_question.question_type == 'scq' or  single_answer.for_question.question_type == 'mcq'%}
+						
+						
+						<h5 class="card-title">Options: </h5>
+						<ul class="list-group list-styled	">
+							{% if single_answer.for_question.option_one|length > 0 %}
+								
+							
+								
+								<li class="list-group-item d-flex {% if '1' in single_answer.opted_choice %} bg-light{% endif %} justify-content-between align-items-center">
+									
+										<span class="badge badge-dark badge-pill">1</span>
+										{% if "1" in single_answer.for_question.correct_options %}
+											<i class="fa fa-check" aria-hidden="true"></i>
+										{% endif %}
+										{% if "1" in single_answer.opted_choice and   "1" not in  single_answer.for_question.correct_options  %}
+											<i class="fa fa-times" aria-hidden="true"></i>
+										{% endif %}
+									
+									<span class="col-md-11">{{ single_answer.for_question.option_one }}</span>
+									{% if "1" in  single_answer.opted_choice %}
+										<i class="fa fa-user pull-right" aria-hidden="true"></i>
+									{% endif %}
+								  </li>
+							
+							{% endif %}
+							
+							{% if single_answer.for_question.option_two|length > 0 %}
+							<li class="list-group-item d-flex {% if '2' in single_answer.opted_choice %} bg-light{% endif %} justify-content-between align-items-center">
+								
+								<span class="badge badge-dark badge-pill">2</span>
+								{% if "2" in single_answer.for_question.correct_options %}
+										<i class="fa fa-check" aria-hidden="true"></i>
+								{% endif %}
+								{% if "2" in single_answer.opted_choice and   "2" not in  single_answer.for_question.correct_options  %}
+												<i class="fa fa-times" aria-hidden="true"></i>
+								
+								{% endif %}
+								<span class="col-md-11">{{ single_answer.for_question.option_two }}</span>
+								{% if "2" in  single_answer.opted_choice %}
+										<i class="fa fa-user pull-right" aria-hidden="true"></i>
+									{% endif %}
+								
+							  </li>
+							{% endif %}
+							{% if single_answer.for_question.option_three|length > 0 %}
+							<li class="list-group-item d-flex {% if '3' in single_answer.opted_choice %} bg-light{% endif %} justify-content-between align-items-center">
+								<span class="badge badge-dark badge-pill">3</span>
+								{% if "3" in single_answer.for_question.correct_options %}
+										<i class="fa fa-check" aria-hidden="true"></i>
+								{% endif %}
+								{% if "3" in single_answer.opted_choice and   "3" not in  single_answer.for_question.correct_options  %}
+										<i class="fa fa-times" aria-hidden="true"></i>
+								
+								{% endif %}
+								
+								<span class="col-md-11">{{ single_answer.for_question.option_three }}</span>
+								{% if "3" in  single_answer.opted_choice %}
+										<i class="fa fa-user pull-right" aria-hidden="true"></i>
+									{% endif %}
+							  </li>
+							
+							{% endif %}
+							{% if single_answer.for_question.option_four|length > 0 %}
+							<li class="list-group-item d-flex {% if '4' in single_answer.opted_choice %} bg-light{% endif %} justify-content-between align-items-center">
+								<span class="badge badge-dark badge-pill">4</span>
+								{% if "4" in single_answer.for_question.correct_options %}
+										<i class="fa fa-check" aria-hidden="true"></i>
+								{% endif %}
+								{% if "4" in single_answer.opted_choice and   "4" not in  single_answer.for_question.correct_options  %}
+										<i class="fa fa-times" aria-hidden="true"></i>
+								{% endif %}
+								
+								<span class="col-md-11">{{ single_answer.for_question.option_four }}</span>
+								{% if "4" in  single_answer.opted_choice %}
+										<i class="fa fa-user pull-right" aria-hidden="true"></i>
+									{% endif %}
+							  </li>
+							{% endif %}
+							
+							{% if single_answer.for_question.option_five|length > 0 %}
+							 <li class="list-group-item d-flex {% if '5' in single_answer.opted_choice %} bg-light{% endif %} justify-content-between align-items-center">
+								<span class="badge badge-dark badge-pill">5</span>
+								{% if "5" in single_answer.for_question.correct_options %}
+										<i class="fa fa-check" aria-hidden="true"></i>
+								{% endif %}
+								{% if "5" in single_answer.opted_choice and   "5" not in  single_answer.for_question.correct_options  %}
+										<i class="fa fa-times" aria-hidden="true"></i>
+								{% endif %}
+								
+								<span class="col-md-11">{{ single_answer.for_question.option_five }}</span>
+								{% if "5" in  single_answer.opted_choice %}
+										<i class="fa fa-user pull-right" aria-hidden="true"></i>
+									{% endif %}
+							  </li>
+							{% endif %}
+							<li class="list-group-item d-flex justify-content-between align-items-center">
+								<span class="col-sm-2 col-md-2 badge badge-primary badge-pill pull-left">{{ single_answer.opted_choice|replace_literals}}</span>
+								<span class="col-sm-10 col-md-10 pull-left">
+								Selected Choice
+								</span>
+							  </li>
+							 <li class="list-group-item d-flex justify-content-between align-items-center">
+								<span class="col-sm-2 col-md-2 badge badge-primary badge-pill pull-left">{{ single_answer.for_question.correct_options|replace_literals}}</span>
+								<span class="col-sm-10 col-md-10 pull-left">
+								Correct Answers
+								</span>
+							  </li>
+							
+							
+						</ul>
+						<h5 class="card-text">Marks Obtained</h5>
+						{% else %}
+						<ul class="list-group list-group-flush">
+							<li class="list-group-item">{{ single_answer.written_answer}}</li>
+						</ul>
+						<p class="card-text">Marks Obtained</p>
+						{% endif %}
+					</div>
+					<div class="card-footer text-muted text-center">
+						<a href="#" class="btn btn-primary "> {{ single_answer.alloted_marks}} / {{ single_answer.for_question.max_marks}}</a>
+
+					</div>
+				</div>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+		<div class="row">
+			<div class="col-md-12">
+			<div align="center" class=" card">
+				
+					<canvas id="canvas"></canvas>
+				
+			</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		section = [];
+		total_questions = [];
+		{% for key, value in section_name.items %}
+				section.push("{{key}}");
+				total_questions.push({{value}});
+		{% endfor %}
+		
+
+		var config = {
+			type: 'line',
+			data: {
+				labels: section,
+				datasets: [
+					{
+						label: 'Marks Obtained',
+						fill: false,
+						backgroundColor: window.chartColors.red,
+						borderColor: window.chartColors.red,
+						data: total_questions,
+						
+					},
+				]
+			},
+			
+			options: {
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Section Wise Student Result Graph View'
+				},
+				tooltips: {
+					mode: 'index',
+					intersect: false,
+				},
+				hover: {
+					mode: 'nearest',
+					intersect: true
+				},
+				scales: {
+					xAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'SECTION NAME'
+						}
+					}],
+					yAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Marks'
+						},
+						ticks: {
+							min: 0,
+							max: 20,
+
+							// forces step size to be 5 units
+							stepSize: 1
+						}
+					}]
+				}
+			}
+		};
+
+		window.onload = function() {
+			var ctx = document.getElementById('canvas').getContext('2d');
+			window.myLine = new Chart(ctx, config);
+		};
+
+	</script>
+
+	<!--<script src="{% static "js/assessment_display_result_script.js" %}"></script> -->
+	{% endblock %}
+
+
+	

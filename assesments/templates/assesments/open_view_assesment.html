@@ -1,0 +1,36 @@
+
+{% extends "base.html" %}
+{% load render_table from django_tables2 %}
+
+{% block title %}   Live Assesments   {% endblock %}
+
+
+{% block content %} 
+<style type="text/css">
+
+</style>
+ <h1></h1>
+ <div id="user_message_display">
+		{% for message in messages %}
+				<div class="alert alert-warning alert-dismissible fade show" role="alert">
+					{{ message|safe }}
+				  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				  </button>
+				</div>
+		{% endfor %}
+	</div>
+<br/>
+ <div class="container" style="min-height:60%;" >
+	{% if request.user_agent.is_pc %}
+		{% render_table table  'assesments/boostrap4cards_dj_tables2_open.html' %}
+	{% else %}
+		{% render_table table  'assesments/boostrap4cards_dj_tables2_open.html' %}
+	{% endif %}
+ 
+ </div>
+{% endblock %}
+
+
+
+

@@ -26,7 +26,7 @@ class Assesment(MetaInformationMixin, SoftDeletionModelMixin, ModelMeta):
     ASSESMENT_PRIVILEGE_CHOICES = (
         ('public', 'Public'),
         ('private', 'Private'),
-        #('protected', 'Protected'),
+        ('open', 'Open - Visible to Entire World'),
         )
     
     #objects = models.Manager()  # The Default Manager
@@ -194,7 +194,7 @@ class Result(MetaInformationMixin, SoftDeletionModelMixin):
     total_marks = models.IntegerField(default=0)
     obtained_marks = models.IntegerField(default=0)
     
-    publish_result = models.BooleanField(default=False)
+    publish_result = models.BooleanField(default=True)
     result_passed = models.BooleanField(default=False)
     type = models.CharField(max_length=10, default="result", editable=False)
     

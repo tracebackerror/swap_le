@@ -68,7 +68,7 @@
 										{% csrf_token %} 
 											
 											<input type="hidden" name="examid" value={{ row.record.id }}> 
-											<p class="card-text"><a href="{% url "staff:assesments:student_assesment_intro" slug=row.record.slug %}" class="btn btn-primary " value="Take Exam" >Take Exam</a></p>
+											<p class="card-text"><a href="{% url "staff:assesments:open_assesment_intro" slug=row.record.slug %}" class="btn btn-primary " value="Take Exam" >Take Exam</a></p>
 										</form>
 										 
 									</div>

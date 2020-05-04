@@ -136,7 +136,8 @@ class GroupedModelChoiceField(ModelChoiceField):
         if  type(value) == Student:
             return value.pk
         elif value and len(value) > 0:
-            v = [selected.pk for selected in value]
+            
+            v = [selected.pk for selected in value if hasattr(selected,'pk')]
             '''
             if self.to_field_name:
                 return value.serializable_value(self.to_field_name)

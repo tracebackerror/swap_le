@@ -13,7 +13,7 @@ from .tables import AssesmentTable, StudentAssesmentTable, QuestionTable, Result
 from .filter import AssesmentFilter
 from students.models import Student
 from staff.models import Staff
-
+import pytz
 from .models import Assesment, Answer, Result
 from .forms import AssessmentForm, AssessmentCreationForm, QuestionForm, ReviewSqaAnswerForm, ReviewSqaFormSet, ReviewSqaFormSetHelper
 from django.contrib import messages
@@ -61,6 +61,8 @@ import pandas as pd
 from dal import autocomplete
 from taggit.models import Tag
 
+import uuid
+from django.contrib.auth.models import User
 class ReviewAllSqaView(TemplateView):
     model = Answer
     template_name = 'assesments/review_all_sqa.html'
@@ -146,7 +148,58 @@ class ReviewAllSqaView(TemplateView):
     
     
     
+class GenerateOpenAssesmentResultView(TemplateView):
+    http_method_names = [ 'post',]
+    template_name = 'assesments/review_all_sqa.html'
+    def get_queryset(self):
+        self.queryset = super(GenerateOpenAssesmentResultView, self).get_queryset()
+        return self.queryset
 
+    def dispatch(self, *args, **kwargs):
+        return super(GenerateOpenAssesmentResultView, self).dispatch(*args, **kwargs)
+
+            
+    def post(self, request, *args, **kwargs):
+        '''
+        1. Before Submission Check Whether resultid is in loggedinuser == usersubmission
+        2. Only once submission allowed -- Multiple Allowed
+        3. Not allow other user exams to be submitted
+        4. Calculate Result
+        5. And pop out the assesement from student view
+        
+'''
+        assesment_to_submit = self.request.session.get('assesment_to_undertake')
+        result_for_student_user = User.objects.get( username = self.request.session['anonymous_student_id'])
+        fetch_appropriate_result = Result.objects.filter(assesment__id = assesment_to_submit, registered_user = result_for_student_user.student)
+        
+        if fetch_appropriate_result.exists():
+            get_assesment_obj_to_update = fetch_appropriate_result[0]
+            get_assesment_obj_to_update.assesment_submitted = True
+            get_assesment_obj_to_update.total_question =  get_assesment_obj_to_update.assesment.question_set.count()
+            get_assesment_obj_to_update.total_attempted = get_assesment_obj_to_update.answer_set.all().count()
+            
+            sum_of_marks = get_assesment_obj_to_update.assesment.question_set.aggregate(sum_of_marks = Sum('max_marks'))
+            get_assesment_obj_to_update.total_marks  = sum_of_marks['sum_of_marks']
+            
+            obtained_marks_calculate = get_assesment_obj_to_update.answer_set.aggregate(answer_obtained_marks = Sum('alloted_marks'))
+            get_assesment_obj_to_update.obtained_marks = obtained_marks_calculate.get('answer_obtained_marks')
+            get_assesment_obj_to_update.result_passed = obtained_marks_calculate.get('answer_obtained_marks') >= get_assesment_obj_to_update.assesment.passing_marks  
+            get_assesment_obj_to_update.save()
+            messages.success(request, 'Assesment Has Been Completed')
+            
+            return redirect(reverse('staff:assesments:assessment_open_result_by_staff', kwargs= {'slug': get_assesment_obj_to_update.assesment.slug, 'pk': get_assesment_obj_to_update.pk}))
+            
+        else:
+            raise NotImplementedError("Implementation Is Stale")
+    
+    def get_context_data(self, **kwargs):
+        context = super(GenerateOpenAssesmentResultView, self).get_context_data(**kwargs)
+        if 'assesmentid' in self.kwargs:
+            context['assesmentid'] = self.kwargs['assesmentid']
+        if 'slug' in self.kwargs:
+            context['assesment_slug'] = self.kwargs['slug']
+        return context 
+        
 class GenerateAssesmentResultView(TemplateView):
     http_method_names = [ 'post',]
     template_name = 'assesments/review_all_sqa.html'
@@ -190,6 +243,7 @@ class GenerateAssesmentResultView(TemplateView):
             get_assesment_obj_to_update.result_passed = obtained_marks_calculate.get('answer_obtained_marks') >= get_assesment_obj_to_update.assesment.passing_marks  
             get_assesment_obj_to_update.save()
             messages.success(request, 'Assesment Has Been Completed')
+            
             return redirect('student:dashboard')
         else:
             raise NotImplementedError("Implementation Is Stale")
@@ -359,7 +413,43 @@ class ManageAllAssesmentView(PermissionRequiredMixin, ExportMixin, SingleTableMi
             return exporter.response("table.{}".format(export_format))'''
         return context
 
+class AssessmentOpenResultByStaff( DetailView):
+    model = Result
+    template_name = 'assesments/open_display_single_result.html'
+    
+    def render_to_response(self, context, **response_kwargs):
+        #data to required in graph result view =========================================================================
+        slug = self.kwargs.get('slug')
+        pk = self.kwargs.get('pk')
+        result_obj = Result.objects.get(id = pk)
+        curr_assessment = result_obj.assesment
+        #section_obj = SectionQuestionMapping.objects.filter(for_section__linked_assessment = curr_assessment).values('for_section__name').annotate(count_question = Count('for_question'))
+        ans_obj = Answer.objects.filter(for_result = result_obj)
+        data = [];
+        #print(ans_obj)
+        attempted , corrected,total = 0,0,0
+        q1 = ans_obj.values('alloted_marks', question_id = F('for_question__id') )
+        q2 = Section.objects.filter(linked_assessment = curr_assessment).values('name', question_id = F('for_question__id')).exclude(question_id__isnull=True)
 
+        p1 = pd.DataFrame(q1)
+        p2 = pd.DataFrame(q2)
+        if not (p1.empty or p2.empty):
+            p1.question_id.astype('int') 
+            p2.question_id.astype('int') 
+            joined_marks_question_and_section = p1.merge(p2)
+            sum_df = joined_marks_question_and_section.groupby('name')['alloted_marks'].agg('sum')
+        
+        
+            context['section_name'] = sum_df.to_dict()
+        else:
+            context['section_name'] = dict()
+        return self.response_class(
+            request = self.request,
+            template = self.get_template_names(),
+            context = context,
+            **response_kwargs
+        )
+        
 class AssessmentResultByStaff(LoginRequiredMixin, DetailView):
     
     model = Result
@@ -402,7 +492,19 @@ class AssessmentResultByStaff(LoginRequiredMixin, DetailView):
             **response_kwargs
         )
     
-
+class OpenIntroStudentAssesmentView( DetailView):
+    model = Assesment
+    
+    slug_field = 'slug'
+    template_name = 'assesments/open_exam_start_intro_page.html'
+    context_object_name = "assesment_object"
+    
+    
+    def get_context_data(self, **kwargs):
+        context = super(OpenIntroStudentAssesmentView, self).get_context_data(**kwargs)
+        context['meta'] = self.get_object().as_meta(self.request)
+        return context
+        
 class StartIntroStudentAssesmentView( DetailView):
     model = Assesment
     
@@ -428,7 +530,41 @@ class StartIntroStudentAssesmentView( DetailView):
     
        
      '''
+class ManageOpenAssesmentView(SingleTableView, ListView):
+    model = Assesment
+    context_object_name = 'table'
+    paginate_by = 20
+    template_name = 'assesments/open_view_assesment.html'
+    table_class = StudentAssesmentTable
+    http_method_names = ['get', 'post']
     
+    def get_queryset(self):
+        
+        #student_obj = Student.objects.get(studentuser = self.request.user)
+        
+        #all_user_linked_assesment = Assesment.objects.filter(subscriber_users = student_obj, privilege='public')
+        all_user_linked_assesment = Assesment.objects.filter( privilege='open')
+        all_user_linked_assesment_filter_exam_date = all_user_linked_assesment.filter(exam_start_date_time__lte= timezone.datetime.now(), expired_on__gte=  timezone.datetime.now())
+        self.queryset = all_user_linked_assesment_filter_exam_date
+    
+        return super(ManageOpenAssesmentView, self).get_queryset()
+
+    def dispatch(self, *args, **kwargs):
+        return super(ManageOpenAssesmentView, self).dispatch(*args, **kwargs)
+    
+    def post(self, *args, **kwargs):
+        assesment_initiate_flag = self.request.POST.get('start_assesment_boolean', None)
+        examid = self.request.POST.get('examid', None)
+        assesment_to_undertake = Assesment.objects.get(id = int(examid))
+        #self.request.context['meta'] = assesment_to_undertake.as_meta(self.request)
+        self.request.session['assesment_to_undertake'] = examid    
+        return redirect(reverse_lazy("staff:assesments:student_assesment_intro", kwargs={'assesmentid': examid}))
+     
+    def get_context_data(self, **kwargs):
+        context = super(ManageOpenAssesmentView, self).get_context_data(**kwargs)
+        examid = self.request.POST.get('examid', None)
+        
+        return context     
     
 class ManageStudentAssesmentView(SingleTableView, ListView):
     model = Assesment
@@ -557,7 +693,213 @@ class ManageSingleAsessment(ExportMixin, SingleTableView):
         
         return context
     
+class ProcessOpenAssesmentView(DetailView):
+    model = Assesment
+    context_object_name = "assesment_object"
+    template_name = 'assesments/open_exam_start_main_page.html'
+    http_method_names = ['get', 'post']
     
+    def get_queryset(self):
+        student_obj = Student.objects.get(studentuser = self.request.user)
+        self.queryset = Assesment.objects.filter(subscriber_users = student_obj)
+        return super(ProcessOpenAssesmentView, self).get_queryset()
+
+    def _process_assesment(self, *args, **kwargs):
+        get_the_answer_obj = None
+        page_question_obj = None
+        
+        if 'start_assesment_boolean' in self.request.POST.keys():
+            assesment_initiate_flag = eval(self.request.POST.get('start_assesment_boolean', None))
+            time_obj= timezone.datetime.now()
+            self.request.session['exam_start_time'] = timezone.datetime.now().strftime("%d/%m/%Y %H:%M")
+            self.request.session['exam_start_time_year'] = time_obj.year
+            self.request.session['exam_start_time_month'] = time_obj.month
+            self.request.session['exam_start_time_day'] = time_obj.day
+            self.request.session['exam_start_time_hour'] = time_obj.hour
+            self.request.session['exam_start_time_minute'] = time_obj.minute
+            user_name = uuid.uuid4().hex[:30]
+            user_obj = User.objects.create_user(username=user_name,
+                             email='anonymoususer@beatles.com',
+                             password='Test@19487d')
+            
+            student_obj = Student()
+
+            student_obj.studentuser = user_obj
+            
+            student_obj.save()
+            user_obj.save()
+            self.request.session['anonymous_student_id'] = user_name
+            
+        elif '_assesment_initiate_flag' in self.request.session.keys():
+            assesment_initiate_flag = self.request.session.get('_assesment_initiate_flag')
+             
+        if assesment_initiate_flag:
+            
+            if self.request.POST.get('assesment_obj', None) :
+                self.request.session['assesment_to_undertake'] = self.request.POST['assesment_obj']
+                
+            self.request.session['_assesment_initiate_flag'] = assesment_initiate_flag
+            asses_unfiltered = self.request.session.get('assesment_to_undertake', None)
+            page_of_question = int(self.request.POST.get('nextpage', 1))
+            
+            if asses_unfiltered and eval(asses_unfiltered):
+                assesment_to_undertake = Assesment.objects.get(id = eval(asses_unfiltered))
+                
+                ''' Getting Next Question'''
+                fetch_all_linked_question = Question.objects.filter(assesment_linked = assesment_to_undertake).order_by('pk')
+                total_question_on_single_page = 1
+                
+                paginator = Paginator(fetch_all_linked_question, total_question_on_single_page)
+                
+                logging.info("Can Proceed For Assesment")
+                
+                try:
+                    page_question_obj = paginator.page(page_of_question)
+                except PageNotAnInteger:
+                    page_question_obj = paginator.page(1)
+                except EmptyPage:
+                    page_question_obj = paginator.page(paginator.num_pages)
+                    
+                
+                ''' Log the Answer in Database '''
+                question_type = self.request.POST.get('question_type', None)
+                
+                result_for_student_user = User.objects.get( username = self.request.session['anonymous_student_id'])
+                
+                result_of_assesment = Result.objects.filter(assesment = assesment_to_undertake, registered_user = result_for_student_user.student, exam_taken_date_time__year = self.request.session['exam_start_time_year'], exam_taken_date_time__month = self.request.session['exam_start_time_month'], exam_taken_date_time__day = self.request.session['exam_start_time_day'], exam_taken_date_time__hour = self.request.session['exam_start_time_hour'], exam_taken_date_time__minute = self.request.session['exam_start_time_minute'])
+                #result_of_assesment.delete()
+                if len(result_of_assesment)  == 0:
+                    self.create_result_instance = Result()
+                    #exam_taken_date_time use for exam time
+                    
+                    self.create_result_instance.exam_taken_date_time = timezone.datetime.strptime(self.request.session['exam_start_time'], "%d/%m/%Y %H:%M").replace(tzinfo=None)
+                    self.create_result_instance.assesment = assesment_to_undertake
+                    self.create_result_instance.registered_user = result_for_student_user.student
+                    self.create_result_instance.created_by = result_for_student_user
+                    self.create_result_instance.updated_by = result_for_student_user
+                    self.create_result_instance.save()
+                else:
+                    self.create_result_instance = result_of_assesment[0]
+                
+                if len(result_of_assesment)  == 0:
+                    difference =  timezone.now() -  timezone.now() 
+                else:
+                    difference =  timezone.now() - self.create_result_instance.exam_taken_date_time 
+                seconds_in_day = 24 * 60 * 60
+                alloted_seconds = (assesment_to_undertake.duration_hours * 60 + assesment_to_undertake.duration_minutes) * 60
+                minutes_cumulative_over, seconds_over = divmod(difference.seconds, 60)
+                hours_over, minutes_over = divmod(minutes_cumulative_over, 60)
+                
+                if hours_over >= assesment_to_undertake.duration_hours and minutes_over >= assesment_to_undertake.duration_minutes:
+                    # Time Over Exit Assesment
+                    self.create_result_instance.assesment_submitted = True
+                    self.create_result_instance.total_question =  self.create_result_instance.assesment.question_set.count()
+                    self.create_result_instance.total_attempted = self.create_result_instance.answer_set.all().count()
+                        
+                    sum_of_marks = self.create_result_instance.assesment.question_set.aggregate(sum_of_marks = Sum('max_marks'))
+                    self.create_result_instance.total_marks  = sum_of_marks['sum_of_marks']
+                        
+                    obtained_marks_calculate = self.create_result_instance.answer_set.aggregate(answer_obtained_marks = Sum('alloted_marks'))
+                    self.create_result_instance.obtained_marks = obtained_marks_calculate.get('answer_obtained_marks')
+                    if obtained_marks_calculate.get('answer_obtained_marks'):
+                        self.create_result_instance.result_passed = obtained_marks_calculate.get('answer_obtained_marks') >= self.create_result_instance.assesment.passing_marks  
+                    else:
+                        self.create_result_instance.result_passed = False
+                    self.create_result_instance.save()
+
+                    messages.success(self.request, 'Alloted Time Over: Assesment Test Has Been Submitted')
+                    return redirect(reverse('staff:assesments:assessment_open_result_by_staff', kwargs= {'slug': get_assesment_obj_to_update.assesment.slug, 'pk': get_assesment_obj_to_update.pk}))
+                    
+                
+                if question_type and question_type in all_question_types:
+                    pk_of_question = self.request.POST.get('question_id')
+                    question_obj = Question.objects.filter(assesment_linked = assesment_to_undertake, pk = pk_of_question)
+                    get_the_answer_obj = Answer.objects.filter(for_result = self.create_result_instance, for_question__in = question_obj)
+                    
+                    if len(get_the_answer_obj) == 0:
+                        get_the_answer_obj = Answer()
+                        get_the_answer_obj.created_by = self.request.user
+                        get_the_answer_obj.updated_by = self.request.user
+                        get_the_answer_obj.for_result = self.create_result_instance
+                        get_the_answer_obj.for_question = question_obj[0]
+                        #get_the_answer_obj.save()
+                    else:
+                        get_the_answer_obj = get_the_answer_obj[0]
+                        
+                    
+                    if question_type == swaple_constants.SCQ or question_type == swaple_constants.MCQ:
+                        selected_answer = self.request.POST.getlist('answer')
+                        get_the_answer_obj.opted_choice = selected_answer
+                        # Here we need to add code for checking and setting the marks from question_obj
+                        option_selected = "-".join(selected_answer)
+                        if option_selected == question_obj[0].correct_options:
+                            get_the_answer_obj.alloted_marks = question_obj[0].max_marks
+                        else:
+                            get_the_answer_obj.alloted_marks = 0
+                        get_the_answer_obj.save()
+                    elif question_type == swaple_constants.SQA:
+                        written_answer= self.request.POST.get('answer')
+                        get_the_answer_obj.opted_choice = ''
+                        get_the_answer_obj.written_answer = written_answer
+                        # Here we need to add code for checking and setting the marks from question_obj
+                        get_the_answer_obj.alloted_marks = 0
+                        get_the_answer_obj.save()
+                    
+                else:
+                    pass
+                
+                if len(page_question_obj) == 0 :
+                    messages.add_message(self.request, messages.SUCCESS,  'Assessment Test Is Not Having Any Single Question To Answer. ')
+                    return redirect(reverse_lazy("staff:assesments:manage_open_assesment"))
+                get_the_current_answer_obj = Answer.objects.filter(for_result = self.create_result_instance, for_question = page_question_obj[0])
+                    
+                if len(get_the_current_answer_obj) == 0:
+                        get_the_current_answer_obj = Answer()
+                        get_the_current_answer_obj.created_by = result_for_student_user
+                        get_the_current_answer_obj.updated_by = result_for_student_user
+                        get_the_current_answer_obj.for_result = self.create_result_instance
+                        
+                        get_the_current_answer_obj.for_question = page_question_obj[0]
+                        get_the_current_answer_obj.alloted_marks = 0
+                        #get_the_answer_obj.save()
+                else:
+                        get_the_current_answer_obj = get_the_current_answer_obj[0]
+                        
+                get_the_current_answer_obj.save() 
+                # Check whether user has answered any question
+                
+                
+                #question image display view
+                question_image_obj = {}
+                for question in fetch_all_linked_question:
+                    if(question.question_image):
+                        question_image_obj[question.id] = question.question_image
+                   
+                return render(self.request, self.template_name, {
+                    'assesment_object': assesment_to_undertake,
+                    'all_question_to_answer':page_question_obj,
+                    'get_the_answer_obj':get_the_current_answer_obj,
+                    'result_object':self.create_result_instance,
+                    'question_image_obj':question_image_obj,
+                    
+                    })
+     
+    @register.filter
+    def get_item(dictionary, key):
+        return dictionary.get(key)
+
+    def get(self, *args, **kwargs):
+        self._process_assesment(self, *args, **kwargs)
+    
+        
+    def post(self, *args, **kwargs):
+        return self._process_assesment(self, *args, **kwargs)
+
+    
+    def get_context_data(self, **kwargs):
+        context = super(ProcessOpenAssesmentView, self).get_context_data(**kwargs)
+        return context
+        
 class ProcesStudentAssesmentView(DetailView):
     model = Assesment
     context_object_name = "assesment_object"
@@ -741,7 +1083,7 @@ class ProcesStudentAssesmentView(DetailView):
             pass
         
     def get_success_url(self, **kwargs):         
-        import pdb; pdb.set_trace()
+        
         return reverse_lazy('staff:assesments:process_assesment', kwargs = self.kwargs)
     @register.filter
     def get_item(dictionary, key):

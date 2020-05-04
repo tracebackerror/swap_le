@@ -1,0 +1,499 @@
+{% extends "base.html" %}
+{% load literal_eval %}
+
+{% load tz %}
+
+
+
+{% block title %}{{assesment_object.header}}{% endblock %} {% block content %}
+
+<h1>
+{% if request.user_agent.is_pc %}
+    {{all_question_to_answer.0.assesment_linked.header }}
+{% endif %}</h1>
+
+<div class="container" >
+	{% if request.user_agent.is_mobile %}
+		<h4> {{all_question_to_answer.0.assesment_linked.header }}</h4>
+	{% endif %}
+	<div id="user_message_display">
+		{% for message in messages %}
+				<div class="alert alert-warning alert-dismissible fade show" role="alert">
+					{{ message|safe }}
+				  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				  </button>
+				</div>
+		{% endfor %}
+		
+		
+	</div>
+
+
+
+{% if assesment_object.privilege == 'open' %}
+
+<div class="table-responsive">
+<table class="table table-bordered">
+	<thead>
+	<tr >
+		<td >Remaining Time:</td>
+		<td style=""><div id="examtime" style="font-size:20;"></div></td>
+	</tr>
+	<tr>
+	<td >
+			<input type="button" name="final_submit" value="Final Submit" class="btn btn-danger" data-toggle="modal" data-target="#modalForFinalExit"/>
+
+	</td>
+	<td>
+		User : {{ request.session.anonymous_student_id}}
+	</td>
+	</tr>
+	</thead>
+</table>
+</div>
+<!-- For Debugging Naive vs Aware Time -->
+<!--
+Start Time :
+<br>
+{% localtime on %}
+   {{result_object.exam_taken_date_time}}
+{% endlocaltime %}
+<br>
+{% localtime off %}
+    {{result_object.exam_taken_date_time}}
+{% endlocaltime %}
+<br>
+{{result_object.exam_taken_date_time.isoformat}}
+<br>
+{% timezone None %}
+    Server time: {{result_object.exam_taken_date_time}}
+{% endtimezone %}
+{% get_current_timezone as TIME_ZONE %}
+{{TIME_ZONE}}
+<br>
+Local Time:  {{result_object.exam_taken_date_time|localtime }}
+-->
+
+<!-- Modal -->
+
+		<div id="modalForFinalExit" class="modal fade" role="dialog">
+		  <div class="modal-dialog">
+		
+		    <!-- Modal content-->
+		    <div class="modal-content">
+		      <div class="modal-header">
+		      <h4 class="modal-title">Confirm Examination Submission</h4>
+		        <button type="button" class="close" data-dismiss="modal">&times;</button>
+		      </div>
+		      
+		      
+		      <div class="modal-body">
+		        <p>Please Click on <b><i>"Confirm Submission"</i></b> button to exit the examination.</p>
+		      </div>
+		      <div class="modal-footer">
+		      	
+			  		<form  method="post" id="assesment_submission_form" action= {% url 'student:assesments:assesment_open_finished_by_student' slug=all_question_to_answer.0.assesment_linked.slug %}>
+				 		{% csrf_token %}
+				      	<input type="submit" name="final_confirmed_submit" value="Confirm Submission" class="btn btn-danger" />
+				        <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+		        	</form>
+		      </div>
+		    </div>
+		
+		  </div>
+		</div>
+		
+
+
+<form action="{% url 'student:assesments:process_open_assesment' %}" method="POST" id="questionProcessingForm">
+
+{% if get_the_answer_obj %} 
+	{% if get_the_answer_obj.for_question.question_type|lower == "scq"  or get_the_answer_obj.for_question.question_type|lower == "mcq" %}
+		<input type="hidden" value = '{{get_the_answer_obj.opted_choice|replace:"/['\"]/_"  }}' name="selected_answer" id="selected_answer" />		
+	{% endif %}
+		
+{% endif %}
+
+<table class="table table-bordered">
+  <tbody>
+    {% for question in all_question_to_answer %}
+    <input type="hidden" value={{question.pk}} name="question_id">
+	<tr>
+      <th style="width:10%;">Question {{ all_question_to_answer.number}}</th>
+      <th>{{ question.question_text }}</th>
+    </tr>
+    
+    {% if question.id in question_image_obj %}
+    <tr>
+     <th style="vertical-align: middle;">Figure</th>
+     <td colspan=2><img width="auto" height="150px" src="{{ question_image_obj|get_item:question.id}}"/></td>
+    </tr>
+    {% endif %}
+    
+	{% if question.question_type|lower == 'scq'%}
+	<input type="hidden" name="question_type" value="scq" />
+	  <tr>
+        <td style="width:10%;>
+        <div class="form-group">
+				{% if question.option_one|length > 0 %}
+        <input class="form-control" type="radio" name="answer" id="option1" value=1 {% if get_the_answer_obj.opted_choice.2 == 1 %} checked="checked" {% endif %}>
+				{% endif %}
+        </div>
+        </td>
+        <td>{{ question.option_one }}</td>
+      </tr>
+      <tr>
+        <td style="width:10%;>
+        <div class="form-group">
+				{% if question.option_two|length > 0 %}
+        <input class="form-control" type="radio" name="answer" id="option2" value=2 {% if  get_the_answer_obj.opted_choice.2 == 2 %} checked="checked" {% endif %}></td>
+        {% endif %}
+				</div>
+        <td>{{ question.option_two }}</td>
+      </tr>
+      <tr>
+        <td style="width:10%;>
+        <div class="form-group">
+				{% if question.option_three|length > 0 %}
+        <input class="form-control" type="radio" name="answer" id="option3" value=3 {% if get_the_answer_obj.opted_choice.2 == 3 %} checked="checked" {% endif %} ></td>
+        {% endif %}
+				</div>
+        <td>{{ question.option_three }}</td>
+      </tr>
+      <tr>
+        <td style="width:10%;>
+        <div class="form-group">
+				{% if question.option_four|length > 0 %}
+        <input class="form-control" type="radio" name="answer" id="option4" value=4 {% if get_the_answer_obj.opted_choice.2 == 4 %} checked="checked" {% endif %} ></td>
+        {% endif %}
+				</div>
+        <td>{{ question.option_four }}</td>
+      </tr>
+      <tr>
+        <td style="width:10%;>
+        <div class="form-group">
+				{% if question.option_five|length > 0 %}
+        <input class="form-control" type="radio" name="answer" id="option5" value=5 {% if get_the_answer_obj.opted_choice.2 == 5 %} checked="checked" {% endif %}></td>
+        {% endif %}
+				</div>
+        <td>{{ question.option_five }}</td>
+      </tr>
+      {% elif question.question_type|lower == 'mcq' %}
+      <input type="hidden" name="question_type" value="mcq" />
+	  <tr>
+        <td style="width:10%;>
+        <div class="form-group">
+				{% if question.option_one|length > 0 %}
+        <input class="form-control" type="checkbox" name="answer" id="option1" value=1></td>
+        {% endif %}
+				</div>
+        <td>{{ question.option_one }}</td>
+      </tr>
+      <tr>
+        <td style="width:10%;>
+        <div class="form-group">
+				{% if question.option_two|length > 0 %}
+        <input class="form-control" type="checkbox" name="answer"  id="option2" value=2></td>
+				{% endif %}
+        </div>
+        <td>{{ question.option_two }}</td>
+      </tr>
+      <tr>
+        <td style="width:10%;>
+        <div class="form-group">
+				{% if question.option_three|length > 0 %}
+        <input class="form-control" type="checkbox" name="answer"  id="option3" value=3>
+				{% endif %}																					 
+				</td>
+        </div>
+        <td>{{ question.option_three }}</td>
+      </tr>
+      <tr>
+        <td style="width:10%;>
+        <div class="form-group">
+				{% if question.option_four|length > 0 %}
+        <input class="form-control" type="checkbox" name="answer"  id="option4" value=4 class="form-control" >
+        {% endif %}
+				</div>
+        </td>
+        <td>{{ question.option_four }}</td>
+      </tr>
+      <tr>
+        <td style="width:10%;>
+        <div class="form-group">
+				{% if question.option_five|length > 0 %}
+        <input class="form-control" type="checkbox" name="answer" class="form-control"  value=5 id="option5">
+        {% endif %}
+				</div>
+        </td >
+        <td>{{ question.option_five }}</td>
+      </tr>
+    {% elif question.question_type|lower == 'sqa' %}
+    <input type="hidden" name="question_type" value="sqa" />
+      <tr>
+        <td colspan="2" >
+        <div class="form-group">
+        	<textarea class="form-control" rows="20" name="answer" id="brief_answer" > {{get_the_answer_obj.written_answer}} </textarea>
+        	</div>
+        </td>
+      </tr>
+    {% endif %}
+    {% endfor %}
+  </tbody>
+  <tfoot>
+  <tr>
+      <td colspan="2">
+      
+     
+								<ul class="pagination btn-toolbar" role="toolbar" aria-label="pagination_toolbar">
+							 {% if all_question_to_answer.has_previous %}
+      
+								<li class="nav-item">
+									<button type="button" class="btn btn-default consequetive_question"  name="page" value={{all_question_to_answer.previous_page_number }}>
+										&laquo;</button>
+								</li>
+								{% else %}
+									<li class="nav-item">
+									<button type="button" class="btn btn-default consequetive_question"  name="page" value={{all_question_to_answer.paginator.num_pages }}>
+										&laquo;</button>
+									</li>
+    					{% endif %}
+																								 
+							{% if all_question_to_answer.has_next %}
+								<li class="nav-item">
+								<button type="button" class=" btn btn-default" id="nextquestion" name="page" value={{ all_question_to_answer.next_page_number }}> &raquo; </button>
+								</li>
+							{% else %}
+								<li class="nav-item">
+								<button type="button" class=" btn btn-default" id="nextquestion" name="page" value={{ all_question_to_answer.paginator.page_range.0 }}> &raquo; </button>
+								
+								</li>
+							{% endif %}
+							</ul>
+			</td>
+    
+    </tr>
+    
+  </tfoot>
+</table>
+<div class="row">
+	<div class="col-md-12">
+		<p><small>Do Not Forget To Click on <button type="button" class="btn btn-default" disabled>&laquo; </button> OR
+		<button type="button" class="btn btn-default" disabled>&raquo; </button>
+								buttons after answering each question</small></p>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<p>Question Navigation Panel :</p>
+		
+	</div>
+	<div class="col-md-12">
+		
+				{% if all_question_to_answer.has_other_pages %}
+					<ul class="pagination  btn-toolbar" role="toolbar" aria-label="pagination_toolbar">
+
+
+						{% for i in all_question_to_answer.paginator.page_range %}
+							{% if all_question_to_answer.number == i %}
+								<li class="nav-item   active ">
+									<button type="button" class="btn btn-info" name="page" value={{ i }}> {{ i }} </button>
+								</li>
+								
+							{% else %}
+								<li class="nav-item">
+								<button type="button" class="btn btn-default consequetive_question" name="page" value={{ i }}> {{ i }} </button>
+								</li>
+							{% endif %}
+						{% endfor %}
+
+					</ul>
+				{% endif %}			
+	</div>
+</div>
+
+
+
+
+
+
+
+
+{% endif %}
+{%csrf_token%}
+
+
+</form>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+	 $("#nextquestion, .consequetive_question").click(function () {
+	 	input = jQuery('<input type="hidden" name="nextpage" id="next_page_to_asses" value='+ $(this).val() +'>');
+	 	$('#questionProcessingForm').append(input);
+	 	 $( "#questionProcessingForm" ).submit();
+	 	});
+	 	
+	 if ($("#selected_answer").length > 0 ){
+	 	var numberPattern = /\d+/g;
+		 selected_answers = $("#selected_answer").val();
+		 arr_of_selected_answer=selected_answers.match(numberPattern);
+		 
+		 if (arr_of_selected_answer.length > 0){
+		 	if (arr_of_selected_answer.length == 1){
+		 		val_to_test = parseInt(arr_of_selected_answer[0]);
+		 		
+		 		switch(val_to_test){
+		 			case 1:
+		 				$("#option1").prop("checked", true);
+		 				break;
+		 			case 2:
+		 				$("#option2").prop("checked", true);
+		 				break;
+		 			case 3:
+		 				$("#option3").prop("checked", true);
+		 				break;
+		 			case 4:
+		 				$("#option4").prop("checked", true);
+		 				break;
+		 			case 5:
+		 				$("#option5").prop("checked", true);
+		 				break;
+		 		}
+		 			
+		 	} else if(arr_of_selected_answer.length > 1) {
+		 			
+		 			
+		 			for (i = 0; i < arr_of_selected_answer.length; i++) { 
+	    				val_to_test = parseInt(arr_of_selected_answer[i])
+	
+		    			switch(val_to_test){
+			 			case 1:
+			 				$("#option1").prop("checked", true);
+			 				break;
+			 			case 2:
+			 				$("#option2").prop("checked", true);
+			 				break;
+			 			case 3:
+			 				$("#option3").prop("checked", true);
+			 				break;
+			 			case 4:
+			 				$("#option4").prop("checked", true);
+			 				break;
+			 			case 5:
+			 				$("#option5").prop("checked", true);
+			 				break;		
+						}		
+		 			}	
+	 		}
+	 	}	
+	 }
+	 
+	
+	 	
+});
+
+</script>
+ 
+ 
+<!-- Assessment Time Script -->
+<script type="text/javascript">
+if("{{result_object.assesment_submitted}}"=="True"){
+	document.getElementById("examtime").innerHTML = "ASSESSMENT ALREADY SUBMITTED";
+    document.title="ASSESSMENT ALREADY SUBMITTED";
+    alert("ASSESSMENT ALREADY SUBMITTED");
+    window.history.back();
+}
+else{
+var exam_take_date_time = "{{result_object.exam_taken_date_time|date:'Y-m-d H:i'}}";
+var durationHour = {{assesment_object.duration_hours}};
+var durationMinute = {{assesment_object.duration_minutes}};
+
+//var examEnd = new Date("Aug 28, 2018 15:30:00").getTime();
+//var examEnd = new Date(moment("{{result_object.exam_taken_date_time|date:'Y-m-d H:i'}}").format('YYYY-MM-DD HH:mm'));
+var examEnd = new Date("{{result_object.exam_taken_date_time.isoformat}}");
+examEnd.setHours (examEnd.getHours() + durationHour );
+examEnd.setMinutes (examEnd.getMinutes() + durationMinute );
+
+var x = setInterval(function() {
+	  // Get todays date and time
+	  var now = new Date();
+	  var distance = examEnd.getTime()-now.getTime();
+	  
+	  // Time calculations for days, hours, minutes and seconds
+	  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+	  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+	  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+	  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+	  // Display the result in the element with id="demo"
+	  document.getElementById("examtime").innerHTML = hours+' : '+minutes+' : '+seconds;
+	  document.title="Time Left - "+hours+':'+minutes+':'+seconds;
+
+	  // After count down finished
+	  if (distance < 0) {
+	    clearInterval(x);
+	    document.getElementById("examtime").innerHTML = "TIME EXPIRED";
+	    document.title="TIME EXPIRED";
+	    document.getElementById("assesment_submission_form").submit();//To click the submit button automatically when the time is up
+	  }
+	}, 100);
+
+
+}//else block ending
+
+
+//Restriction Code For Browser Back Button
+(function (global) { 
+
+    if(typeof (global) === "undefined") {
+        throw new Error("window is undefined");
+    }
+
+    var _hash = "!";
+    var noBackPlease = function () {
+        global.location.href += "#";
+
+        // making sure we have the fruit available for juice (^__^)
+        global.setTimeout(function () {
+            global.location.href += "!";
+        }, 50);
+    };
+
+    global.onhashchange = function () {
+        if (global.location.hash !== _hash) {
+            global.location.hash = _hash;
+        }
+    };
+
+    global.onload = function () {            
+        noBackPlease();
+
+        // disables backspace on page except on input fields and textarea..
+        document.body.onkeydown = function (e) {
+            var elm = e.target.nodeName.toLowerCase();
+            if (e.which === 8 && (elm !== 'input' && elm  !== 'textarea')) {
+                e.preventDefault();
+            }
+            // stopping event bubbling up the DOM tree..
+            e.stopPropagation();
+        };          
+    }
+
+})(window);
+
+$(document).ready(function(){
+    $(this).bind("contextmenu", function(e) {
+        e.preventDefault();
+    });
+	$('textarea').on("cut copy paste",function(e) {
+      e.preventDefault();
+   });
+});
+</script>
+
+{% endblock %}
+</div>
+
+

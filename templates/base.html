@@ -43,6 +43,9 @@
 					<div class="collapse navbar-collapse" id="navbarSupportedContent">
 						<ul class="navbar-nav mr-auto">
 							<li class="nav-item active">
+								<a class="nav-link" href="{% url "staff:assesments:manage_open_assesment" %}">Open Test/Assessment <span class="sr-only"> </span></a>
+							</li>
+							<li class="nav-item ">
 								<a class="nav-link" href="{% url "institutions:dashboard" %}">Home <span class="sr-only"> {% if section == "dashboard" %}(current){% endif %}</span></a>
 							</li>
 

@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+
+{% block title %} {{assesment_object.header}}{% endblock %} {% block content %}
+{% block more_meta_tags %}
+ <meta name="author" content="{{assesment_object.created_by.get_full_name|default:assesment_object.created_by.username}}">
+ <meta name="title" content="{{assesment_object.header|title}}">
+ <meta name="keywords" content="{{assesment_object.tags.all |join:","}}">
+ 
+
+ 
+  
+{% endblock %}
+
+<h1> </h1>
+<div class="container" style="min-height:60%;">
+<div id="user_message_display">
+		{% for message in messages %}
+				<div class="alert alert-warning alert-dismissible fade show" role="alert">
+					{{ message|safe }}
+				  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				  </button>
+				</div>
+		{% endfor %}
+	</div>
+	
+<h3>Please Read the Below Assesment Instruction Carefully:</h3>
+
+{% if assesment_object.privilege == 'open' %}
+<form action={% url 'student:assesments:process_open_assesment'  %} method="POST">
+	
+<table  class="table borderless table-responsive">
+	<tr>
+		<th colspan=2>Assesment Detail Information</th>
+	</tr>
+	<tr>
+		<td>Header:</td>
+		<td>{{ assesment_object.header }}</td>
+	</tr>
+	<tr>
+		<td>Brief Details:</td>
+		<td>{{assesment_object.brief|wordwrap:150|linebreaksbr}}</td>
+	</tr>
+	<tr>
+		<td>Start Date & Timing:</td>
+		<td>{{assesment_object.exam_start_date_time}}</td>
+	</tr>
+	<tr>
+		<td>Exam End Date & Timing:</td>
+		<td>{{assesment_object.expired_on }} </td>
+	</tr>
+    <tr>
+		<td>Exam Duration:</td>
+		<td>{{ assesment_object.duration_hours }} Hours, {{assesment_object.duration_minutes}} Minutes</td>
+	</tr>
+	
+	<tr>
+		<td>Note:</td>
+		<td>Please Click on the below button to start the assesments.</td>
+	<tr>
+	<tr>
+	<input type="hidden" name="assesment_obj" value={{ assesment_object.pk }}>
+	<input type="hidden" name="start_assesment_boolean" value="True">
+	{%csrf_token%}
+		<td> Start:</td>
+		<td><input type="submit" class="btn btn-danger" value="Start Now"></td>
+	
+	<tr>
+</table>
+</form>
+{% endif %}
+</div>
+{% endblock %}
+
