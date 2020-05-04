@@ -710,7 +710,7 @@ class ProcessOpenAssesmentView(DetailView):
         
         if 'start_assesment_boolean' in self.request.POST.keys():
             assesment_initiate_flag = eval(self.request.POST.get('start_assesment_boolean', None))
-            time_obj= timezone.datetime.now()
+            time_obj= timezone.now()
             self.request.session['exam_start_time'] = timezone.datetime.now().strftime("%d/%m/%Y %H:%M")
             self.request.session['exam_start_time_year'] = time_obj.year
             self.request.session['exam_start_time_month'] = time_obj.month
@@ -800,10 +800,12 @@ class ProcessOpenAssesmentView(DetailView):
                     self.create_result_instance.total_marks  = sum_of_marks['sum_of_marks']
                         
                     obtained_marks_calculate = self.create_result_instance.answer_set.aggregate(answer_obtained_marks = Sum('alloted_marks'))
-                    self.create_result_instance.obtained_marks = obtained_marks_calculate.get('answer_obtained_marks')
                     if obtained_marks_calculate.get('answer_obtained_marks'):
+                        self.create_result_instance.obtained_marks = obtained_marks_calculate.get('answer_obtained_marks')
+                    
                         self.create_result_instance.result_passed = obtained_marks_calculate.get('answer_obtained_marks') >= self.create_result_instance.assesment.passing_marks  
                     else:
+                        self.create_result_instance.obtained_marks = 0
                         self.create_result_instance.result_passed = False
                     self.create_result_instance.save()
 
