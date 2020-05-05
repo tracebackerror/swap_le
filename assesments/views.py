@@ -57,6 +57,7 @@ from django.db.models import CharField, Value, F, IntegerField
 from base64 import b64encode
 from django.template.defaulttags import register
 import pandas as pd
+from django.forms.models import model_to_dict
 
 from dal import autocomplete
 from taggit.models import Tag
@@ -297,8 +298,16 @@ class ManageSingleQuestionAddView(TemplateView):
         context = self.get_context_data()
         #return render(request, self.template_name) #, content_type, status, using)("jkj") 
         #messages.get_messages(request).used = True
+        if 'questionid' in kwargs:
+            questionid= kwargs['questionid']
+            instance =  Question.objects.filter(id=questionid).first()
+            #fields=[field.name for field in instance._meta.fields]
+            fields = ['question_text', 'question_image', 'option_one', 'option_two', 'option_three', 'option_four', 'option_five', 'question_type', 'brief_answer', 'max_marks', 'correct_options']
+            question_data = model_to_dict(instance, fields=fields)
         
-        question_form = QuestionForm() 
+            question_form = QuestionForm(initial=question_data)
+        else:
+            question_form = QuestionForm()
         context['question_form'] = question_form
         
         return self.render_to_response(context)
@@ -1316,7 +1325,7 @@ def assessment_create_by_staff(request):
             return redirect(reverse_lazy("staff:assesments:assessment_manage_by_staff", kwargs ={ 'assesmentid' : saved_new_assesment.id }))
             
     else:
-        assesment_creation_form = AssessmentCreationForm(request= request)
+        assesment_creation_form = AssessmentCreationForm(request= request, initial = question_data)
         
     return render(request, 'assesments/assessment_create_by_staff.html', {'assessment_c_form': assesment_creation_form})
 

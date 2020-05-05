@@ -33,6 +33,7 @@ urlpatterns = [
     
     url(r'^change/(?P<questionid>\w{0,15})/edit/$', ManageSingleQuestionUpdateView.as_view(), name='assesment_manage_update_question'),
     url(r'^(?P<assesmentid>\w{0,15})/change/question/add/$', ManageSingleQuestionAddView.as_view(), name='assesment_manage_add_question'),
+    url(r'^(?P<assesmentid>\w{0,15})/change/question/clone/(?P<questionid>\w{0,15})$', ManageSingleQuestionAddView.as_view(), name='assesment_manage_add_question_clone'),
     url(r'^(?P<assesmentid>\w{0,15})/change/question/review/$', ReviewAllSqaView.as_view(), name='assesment_manage_review_sqa_question'),
     
     #section

@@ -48,8 +48,9 @@ class ResultTable(ExportMixin, tables.Table):
         exclude = ('id', 'deleted_at','deleted_by','created_by','updated_by','type','assesment','created','updated',)
 
 class QuestionTable(tables.Table):
-    
-    action = tables.TemplateColumn(' <div class="row"> <div class="col-md-6"> <a href=" {% url "staff:assesments:assessment_question_delete" assesmentid=record.assesment_linked.pk questionid=record.pk  %} "><center><span class="fas fa-trash-alt"></span></center></a></div></div>')
+
+    clone = tables.TemplateColumn('  <a href=" {% url "staff:assesments:assesment_manage_add_question_clone" assesmentid=record.assesment_linked.pk  questionid=record.pk%}"><center><i class="fa fa-clone" aria-hidden="true"></i></center></a>', orderable=False)
+    action = tables.TemplateColumn(' <a href=" {% url "staff:assesments:assessment_question_delete" assesmentid=record.assesment_linked.pk questionid=record.pk  %} "><center><span class="fas fa-trash-alt"></span></center></a>', orderable=False)
     question_type = tables.Column(accessor='question_type', orderable=False, verbose_name="Type")
     def __init__(self, *args, **kwargs):
         super(QuestionTable, self).__init__(*args, **kwargs)
@@ -90,7 +91,10 @@ class AssesmentTable(ExportMixin, tables.Table):
     def render_privilege(self, value):
         if value.lower() == "public":
             return format_html('<i class="fas fa-unlock" ></i>')
-        return format_html('<i class="fas fa-lock"></i>')
+        elif value.lower() in "open - visible to entire world":
+            return format_html('<i class="fa fa-globe" aria-hidden="true"></i>')
+         
+        return format_html(format_html('<i class="fas fa-lock" aria-hidden="true"></i>'))
         
 
     def render_brief(self,value):
