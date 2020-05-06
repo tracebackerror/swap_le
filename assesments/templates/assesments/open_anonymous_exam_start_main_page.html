@@ -33,87 +33,18 @@
 
 {% if assesment_object.privilege == 'open' %}
 
-<div class="table-responsive">
-<table class="table table-bordered">
-	<thead>
-	<tr >
-		<td >Remaining Time:</td>
-		<td style=""><div id="examtime" style="font-size:20;"></div></td>
-	</tr>
-	<tr>
-	<td >
-			<input type="button" name="final_submit" value="Final Submit" class="btn btn-danger" data-toggle="modal" data-target="#modalForFinalExit"/>
 
-	</td>
-	<td>
-		User : {{ request.session.anonymous_student_id}}
-	</td>
-	</tr>
-	</thead>
-</table>
-</div>
-<!-- For Debugging Naive vs Aware Time -->
-<!--
-Start Time :
-<br>
-{% localtime on %}
-   {{result_object.exam_taken_date_time}}
-{% endlocaltime %}
-<br>
-{% localtime off %}
-    {{result_object.exam_taken_date_time}}
-{% endlocaltime %}
-<br>
-{{result_object.exam_taken_date_time.isoformat}}
-<br>
-{% timezone None %}
-    Server time: {{result_object.exam_taken_date_time}}
-{% endtimezone %}
-{% get_current_timezone as TIME_ZONE %}
-{{TIME_ZONE}}
-<br>
-Local Time:  {{result_object.exam_taken_date_time|localtime }}
--->
-
-<!-- Modal -->
-
-		<div id="modalForFinalExit" class="modal fade" role="dialog">
-		  <div class="modal-dialog">
-		
-		    <!-- Modal content-->
-		    <div class="modal-content">
-		      <div class="modal-header">
-		      <h4 class="modal-title">Confirm Examination Submission</h4>
-		        <button type="button" class="close" data-dismiss="modal">&times;</button>
-		      </div>
-		      
-		      
-		      <div class="modal-body">
-		        <p>Please Click on <b><i>"Confirm Submission"</i></b> button to exit the examination.</p>
-		      </div>
-		      <div class="modal-footer">
-		      	
-			  		<form  method="post" id="assesment_submission_form" action= {% url 'student:assesments:assesment_open_finished_by_student' slug=all_question_to_answer.0.assesment_linked.slug %}>
-				 		{% csrf_token %}
-				      	<input type="submit" name="final_confirmed_submit" value="Confirm Submission" class="btn btn-danger" />
-				        <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
-		        	</form>
-		      </div>
-		    </div>
-		
-		  </div>
-		</div>
 		
 
 
-<form action="{% url 'student:assesments:process_open_assesment' %}" method="GET" id="questionProcessingForm">
+<form action="" method="GET" id="questionProcessingForm">
 
-{% if get_the_answer_obj %} 
-	{% if get_the_answer_obj.for_question.question_type|lower == "scq"  or get_the_answer_obj.for_question.question_type|lower == "mcq" %}
-		<input type="hidden" value = '{{get_the_answer_obj.opted_choice|replace:"/['\"]/_"  }}' name="selected_answer" id="selected_answer" />		
+
+	{% if all_question_to_answer.0.question_type|lower == "scq"  or  all_question_to_answer.0.question_type|lower == "mcq" %}
+		<input type="hidden" value = '{{ all_question_to_answer.0.correct_options|replace:"/['\"]/_"  }}' name="selected_answer" id="selected_answer" />		
 	{% endif %}
 		
-{% endif %}
+
 
 <table class="table table-bordered">
   <tbody>
@@ -241,77 +172,9 @@ Local Time:  {{result_object.exam_taken_date_time|localtime }}
     {% endif %}
     {% endfor %}
   </tbody>
-  <tfoot>
-  <tr>
-      <td colspan="2">
-      
-     
-								<ul class="pagination btn-toolbar" role="toolbar" aria-label="pagination_toolbar">
-							 {% if all_question_to_answer.has_previous %}
-      
-								<li class="nav-item">
-									<button type="button" class="btn btn-default consequetive_question"  name="page" value={{all_question_to_answer.previous_page_number }}>
-										&laquo;</button>
-								</li>
-								{% else %}
-									<li class="nav-item">
-									<button type="button" class="btn btn-default consequetive_question"  name="page" value={{all_question_to_answer.paginator.num_pages }}>
-										&laquo;</button>
-									</li>
-    					{% endif %}
-																								 
-							{% if all_question_to_answer.has_next %}
-								<li class="nav-item">
-								<button type="button" class=" btn btn-default" id="nextquestion" name="page" value={{ all_question_to_answer.next_page_number }}> &raquo; </button>
-								</li>
-							{% else %}
-								<li class="nav-item">
-								<button type="button" class=" btn btn-default" id="nextquestion" name="page" value={{ all_question_to_answer.paginator.page_range.0 }}> &raquo; </button>
-								
-								</li>
-							{% endif %}
-							</ul>
-			</td>
-    
-    </tr>
-    
-  </tfoot>
+ 
 </table>
-<div class="row">
-	<div class="col-md-12">
-		<p><small>Do Not Forget To Click on <button type="button" class="btn btn-default" disabled>&laquo; </button> OR
-		<button type="button" class="btn btn-default" disabled>&raquo; </button>
-								buttons after answering each question</small></p>
-	</div>
-</div>
-<div class="row">
-	<div class="col-md-12">
-		<p>Question Navigation Panel :</p>
-		
-	</div>
-	<div class="col-md-12">
-		
-				{% if all_question_to_answer.has_other_pages %}
-					<ul class="pagination  btn-toolbar" role="toolbar" aria-label="pagination_toolbar">
 
-
-						{% for i in all_question_to_answer.paginator.page_range %}
-							{% if all_question_to_answer.number == i %}
-								<li class="nav-item   active ">
-									<button type="button" class="btn btn-info" name="page" value={{ i }}> {{ i }} </button>
-								</li>
-								
-							{% else %}
-								<li class="nav-item">
-								<button type="button" class="btn btn-default consequetive_question" name="page" value={{ i }}> {{ i }} </button>
-								</li>
-							{% endif %}
-						{% endfor %}
-
-					</ul>
-				{% endif %}			
-	</div>
-</div>
 
 
 
@@ -329,11 +192,7 @@ Local Time:  {{result_object.exam_taken_date_time|localtime }}
 
 <script type="text/javascript">
 $(document).ready(function(){
-	 $("#nextquestion, .consequetive_question").click(function () {
-	 	input = jQuery('<input type="hidden" name="nextpage" id="next_page_to_asses" value='+ $(this).val() +'>');
-	 	$('#questionProcessingForm').append(input);
-	 	 $( "#questionProcessingForm" ).submit();
-	 	});
+	 
 	 	
 	 if ($("#selected_answer").length > 0 ){
 	 	var numberPattern = /\d+/g;
@@ -399,49 +258,6 @@ $(document).ready(function(){
  
 <!-- Assessment Time Script -->
 <script type="text/javascript">
-if("{{result_object.assesment_submitted}}"=="True"){
-	document.getElementById("examtime").innerHTML = "ASSESSMENT ALREADY SUBMITTED";
-    document.title="ASSESSMENT ALREADY SUBMITTED";
-    alert("ASSESSMENT ALREADY SUBMITTED");
-    window.history.back();
-}
-else{
-var exam_take_date_time = "{{result_object.exam_taken_date_time|date:'Y-m-d H:i'}}";
-var durationHour = {{assesment_object.duration_hours}};
-var durationMinute = {{assesment_object.duration_minutes}};
-
-//var examEnd = new Date("Aug 28, 2018 15:30:00").getTime();
-//var examEnd = new Date(moment("{{result_object.exam_taken_date_time|date:'Y-m-d H:i'}}").format('YYYY-MM-DD HH:mm'));
-var examEnd = new Date("{{result_object.exam_taken_date_time.isoformat}}");
-examEnd.setHours (examEnd.getHours() + durationHour );
-examEnd.setMinutes (examEnd.getMinutes() + durationMinute );
-
-var x = setInterval(function() {
-	  // Get todays date and time
-	  var now = new Date();
-	  var distance = examEnd.getTime()-now.getTime();
-	  
-	  // Time calculations for days, hours, minutes and seconds
-	  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-	  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-	  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-	  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-	  // Display the result in the element with id="demo"
-	  document.getElementById("examtime").innerHTML = hours+' : '+minutes+' : '+seconds;
-	  document.title="Time Left - "+hours+':'+minutes+':'+seconds;
-
-	  // After count down finished
-	  if (distance < 0) {
-	    clearInterval(x);
-	    document.getElementById("examtime").innerHTML = "TIME EXPIRED";
-	    document.title="TIME EXPIRED";
-	    //document.getElementById("assesment_submission_form").submit();//To click the submit button automatically when the time is up
-	  }
-	}, 100);
-
-
-}//else block ending
 
 
 //Restriction Code For Browser Back Button

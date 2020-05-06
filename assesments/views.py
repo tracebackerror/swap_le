@@ -168,31 +168,34 @@ class GenerateOpenAssesmentResultView(TemplateView):
         4. Calculate Result
         5. And pop out the assesement from student view
         
-'''
-        assesment_to_submit = self.request.session.get('assesment_to_undertake')
-        result_for_student_user = User.objects.get( username = self.request.session['anonymous_student_id'])
-        fetch_appropriate_result = Result.objects.filter(assesment__id = assesment_to_submit, registered_user = result_for_student_user.student)
-        
-        if fetch_appropriate_result.exists():
-            get_assesment_obj_to_update = fetch_appropriate_result[0]
-            get_assesment_obj_to_update.assesment_submitted = True
-            get_assesment_obj_to_update.total_question =  get_assesment_obj_to_update.assesment.question_set.count()
-            get_assesment_obj_to_update.total_attempted = get_assesment_obj_to_update.answer_set.all().count()
+        '''
+        try:
+            assesment_to_submit = self.request.session.get('assesment_to_undertake')
+            result_for_student_user = User.objects.get( username = self.request.session['anonymous_student_id'])
+            fetch_appropriate_result = Result.objects.filter(assesment__id = assesment_to_submit, registered_user = result_for_student_user.student)
             
-            sum_of_marks = get_assesment_obj_to_update.assesment.question_set.aggregate(sum_of_marks = Sum('max_marks'))
-            get_assesment_obj_to_update.total_marks  = sum_of_marks['sum_of_marks']
+            if fetch_appropriate_result.exists():
+                get_assesment_obj_to_update = fetch_appropriate_result[0]
+                get_assesment_obj_to_update.assesment_submitted = True
+                get_assesment_obj_to_update.total_question =  get_assesment_obj_to_update.assesment.question_set.count()
+                get_assesment_obj_to_update.total_attempted = get_assesment_obj_to_update.answer_set.all().count()
+                
+                sum_of_marks = get_assesment_obj_to_update.assesment.question_set.aggregate(sum_of_marks = Sum('max_marks'))
+                get_assesment_obj_to_update.total_marks  = sum_of_marks['sum_of_marks']
+                
+                obtained_marks_calculate = get_assesment_obj_to_update.answer_set.aggregate(answer_obtained_marks = Sum('alloted_marks'))
+                get_assesment_obj_to_update.obtained_marks = obtained_marks_calculate.get('answer_obtained_marks')
+                get_assesment_obj_to_update.result_passed = obtained_marks_calculate.get('answer_obtained_marks') >= get_assesment_obj_to_update.assesment.passing_marks  
+                get_assesment_obj_to_update.save()
+                messages.success(request, 'Assesment Has Been Completed')
+                
+                return redirect(reverse('staff:assesments:assessment_open_result_by_staff', kwargs= {'slug': get_assesment_obj_to_update.assesment.slug, 'pk': get_assesment_obj_to_update.pk}))
+                
+            else:
+                raise NotImplementedError("Implementation Is Stale")
+        except :
             
-            obtained_marks_calculate = get_assesment_obj_to_update.answer_set.aggregate(answer_obtained_marks = Sum('alloted_marks'))
-            get_assesment_obj_to_update.obtained_marks = obtained_marks_calculate.get('answer_obtained_marks')
-            get_assesment_obj_to_update.result_passed = obtained_marks_calculate.get('answer_obtained_marks') >= get_assesment_obj_to_update.assesment.passing_marks  
-            get_assesment_obj_to_update.save()
-            messages.success(request, 'Assesment Has Been Completed')
-            
-            return redirect(reverse('staff:assesments:assessment_open_result_by_staff', kwargs= {'slug': get_assesment_obj_to_update.assesment.slug, 'pk': get_assesment_obj_to_update.pk}))
-            
-        else:
-            raise NotImplementedError("Implementation Is Stale")
-    
+            return redirect(reverse_lazy("staff:assesments:manage_open_assesment"))
     def get_context_data(self, **kwargs):
         context = super(GenerateOpenAssesmentResultView, self).get_context_data(**kwargs)
         if 'assesmentid' in self.kwargs:
@@ -706,7 +709,9 @@ class ProcessOpenAssesmentView(DetailView):
     model = Assesment
     context_object_name = "assesment_object"
     template_name = 'assesments/open_exam_start_main_page.html'
+    template_anonymous_name = 'assesments/open_anonymous_exam_start_main_page.html'
     http_method_names = ['get', 'post']
+    open_assessment_homepage = reverse_lazy("staff:assesments:manage_open_assesment")
     
     def _process_assesment(self, *args, **kwargs):
         get_the_answer_obj = None
@@ -905,95 +910,117 @@ class ProcessOpenAssesmentView(DetailView):
         return dictionary.get(key)
 
     def get(self, *args, **kwargs):
-        
-        asses_unfiltered = self.request.session.get('assesment_to_undertake', None)
-        page_of_question = int(self.request.GET.get('nextpage', 1))
-        
-        if asses_unfiltered and eval(asses_unfiltered):
-            assesment_to_undertake = Assesment.objects.get(id = eval(asses_unfiltered))
+        try:
+            question_type = None
+            asses_unfiltered = self.request.session.get('assesment_to_undertake', None)
+            page_of_question = int(self.request.GET.get('nextpage', 1))
             
-            ''' Getting Next Question'''
-            fetch_all_linked_question = Question.objects.filter(assesment_linked = assesment_to_undertake).order_by('pk')
-            total_question_on_single_page = 1
-            
-            paginator = Paginator(fetch_all_linked_question, total_question_on_single_page)
-            
-            logging.info("Can Proceed For Assesment")
+            if asses_unfiltered and eval(asses_unfiltered):
+                assesment_to_undertake = Assesment.objects.get(id = eval(asses_unfiltered))
+                
+                ''' Getting Next Question'''
+                fetch_all_linked_question = Question.objects.filter(assesment_linked = assesment_to_undertake).order_by('pk')
+                total_question_on_single_page = 1
+                
+                paginator = Paginator(fetch_all_linked_question, total_question_on_single_page)
+                
+                logging.info("Can Proceed For Assesment")
+                
+                try:
+                    page_question_obj = paginator.page(page_of_question)
+                except PageNotAnInteger:
+                    page_question_obj = paginator.page(1)
+                except EmptyPage:
+                    page_question_obj = paginator.page(paginator.num_pages)
+                    
+                
+                ''' Log the Answer in Database '''
+                question_type = self.request.GET.get('question_type', None)
+                
+                result_for_student_user = User.objects.get( username = self.request.session['anonymous_student_id'])
+                
+                result_of_assesment = Result.objects.filter(assesment = assesment_to_undertake, registered_user = result_for_student_user.student)
+                
+                self.create_result_instance = result_of_assesment.first()
+                
+            if question_type and question_type in all_question_types:
+                pk_of_question = self.request.GET.get('question_id')
+                question_obj = Question.objects.filter(assesment_linked = assesment_to_undertake, pk = pk_of_question)
+                get_the_answer_obj = Answer.objects.filter(for_result = self.create_result_instance, for_question__in = question_obj)
+                #import pdb; pdb.set_trace();
+                
+                if len(get_the_answer_obj) == 0:
+                    get_the_answer_obj = Answer()
+                    get_the_answer_obj.created_by = result_for_student_user
+                    get_the_answer_obj.updated_by = result_for_student_user
+                    get_the_answer_obj.for_result = self.create_result_instance
+                    get_the_answer_obj.for_question = question_obj[0]
+                    #get_the_answer_obj.save()
+                else:
+                    get_the_answer_obj = get_the_answer_obj[0]
+                    
+                
+                if question_type == swaple_constants.SCQ or question_type == swaple_constants.MCQ:
+                    selected_answer = self.request.GET.getlist('answer')
+                    get_the_answer_obj.opted_choice = selected_answer
+                    # Here we need to add code for checking and setting the marks from question_obj
+                    option_selected = "-".join(selected_answer)
+                    if option_selected == question_obj[0].correct_options:
+                        get_the_answer_obj.alloted_marks = question_obj[0].max_marks
+                    else:
+                        get_the_answer_obj.alloted_marks = 0
+                    get_the_answer_obj.save()
+                elif question_type == swaple_constants.SQA:
+                    written_answer= self.request.GET.get('answer')
+                    get_the_answer_obj.opted_choice = ''
+                    get_the_answer_obj.written_answer = written_answer
+                    # Here we need to add code for checking and setting the marks from question_obj
+                    get_the_answer_obj.alloted_marks = 0
+                    get_the_answer_obj.save()
+                
+            else:
+                self.request.session.flush()
             
             try:
-                page_question_obj = paginator.page(page_of_question)
-            except PageNotAnInteger:
-                page_question_obj = paginator.page(1)
-            except EmptyPage:
-                page_question_obj = paginator.page(paginator.num_pages)
+                if  len(page_question_obj) == 0 :
+                    messages.add_message(self.request, messages.SUCCESS,  'Assessment Test Is Not Having Any Single Question To Answer. ')
+                    return redirect(reverse_lazy("staff:assesments:manage_open_assesment"))
+                get_the_current_answer_obj = Answer.objects.filter(for_result = self.create_result_instance, for_question = page_question_obj[0]).first()
                 
-            
-            ''' Log the Answer in Database '''
-            question_type = self.request.GET.get('question_type', None)
-            
-            result_for_student_user = User.objects.get( username = self.request.session['anonymous_student_id'])
-            
-            result_of_assesment = Result.objects.filter(assesment = assesment_to_undertake, registered_user = result_for_student_user.student)
-            
-            self.create_result_instance = result_of_assesment.first()
-            
-        if question_type and question_type in all_question_types:
-            pk_of_question = self.request.GET.get('question_id')
-            question_obj = Question.objects.filter(assesment_linked = assesment_to_undertake, pk = pk_of_question)
-            get_the_answer_obj = Answer.objects.filter(for_result = self.create_result_instance, for_question__in = question_obj)
-            #import pdb; pdb.set_trace();
-            
-            if len(get_the_answer_obj) == 0:
-                get_the_answer_obj = Answer()
-                get_the_answer_obj.created_by = result_for_student_user
-                get_the_answer_obj.updated_by = result_for_student_user
-                get_the_answer_obj.for_result = self.create_result_instance
-                get_the_answer_obj.for_question = question_obj[0]
-                #get_the_answer_obj.save()
-            else:
-                get_the_answer_obj = get_the_answer_obj[0]
+                question_image_obj = {}
+                for question in fetch_all_linked_question:
+                    if (question.question_image):
+                        question_image_obj[question.id] = question.question_image
+            except:
+                #JUST DISPLAY OPEN QUESTION
+                self.request.session.flush()
+                if self.request.GET.get('question_id'):
+                    question_obj = Question.objects.filter(id= self.request.GET.get('question_id'))
+                    if question_obj.assesment_linked.privilege.lower() == "open":
+                        import pdb; pdb.set_trace()
+                        question_image_obj = {}
+                        if (question_obj.question_image):
+                            question_image_obj[question.id] = question_obj.question_image
+                        return render(self.request, self.template_anonymous_name, {
+                            'assesment_object': question_obj.assesment_linked,
+                            'all_question_to_answer':question_obj,
+                            'result_object': None,
+                            'get_the_answer_obj':None,
+                            'question_image_obj':question_image_obj,
+                            
+                            })
+                return redirect(self.open_assessment_homepage)
+            return render(self.request, self.template_name, {
+                'assesment_object': assesment_to_undertake,
+                'all_question_to_answer':page_question_obj,
+                'get_the_answer_obj':get_the_current_answer_obj,
+                'result_object':self.create_result_instance,
+                'question_image_obj':question_image_obj,
                 
-            
-            if question_type == swaple_constants.SCQ or question_type == swaple_constants.MCQ:
-                selected_answer = self.request.GET.getlist('answer')
-                get_the_answer_obj.opted_choice = selected_answer
-                # Here we need to add code for checking and setting the marks from question_obj
-                option_selected = "-".join(selected_answer)
-                if option_selected == question_obj[0].correct_options:
-                    get_the_answer_obj.alloted_marks = question_obj[0].max_marks
-                else:
-                    get_the_answer_obj.alloted_marks = 0
-                get_the_answer_obj.save()
-            elif question_type == swaple_constants.SQA:
-                written_answer= self.request.GET.get('answer')
-                get_the_answer_obj.opted_choice = ''
-                get_the_answer_obj.written_answer = written_answer
-                # Here we need to add code for checking and setting the marks from question_obj
-                get_the_answer_obj.alloted_marks = 0
-                get_the_answer_obj.save()
-            
-        else:
-            pass
-        
-        if len(page_question_obj) == 0 :
-            messages.add_message(self.request, messages.SUCCESS,  'Assessment Test Is Not Having Any Single Question To Answer. ')
-            return redirect(reverse_lazy("staff:assesments:manage_open_assesment"))
-        get_the_current_answer_obj = Answer.objects.filter(for_result = self.create_result_instance, for_question = page_question_obj[0]).first()
-        
-        question_image_obj = {}
-        for question in fetch_all_linked_question:
-            if (question.question_image):
-                question_image_obj[question.id] = question.question_image
-           
-        return render(self.request, self.template_name, {
-            'assesment_object': assesment_to_undertake,
-            'all_question_to_answer':page_question_obj,
-            'get_the_answer_obj':get_the_current_answer_obj,
-            'result_object':self.create_result_instance,
-            'question_image_obj':question_image_obj,
-            
-            })        
-
+                })
+        except (TypeError, AttributeError ) as e:
+            self.request.session.flush()
+            return redirect(self.open_assessment_homepage)
     def post(self, *args, **kwargs):
         return self._process_assesment(self, *args, **kwargs)
 
@@ -1325,7 +1352,7 @@ def assessment_create_by_staff(request):
             return redirect(reverse_lazy("staff:assesments:assessment_manage_by_staff", kwargs ={ 'assesmentid' : saved_new_assesment.id }))
             
     else:
-        assesment_creation_form = AssessmentCreationForm(request= request, initial = question_data)
+        assesment_creation_form = AssessmentCreationForm(request= request )
         
     return render(request, 'assesments/assessment_create_by_staff.html', {'assessment_c_form': assesment_creation_form})
 
