@@ -14,7 +14,11 @@
 
 <div class="container" >
 	{% if request.user_agent.is_mobile %}
-		<h4> {{all_question_to_answer.0.assesment_linked.header }}</h4>
+	<div class="row">
+		<div class="col-sm-12 col-md-12 ">
+		<h4 style=" word-wrap: break-word;"> {{all_question_to_answer.0.assesment_linked.header }}</h4>
+		</div>
+	</div>
 	{% endif %}
 	<div id="user_message_display">
 		{% for message in messages %}
@@ -32,26 +36,28 @@
 
 
 {% if assesment_object.privilege == 'open' %}
-
-<div class="table-responsive">
-<table class="table table-bordered">
-	<thead>
-	<tr >
-		<td >Remaining Time:</td>
-		<td style=""><div id="examtime" style="font-size:20;"></div></td>
-	</tr>
-	<tr>
-	<td >
-			<input type="button" name="final_submit" value="Final Submit" class="btn btn-danger" data-toggle="modal" data-target="#modalForFinalExit"/>
-
-	</td>
-	<td>
-		User : {{ request.session.anonymous_student_id}}
-	</td>
-	</tr>
-	</thead>
-</table>
+<div class="row">
+	<div class="col-sm-6 col-md-6">
+		Remaining Time:
+	</div>
+	<div class="col-sm-6 col-md-6">
+		<div id="examtime" style="font-size:20;"></div>
+	</div>
 </div>
+<div class="row">
+	<div class="col-sm-12 col-md-12">
+		<input type="button" name="final_submit" value="Final Submit" class="btn btn-danger" data-toggle="modal" data-target="#modalForFinalExit"/>
+
+	</div>
+	
+</div>
+<div class="row">
+	<div class="col-sm-12 col-md-12">
+		User : {{ request.session.anonymous_student_id}}
+	</div>
+	
+</div>
+
 <!-- For Debugging Naive vs Aware Time -->
 <!--
 Start Time :
@@ -402,8 +408,8 @@ $(document).ready(function(){
 if("{{result_object.assesment_submitted}}"=="True"){
 	document.getElementById("examtime").innerHTML = "ASSESSMENT ALREADY SUBMITTED";
     document.title="ASSESSMENT ALREADY SUBMITTED";
-    alert("ASSESSMENT ALREADY SUBMITTED");
-    window.history.back();
+    //alert("ASSESSMENT ALREADY SUBMITTED");
+    //window.history.back();
 }
 else{
 var exam_take_date_time = "{{result_object.exam_taken_date_time|date:'Y-m-d H:i'}}";
