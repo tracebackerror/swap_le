@@ -37,9 +37,9 @@
 	
          if (navigator.share) {
 			 navigator.share({
-				title: title,
-				text: text,
-				url: url,
+				title: encodeURIComponent(title),
+				text: encodeURIComponent(text),
+				url: encodeURIComponent(url),
 			  })
 				.then(() => console.log('Successful share'))
 				.catch((error) => console.log('Error sharing', error));
