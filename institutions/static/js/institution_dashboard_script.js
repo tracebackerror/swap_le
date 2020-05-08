@@ -49,9 +49,9 @@
 		var cfg = {
 			type: 'line',
 			data: {
-				labels: studentUsername,	
+				labels: studentCount,	
 				datasets: [{
-					label: 'Student Marks of ' + assessmentHeader.toUpperCase(),
+					label: 'Student Marks ',
 					data: studentMarks,
 					backgroundColor: window.chartColors.green,
 					borderColor: window.chartColors.green,
@@ -66,9 +66,11 @@
 				scales: {
 					xAxes: [{
 						scaleLabel: {
-							display: true,
-							labelString: 'STUDENT USERNAME'
-						}
+							display: false,
+							labelString: 'STUDENT USERNAME',
+							
+						},
+						
 					}],
 					yAxes: [{
 						scaleLabel: {
@@ -76,7 +78,23 @@
 							labelString: 'MARKS'
 						}
 					}]
-				}
+				},
+				 tooltips: {
+					enabled: true,
+					mode: 'label',
+					callbacks: {
+					  title: function(tooltipItems, data) {
+						var idx = tooltipItems[0].index;
+						return 'Name :' + studentUsername[idx]; //do something with title
+					  },
+					  label: function(tooltipItems, data) {
+						//var idx = tooltipItems.index;
+						//return data.labels[idx] + ' €';
+						return "Score" + tooltipItems.xLabel ;
+					  }
+					}
+				  },
+				
 			}
 		};
 	

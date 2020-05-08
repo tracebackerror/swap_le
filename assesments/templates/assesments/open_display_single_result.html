@@ -8,7 +8,11 @@
 {% block content %}
 
 <div class="container" style="min-height:60%;">
-<div id="user_message_display">
+
+	<div class="row">
+		<h1>Below is the Result of Student:</h1>
+	</div>
+	<div id="user_message_display">
 		{% for message in messages %}
 				<div class="alert alert-warning alert-dismissible fade show" role="alert">
 					{{ message|safe }}
@@ -18,128 +22,89 @@
 				</div>
 		{% endfor %}
 	</div>
-	<div class="row">
-		<h1>Below is the Result of Student:</h1>
-	</div>
 	<br>
+	
+	
+<div  class="card mb-3 text-center ""  >
 
-		
-			<div class="card">
-				<div class="card-body">
-					<h5 class="card-title">Examination Detailed Information: </h5>
-					<h6 class="card-subtitle mb-2 text-muted">
-						Result linked to {{object.registered_user.user_type|title}} with username {{object.registered_user.studentuser.username}} and First and Last Name as {{object.registered_user.studentuser.first_name|upper}}  {{object.registered_user.studentuser.last_name|upper}} having mailing address as  {{object.registered_user.studentuser.email}} 
-					</h6>
-
-					<div class="row border-bottom my-1">
-						<div class="col-md-12">
-							<h5> Title: </h5>
+									<div class="card-header text-white bg-success">
+										<h5 class="card-title">{{ object.assesment.header }} </h5>
+										
+										<ul class="nav nav-pills card-header-pills justify-content-center">
+										  <li class="nav-item">
+											<i class="fa fa-scissors" aria-hidden="true"></i> {{object.assesment.passing_marks}} Minimum Marks
+										  </li>
+										  <li class="nav-item">
+											&nbsp;<i class="fa fa-clock-o" aria-hidden="true"></i> {{object.assesment.duration_hours}} Hour &nbsp;<i class="fa fa-clock-o" aria-hidden="true"></i> {{object.assesment.duration_minutes}} Minutes
+										  </li>
+										  <li class="nav-item">
+											 
+										  </li>
+										 
+										</ul>
+									</div>
+									
+									
+									  <div class="card-body text-center">
+										<!-- {{object.result_passed|yesno:"Pass,Fail"}} -->
+										{% if object.obtained_marks >= object.assesment.passing_marks%}
+										<h2><i class=" fa fa-graduation-cap avatar rounded-circle fa-2x" aria-hidden="true"></i></h2>
+										<h4 class="card-title"><a href="#" class="btn btn-info " disabled="disabled"><i class=" fa fa-thumbs-o-up " aria-hidden="true"></i>&nbsp; PASSED</a></h4>
+										{% else %}
+										<h2><i class=" fa fa-thumbs-o-down fa-2x" aria-hidden="true"></i></h2>
+										<h4 class="card-title"><a href="#" class="btn btn-danfer" disabled="disabled"><i class=" fa fa-thumbs-o-down " aria-hidden="true"></i> FAILED</a></h4>
+										
+										{% endif %}
+										<h6 class="card-subtitle mb-2 text-muted">{{object.registered_user.studentuser.first_name|title}}  {{object.registered_user.studentuser.last_name|title}}</h6>
+										
+										<p class="card-text">... </p>
+										<a href="#" class="btn btn-outline-info"><i class="fa fa-question-circle-o" aria-hidden="true"></i> Attempted {{object.total_question}} / {{object.total_question}}</a>
+										<a href="#" class="btn btn-outline-info"><i class="fa fa-bullseye" aria-hidden="true"></i> Score {{object.obtained_marks}} / {{object.total_marks}}</a>
+										
+									  </div>
+									
+									<div class="card-body ">
+									
+										
+										
+										<p class="card-text ">{{ object.assesment.brief }}</p>
+										{{object.assesment.take_assesment}}</p>
+										
+									</div>
+									
+							
+									 <div class="card-footer text-white bg-dark text-muted">
+										<small>
+										<ul class="nav nav-pills card-header-pills justify-content-center text-white bg-dark">
+											<li class="nav-item">
+												<i class="fa fa-user-circle-o" aria-hidden="true"></i> {{ object.assesment.created_by.get_full_name|default:object.assesment.created_by }} &nbsp;
+											</li>
+										  <li class="nav-item">
+											<i class="fa fa-hourglass" aria-hidden="true"></i> {{object.assesment.exam_start_date_time}}
+											<i class="fa fa-hourglass-o" aria-hidden="true"></i> {{ object.assesment.expired_on }}
+										  </li>
+										  
+										 
+										</ul>
+										
+										</small>
+										<h5 class="text-white bg-dark">
+										<i class="fa fa-black-tie " aria-hidden="true"></i> {{object.exam_taken_date_time}}
+										</h5>
+										<h5 class="text-white bg-dark">
+										<button href="#" class="btn btn-outline-success" id="download_result"><i class="fa fa-download" aria-hidden="true"></i></button>
+										</h5>
+										
+									 </div>
+							
+						
+						
 						</div>
 
-						<div class="col-md-12">
-							<h6> {{object.assesment.header}}</h6>
-						</div>
-					</div>
-					<div class="row border-bottom my-1">
-						<div class="col-md-12">
-							<h5> Description: </h5>
-						</div>
-						<div class="col-md-12">
-							<h6> {{object.assesment.brief}}</h6>
-						</div>
-					</div>
-					<div class="row border-bottom my-1">
-						<div class="col-md-3">
-							Available From Date: 
-						</div>
-						<div class="col-md-3">
-							{{object.assesment.exam_start_date_time}}
-						</div>
-						<div class="col-md-3">
-							Available To End Date: 
-						</div>
-						<div class="col-md-3">
-							{{object.assesment.expired_on}}
-						</div>
-					</div>
 
-					<div class="row border-bottom my-1">
-						<div class="col-md-4">
-							Exam Duration: 
-						</div>
-						<div class="col-md-4">
-							{{object.assesment.duration_hours}} Hours {{object.assesment.duration_minutes}} Minutes
-						</div>
-						<div class="col-md-4">
-							Minimum Required Marks To Pass: 
-						</div>
-						<div class="col-md-3">
-							{{object.assesment.passing_marks}}
-						</div>
-					</div>
+</center>	
+<br/>
 
-				</div>
-			</div>
-
-		<br/>
-
-
-		<div class="card">
-			<div class="card-body">
-				<h5 class="card-title">Summary: </h5>
-				<h6 class="card-subtitle mb-2 text-muted">Result Overview</h6>
-				<div class="row border-bottom my-1">
-					<div class="col-md-3">
-						Taken Date Time: 
-					</div>
-					<div class="col-md-3">
-						{{object.exam_taken_date_time}}
-					</div>
-
-					<div class="col-md-3 ">
-						Result:
-					</div>
-					<div class="col-md-3 ">
-						{{object.result_passed|yesno:"Pass,Fail"}}
-					</div>
-				</div>
-				<div class="row border-bottom my-1">
-					<div class="col-md-2">
-						Total Question: 
-					</div>
-					<div class="col-md-1">
-						{{object.total_question}}
-					</div>
-					<div class="col-md-2">
-						Attempted Question: 
-					</div>
-					<div class="col-md-1">
-						{{object.total_attempted}}
-					</div>
-					<div class="col-md-2">
-						Total Marks: 
-					</div>
-					<div class="col-md-1">
-						{{object.total_marks}}
-					</div>
-					<div class="col-md-2">
-						Obtained Marks: 
-					</div>
-					<div class="col-md-1">
-						{{object.obtained_marks}}
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-2">
-						Status: 
-					</div>
-					<div class="col-md-10">
-						{{object.assesment_submitted|yesno:"Student Has Completed The Assesment,Assesment is in Progress"}}
-					</div>
-				</div>
-
-			</div>
-		</div>
 
 		<br/>
 		{% for single_answer in object.answer_set.all %}
@@ -291,7 +256,12 @@
 			</div>
 		</div>
 	</div>
-	<script>
+	<script type="text/javascript" src="https://raw.githack.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"> </script>
+	<script type="text/javascript">
+		$("#download_result").on("click", function(){
+		  html2pdf(document.body);
+		});
+		
 		section = [];
 		total_questions = [];
 		{% for key, value in section_name.items %}

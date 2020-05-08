@@ -95,6 +95,10 @@
 										<a href="javascript:{window.location='https://wa.me/?text=https://www.swaple.in{% url 'staff:assesments:open_assesment_intro' slug=row.record.slug %}  {{row.record.brief}}  Author {{ row.record.created_by.get_full_name|default:row.record.created_by }}'}"><i class="fa fa-whatsapp" aria-hidden="true"></i></a>
 										&nbsp;
 										<a href="javascript:{window.location='https://telegram.me/share/url?url=https://www.swaple.in{% url 'staff:assesments:open_assesment_intro' slug=row.record.slug %}&text={{row.record.brief}} Author {{ row.record.created_by.get_full_name|default:row.record.created_by }}'}"><i class="fa fa-telegram" aria-hidden="true"></i></a>
+										{% if request.user_agent.is_mobile %}
+										
+										<button  type="button" class="btn  btn-link" style="background-color:transparent!important;" id="share_it" onclick='share_me("{{row.record.header}}", "{{row.record.brief}} Author {{ row.record.created_by.get_full_name|default:row.record.created_by }}", "https://www.swaple.in{% url "staff:assesments:open_assesment_intro" slug=row.record.slug %}" );'><i class="fa fa-share-alt" aria-hidden="true"></i></button>
+										{% endif %}
 										</h5>
 										
 									 </div>

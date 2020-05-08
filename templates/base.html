@@ -45,9 +45,11 @@
 							<li class="nav-item active">
 								<a class="nav-link" href="{% url "staff:assesments:manage_open_assesment" %}">Open Test/Assessment <span class="sr-only"> </span></a>
 							</li>
+							{% if request.user.is_authenticated %} 
 							<li class="nav-item ">
 								<a class="nav-link" href="{% url "institutions:dashboard" %}">Home <span class="sr-only"> {% if section == "dashboard" %}(current){% endif %}</span></a>
 							</li>
+							{% endif %}
 
 							{% if request.user.is_authenticated and perms.institutions.is_institute %} 
 
@@ -246,7 +248,7 @@
 				<div class="row">
 					<div class="col-lg-6 text-lg-left text-center">
 						<div class="copyright">
-							&copy; Copyright <strong>SwapLE</strong>. Proudly made in <picture><img  src="{% static 'img/india-flag-icon-64.png' %}" class="img-fluid"  width=32px /></picture>. All Rights Reserved.
+							&copy; Copyright <strong>SWAPLE</strong>. Proudly made in <picture><img  src="{% static 'img/india-flag-icon-64.png' %}" class="img-fluid"  width=32px /></picture>. All Rights Reserved.
 						</div>
 					
 					</div>
