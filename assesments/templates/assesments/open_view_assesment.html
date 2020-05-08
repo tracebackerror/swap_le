@@ -29,7 +29,7 @@
 	{% endif %}
  
  </div>
- 
+ <script src="https://cdn.jsdelivr.net/npm/sanitize-html@1.23.0/dist/sanitize-html.min.js" type="text/javascript"></script>
  <script type="text/javascript">
  
 
@@ -37,9 +37,9 @@
 	
          if (navigator.share) {
 			 navigator.share({
-				title: encodeURIComponent(title),
-				text: encodeURIComponent(text),
-				url: encodeURIComponent(url),
+				title: sanitizeHtml(title),
+				text: sanitizeHtml(text.replace(/[•,!,|,;]/g,'')),
+				url: sanitizeHtml(url),
 			  })
 				.then(() => console.log('Successful share'))
 				.catch((error) => console.log('Error sharing', error));
