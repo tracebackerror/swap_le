@@ -38,7 +38,7 @@
          if (navigator.share) {
 			 navigator.share({
 				title: sanitizeHtml(title),
-				text: sanitizeHtml(text.replace(/[•,!,|,;]/g,'')),
+				text: sanitizeHtml(text.replace(/[•,!,|,;,.]/g,'')),
 				url: sanitizeHtml(url),
 			  })
 				.then(() => console.log('Successful share'))
