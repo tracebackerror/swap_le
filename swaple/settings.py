@@ -11,7 +11,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get('SECRET_KEY','(!&6*!a9x(g#2tba@125a^$t_s+*1882+jd3$@k3=er)q!2id$')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG =  os.environ.get('DEBUG',True)
+DEBUG =  False
 
 DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap-responsive.html"
 
@@ -24,6 +24,7 @@ ALLOWED_HOSTS = [
   '127.0.0.1',
   'localhost',
   '192.168.1.207',
+  '192.168.1.208',
   
 ]
 

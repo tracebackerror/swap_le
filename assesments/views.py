@@ -690,8 +690,8 @@ class ManageSingleAsessment(ExportMixin, SingleTableView):
         total_subscribes_student = Assesment.objects.filter(id = self.kwargs['assesmentid']).aggregate(total_user = Count('subscriber_users'))
         attend_exam_student = Result.objects.filter(assesment__id = self.kwargs['assesmentid'] , assesment_submitted = True).count()
         
-        percentage_of_attend_exam = (attend_exam_student / total_subscribes_student['total_user']) * 100
-        context['percentage_student'] = round(percentage_of_attend_exam,2)
+        #percentage_of_attend_exam = (attend_exam_student / total_subscribes_student['total_user']) * 100
+        context['percentage_student'] = None #round(percentage_of_attend_exam,2)
         context['total_subscribes_student'] = total_subscribes_student['total_user']
         context['attend_exam_student'] = attend_exam_student
         
@@ -727,8 +727,11 @@ class ProcessOpenAssesmentView(DetailView):
             self.request.session['exam_start_time_hour'] = time_obj.hour
             self.request.session['exam_start_time_minute'] = time_obj.minute
             user_name = uuid.uuid4().hex[:30]
+            
+            first_name = self.request.POST.get('open_exam_result_name', '...')
             user_obj = User.objects.create_user(username=user_name,
-                             email='anonymoususer@beatles.com',
+                             first_name = first_name,
+                             email='anonymoususer@swaple.in',
                              password='Test@19487d')
             
             student_obj = Student()

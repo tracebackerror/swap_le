@@ -116,7 +116,7 @@ class GroupedModelChoiceField(ModelChoiceField):
         value = [ student_data for student_data in value if student_data]
         try:
             value = super(GroupedModelChoiceField, self).to_python(value)
-            import pdb; pdb.set_trace()
+            #import pdb; pdb.set_trace()
         except Exception as e:
             
             #key = self.to_field_name or 'pk'
@@ -195,16 +195,15 @@ class AssessmentForm(forms.ModelForm):
     subscriber_users = GroupedModelChoiceField(
                                 queryset=Student.objects.none(), 
                                 choices_groupby='staffuser',
-                                widget= forms.SelectMultiple
+                                widget= forms.SelectMultiple,
+                                required=False
                                 )   
-    '''
     def clean_subscriber_users(self):
-        student = self.cleaned_data['subscriber_users']
+        pos = self.cleaned_data.get("subscriber_users")
+        if pos is None:
+            return []
+        return pos
         
-        import pdb; pdb.set_trace()
-        #forms.ValidationError("By Pass Validation")
-        return student
-    '''
     class Meta:
         model = Assesment
         
@@ -276,9 +275,14 @@ class AssessmentCreationForm(autocomplete.FutureModelForm):
     subscriber_users = GroupedModelChoiceField(
                                 queryset=Student.objects.none(), 
                                 choices_groupby='staffuser',
-                                widget= forms.SelectMultiple
+                                widget= forms.SelectMultiple,
+                                required=False
                                 )
-    
+    def clean_subscriber_users(self):
+        pos = self.cleaned_data.get("subscriber_users")
+        if pos is None:
+            return []
+        return pos
     class Meta:
         model = Assesment
         fields = ('__all__')

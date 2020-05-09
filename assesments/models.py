@@ -64,7 +64,7 @@ class Assesment(MetaInformationMixin, SoftDeletionModelMixin, ModelMeta):
     type = models.CharField(max_length=10, default="assessment", editable=False)
     #deleted = models.CharField(max_length=1, default="N")
 
-    subscriber_users = models.ManyToManyField(Student)
+    subscriber_users = models.ManyToManyField(Student, blank=True)
     
     duration_hours = models.IntegerField(null=True)
     duration_minutes = models.IntegerField(null=True)
