@@ -54,7 +54,7 @@
 										<h4 class="card-title"><a href="#" class="btn btn-danfer" disabled="disabled"><i class=" fa fa-thumbs-o-down " aria-hidden="true"></i> FAILED</a></h4>
 										
 										{% endif %}
-										<h6 class="card-subtitle mb-2 text-muted">{{object.registered_user.studentuser.first_name|title}}  {{object.registered_user.studentuser.last_name|title}}</h6>
+										<h2 class="card-subtitle mb-2 text-muted"><strong>{{object.registered_user.studentuser.first_name|title}}</strong></h2>
 										
 										<p class="card-text">... </p>
 										<a href="#" class="btn btn-outline-info"><i class="fa fa-question-circle-o" aria-hidden="true"></i> Attempted {{object.total_question}} / {{object.total_question}}</a>

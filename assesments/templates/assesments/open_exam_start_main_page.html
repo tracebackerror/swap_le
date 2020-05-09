@@ -12,6 +12,7 @@
     {{all_question_to_answer.0.assesment_linked.header }}
 {% endif %}</h1>
 
+
 <div class="container" >
 	{% if request.user_agent.is_mobile %}
 	<div class="row">
@@ -36,6 +37,8 @@
 
 
 {% if assesment_object.privilege == 'open' %}
+
+
 <div class="row">
 	<div class="col-sm-6 col-md-6">
 		Remaining Time:
@@ -111,7 +114,9 @@ Local Time:  {{result_object.exam_taken_date_time|localtime }}
 		</div>
 		
 
-
+<div class="progress" style="height: 5px;">
+  <div class="progress-bar " role="progressbar " style=" width: {% widthratio all_question_to_answer.number all_question_to_answer.paginator.count 100 %}%;" aria-valuenow="{{ all_question_to_answer.number}}" aria-valuemin="0" aria-valuemax="{{ all_question_to_answer.paginator.count}}"></div>
+</div>
 <form action="{% url 'student:assesments:process_open_assesment' %}" method="GET" id="questionProcessingForm">
 
 {% if get_the_answer_obj %} 

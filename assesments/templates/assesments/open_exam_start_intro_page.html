@@ -56,8 +56,17 @@
 										<input type="hidden" name="assesment_obj" value={{ assesment_object.pk }}>
 										<input type="hidden" name="start_assesment_boolean" value="True">
 										{%csrf_token%}
-										
-											<button type="submit" class=" col-sm-12 btn btn-danger" ><i class="fa fa-play-circle" aria-hidden="true"></i> Start Now</button>
+										<div class="input-group col-sm-12 col-md-12">
+										<label for="open_exam_name"><small >Name to display in Result</small></label>
+											</div>		
+										<div class="input-group col-sm-12 col-md-12">
+												<div class="input-group-prepend ">
+													<span class="input-group-text bg-dark text-white" id="basic-addon1"><i class="fas fa-user-graduate"></i></span>
+												 </div>
+												 <input class="form-control" type="text" name="open_exam_result_name" placeholder="Please Enter Your Name" />
+												
+											</div>
+										<button type="submit" class=" col-sm-12 btn btn-danger" ><i class="fa fa-play-circle" aria-hidden="true"></i> Start Now</button>
 										 
 									</div>
 									
