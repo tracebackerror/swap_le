@@ -24,7 +24,7 @@ class QuestionForm(forms.ModelForm):
     question_text = forms.CharField(label="Question ", widget=forms.Textarea(attrs={'rows':14, 'cols':50}))
     def __init__(self, *args, **kwargs):
         super(QuestionForm, self).__init__(*args, **kwargs)
-        
+        self.fields['question_text'].required = False  
         
     
     class Meta:
