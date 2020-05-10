@@ -1,11 +1,58 @@
+
 {% extends "base.html" %}
 {% load literal_eval %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
+{% load static %}
 {% block title %}Add a Question{% endblock %} {% block content %}
+ 
 
-<h1>Add a Question:</h1>
 
+
+<!-- For High Chart-->
+<link
+      href="{% static '/css/highcharts-editor.min.css' %}"
+      rel="stylesheet"
+      type="text/css"
+    />
+
+    <script
+      src="https://code.highcharts.com/stock/highstock.js"
+      type="text/javascript"
+      charset="utf-8"
+    ></script>
+    <script
+      src="https://code.highcharts.com/modules/data.js"
+      type="text/javascript"
+      charset="utf-8"
+    ></script>
+    <script
+      src="https://code.highcharts.com/highcharts-more.js"
+      type="text/javascript"
+      charset="utf-8"
+    ></script>
+    <script
+      src="https://code.highcharts.com/highcharts-3d.js"
+      type="text/javascript"
+      charset="utf-8"
+    ></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/funnel.js"></script>
+    <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
+    <script src="https://code.highcharts.com/modules/annotations.js"></script>
+    <script src="{% static '/js/highcharts-editor.complete.js' %}"></script>
+    <script src="https://cdn.tiny.cloud/1/1qzknskyuat8vftbr3r30jkwppeoawjk55txwmqrdppkr5cf/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+
+    <script src="{% static '/js/highcharts-editor.tinymce.js' %}"></script>
+    <script src="{% static '/js/latex_plugin.js' %}"></script>
+	
+  
+<!-- For Tiny Mce WIth High Chart-->
+
+ 
+ 
+ 
+ <h1>Add a Question:</h1>
 
 {% if form_errors %}
 
@@ -277,7 +324,31 @@ $('#id_question_image').change(function(e){
     	}
     	
     }
-})
+});
+
+ tinymce.init({
+    selector: '#id_question_text',
+	  
+    plugins: ['a11ychecker  casechange formatpainter linkchecker autolink lists advlist  checklist media mediaembed pageembed permanentpen powerpaste table advtable tinycomments tinymcespellchecker link autoresize preview hr fullscreen toc',
+					'highcharts highchartssvg noneditable ',
+					],
+    toolbar: ' fullscreen undo redo | styleselect code | bold italic | alignleft aligncenter alignright alignjustify | table bullist numlist outdent indent | link image media | insertfile fontsizeselect ',
+    toolbar_mode: 'floating',
+	menubar:'file view edit insert format tools table highcharts',
+    tinycomments_mode: 'embedded',
+    tinycomments_author: 'Author name',
+	height : "300",
+	width : "100%",
+	  
+	menu: {
+		highcharts: {
+		  title: "Highcharts",
+		  items: "highcharts"
+		}},
+		
+	
+		
+    });
 
 
 </script>

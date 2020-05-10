@@ -131,9 +131,14 @@ Local Time:  {{result_object.exam_taken_date_time|localtime }}
     {% for question in all_question_to_answer %}
     <input type="hidden" value={{question.pk}} name="question_id">
 	<tr>
-      <th style="width:10%;">Question {{ all_question_to_answer.number}}</th>
-      <th>{{ question.question_text }}</th>
+      <th style="width:10%;" colspan=2>Question {{ all_question_to_answer.number}}</th>
+      
     </tr>
+	<tr>
+	
+	<td colspan=2>{{ question.question_text|safe }}</td>
+	
+	</tr>
     
     {% if question.id in question_image_obj %}
     <tr>
@@ -144,102 +149,124 @@ Local Time:  {{result_object.exam_taken_date_time|localtime }}
     
 	{% if question.question_type|lower == 'scq'%}
 	<input type="hidden" name="question_type" value="scq" />
-	  <tr>
-        <td style="width:10%;>
-        <div class="form-group">
-				{% if question.option_one|length > 0 %}
-        <input class="form-control" type="radio" name="answer" id="option1" value=1 {% if get_the_answer_obj.opted_choice.2 == 1 %} checked="checked" {% endif %}>
-				{% endif %}
-        </div>
-        </td>
-        <td>{{ question.option_one }}</td>
-      </tr>
-      <tr>
-        <td style="width:10%;>
-        <div class="form-group">
-				{% if question.option_two|length > 0 %}
-        <input class="form-control" type="radio" name="answer" id="option2" value=2 {% if  get_the_answer_obj.opted_choice.2 == 2 %} checked="checked" {% endif %}></td>
-        {% endif %}
-				</div>
-        <td>{{ question.option_two }}</td>
-      </tr>
-      <tr>
-        <td style="width:10%;>
-        <div class="form-group">
-				{% if question.option_three|length > 0 %}
-        <input class="form-control" type="radio" name="answer" id="option3" value=3 {% if get_the_answer_obj.opted_choice.2 == 3 %} checked="checked" {% endif %} ></td>
-        {% endif %}
-				</div>
-        <td>{{ question.option_three }}</td>
-      </tr>
-      <tr>
-        <td style="width:10%;>
-        <div class="form-group">
-				{% if question.option_four|length > 0 %}
-        <input class="form-control" type="radio" name="answer" id="option4" value=4 {% if get_the_answer_obj.opted_choice.2 == 4 %} checked="checked" {% endif %} ></td>
-        {% endif %}
-				</div>
-        <td>{{ question.option_four }}</td>
-      </tr>
-      <tr>
-        <td style="width:10%;>
-        <div class="form-group">
-				{% if question.option_five|length > 0 %}
-        <input class="form-control" type="radio" name="answer" id="option5" value=5 {% if get_the_answer_obj.opted_choice.2 == 5 %} checked="checked" {% endif %}></td>
-        {% endif %}
-				</div>
-        <td>{{ question.option_five }}</td>
-      </tr>
-      {% elif question.question_type|lower == 'mcq' %}
-      <input type="hidden" name="question_type" value="mcq" />
-	  <tr>
-        <td style="width:10%;>
-        <div class="form-group">
-				{% if question.option_one|length > 0 %}
-        <input class="form-control" type="checkbox" name="answer" id="option1" value=1></td>
-        {% endif %}
-				</div>
-        <td>{{ question.option_one }}</td>
-      </tr>
-      <tr>
-        <td style="width:10%;>
-        <div class="form-group">
-				{% if question.option_two|length > 0 %}
-        <input class="form-control" type="checkbox" name="answer"  id="option2" value=2></td>
-				{% endif %}
-        </div>
-        <td>{{ question.option_two }}</td>
-      </tr>
-      <tr>
-        <td style="width:10%;>
-        <div class="form-group">
-				{% if question.option_three|length > 0 %}
-        <input class="form-control" type="checkbox" name="answer"  id="option3" value=3>
-				{% endif %}																					 
+		{% if question.option_one|length > 0 %}
+		<tr>
+			<td style="width:10%;>
+			<div class="form-group">
+					
+			<input class="form-control" type="radio" name="answer" id="option1" value=1 {% if get_the_answer_obj.opted_choice.2 == 1 %} checked="checked" {% endif %}>
+					
+			</div>
+			</td>
+			<td>{{ question.option_one }}</td>
+		</tr>
+		{% endif %}
+		{% if question.option_two|length > 0 %}
+			  <tr>
+				<td style="width:10%;>
+				<div class="form-group">
+						
+				<input class="form-control" type="radio" name="answer" id="option2" value=2 {% if  get_the_answer_obj.opted_choice.2 == 2 %} checked="checked" {% endif %}></td>
+				
+						</div>
+				<td>{{ question.option_two }}</td>
+			  </tr>
+		  {% endif %}
+		  {% if question.option_three|length > 0 %}
+		  <tr>
+			<td style="width:10%;>
+			<div class="form-group">
+					
+			<input class="form-control" type="radio" name="answer" id="option3" value=3 {% if get_the_answer_obj.opted_choice.2 == 3 %} checked="checked" {% endif %} ></td>
+			
+					</div>
+			<td>{{ question.option_three }}</td>
+		  </tr>
+		  {% endif %}
+		  {% if question.option_four|length > 0 %}
+		  <tr>
+			<td style="width:10%;>
+			<div class="form-group">
+					
+			<input class="form-control" type="radio" name="answer" id="option4" value=4 {% if get_the_answer_obj.opted_choice.2 == 4 %} checked="checked" {% endif %} ></td>
+			
+					</div>
+			<td>{{ question.option_four }}</td>
+		  </tr>
+			{% endif %}
+			{% if question.option_five|length > 0 %}
+				<tr>
+				<td style="width:10%;>
+				<div class="form-group">
+				
+				<input class="form-control" type="radio" name="answer" id="option5" value=5 {% if get_the_answer_obj.opted_choice.2 == 5 %} checked="checked" {% endif %}></td>
+				
+						</div>
+				<td>{{ question.option_five }}</td>
+				</tr>
+			{% endif %}
+		{% elif question.question_type|lower == 'mcq' %}
+		
+		<input type="hidden" name="question_type" value="mcq" />
+		
+		{% if question.option_one|length > 0 %}
+		<tr>
+			<td style="width:10%;>
+			<div class="form-group">
+					
+			<input class="form-control" type="checkbox" name="answer" id="option1" value=1></td>
+			
+					</div>
+			<td>{{ question.option_one }}</td>
+		</tr>
+		{% endif %}
+		{% if question.option_two|length > 0 %}
+			<tr>
+			<td style="width:10%;>
+			<div class="form-group">
+				
+			<input class="form-control" type="checkbox" name="answer"  id="option2" value=2></td>
+				
+			</div>
+			<td>{{ question.option_two }}</td>
+		</tr>
+		{% endif %}
+		{% if question.option_three|length > 0 %}
+		<tr>
+			<td style="width:10%;>
+			<div class="form-group">
+				
+				<input class="form-control" type="checkbox" name="answer"  id="option3" value=3>
+																								 
 				</td>
-        </div>
-        <td>{{ question.option_three }}</td>
-      </tr>
-      <tr>
-        <td style="width:10%;>
-        <div class="form-group">
-				{% if question.option_four|length > 0 %}
-        <input class="form-control" type="checkbox" name="answer"  id="option4" value=4 class="form-control" >
-        {% endif %}
+			</div>
+			<td>{{ question.option_three }}</td>
+		</tr>
+		{% endif %}
+		{% if question.option_four|length > 0 %}
+		<tr>
+			<td style="width:10%;>
+			<div class="form-group">
+				
+			<input class="form-control" type="checkbox" name="answer"  id="option4" value=4 class="form-control" >
+       
 				</div>
-        </td>
-        <td>{{ question.option_four }}</td>
-      </tr>
-      <tr>
-        <td style="width:10%;>
-        <div class="form-group">
-				{% if question.option_five|length > 0 %}
-        <input class="form-control" type="checkbox" name="answer" class="form-control"  value=5 id="option5">
-        {% endif %}
+			</td>
+			<td>{{ question.option_four }}</td>
+		</tr>
+	   {% endif %}
+	   {% if question.option_five|length > 0 %}
+		<tr>
+			<td style="width:10%;>
+			<div class="form-group">
+				
+			<input class="form-control" type="checkbox" name="answer" class="form-control"  value=5 id="option5">
+        
 				</div>
-        </td >
-        <td>{{ question.option_five }}</td>
-      </tr>
+			</td >
+			<td>{{ question.option_five }}</td>
+		</tr>
+		{% endif %}
     {% elif question.question_type|lower == 'sqa' %}
     <input type="hidden" name="question_type" value="sqa" />
       <tr>
