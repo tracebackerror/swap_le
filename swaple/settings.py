@@ -12,9 +12,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY','(!&6*!a9x(g#2tba@125a^$t_s+*1882+jd3$@
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG =  False
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+
 
 DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap-responsive.html"
 
@@ -76,7 +74,7 @@ INSTALLED_APPS = [
     'import_export',
     'meta',
     'taggit',
-    'compressor',
+   
     #'tz_detect',
 ]
 
@@ -192,12 +190,6 @@ STATICFILES_DIRS = (
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    # other finders..
-    'compressor.finders.CompressorFinder',
-)
 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
