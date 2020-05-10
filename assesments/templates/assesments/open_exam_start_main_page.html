@@ -134,11 +134,14 @@ Local Time:  {{result_object.exam_taken_date_time|localtime }}
       <th style="width:10%;" colspan=2>Question {{ all_question_to_answer.number}}</th>
       
     </tr>
-	<tr>
+	</table>
+	<div class="col-sm-12 col-md-12 table-responsive">
+	{{ question.question_text|safe }}
+	</div>
+	<table class="table table-bordered ">
 	
-	<td colspan=2>{{ question.question_text|safe }}</td>
 	
-	</tr>
+	
     
     {% if question.id in question_image_obj %}
     <tr>
@@ -528,6 +531,7 @@ $(document).ready(function(){
 	$('textarea').on("cut copy paste",function(e) {
       e.preventDefault();
    });
+  
 });
 </script>
 

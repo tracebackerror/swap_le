@@ -312,17 +312,18 @@ $('#id_question_image').change(function(e){
  tinymce.init({
     selector: '#id_question_text',
 	  
-    plugins: ['a11ychecker  casechange formatpainter linkchecker autolink lists advlist  checklist media mediaembed pageembed permanentpen powerpaste table advtable tinycomments tinymcespellchecker link autoresize preview hr fullscreen toc',
-					'highcharts highchartssvg noneditable ',
+    plugins: ['advcode noneditable image imagetools a11ychecker  casechange formatpainter linkchecker autolink lists advlist  checklist media mediaembed pageembed permanentpen powerpaste table advtable tinycomments tinymcespellchecker link autoresize preview hr fullscreen toc',
+					'highcharts highchartssvg  ',
 					],
-    toolbar: ' fullscreen undo redo | styleselect code | bold italic | alignleft aligncenter alignright alignjustify | table bullist numlist outdent indent | link image media | insertfile fontsizeselect ',
+    toolbar: ' fullscreen undo redo | styleselect code | bold italic | alignleft aligncenter alignright alignjustify | table bullist numlist outdent indent | link image imagetools media | insertfile fontsizeselect ',
     toolbar_mode: 'floating',
 	menubar:'file view edit insert format tools table highcharts',
     tinycomments_mode: 'embedded',
     tinycomments_author: 'Author name',
 	height : "300",
 	width : "100%",
-	  
+	imagetools_cors_hosts: ['localhost', '127.0.0.1', 'swaple.in', 'swaple.herokuapp.com'],
+	extended_valid_elements : "svg[*]",  
 	menu: {
 		highcharts: {
 		  title: "Highcharts",
