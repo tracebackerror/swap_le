@@ -1,4 +1,5 @@
 django-quill
+django_compressor
 django-import-export
 django-meta
 django-taggit
