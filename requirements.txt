@@ -1,3 +1,4 @@
+django-quill
 django-import-export
 django-meta
 django-taggit
