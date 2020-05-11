@@ -11,7 +11,11 @@ register = template.Library()
 
 @register.filter
 def replace_literals(string):
-    string =  re.sub('[u \]\'\[]',  '',string)
+    #import pdb;pdb.set_trace();
+    if string:
+        string =  re.sub('[u \]\'\[]',  '',string)
+    else:
+        return ''
     return string
 
 
