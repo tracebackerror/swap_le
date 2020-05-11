@@ -5,6 +5,7 @@ from .models import Assesment, Question, Result
 from django_tables2 import A
 from django_tables2.export.views import ExportMixin
 from django.urls import reverse
+from django.utils.html import strip_tags
 
 class ResultTable(ExportMixin, tables.Table):
     export_formats = ['csv', 'xls', ]
@@ -66,6 +67,7 @@ class QuestionTable(tables.Table):
         return format_html('<center><i class="fas fa-pencil-alt" aria-hidden="true"></i></center>')
         
     def render_question_text(self,value):
+        value = strip_tags(value)
         return (value[:75] + '..') if len(value) > 75 else value
     class Meta:
         model = Question
