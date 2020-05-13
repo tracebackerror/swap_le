@@ -40,17 +40,59 @@
 
 
 <div class="row">
-	<div class="col-sm-6 col-md-6">
-		Remaining Time:
+	<div class="col-sm-12 col-md-6">
+		Remaining Time: <span id="examtime" style=""></span> 
 	</div>
-	<div class="col-sm-6 col-md-6">
-		<div id="examtime" style="font-size:20;"></div>
-	</div>
+	
 </div>
-<div class="row">
-	<div class="col-sm-12 col-md-12">
-		<input type="button" name="final_submit" value="Final Submit" class="btn btn-danger" data-toggle="modal" data-target="#modalForFinalExit"/>
 
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title">Question Navigation Panel</h5>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			  <span aria-hidden="true">&times;</span>
+			</button>
+		  </div>
+      
+		 <div class="modal-body">
+			
+					{% if all_question_to_answer.has_other_pages %}
+						<ul class="pagination  btn-toolbar" role="toolbar" aria-label="pagination_toolbar">
+
+
+							{% for i in all_question_to_answer.paginator.page_range %}
+								{% if all_question_to_answer.number == i %}
+									<li class="nav-item   active ">
+										<button type="button" class="btn btn-info" name="page" value={{ i }}> {{ i }} </button>
+									</li>
+									
+								{% else %}
+									<li class="nav-item">
+									<button type="button" class="btn btn-default consequetive_question" name="page" value={{ i }}> {{ i }} </button>
+									</li>
+								{% endif %}
+							{% endfor %}
+
+						</ul>
+					{% endif %}			
+		</div>
+		<div class="modal-footer">
+			
+			<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		  </div>
+    </div>
+  </div>
+</div>
+<div class="row col-sm-12">
+	<div class="btn-group" role="group" aria-label="Basic example">
+	  <button type="button" class="col-sm-4 btn-sm btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Question </button>
+	&nbsp; 
+	 <input type="button" name="final_submit"  value="Final Submit" class=" col-sm-8 btn-sm btn-danger" data-toggle="modal" data-target="#modalForFinalExit"/>
+
+	 
 	</div>
 	
 </div>
