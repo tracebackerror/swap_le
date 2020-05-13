@@ -76,14 +76,24 @@
 		</div>
 		{% if request.user_agent.is_pc  %}
 			<div class="row">
-				<div class="col-sm-3">Type Equation : </div>
+				<div class="col-sm-2">Type Equation : </div>
 				<div class="col-sm-6"> <span id="answer" class="col-sm-6" >x= </span></div>
-				<div class="col-sm-3"><button id="insert_equation" class="btn-sm btn-default">Insert Equation</button> </div>
+				<div class="col-sm-2"> 
+					<select id="equation_to_place" class="form-control" >
+						<option value="question">Question</option>
+						<option value="#id_option_one">Option 1</option>
+						<option value="#id_option_two">Option 2</option>
+						<option value="#id_option_three">Option 3</option>
+						<option value="#id_option_four">Option 4</option>
+						<option value="#id_option_five">Option 5</option>
+					</select>
+					</div>
+				<div class="col-sm-2"><button type="button" id="insert_equation" class="btn-sm btn-default">Insert Equation</button> </div>
 			</div>
 		{% endif %}
 		<div class="form-row">
 			<div class="form-group col-md-4"> {{ question_form.max_marks | as_crispy_field }}</div>
-			<div class="form-group col-md-4"> {{ question_form.question_image | as_crispy_field }} <span class="small em">File(jpg/jpeg/png) Size Should Be Less Than 500kb.</span></div>
+			<div class="form-group col-md-4"> {{ question_form.question_image | as_crispy_field }} <span class="small em">File(jpg/jpeg/png) Size Should Be Less Than 1Mb.</span></div>
 			<div class="form-group col-md-4"> {{ question_form.question_type | as_crispy_field }}</div>
 		</div>
 		<div class="row" id="div_id_brief_answer">
@@ -177,7 +187,13 @@ $('#answer').on('DOMSubtreeModified',function(){
 */
 
 $("#insert_equation").click(function(){
- tinyMCE.activeEditor.execCommand('mceInsertContent',false, "\\( " + answerMathField.latex() + " \\)");
+	if($("#equation_to_place").val().includes("question")) {
+		
+		tinyMCE.activeEditor.execCommand('mceInsertContent',false, "\\( " + answerMathField.latex() + " \\)");
+	}
+	else {
+		$($("#equation_to_place").val()).val("\\( " + answerMathField.latex() + " \\)");
+	}
 });
 </script>
 {% endif %}
@@ -315,6 +331,7 @@ $(document).ready(function(){
 <!--  File Uploading Validation  -->
 
 <script type="text/javascript">
+$("#id_question_image").addClass("form-control");
 
 $('#id_question_image').change(function(e){
 	var file = $('input[type=file]').prop('files')[0];
@@ -322,8 +339,8 @@ $('#id_question_image').change(function(e){
     	var file_size = Math.round(file.size / 1024);
     	var file_ext = file.name.split('.')[1].toLowerCase();
     	//console.log(file_ext+" - "+file_size);
-    	if(file_size > 500){
-    		alert("File Size Should Be Less Than 500kb.");
+    	if(file_size > 1000){
+    		alert("File Size Should Be Less Than 1mb.");
 			document.getElementById("id_question_image").value = "";
     	}
     	else{
