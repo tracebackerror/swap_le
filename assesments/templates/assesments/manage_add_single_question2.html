@@ -30,8 +30,8 @@
     <script src="{% static '/js/highcharts-editor.tinymce.js' %}" type="text/javascript"></script>
 	  
 <!-- For Tiny Mce WIth High Chart-->
-
- 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js" integrity="sha256-dxKVPdWCaZTdphHQqQEc0GSDAVZJCxshwn3ZrvHtqgo=" crossorigin="anonymous"></script>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css" integrity="sha256-Z0FmvP1JtDmwVaHpsgu75FrC/SInDnlFWL95M65PCr4=" crossorigin="anonymous" />
  
  
  <h1>Add a Question:</h1>
@@ -74,6 +74,13 @@
 			</div>
 			
 		</div>
+		{% if request.user_agent.is_pc  %}
+			<div class="row">
+				<div class="col-sm-3">Type Equation : </div>
+				<div class="col-sm-6"> <span id="answer" class="col-sm-6" >x= </span></div>
+				<div class="col-sm-3"><button id="insert_equation" class="btn-sm btn-default">Insert Equation</button> </div>
+			</div>
+		{% endif %}
 		<div class="form-row">
 			<div class="form-group col-md-4"> {{ question_form.max_marks | as_crispy_field }}</div>
 			<div class="form-group col-md-4"> {{ question_form.question_image | as_crispy_field }} <span class="small em">File(jpg/jpeg/png) Size Should Be Less Than 500kb.</span></div>
@@ -142,10 +149,38 @@
 		</div>
 	</form>
 </div>
+{% if request.user_agent.is_pc  %}
 
+<script>
+	var MQ = MathQuill.getInterface(2);
+  var answerSpan = document.getElementById('answer');
+  var answerMathField = MQ.MathField(answerSpan, {
+	substituteTextarea: function() {
+		return document.createElement('textarea');
+	  },
+    handlers: {
+      edit: function() {
+	  answerMathField.focus()
+        var enteredMath = answerMathField.latex(); // Get entered math in LaTeX format
+        
+      },
+	 
+    }
+  });
+  
+  
+/*
+$('#answer').on('DOMSubtreeModified',function(){
+  
+ // $("#latex_code").text(answerMathField.latex());
+});
+*/
 
-
-
+$("#insert_equation").click(function(){
+ tinyMCE.activeEditor.execCommand('mceInsertContent',false, "\\( " + answerMathField.latex() + " \\)");
+});
+</script>
+{% endif %}
 <script type="text/javascript">
 $(document).ready(function(){
 	console.log("-- DOM Ready --");
@@ -310,11 +345,10 @@ $('#id_question_image').change(function(e){
 
  tinymce.init({
     selector: '#id_question_text',
-	external_plugins: {'mathjax': '{% static "/js/plugin.js" %}'},
-    plugins: ['paste advcode noneditable image imagetools a11ychecker  casechange formatpainter linkchecker autolink lists advlist  checklist media mediaembed pageembed permanentpen powerpaste table advtable tinycomments tinymcespellchecker link autoresize preview hr fullscreen toc',
-					'highcharts highchartssvg  ',
+	plugins: ['powerpaste advcode noneditable image imagetools a11ychecker  casechange formatpainter linkchecker autolink lists advlist  checklist media mediaembed pageembed permanentpen powerpaste table advtable tinycomments tinymcespellchecker link autoresize preview hr fullscreen toc',
+					'highcharts   ',
 					],
-    toolbar: 'fullscreen undo redo |  forecolor backcolor | styleselect code | bold italic underline | alignleft aligncenter alignright alignjustify | table bullist numlist outdent indent | link image imagetools media | insertfile fontsizeselect mathjax  ',
+    toolbar: ' fullscreen undo redo |  forecolor backcolor | styleselect code | bold italic underline | alignleft aligncenter alignright alignjustify | table bullist numlist outdent indent | link image imagetools media | insertfile fontsizeselect | cut copy powerpaste  ',
     toolbar_mode: 'floating',
 	menubar:'file view edit insert format tools table highcharts',
     tinycomments_mode: 'embedded',
@@ -323,11 +357,7 @@ $('#id_question_image').change(function(e){
 	width : "100%",
 	imagetools_cors_hosts: ['localhost', '127.0.0.1', 'swaple.in', 'swaple.herokuapp.com'],
 	extended_valid_elements : "svg[*]",  
-	mathjax: {
-		lib: "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js",
-		configUrl: '{% static 'js/config.js' %}',
-		
-	},
+	
 	menu: {
 		highcharts: {
 		  title: "Highcharts",

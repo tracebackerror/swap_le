@@ -146,7 +146,7 @@ Local Time:  {{result_object.exam_taken_date_time|localtime }}
     {% if question.id in question_image_obj %}
     <tr>
      <th style="vertical-align: middle;">Figure</th>
-     <td colspan=2><img width="auto" height="150px" src="{{ question_image_obj|get_item:question.id}}"/></td>
+     <td colspan=2><img class="w-50 img-thumbnail"  src="{{ question_image_obj|get_item:question.id}}"/></td>
     </tr>
     {% endif %}
     
