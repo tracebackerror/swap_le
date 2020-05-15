@@ -21,7 +21,10 @@ from staff.tables import StaffTable
 from staff.forms import StaffEditForm
 from django.db import transaction
 from institutions.forms import StaffProfileForm
+
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import authenticate, login
+
 from licenses.models import License
 from django.contrib.auth.views import (PasswordResetView,PasswordResetDoneView, PasswordResetConfirmView ,PasswordResetCompleteView)
 from django.urls import reverse_lazy, reverse
@@ -592,7 +595,11 @@ class InstitutionRegistration(FormView):
             )
         #import pdb; pdb.set_trace();
         send_mail(subject, message, DEFAULT_FROM_EMAIL, [self.request.POST['email']], fail_silently = True)
-            
+        
+        new_user = authenticate(username=form.cleaned_data['username'],
+                                    password=form.cleaned_data['password1'],
+                                    )
+        login(self.request, new_user)
         return HttpResponseRedirect(self.get_success_url())
     
     

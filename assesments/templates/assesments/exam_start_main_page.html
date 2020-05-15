@@ -111,7 +111,7 @@ Local Time:  {{result_object.exam_taken_date_time|localtime }}
     <input type="hidden" value={{question.pk}} name="question_id">
 	<tr>
       <th style="width:10%;">Question {{ all_question_to_answer.number}}</th>
-      <th>{{ question.question_text }}</th>
+      <th>{{ question.question_text|safe }}</th>
     </tr>
     
     {% if question.id in question_image_obj %}

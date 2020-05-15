@@ -334,22 +334,22 @@ Local Time:  {{result_object.exam_taken_date_time|localtime }}
       
 								<li class="nav-item">
 									<button type="button" class="btn btn-default consequetive_question"  name="page" value={{all_question_to_answer.previous_page_number }}>
-										&laquo;</button>
+										<i class="fa fa-step-backward" aria-hidden="true"></i> Save & Previous</button>
 								</li>
 								{% else %}
 									<li class="nav-item">
 									<button type="button" class="btn btn-default consequetive_question"  name="page" value={{all_question_to_answer.paginator.num_pages }}>
-										&laquo;</button>
+										<i class="fa fa-step-backward" aria-hidden="true"></i> Save & Previous</button>
 									</li>
     					{% endif %}
 																								 
 							{% if all_question_to_answer.has_next %}
 								<li class="nav-item">
-								<button type="button" class=" btn btn-default" id="nextquestion" name="page" value={{ all_question_to_answer.next_page_number }}> &raquo; </button>
+								<button type="button" class=" btn btn-default" id="nextquestion" name="page" value={{ all_question_to_answer.next_page_number }}> <i class="fa fa-step-forward" aria-hidden="true"></i> Save & Next</button>
 								</li>
 							{% else %}
 								<li class="nav-item">
-								<button type="button" class=" btn btn-default" id="nextquestion" name="page" value={{ all_question_to_answer.paginator.page_range.0 }}> &raquo; </button>
+								<button type="button" class=" btn btn-default" id="nextquestion" name="page" value={{ all_question_to_answer.paginator.page_range.0 }}><i class="fa fa-step-forward" aria-hidden="true"></i> Save & Next</button>
 								
 								</li>
 							{% endif %}
@@ -368,13 +368,13 @@ Local Time:  {{result_object.exam_taken_date_time|localtime }}
 	</div>
 </div>
 <div class="row">
-	<div class="col-md-12">
-		<p>Question Navigation Panel :</p>
-		
-	</div>
-	<div class="col-md-12">
-		
-				{% if all_question_to_answer.has_other_pages %}
+	<button type="button" class="col-sm-12 col-md-12 collapsed" data-toggle="collapse" data-target="#question_panel_down" aria-expanded="false" aria-controls="manage_all_assesment">
+	<h5>Question Panel <span class="badge badge-dark pull-right"> Total  {{all_question_to_answer.paginator.count}}  </span></h5>
+</button>
+
+<div class="collapse" id="question_panel_down" style="">
+	<div class="card card-body">
+		{% if all_question_to_answer.has_other_pages %}
 					<ul class="pagination  btn-toolbar" role="toolbar" aria-label="pagination_toolbar">
 
 
@@ -392,8 +392,9 @@ Local Time:  {{result_object.exam_taken_date_time|localtime }}
 						{% endfor %}
 
 					</ul>
-				{% endif %}			
+		{% endif %}	
 	</div>
+</div>
 </div>
 
 
