@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 from autoslug import AutoSlugField
 from meta.models import ModelMeta
 from taggit.managers import TaggableManager
-
+from django.utils.html import strip_tags
 
 class AssesmentManager(models.Manager):
     def get_queryset(self):
@@ -172,8 +172,9 @@ class Question(MetaInformationMixin, SoftDeletionModelMixin):
     
     
     def __str__(self):
-        data = (self.question_text[:150] + '..') if len(self.question_text) > 75 else self.question_text
-        return 'Question - {}'.format(data)
+        data_temp = strip_tags(self.question_text).replace("&nbsp;", "")
+        data = (data_temp[:150] + '..') if len(data_temp) > 75 else data_temp
+        return data
     
     
 class Result(MetaInformationMixin, SoftDeletionModelMixin):

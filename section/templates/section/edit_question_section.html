@@ -36,7 +36,7 @@ label {
 				</div>
 		{% endfor %}
 	</div>
- <div class="container" style="min-height:60%">
+ <div class="container-fluid" style="min-height:60%">
  <div class="row">
 	<p>You can Edit Question Section  using the following form:</p>
  </div>
@@ -58,13 +58,11 @@ label {
 		</div>
 	<div class="form-row">
 			
-			<div class="col-md-12 overflow-auto" id="manage_questions" style="height:200px; border: 1px solid #ccc; padding: 10px 10px; overflow-y: auto;">
-					{% for question in form.for_question %}
-							{{ question }}
-					{% endfor %}
+			<div class="col-sm-12 col-md-12 overflow-auto" id="manage_questions" >
+					{{ form.for_question|as_crispy_field }}
 						
 			</div>
-						
+							
 		</div>
    
  <p><input type="submit" class="btn btn-success" value="Save changes"></p>
@@ -72,5 +70,27 @@ label {
  
   
  </div>
+ <script>
+ $.fn.selectpicker.Constructor.BootstrapVersion = '4';
+
+	$('#id_for_question').selectpicker({
+		liveSearch: false,
+		countSelectedText: 'Question {0}/{1}',
+		actionsBox: true,
+		selectedTextFormat: 'count > 1',
+		
+		style : 'btn-light',
+		styleBase : 'btn',
+		{% if request.user_agent.is_mobile %}
+		mobile: true,
+		{% endif %}
+		size:5,
+		container: 'container',
+		
+		
+	});
+	$('#id_for_question').addClass('col-sm-8').selectpicker('setStyle');
+	
+ </script>
 {% endblock %}
  

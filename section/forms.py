@@ -26,7 +26,7 @@ class EditQuestionSectionForm(forms.ModelForm):
     name = forms.CharField(widget = forms.TextInput(),required = True, label="Section Name")
     
     for_question = forms.ModelMultipleChoiceField(queryset = Question.objects.filter(assesment_linked__pk=1),
-                                                      widget=forms.CheckboxSelectMultiple())
+                                                      )
     def __init__(self, *args, **kwargs):
     
         #user = kwargs.pop('user', None)
