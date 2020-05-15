@@ -327,34 +327,35 @@ Local Time:  {{result_object.exam_taken_date_time|localtime }}
   <tfoot>
   <tr>
       <td colspan="2">
-      
+		<div class="btn-group" role="group" aria-label="Basic example">
      
 								<ul class="pagination btn-toolbar" role="toolbar" aria-label="pagination_toolbar">
 							 {% if all_question_to_answer.has_previous %}
       
 								<li class="nav-item">
 									<button type="button" class="btn btn-default consequetive_question"  name="page" value={{all_question_to_answer.previous_page_number }}>
-										<i class="fa fa-step-backward" aria-hidden="true"></i> Save & Previous</button>
+										<i class="fa fa-step-backward" aria-hidden="true"></i> Previous</button>
 								</li>
 								{% else %}
 									<li class="nav-item">
 									<button type="button" class="btn btn-default consequetive_question"  name="page" value={{all_question_to_answer.paginator.num_pages }}>
-										<i class="fa fa-step-backward" aria-hidden="true"></i> Save & Previous</button>
+										<i class="fa fa-step-backward" aria-hidden="true"></i> Previous</button>
 									</li>
     					{% endif %}
 																								 
 							{% if all_question_to_answer.has_next %}
 								<li class="nav-item">
-								<button type="button" class=" btn btn-default" id="nextquestion" name="page" value={{ all_question_to_answer.next_page_number }}> <i class="fa fa-step-forward" aria-hidden="true"></i> Save & Next</button>
+								<button type="button" class=" btn btn-default" id="nextquestion" name="page" value={{ all_question_to_answer.next_page_number }}> <i class="fa fa-step-forward" aria-hidden="true"></i> Next</button>
 								</li>
 							{% else %}
 								<li class="nav-item">
-								<button type="button" class=" btn btn-default" id="nextquestion" name="page" value={{ all_question_to_answer.paginator.page_range.0 }}><i class="fa fa-step-forward" aria-hidden="true"></i> Save & Next</button>
+								<button type="button" class=" btn btn-default" id="nextquestion" name="page" value={{ all_question_to_answer.paginator.page_range.0 }}><i class="fa fa-step-forward" aria-hidden="true"></i> Next</button>
 								
 								</li>
 							{% endif %}
 							</ul>
 			</td>
+			</div>
     
     </tr>
     
@@ -362,8 +363,8 @@ Local Time:  {{result_object.exam_taken_date_time|localtime }}
 </table>
 <div class="row">
 	<div class="col-md-12">
-		<p><small>Do Not Forget To Click on <button type="button" class="btn btn-default" disabled>&laquo; </button> OR
-		<button type="button" class="btn btn-default" disabled>&raquo; </button>
+		<p><small>Do Not Forget To Click on <button type="button" class="btn btn-default" disabled><i class="fa fa-step-backward" aria-hidden="true"></i>  </button> OR
+		<button type="button" class="btn btn-default" disabled><i class="fa fa-step-forward" aria-hidden="true"></i>  </button>
 								buttons after answering each question</small></p>
 	</div>
 </div>
