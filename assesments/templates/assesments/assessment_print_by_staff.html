@@ -8,26 +8,7 @@
   <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/js/select2.full.min.js" integrity="sha256-vucLmrjdfi9YwjGY/3CQ7HnccFSS/XRS1M/3k/FDXJw=" crossorigin="anonymous"></script>4
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/css/select2.min.css" integrity="sha256-FdatTf20PQr/rWg+cAKfl6j4/IY3oohFAJ7gVC3M34E=" crossorigin="anonymous" />
-<style>
-#scroll_questions {
-	 margin: auto;
-		height: 285px;
-		width: 300px;
-		overflow-y: auto; /* This changed */
-}
 
-  	ul {
-	  list-style-type: none;
-	}
-	  .bootstrap-select.btn-group.show-tick .dropdown-menu li.selected a span.check-mark{
-		position: absolute;
-		display: inline-block;
-		left: 5px !important; //changed from right:15
-		
-		margin-top: 5px;
-	}
-
-</style>
 <h1> </h1> 
 <div class="container">
 	<div class="row">
@@ -71,16 +52,20 @@
   <div class="clearfix"></div>
 </div>
 <br/>
-<ol style="list-style-type: upper-roman;  ">
+
+<table>
 {% for each_section in section %}
 	
-	
-		<li style="" class="col-sm-12 col-md-12" ><strong>{{ each_section.name }} </strong>
-	
-		<ol class="">
+		<tr>
+		<th colspan="3"><strong>Q.{{forloop.counter}} {{ each_section.name }} </strong></th>
+		</tr>
+		
 		{% for question in each_section.for_question.all %}
-			<div class="row">
-				<li  style="font-weight:normal;" class="col-sm-12 col-md-12">
+			
+			<tr>
+			<td ></td>
+			<td colspan="2">
+				
 					<div class="page-header">
 						
 					  <div class="float-left">
@@ -91,45 +76,44 @@
 					  </div>
 					  <div class="clearfix"></div>
 					</div>
-				</li>
-					
-					<div class="row col-sm-12 col-md-12">
+				
+			</td>
+			</tr>
+			
 					{% if question.option_one|length > 0 %}
-						<div class="col-sm-6 col-md-6">
-							<img src="{% static "img/thin_circle.png"  %}" width="20px;" /> {{ question.option_one}}
-						</div>
+						<tr>
+						<td></td><td><img src="{% static "img/thin_circle.png"  %}" width="20px;" /> </td><td >{{ question.option_one}}</td>
+						</tr>
 					{% endif %}
 					{% if question.option_two|length > 0 %}
-						<div class="col-sm-6 col-md-6">
-							<img src="{% static "img/thin_circle.png"  %}" width="20px;" /> {{ question.option_two}}
-						</div>
+						<tr>
+						<td></td><td><img src="{% static "img/thin_circle.png"  %}" width="20px;" /> </td><td >{{ question.option_two}}</td>
+						</tr>
 					{% endif %}
 					{% if question.option_three|length > 0 %}
-						<div class="col-sm-6 col-md-6">
-							<img src="{% static "img/thin_circle.png"  %}" width="20px;" /> {{ question.option_three}}
-						</div>
+						<tr>
+						<td></td><td><img src="{% static "img/thin_circle.png"  %}" width="20px;" /> </td><td >{{ question.option_three}}</td>
+						</tr>
 					{% endif %}
 					{% if question.option_four|length > 0 %}
-						<div class="col-sm-6 col-md-6">
-							<img src="{% static "img/thin_circle.png"  %}" width="20px;" /> {{ question.option_four}}
-						</div>
+						<tr class="">
+						<td></td><td><img src="{% static "img/thin_circle.png"  %}" width="20px;" /> </td><td >{{ question.option_four}}</td>
+						</tr>
+						
 					{% endif %}
+					
 					{% if question.option_five|length > 0 %}
-						<div class="col-sm-6 col-md-6">
-							<img src="{% static "img/thin_circle.png"  %}" width="20px;" /> {{ question.option_five}}
-						</div>
+						<tr>
+						<td></td><td><img src="{% static "img/thin_circle.png"  %}" width="20px;" /> </td><td colspan="2">{{ question.option_five}}</td>
+						</tr>
 					{% endif %}
-					</div>
-				
-			</div>
-			
+					
 		{% endfor%}
-		</ol>
-		</li>
-		<br/>
+		
 {% endfor %}
-</ol>
-</div>
+
+</table>
+
  <script type="text/javascript" src="https://printjs-4de6.kxcdn.com/print.min.js"> </script>
 	<script type="text/javascript" src="https://printjs-4de6.kxcdn.com/print.min.css"> </script>
 	<script type="text/javascript">
