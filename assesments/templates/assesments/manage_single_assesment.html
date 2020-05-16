@@ -157,6 +157,9 @@
 		<p>Section allows you to assign your question into group of categories for section-wise result visualization. Get started by creating a section and adding few question through <span class="fas fa-cogs" aria-hidden="true"></span> manage section option.
 		Symbol : <i class="fa fa-cogs" aria-hidden="true"></i> Allows to edit and add question into this section <span class="fas fa-trash-alt" aria-hidden="true"></span> Delete this current section.</p>
 	  </div>
+	  <div class="card-footer text-muted">
+		<center><a href="{% url "staff:assesments:assessment_print_by_staff"  assesmentid=assesment.id  %}" class="card-link btn btn-success"><i class="fa fa-print" aria-hidden="true"></i> Print Paper</a></center>
+	  </div>
 	</div>
 </div>
  

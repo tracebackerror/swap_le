@@ -76,7 +76,20 @@ class Assesment(MetaInformationMixin, SoftDeletionModelMixin, ModelMeta):
         'description': 'brief',
         'author': 'get_assessment_author'
         
-    } 
+    }
+    def get_assessment_institute_name(self):
+        return_name = "{}".format(
+            self.created_by.institutions.institute_name
+            
+            )
+        return return_name.title()    
+    def get_assessment_institute_address(self):
+        return_address = "{},{},{}. ".format(
+            self.created_by.institutions.institute_address,
+            self.created_by.institutions.institute_state,
+            self.created_by.institutions.institute_city
+            )
+        return return_address.title()
     
     def get_assessment_author(self):
         if self.created_by:
