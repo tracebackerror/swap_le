@@ -11,10 +11,43 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get('SECRET_KEY','(!&6*!a9x(g#2tba@125a^$t_s+*1882+jd3$@k3=er)q!2id$')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG =  True
+DEBUG =  False
 
-
+DEBUG_PROPAGATE_EXCEPTIONS  = True
 DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap-responsive.html"
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': ('%(asctime)s [%(process)d] [%(levelname)s] ' +
+                       'pathname=%(pathname)s lineno=%(lineno)s ' +
+                       'funcname=%(funcName)s %(message)s'),
+            'datefmt': '%Y-%m-%d %H:%M:%S'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        }
+    },
+    'handlers': {
+        'null': {
+            'level': 'DEBUG',
+            'class': 'logging.NullHandler',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        }
+    },
+    'loggers': {
+        'testlogger': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        }
+    }
+}
 
 ALLOWED_HOSTS = [
   'swaple-shivam9172873031.codeanyapp.com',
