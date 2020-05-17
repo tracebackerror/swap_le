@@ -15,6 +15,14 @@ class CustomTemplateColumnEscapeAdmin(tables.TemplateColumn):
             return format_html('<center><i class="fas fa-user-shield "></i></center>')
         return super(CustomTemplateColumnEscapeAdmin, self).render(record, table, value, bound_column, **kwargs)
 
+class CustomTemplateStudentEscapeAdmin(tables.TemplateColumn):
+    
+    def render(self, record, table, value, bound_column, **kwargs):
+        
+        if record.studentuser.has_perm('institutions.is_institute'):
+            return format_html('<center><i class="fas fa-user-shield "></i></center>')
+        return super(CustomTemplateStudentEscapeAdmin, self).render(record, table, value, bound_column, **kwargs)
+        
 class StaffTable(ExportMixin, tables.Table):
     export_formats = ['csv', 'xls', ]
     edit_button_html = '<a href=" {% url "institutions:edit_institution_staff" username=record.staffuser  %} "  ><center><span class="fas fa-edit "></span></center></a>'
@@ -56,7 +64,9 @@ class StudentTable(ExportMixin, tables.Table):
                           verbose_name='Mail Address',  attrs={"th": {"class": "text-nowrap"}})
     
     edit_student = tables.TemplateColumn('<a href=" {% url "staff:student_edit_by_staff" upk=record.pk  %} "><center><span class="fas fa-edit "></span></center></a>', verbose_name="Edit",  attrs={"td": {"class": "text-nowrap"}})
-    delete_student = tables.TemplateColumn('<a href=" {% url "staff:delete_institution_staff_student" username=record.studentuser  %} "><center><span class="fas fa-trash-alt"></span></center></a>', verbose_name="Delete")
+    
+    delete_button_html = '<a href=" {% url "staff:delete_institution_staff_student" username=record.studentuser  %} "><center><span class="fas fa-trash-alt"></span></center></a>'
+    delete_student = CustomTemplateStudentEscapeAdmin(delete_button_html, orderable=False, verbose_name="Delete")
     #student_fees = tables.TemplateColumn('<a href=" {% url "staff:fees:manage_fees_installment" pk=record.id  %} ">Installment</a>', verbose_name="Fees")
     
     standard = tables.Column(accessor='standard', verbose_name=_('Std.'))

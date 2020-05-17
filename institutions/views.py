@@ -570,6 +570,7 @@ class InstitutionRegistration(FormView):
         
         user_obj.refresh_from_db()  # This will load the Profile created by the Signal
         assign_perm('staff.is_staff', user_obj)
+        
         profile_form = Staff()  # Reload the profile form with the profile instance
         profile_form.institute = user_obj.institutions
         profile_form.staffuser = user_obj
@@ -577,6 +578,12 @@ class InstitutionRegistration(FormView):
         license_obj.li_current_staff += 1
         license_obj.save()
         profile_form.save()  # Gracefully save the form
+        
+        student_obj = Student()
+    
+        student_obj.studentuser = user_obj
+        student_obj.staffuser = profile_form
+        student_obj.save()
         
         messages.add_message(self.request, messages.SUCCESS, 'Your Account Registered Successfully')
         
