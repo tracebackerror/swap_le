@@ -1316,7 +1316,7 @@ def assessment_edit_by_staff(request, assesmentid):
                 
             #messages.success(request, 'Assessment Updated Successfully')
             messages.add_message(request, messages.SUCCESS, 'Assessment Updated Successfully')
-            success_url = reverse_lazy("staff:assesments:manage_all_assesment")
+            success_url = reverse_lazy("staff:assesments:assessment_manage_by_staff", kwargs ={ 'assesmentid' : asses_obj.id })
             return HttpResponseRedirect(success_url)
  
     else:   

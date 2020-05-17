@@ -32,11 +32,39 @@
 	
 <h1>Manage Single Assessment</h1>
 
-<br>
 <!-- ------------------- Student Assessment Bubble Progress Bar ------------------- -->
 
 <div class="container">
+<div id="user_message_display">
+		{% for message in messages %}
+				<div class="alert alert-warning alert-dismissible fade show" role="alert">
+					{{ message|safe }}
+				  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				  </button>
+				</div>
+		{% endfor %}
+	</div>
 
+
+<div class="card row">
+	<div class="card-body text-white bg-danger ">
+		<p class="card-title "><i class="fa fa-cogs" aria-hidden="true"></i> {{assesment.header|upper }}</p>
+	</div>
+	<div class="card-footer ">
+	<a href="{% url "staff:assesments:assessment_edit_by_staff"  assesmentid=assesment.id  %}" class="card-link btn btn-success"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+	{% if assesment.privilege == 'open'%}
+		<a href="{% url "staff:assesments:open_assesment_intro"  slug=assesment.slug  %}" class="card-link btn btn-success"><i class="fa fa-play" aria-hidden="true"></i></a>
+		{% if not request.user_agent.is_pc %}
+		<a class="card-link btn btn-success"  href="javascript:{window.location='https://wa.me/?text=https://www.swaple.in{% url 'staff:assesments:open_assesment_intro' slug=assesment.slug %}   {{assesment.brief}} {{ assesment.created_by.get_full_name|default:assesment.created_by }}'}"><i class="fa fa-whatsapp " aria-hidden="true"></i></a>
+		{% endif %}
+		<a class="card-link btn btn-success" target="_blank" href="javascript:{window.location='https://telegram.me/share/url?url=https://www.swaple.in{% url 'staff:assesments:open_assesment_intro' slug=assesment.slug %}&text={{assesment.brief}} {{ assesment.created_by.get_full_name|default:assesment.created_by }}'}"><i class="fa fa-telegram " aria-hidden="true"></i></a>
+										
+	  {% endif %}
+	
+    
+  </div>
+</div>
 <div class="row">
 	<button type="button" class="col-sm-12 col-md-12 " data-toggle="collapse" data-target="#main_assesment_description" aria-expanded="false" aria-controls="main_assesment_description">
 		  {% if assesment.privilege == 'public'%}
@@ -62,30 +90,12 @@
 		
 		
 	  </div>
-	  {% if assesment.privilege == 'open'%}
-	  <div class="card-footer text-muted">
-			<h5 class="text-center">
-										<a href="javascript:{window.location='https://wa.me/?text=https://www.swaple.in{% url 'staff:assesments:open_assesment_intro' slug=assesment.slug %}   {{assesment.brief}} {{ assesment.created_by.get_full_name|default:assesment.created_by }}'}"><i class="fa fa-whatsapp" aria-hidden="true"></i></a>
-										&nbsp;
-										<a href="javascript:{window.location='https://telegram.me/share/url?url=https://www.swaple.in{% url 'staff:assesments:open_assesment_intro' slug=assesment.slug %}&text={{assesment.brief}} {{ assesment.created_by.get_full_name|default:assesment.created_by }}'}"><i class="fa fa-telegram" aria-hidden="true"></i></a>
-										</h5>
-		</div>
-	  {% endif %}
+	  
 	  <div class="card-footer text-muted">
 		<center><a href="{% url "staff:assesments:assessment_edit_by_staff"  assesmentid=assesment.id  %}" class="card-link btn btn-success"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a></center>
 	  </div>
 	</div>
 </div>
-<div id="user_message_display">
-		{% for message in messages %}
-				<div class="alert alert-warning alert-dismissible fade show" role="alert">
-					{{ message|safe }}
-				  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				  </button>
-				</div>
-		{% endfor %}
-	</div>
 	<div class="row">
 		<h2>Metrics:</h2>
 	</div>
