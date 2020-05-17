@@ -270,8 +270,29 @@
 			{% block content %}    {% endblock %}  
 
 		</div>
-
-
+		{% if  perms.institutions.is_institute %}
+		<nav style="padding:0;" class="navbar fixed-bottom navbar-light bg-light">
+		  
+			<ul class="nav">
+				<li class="nav-item">
+					<a class="btn btn-white nav-link" href ={% url "institutions:manage_staff" %}><i class="fas fa-chalkboard-teacher"></i>&nbsp;</a> 
+				</li>
+				<li class="nav-item">
+					<a class="btn btn-white nav-link" href ={% url "staff:manage_student" %}><i class="fas fa-book-reader" aria-hidden="true"></i>&nbsp;</a>
+				</li>
+				<li>
+					<a class="btn btn-white nav-link" href="{% url "institutions:dashboard" %}"><i class="fa fa-tachometer"></i></a>
+				</li>
+				<li class="nav-item " >
+					<a class="btn btn-white nav-link" href ={% url "staff:assesments:manage_all_assesment" %}><i class="fab fa-battle-net" aria-hidden="true"></i>&nbsp;</a>						
+				</li>
+				
+				<li>
+					<a class="btn btn-white nav-link" href="{% url "staff:assesments:assessment_create_by_staff" %}"><i class="fab fa-battle-net"></i>&nbsp;Create</a>
+				</li>
+			</ul>
+		</nav>
+		{% endif %}
 		<div id="footer">
 			{% block footer %} 
 
@@ -280,7 +301,7 @@
 				<div class="row">
 					<div class="col-lg-6 text-lg-left text-center">
 						<div class="copyright">
-							&copy; Copyright <strong>SWAPLE</strong>. Proudly made in <picture><img  src="{% static 'img/india-flag-icon-64.png' %}" class="img-fluid"  width=32px /></picture>. All Rights Reserved.
+							&copy; Copyright <strong>SWAPLE</strong>. Proudly made in <picture><img  src="{% static 'img/india-flag-icon-64.png' %}" class="img-fluid"  width=32px /></picture>. 
 						</div>
 					
 					</div>
