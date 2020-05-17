@@ -12,7 +12,7 @@ class ResultTable(ExportMixin, tables.Table):
     
     #review_sqa = tables.LinkColumn('reviewsqa', text='Review Descriptive Answer')
     review_sqa = tables.TemplateColumn('<a href="{% url "staff:assesments:assesment_manage_review_sqa_question"  assesmentid=self.request.GET.assesmentid %}"><span class="fas fa-comments"></span></a>', verbose_name="Validate Descriptive Answer")
-    result = tables.TemplateColumn('<a href="{% url "staff:assesments:assessment_result_by_staff" pk=record.pk %}"><center><span class="fas fa-file"></span></center></a>')
+    result = tables.TemplateColumn('<a href="{% url "staff:assesments:assessment_result_by_staff" pk=record.pk %}"><center><span class="fas fa-file-contract"></span></center></a>')
     exam_taken_date_time = tables.DateTimeColumn(accessor='exam_taken_date_time', verbose_name='Taken At')
     total_question = tables.Column(accessor='total_question', verbose_name='Questions')
     total_attempted = tables.Column(accessor='total_attempted', verbose_name='Attempted')

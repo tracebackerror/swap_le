@@ -206,7 +206,7 @@
 							<li class="nav-item">
 								<a class="nav-link" href="#">
 								{% if request.user.is_authenticated and perms.staff.is_staff or request.user.is_authenticated and perms.institutions.is_institute %} 
-									<i class="fas fa-university"></i> {{ request.user.institutions.institute_name|title }} 
+									<small><i class="fas fa-university"></i> {{ request.user.institutions.institute_name|title|truncatechars:25}} </small>
 								{% else %}
 									<i class="far fa-user"></i> {{ request.user.get_full_name|title }}
 								{% endif %}

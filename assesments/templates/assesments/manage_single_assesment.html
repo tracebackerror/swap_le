@@ -49,10 +49,17 @@
 
 <div class="card row">
 	<div class="card-body text-white bg-danger ">
-		<p class="card-title "><i class="fa fa-cogs" aria-hidden="true"></i> {{assesment.header|upper }}</p>
+		<p class="card-title "><i class="fab fa-battle-net" aria-hidden="true"></i> {{assesment.header|upper }}</p>
 	</div>
 	<div class="card-footer ">
-	<a href="{% url "staff:assesments:assessment_edit_by_staff"  assesmentid=assesment.id  %}" class="card-link btn btn-success"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+	<a href="{% url "staff:assesments:assessment_edit_by_staff"  assesmentid=assesment.id  %}" class="card-link btn btn-success"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;<i class="fab fa-battle-net"></i></a>
+	<a href="{% url 'staff:assesments:assesment_manage_add_question' assesment.id  %}" class="card-link btn btn-success"><i class="fa fa-plus-square-o" aria-hidden="true"></i>&nbsp;<i class="fa fa-question-circle" aria-hidden="true"></i></a>
+	<a href="{% url "staff:assesments:add_question_section"  assesment.id %}" class="card-link btn btn-success"><i class="fa fa-plus-square-o" aria-hidden="true"></i>&nbsp;<i class="fa fa-area-chart" aria-hidden="true"></i></a>
+	{% if  request.user_agent.is_mobile %}
+	</div><div class="card-footer ">
+	{%endif%}
+	<a href="{% url "staff:assesments:publish_all_results"  assesment.id %}" class="card-link btn {% if flag %}btn-dark{% else %}btn-success{%endif%}"><i class="fas fa-file-contract"></i></a>
+		
 	{% if assesment.privilege == 'open'%}
 		<a href="{% url "staff:assesments:open_assesment_intro"  slug=assesment.slug  %}" class="card-link btn btn-success"><i class="fa fa-play" aria-hidden="true"></i></a>
 		{% if not request.user_agent.is_pc %}
@@ -60,7 +67,7 @@
 		{% endif %}
 		<a class="card-link btn btn-success" target="_blank" href="javascript:{window.location='https://telegram.me/share/url?url=https://www.swaple.in{% url 'staff:assesments:open_assesment_intro' slug=assesment.slug %}&text={{assesment.brief}} {{ assesment.created_by.get_full_name|default:assesment.created_by }}'}"><i class="fa fa-telegram " aria-hidden="true"></i></a>
 										
-	  {% endif %}
+	{% endif %}
 	
     
   </div>
@@ -196,7 +203,7 @@
 	
 	
     <div class = " col-md-4">
-			{% if flag %}
+		{% if flag %}
 			<button class="btn btn-default " type="submit"><i class="fas fa-paper-plane" aria-hidden="true"></i>  Publish All Results</button>
 		  {% else %}
 			<button class="btn btn-default " type="submit"><i class="fas fa-link" aria-hidden="true"></i> Un-Publish All Results</button>
