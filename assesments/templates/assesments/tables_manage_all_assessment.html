@@ -1,0 +1,167 @@
+{% load django_tables2 %}
+{% load i18n %}
+
+{% block table-wrapper %}
+
+    {% block table %}
+		{% if table.page and table.paginator.num_pages > 1 %}
+	<nav aria-label="Table navigation">
+            <ul class="pagination justify-content-center">
+            {% if table.page.has_previous %}
+                <li class="previous page-item">
+                    <a href="{% querystring table.prefixed_page_field=table.page.previous_page_number %}" class="page-link">
+                        <span aria-hidden="true">&laquo;</span>
+                        {% trans 'previous' %}
+                    </a>
+                </li>
+			{% endif %}
+			{% if table.page.has_previous or table.page.has_next %}
+				{% for p in table.page|table_page_range:table.paginator %}
+                <li class="page-item{% if table.page.number == p %} active{% endif %}">
+                    <a class="page-link" {% if p != '...' %}href="{% querystring table.prefixed_page_field=p %}"{% endif %}>
+                        {{ p }}
+                    </a>
+                </li>
+				{% endfor %}
+			{% endif %}
+            {% if table.page.has_next %}
+                <li class="next page-item">
+                    <a href="{% querystring table.prefixed_page_field=table.page.next_page_number %}" class="page-link">
+                        {% trans 'next' %}
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+		
+	
+        {% block table.tbody %}
+		
+			<div class="card-columns ">
+            {% for row in table.paginated_rows %}
+					
+					
+                    {% block table.tbody.row %}
+						<div  class="card mb-3 text-center ""  style="max-width: 400px;">
+									<div class="card-header text-white bg-danger ">
+										<p class="card-title "><i class="fab fa-battle-net" aria-hidden="true"></i> {{ row.record.header }} </p>
+										<ul class="nav nav-pills card-header-pills justify-content-center">
+										  <li class="nav-item">
+											<i class="fa fa-scissors" aria-hidden="true"></i> {{row.record.passing_marks}} Minimum Marks
+										  </li>
+										  <li class="nav-item">
+											&nbsp;<i class="fa fa-clock-o" aria-hidden="true"></i> {{row.record.duration_hours}} Hour &nbsp;<i class="fa fa-clock-o" aria-hidden="true"></i> {{row.record.duration_minutes}} Minutes
+										  </li>
+										  <li class="nav-item">
+											 
+										  </li>
+										 
+										</ul>
+									</div>
+									<div class="card-body">
+										
+										
+										<p class="card-text">{{ row.record.brief}}</p>
+										
+										
+										 
+									</div>
+									
+									<div class="card-footer ">
+										<a href="{% url "staff:assesments:assessment_manage_by_staff"  assesmentid=row.record.id  %}" class="card-link btn btn-success"><i class="fa fa-cogs" aria-hidden="true"></i></a>
+										<a href="{% url "staff:assesments:assessment_edit_by_staff"  assesmentid=row.record.id  %}" class="card-link btn btn-success"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+										<a href="{% url "staff:assesments:assessment_delete_by_staff"  assesmentid=row.record.id  %}" class="card-link btn btn-success"><i class="fa fa-trash" aria-hidden="true"></i></a>
+										<a href="{% url 'staff:assesments:assesment_manage_add_question' row.record.id  %}" class="card-link btn btn-success"><i class="fa fa-plus-square-o" aria-hidden="true"></i>&nbsp;<i class="fa fa-question-circle" aria-hidden="true"></i></a>
+										<a href="{% url "staff:assesments:add_question_section"  row.record.id %}" class="card-link btn btn-success"><i class="fa fa-plus-square-o" aria-hidden="true"></i>&nbsp;<i class="fa fa-area-chart" aria-hidden="true"></i></a>
+									</div>
+										{% if row.record.privilege == 'open'%}
+										<div class="card-footer ">
+											<a href="{% url "staff:assesments:open_assesment_intro"  slug=row.record.slug  %}" class="card-link btn btn-success"><i class="fa fa-play" aria-hidden="true"></i></a>
+										</div>
+										{% endif %}		
+									 <div class="card-footer text-muted text-white bg-success">
+										<small>
+										<ul class="nav nav-pills card-header-pills text-white justify-content-center">
+											<li class="nav-item">
+												<i class="fa fa-user-circle-o" aria-hidden="true"></i> {{ row.record.created_by.get_full_name|default:row.record.created_by }}
+										  </li>
+										  <li class="nav-item">
+											<i class="fa fa-hourglass" aria-hidden="true"></i> {{row.record.exam_start_date_time}}
+											<i class="fa fa-hourglass-o" aria-hidden="true"></i> {{ row.record.expired_on }}
+										  </li>
+										  
+										 
+										</ul>
+										
+										</small>
+										<h5 class="text-white">
+										{% if row.record.privilege == 'open'%}
+											<a class="btn" href="https://wa.me/?text=https://www.swaple.in{% url 'staff:assesments:open_assesment_intro' slug=row.record.slug %}  {{row.record.brief}}  {{ row.record.created_by.get_full_name|default:row.record.created_by }}"><i class="fa fa-whatsapp" aria-hidden="true"></i></a>
+											<a class="btn"href="https://telegram.me/share/url?url=https://www.swaple.in{% url 'staff:assesments:open_assesment_intro' slug=row.record.slug %}&text={{row.record.brief}} {{ row.record.created_by.get_full_name|default:row.record.created_by }}"><i class="fa fa-telegram" aria-hidden="true"></i></a>
+											<button  type="button" class="btn" style="background-color:transparent!important;" id="share_it" onclick='share_me("{{row.record.header}}", "{{row.record.brief}} {{ row.record.created_by.get_full_name|default:row.record.created_by }}", "https://www.swaple.in{% url "staff:assesments:open_assesment_intro" slug=row.record.slug %}" );'><i class="fa fa-share-alt" aria-hidden="true"></i></button>
+										{% endif %}
+										</h5>
+										
+									 </div>
+							
+						
+						
+						</div>
+                    {% endblock table.tbody.row %}
+                {% empty %}
+                    {% if table.empty_text %}
+                    {% block table.tbody.empty_text %}
+                        <div class="col-sm-12 col-md-12">{{ table.empty_text }}</div>
+                    {% endblock table.tbody.empty_text %}
+                    {% endif %}
+            {% endfor %}
+			</div> 
+        {% endblock table.tbody %}
+			
+    {% endblock table %}
+
+    {% block pagination %}
+        {% if table.page and table.paginator.num_pages > 1 %}
+		
+        <nav aria-label="Table navigation">
+            <ul class="pagination justify-content-center">
+            {% if table.page.has_previous %}
+                {% block pagination.previous %}
+                <li class="previous page-item">
+                    <a href="{% querystring table.prefixed_page_field=table.page.previous_page_number %}" class="page-link">
+                        <span aria-hidden="true">&laquo;</span>
+                        {% trans 'previous' %}
+                    </a>
+                </li>
+                {% endblock pagination.previous %}
+            {% endif %}
+            {% if table.page.has_previous or table.page.has_next %}
+            {% block pagination.range %}
+            {% for p in table.page|table_page_range:table.paginator %}
+                <li class="page-item{% if table.page.number == p %} active{% endif %}">
+                    <a class="page-link" {% if p != '...' %}href="{% querystring table.prefixed_page_field=p %}"{% endif %}>
+                        {{ p }}
+                    </a>
+                </li>
+            {% endfor %}
+            {% endblock pagination.range %}
+            {% endif %}
+            {% if table.page.has_next %}
+                {% block pagination.next %}
+                <li class="next page-item">
+                    <a href="{% querystring table.prefixed_page_field=table.page.next_page_number %}" class="page-link">
+                        {% trans 'next' %}
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                {% endblock pagination.next %}
+            {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    {% endblock pagination %}
+
+
+{% endblock table-wrapper %}

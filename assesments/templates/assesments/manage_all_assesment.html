@@ -12,9 +12,13 @@
 
 
 {% block content %} 
+<style>
+.bg-mobile-nav, body  {
+	
+}
+</style>
+ <h1></h1>
 
- <h1>Manage all the Assesments</h1>
- <br>
 <div class="container"> 
 
 		
@@ -67,8 +71,13 @@
 		  </div>
 		</div>
 	</div>
- <div class="row">
-  {% render_table table  %}
+	
+ <div class="container bg-mobile-nav">
+	{% if request.user_agent.is_pc %}
+		{% render_table table %}
+	{% else %}
+		{% render_table table  'assesments/tables_manage_all_assessment.html' %}
+	{% endif %}
 </div>
 
 {% endblock %}
