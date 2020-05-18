@@ -50,12 +50,35 @@
 	</div>
 	<br>
 	<div >Student Performance :</div>
+	
+    
+    
+<div>
 	<div class="row">
+		<!-- ------------------ Assessment Filter	----------------------- -->
+		<form method="post">
+		{% csrf_token %}
+		{% if request.user_agent.is_mobile %}
+        <div class="input-group col-12"> 
+            <select id="assessment_id" data-width="80%" name="assessment_id" style="margin:0" class="form-control" data-live-search="true" title="Select Test/Assessment">
+            <option value="">Please Select The Test/Assessment</option>
+							 {% for data in all_instituion_assessments %}
+							  <option value="{{data.id}}">{{ data.header }}</option>
+							  {% endfor %}
+			</select> 
+            <span class="input-group-append" style="margin:0; padding:0">
+                
+				<button class="btn btn-success" id="search_results" style="margin:0"><i class="fas fa-search"></i></button>
+            </span>
+        </div>
+		
+		{% else%}
+		
 		<div class="col-md-4"></div>
 		<div align="center" class="col-md-6" >
-		 <!-- ------------------ Assessment Filter	----------------------- -->
-		   <form method="post">
-				 {% csrf_token %}
+		 
+				 
+				 
 				 <div class="row">
 						 <div class="col-md-8">
 							<select  style="height:100%" id="assessment_id" name="assessment_id" class="form-control align-middle" data-live-search="true">
@@ -67,15 +90,16 @@
 						</div>
 						<div class="col-md-4">   <button class="btn btn-success" id="search_results">Search  Result</button></div>
 				</div>
-			</form>
+			
 		</div>
-		
+		{% endif %}
+		</form>
 	</div>
 	
 	<div class="row">
 		<div class="col-sm-12 col-md-12">
 			<center>
-				 <div style="">
+				 <div style="" class="border border-dark">
 					<canvas id="time-series-graph"></canvas>
 				 </div>
 			 </center>

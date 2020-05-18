@@ -53,7 +53,7 @@
 			<br/><i class="fas fa-trash-alt" aria-hidden="true"></i>Delete. Note Once deleted you will not be able to restore your Assessment data.</p>
 		  </div>
 		</div>
-	</div>
+</div>
 	
 	{% if filter %}
     <form method="get" class="form row">
@@ -62,7 +62,7 @@
 	  
 		<input type="text" class="form-control" name="brief__icontains" placeholder="Description " aria-label="Title Contains" aria-describedby="title_contain">
 		<div class="input-group-append">
-		<span class="input-group-text" id="title_contain"><button class="btn btn-primary" style="margin:0;"><i class="fas fa-search"></i></button></span>
+		<span class="input-group-text" id="title_contain" style=""><button class="btn btn-primary" style="margin:0;"><i class="fas fa-search"></i></button></span>
 		</div>
 	</div>
 	</form>
@@ -81,6 +81,7 @@
 			
 			{% endfor %}
 		</div>	
+	</div>
  <div class="container bg-mobile-nav">
 	{% if request.user_agent.is_pc %}
 		{% render_table table %}

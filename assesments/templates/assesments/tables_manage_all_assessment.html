@@ -49,7 +49,7 @@
 										<p class="card-title "><i class="fab fa-battle-net" aria-hidden="true"></i> {{ row.record.header }} </p>
 										<ul class="nav nav-pills card-header-pills justify-content-center">
 										  <li class="nav-item">
-											<i class="fa fa-scissors" aria-hidden="true"></i> {{row.record.passing_marks}} Minimum Marks
+											{% if row.record.privilege == 'open' %}<i class="fa fa-globe-americas" aria-hidden="true"></i>{% elif row.record.privilege == 'public' %}<i class="fa fa-unlock" aria-hidden="true"></i>{% else %}<i class="fa fa-lock" aria-hidden="true"></i>{% endif%} <i class="fa fa-scissors" aria-hidden="true"></i> {{row.record.passing_marks}} Minimum Marks
 										  </li>
 										  <li class="nav-item">
 											&nbsp;<i class="fa fa-clock-o" aria-hidden="true"></i> {{row.record.duration_hours}} Hour &nbsp;<i class="fa fa-clock-o" aria-hidden="true"></i> {{row.record.duration_minutes}} Minutes
