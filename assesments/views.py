@@ -1268,7 +1268,13 @@ def assessment_delete_by_staff(request, assesmentid):
 def __recalculate_result(assesment_id = None, *args, **kwargs):
     pass
     
-
+@login_required(login_url="/staff/login/")
+def assessment_print_by_staff_question(request, assesmentid):
+    asses_obj = Assesment.objects.get(id=assesmentid) 
+    question = Question.objects.filter(assesment_linked = asses_obj)
+    
+    return render(request, 'assesments/assessment_print_by_staff_only_question.html', {'object': asses_obj, 'question':question})
+    
 @login_required(login_url="/staff/login/")
 def assessment_print_by_staff(request, assesmentid):
     asses_obj = Assesment.objects.get(id=assesmentid) 

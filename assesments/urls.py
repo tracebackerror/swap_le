@@ -27,6 +27,7 @@ urlpatterns = [
 
     url(r'^(?P<assesmentid>\w{0,15})/edit/$', assessment_edit_by_staff, name='assessment_edit_by_staff'),
     url(r'^(?P<assesmentid>\w{0,15})/print/$', assessment_print_by_staff, name='assessment_print_by_staff'),
+    url(r'^(?P<assesmentid>\w{0,15})/print/question$', assessment_print_by_staff_question, name='assessment_print_by_staff_question'),
     url(r'^(?P<assesmentid>\w{0,15})/edit/(?P<questionid>\w{0,15})/delete/$', assessment_question_delete, name='assessment_question_delete'),
     url(r'^result/(?P<pk>\w{0,15})/$', AssessmentResultByStaff.as_view(), name='assessment_result_by_staff'),
     url(r'^(?P<assesmentid>\w{0,15})/change/$', ManageSingleAsessment.as_view(), name='assessment_manage_by_staff'),
