@@ -1,0 +1,143 @@
+{% load django_tables2 %}
+{% load i18n %}
+
+{% block table-wrapper %}
+<!-- https://bootsnipp.com/snippets/X2Wlp -->
+{% block table %}
+{% if table.page and table.paginator.num_pages > 1 %}
+<nav aria-label="Table navigation">
+	<ul class="pagination justify-content-center">
+		{% if table.page.has_previous %}
+		<li class="previous page-item">
+			<a href="{% querystring table.prefixed_page_field=table.page.previous_page_number %}" class="page-link">
+				<span aria-hidden="true">&laquo;</span>
+				{% trans 'previous' %}
+			</a>
+		</li>
+		{% endif %}
+		{% if table.page.has_previous or table.page.has_next %}
+		{% for p in table.page|table_page_range:table.paginator %}
+		<li class="page-item{% if table.page.number == p %} active{% endif %}">
+			<a class="page-link" {% if p != '...' %}href="{% querystring table.prefixed_page_field=p %}"{% endif %}>
+				{{ p }}
+			</a>
+		</li>
+		{% endfor %}
+		{% endif %}
+		{% if table.page.has_next %}
+		<li class="next page-item">
+			<a href="{% querystring table.prefixed_page_field=table.page.next_page_number %}" class="page-link">
+				{% trans 'next' %}
+				<span aria-hidden="true">&raquo;</span>
+			</a>
+		</li>
+		{% endif %}
+	</ul>
+</nav>
+{% endif %}
+
+
+{% block table.tbody %}
+
+<section>
+	<div class="container">
+		<div class="row">
+			
+			{% for row in table.paginated_rows %}
+
+
+			{% block table.tbody.row %}
+			<!--Profile Card Male-->
+			<div class="col-md-4">
+				<div class="card profile-card-3">
+					<div class="background-block">
+						<img src="https://images.pexels.com/photos/459225/pexels-photo-459225.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" alt="profile-sample1" class="background"/>
+					</div>
+					<div class="profile-thumb-block">
+						
+						<img src="https://images.pexels.com/photos/265076/pexels-photo-265076.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" alt="profile-image" class="profile"/>
+						
+					</div>
+					<div class="card-content">
+						<h2>{{row.record.staffuser.first_name|title}} {{row.record.staffuser.last_name|title}}</h3>
+						<h2 class=""><small><i class="fa fa-envelope"></i>{{row.record.staffuser.email|lower}} </h3>
+							<h2 class=""><small><i class="fa fa-at"></i>{{row.record.staffuser.username}}</small></h3>
+							<hr/>
+							
+								
+								
+								<div class="icon-block">
+								<a href=" {% url "institutions:edit_institution_staff" username=row.record.staffuser  %}"><i class="fa fa-pencil"></i></a>
+								{% if 'institutions.is_institute' in row.record.staffuser.get_all_permissions %}
+								 <i class="fa fa-user-shield"></i>
+								{% else %}
+									<a href=" {% url "institutions:delete_institution_staff" username=row.record.staffuser  %} "  ><i class="fa fa-trash"></i></a>
+								
+								{% endif %}
+								</div>
+							
+							</div>
+						</div>
+						
+					</div>
+					<p class="mt-3 w-100 float-left text-center"><strong></strong></p>
+					{% endblock table.tbody.row %}
+					{% empty %}
+					{% if table.empty_text %}
+					{% block table.tbody.empty_text %}
+					<div class="col-sm-12 col-md-12">{{ table.empty_text }}</div>
+					{% endblock table.tbody.empty_text %}
+					{% endif %}
+					{% endfor %}
+				</div>
+			</div>
+		</section>
+
+		{% endblock table.tbody %}
+
+		{% endblock table %}
+
+		{% block pagination %}
+		{% if table.page and table.paginator.num_pages > 1 %}
+
+		<nav aria-label="Table navigation">
+			<ul class="pagination justify-content-center">
+				{% if table.page.has_previous %}
+				{% block pagination.previous %}
+				<li class="previous page-item">
+					<a href="{% querystring table.prefixed_page_field=table.page.previous_page_number %}" class="page-link">
+						<span aria-hidden="true">&laquo;</span>
+						{% trans 'previous' %}
+					</a>
+				</li>
+				{% endblock pagination.previous %}
+				{% endif %}
+				{% if table.page.has_previous or table.page.has_next %}
+				{% block pagination.range %}
+				{% for p in table.page|table_page_range:table.paginator %}
+				<li class="page-item{% if table.page.number == p %} active{% endif %}">
+					<a class="page-link" {% if p != '...' %}href="{% querystring table.prefixed_page_field=p %}"{% endif %}>
+						{{ p }}
+					</a>
+				</li>
+				{% endfor %}
+				{% endblock pagination.range %}
+				{% endif %}
+				{% if table.page.has_next %}
+				{% block pagination.next %}
+				<li class="next page-item">
+					<a href="{% querystring table.prefixed_page_field=table.page.next_page_number %}" class="page-link">
+						{% trans 'next' %}
+						<span aria-hidden="true">&raquo;</span>
+					</a>
+				</li>
+				{% endblock pagination.next %}
+				{% endif %}
+			</ul>
+		</nav>
+		{% endif %}
+		{% endblock pagination %}
+
+
+		{% endblock table-wrapper %}
+		

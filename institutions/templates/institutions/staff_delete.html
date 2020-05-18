@@ -4,7 +4,7 @@
 
 
 {% block content %} 
- <h1>Delete Staff account</h1>
+ <h1>Delete Staff</h1>
  <div id="user_message_display">
 		{% for message in messages %}
 				<div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -18,7 +18,7 @@
  <div class="container" style="min-height:50%"> 
  <p>
 
- {% if information %}  <ul class="information">    {% for message in information %}      <li class="warning">        {{ message|safe }}          <a href="#" class="close">✖</a>      </li>    {% endfor %}  </ul> {% endif %}
+ {% if information %}  <ul class="information">    {% for message in information %}      <li class="warning">        {{ message|safe }}                </li>    {% endfor %}  </ul> {% endif %}
 
 
  </p>
