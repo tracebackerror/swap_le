@@ -255,7 +255,7 @@ def add_student_by_staff(request):
                     student_profile.save()
                     license_institute.save()
                     messages.add_message(request, messages.SUCCESS, 'Student Profile Added Successfully')
-                    return HttpResponseRedirect('/staff/')
+                    return HttpResponseRedirect(reverse_lazy('staff:manage_student'))
             else:
                 messages.add_message(request, messages.INFO, 'Staff Limit Reached. Kindly Reach to Admin for Upgrade.')
         else:
