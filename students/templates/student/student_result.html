@@ -4,7 +4,55 @@
 {% block title %}   View My Result  {% endblock %}
 
 {% block content %}
- <h1>View All Your Result </h1>
+<style>
+.card-custom {
+  overflow: hidden;
+  min-height: 450px;
+  box-shadow: 0 0 15px rgba(10, 10, 10, 0.3);
+  width:100%;
+}
+
+.card-custom-img {
+  height: 200px;
+  min-height: 200px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  border-color: inherit;
+}
+
+/* First border-left-width setting is a fallback */
+.card-custom-img::after {
+  position: absolute;
+  content: '';
+  top: 161px;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-top-width: 40px;
+  border-right-width: 0;
+  border-bottom-width: 0;
+  border-left-width: 545px;
+  border-left-width: calc(575px - 5vw);
+  border-top-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+  border-left-color: inherit;
+}
+
+.card-custom-avatar img,  .card-custom-avatar i{
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(10, 10, 10, 0.3);
+  position: absolute;
+  top: 100px;
+  left: 1.25rem;
+  width: 100px;
+  height: 100px;
+}
+
+</style>
+ <h1>View Result </h1>
 
 
 <!--Filter-->
@@ -27,7 +75,42 @@
     </form>
 {% endif %}
 </div>
-
+{% if request.user_agent.is_mobile %}
+    
+ <div class="container">
+	
+    <div class="row pt-5 m-auto">
+      {% for data in result %}
+        <!-- Copy the content below until next comment -->
+		<div class="card card-custom cool-sm-12">
+        <div class=" bg-white border-white border-0">
+          <div class="card-custom-img" style="background-image: url(http://res.cloudinary.com/d3/image/upload/c_scale,q_auto:good,w_1110/trianglify-v1-cs85g_cc5d2i.jpg);">
+		  {% if data.result_passed %}
+        	<h3 class="px-2" >PASS</h3>
+        {% else %}
+        	<h3 class="px-2">FAIL</h3>
+        {% endif %}
+		<p class="px-2">{{ data.exam_taken_date_time }}</p>
+		<p class="px-2"><i class="fa fa-question-circle-o" aria-hidden="true"></i> Attempted {{data.total_attempted}} / {{data.total_question}}
+			<i class="fa fa-bullseye" aria-hidden="true"></i> Score {{data.obtained_marks}} / {{data.total_marks}}
+		  </p>
+		</div>
+          <div class="card-body" style="overflow-y: auto">
+            <h4 class="card-title">{{ data.assesment.header }}</h4>
+            <p class="card-text">{{ data.assesment.brief }}</p>
+          </div>
+		  <div class="card-footer" style="background: inherit; border-color: inherit;">
+            <a href="{% url "student:result_report_detailed" pk=data.id %}" class="btn btn-outline-primary"><i class="fas fa-file-contract"></i>Result</a>
+            <a href="{% url "student:result_report" pk=data.id %}" class="btn btn-outline-primary">Certificate</a>
+          </div>
+        </div>
+		</div>
+        <!-- Copy until here -->
+		<p class="text-center col-sm-12">...</p>
+		{% endfor %}
+	
+</div>
+{% else %}
 
 <!--Data-->
 
@@ -62,8 +145,8 @@
         	<td><font color="red">Fail</font></td>
         {% endif %}
         
-        <td><a href="{% url "student:result_report_detailed" pk=data.id %}"><center><span class="fas fa-file"></span></center></td>
-        <td><a href="{% url "student:result_report" pk=data.id %}">Certificate</td>
+        <td><a href="{% url "student:result_report_detailed" pk=data.id %}"><center><span class="fas fa-file"></span></center></a></td>
+        <td><a href="{% url "student:result_report" pk=data.id %}">Certificate</a></td>
       </tr>
      {% endfor %}
     {% endif %}
@@ -71,8 +154,7 @@
     </tbody>
   </table>
 </div>
-
-
+{% endif %}
 
 <!--Pagination-->
 
