@@ -5,7 +5,7 @@
 {% block title %}   Student Registration   {% endblock %}
 
 {% block content %} 
- <h1>Student Registration  </h1>
+ <h1>Student Create  </h1>
  <div id="user_message_display">
 			{% for message in messages %}
 				<div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -17,9 +17,7 @@
 		{% endfor %}
 	</div>
  <div class="container" style="min-height:60%">
- <div class="row">
-	<h3 >Please fill all the details for Student account:</h3>
- </div>
+
  
  
  <form action="." method="post" enctype="multipart/form-data">
@@ -27,7 +25,7 @@
  	
 		
 		
-		<div class="form-row"><p> Please fill all your details : </p></div>
+		<div class="form-row"><p>Please fill all the details for Student account:</p></div>
 		<div class="form-row">
 			<div class="form-group col-md-4">
 				<label for="brief_answer">{{"User Id:"}}*</label>

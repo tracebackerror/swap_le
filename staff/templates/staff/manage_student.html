@@ -2,7 +2,7 @@
 {% load render_table from django_tables2 %}
 
 {% load export_url from django_tables2 %}
-{% block title %}   Manage Students   {% endblock %}
+{% block title %}   Manage Student   {% endblock %}
 
 
 {% block content %} 
@@ -357,7 +357,7 @@ h1 a{color:#131313; font-weight:bold;}
     border-color:#4E5E30;
 }
 </style>
- <h1>Manage Student</h1>
+ <h1></h1>
  <div id="user_message_display">
 		{% for message in messages %}
 				<div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -369,21 +369,75 @@ h1 a{color:#131313; font-weight:bold;}
 		{% endfor %}
 	</div>
  <div class="container" style="min-height:60%;">
+	<div class="row">
+	
+		<button type="button" class="col-sm-12 col-md-12 " data-toggle="collapse" data-target="#manage_all_assesment" aria-expanded="false" aria-controls="manage_all_assesment">
+			  <h5>Manage All Student   <span class="badge badge-dark pull-right"> Total  {{table.rows|length}} </h5></span>
+			</button>
+		<div class="collapse" id="manage_all_student">
+		  
+		</div>
+	</div>
+    <form method="get" class="form row">
+		<div class="input-group mb-3">
+		
+		 <div class="input-group-prepend ">
+			<input type="text" class="form-control" name="studentuser__first_name__icontains" placeholder="First Name " aria-label="First Name " aria-describedby="title_contain">
+			{% if request.user_agent.is_pc %}
+				<input type="text" class="form-control" name="studentuser__last_name__icontains" placeholder="Last Name " aria-label="Last Name " aria-describedby="title_contain">
+				<input type="text" class="form-control" name="studentuser__email__icontains" placeholder="Email" aria-label="Email" aria-describedby="title_contain">
+				<input type="text" class="form-control" name="student_contact_no__icontains" placeholder="Student Mobile" aria-label="Student Mobile" aria-describedby="title_contain">
+			{% endif %}
+			<select type="text" class="custom-select custom-select-lg " name="standard__icontains" placeholder="Standard " aria-label="Standard " aria-describedby="title_contain">
+				<option value="">----</option>
+				<option value="other">Other</option>
+				<option value="certificate_course">Certificate Course</option>
+				<option value="master">Master</option>
+				<option value="other">Other</option>
+				<option value="bachelor">Bachelor</option>
+				<option value="highersecondary">Higher Secondary Certificate</option>
+				<option value="matriculation">Matriculation</option>
+				<option value="11">XI</option>
+				<option value="10">X</option>
+				<option value="9">IX</option>
+				<option value="8">VIII</option>
+				<option value="7">VII</option>
+				<option value="6">VI</option>
+				<option value="5">V</option>
+				<option value="4">IV</option>
+				<option value="3">III</option>
+				<option value="2">II</option>
+				<option value="1">I</option>
+			
+			</select>
+			<span class="" id="title_contain" style=""><button class="btn btn-primary" style=""><i class="fas fa-search"></i></button></span>
+		</div>
+		<div class="input-group-append">
+		
+		</div>
+	</div>
+	</form>
+
  <form action="." method="get" enctype="multipart/form-data">
      {{ student_enroll_form.as_p}}
      {% csrf_token %}
 	
 	<div class="row">
-		<div class="col-md-4">
+		<div class="col-sm-4 col-md-4 ">
 			<div class="form-group">
 				<label for=""  style="">Allow student registration using  home page :</label> 
 				
 			</div>
 		</div>
-		<div class="col-md-4">
-		<input id="student_reg" class="form-control" type="checkbox" data-toggle="toggle" data-onstyle="info" name="student_reg">
+		<div class="col-sm-4 col-md-4 ">
+			<input id="student_reg" class="form-control" type="checkbox" data-toggle="toggle" data-onstyle="info" name="student_reg">
+			
+			<a class="btn text-dark" href="{% url "staff:add_student" %}"> Add Student <i class="fa fa-plus"></i> </a>
+		
 		</div>
+		
 	</div>
+	
 	<!--
 	<div class="col-md-4">
       <h4 style="text-align: center;">Auto Active Student Account</h4> </td>

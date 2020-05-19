@@ -10,17 +10,20 @@
 
 </style>
  <h1></h1>
- <div class="row">
+ 
+
+
+ <div class="container" style="min-height:60%;" >
+	<div class="row">
 	
 		<button type="button" class="col-sm-12 col-md-12 " data-toggle="collapse" data-target="#create_edit_assesment" aria-expanded="false" aria-controls="manage_all_assesment">
 			  <h5> <i class="fa fa-globe-americas" aria-hidden="true"></i> Open Test / Assessment   </h5>
 		</button>
 		<div class="collapse" id="create_edit_assesment">
-		  <div class="card card-body">
-			</div>
+		 
 		</div>
 	</div>
- <div id="user_message_display">
+	 <div id="user_message_display">
 		{% for message in messages %}
 				<div class="alert alert-warning alert-dismissible fade show" role="alert">
 					{{ message|safe }}
@@ -30,8 +33,6 @@
 				</div>
 		{% endfor %}
 	</div>
-<br/>
- <div class="container" style="min-height:60%;" >
 	{% if request.user_agent.is_pc %}
 		{% render_table table  'assesments/boostrap4cards_dj_tables2_open.html' %}
 	{% else %}

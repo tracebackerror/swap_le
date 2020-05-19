@@ -1,6 +1,6 @@
 import django_filters
 from library.models import LibraryAsset
-
+from django_filters import FilterSet, CharFilter
 
 class ViewLibraryAssetFilter(django_filters.FilterSet):
     class Meta:
@@ -12,3 +12,4 @@ class ViewLibraryAssetFilter(django_filters.FilterSet):
             'name' : ['icontains']
             
             }
+            

@@ -30,7 +30,7 @@ from staff.models import Staff,StudentEnquiry
 from students.models import Student
 from django.views.generic.edit import FormView
 #from jedi.evaluate.context import instance
-from .filters import StudentEnquiryFilter
+from .filters import StudentEnquiryFilter, StudentFilter
 from django_filters.views import FilterView
 from django.urls import reverse
 
@@ -136,13 +136,14 @@ class PasswordChangeDoneViewForStaff(PasswordChangeDoneView):
 
 
 
-class ManageStudentView(PermissionRequiredMixin, ExportMixin, SingleTableView, ListView):
+class ManageStudentView(PermissionRequiredMixin, ExportMixin, SingleTableMixin, FilterView):
     export_name =  "Student Dataset"
     model = Student
     context_object_name = 'table'
     paginate_by = 20
     template_name = 'staff/manage_student.html'
     table_class = StudentTable
+    filterset_class = StudentFilter
     permission_required = 'staff.is_staff'
     
     #table_data = Staff.active.filter(institute__user__exact=request.user)

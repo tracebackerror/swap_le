@@ -64,7 +64,8 @@
 					<div class="card-content">
 						<h2>{{row.record.studentuser.first_name|title}} {{row.record.studentuser.last_name|title}}</h3>
 						<h2 class="text-left"><small><i class="fa fa-envelope"></i>{{row.record.studentuser.email|lower}} </h3>
-							<h2 class="text-left"><small><i class="fa fa-at"></i>{{row.record.studentuser.username}}</small></h3>
+							<h2 class="text-left"><small><i class="fa fa-at"></i>{{row.record.studentuser.username}} <i class="fas fa-chess-bishop "></i>{{row.record.standard}}</small> 
+							</h3>
 							<h2 class="text-left"><small ><i class="fas fa-phone-alt"></i>{{row.record.student_contact_no}}<i class="fas fa-house-user"></i>{{row.record.parent_contact_no}}</small></h3>
 							<h2 class="text-left"><small><i class="fas fa-chalkboard-teacher"></i>{{row.record.staffuser.first_name|title|default:row.record.staffuser.staffuser.username}} {{row.record.staffuser.last_name|title}}</small></h3>
 							<hr/>
