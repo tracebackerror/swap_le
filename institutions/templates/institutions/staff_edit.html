@@ -4,7 +4,136 @@
 
 
 {% block content %} 
- <h1>Edit your account</h1>
+<style>
+body{
+    font-family: 'Open Sans', sans-serif;
+}
+*:hover{
+    -webkit-transition: all 1s ease;
+    transition: all 1s ease;
+}
+section{
+    float:left;
+    width:100%;
+    background: #fff;  /* fallback for old browsers */
+    padding:30px 0;
+}
+/*h1{float:left; width:100%; color:#232323; margin-bottom:30px; font-size: 14px;}*/
+h1 span{font-family: 'Libre Baskerville', serif; display:block; font-size:45px; text-transform:none; margin-bottom:20px; margin-top:30px; font-weight:700}
+h1 a{color:#131313; font-weight:bold;}
+
+
+/*Profile Card 3*/
+.profile-card-3 {
+  font-family: 'Open Sans', Arial, sans-serif;
+  position: relative;
+  float: left;
+  overflow: hidden;
+  width: 100%;
+  text-align: center;
+  height:468px;
+  border:none;
+  z-index:1;
+}
+.profile-card-3 .background-block {
+    float: left;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
+.profile-card-3 .background-block .background {
+  width:100%;
+  vertical-align: top;
+  opacity: 0.9;
+  -webkit-filter: blur(0.5px);
+  filter: blur(0.5px);
+   -webkit-transform: scale(1.8);
+  transform: scale(2.8);
+}
+.profile-card-3 .card-content {
+  width: 100%;
+  padding: 15px 25px;
+  color:#232323;
+  float:left;
+  background:#efefef;
+  height:70%;
+  border-radius:0 0 5px 5px;
+  position: relative;
+  z-index: 9999;
+}
+.profile-card-3 .card-content::before {
+    content: '';
+    background: #efefef;
+    width: 120%;
+    height: 100%;
+    left: 11px;
+    bottom: 51px;
+    position: absolute;
+    z-index: -1;
+    transform: rotate(-13deg);
+}
+.profile-card-3 .profile {
+  border-radius: 50%;
+  position: absolute;
+  bottom: 65%;
+  left: 50%;
+  max-width: 100px;
+  opacity: 1;
+  box-shadow: 3px 3px 20px rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(255, 255, 255, 1);
+  -webkit-transform: translate(-50%, 0%);
+  transform: translate(-50%, 0%);
+  z-index:99999;
+}
+.profile-card-3 h2 {
+  margin: 0 0 5px;
+  font-weight: 600;
+  font-size:25px;
+}
+.profile-card-3 h2 small {
+  display: block;
+  font-size: 15px;
+  margin-top:10px;
+}
+.profile-card-3 i {
+  display: inline-block;
+    font-size: 16px;
+    color: #232323;
+    text-align: center;
+    border: 1px solid #232323;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 50%;
+    margin:0 5px;
+}
+.profile-card-3 .icon-block{
+    float:left;
+    width:100%;
+    margin-top:15px;
+}
+.profile-card-3 .icon-block a{
+    text-decoration:none;
+}
+.profile-card-3 i:hover {
+  background-color:#232323;
+  color:#fff;
+  text-decoration:none;
+}
+
+input {
+  outline: 0!important;
+  border-width: 0 0 2px!important;
+ 
+  background-color: transparent!important;
+  
+}
+input:focus {
+  border-color: green!important;
+}
+
+</style>
+ <h1>Edit Staff</h1>
  <div id="user_message_display">
 		{% for message in messages %}
 				<div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -17,11 +146,69 @@
 	</div>
  <div class="container"> 
  <p>You can edit your account using the following form:</p>
- <form action="." method="post" enctype="multipart/form-data">
-     {{ user_form.as_p}}
-     {{ staff_form.as_p }}
-     {% csrf_token %}
- <p><input type="submit" class="btn btn-success" value="Save changes"></p>
+  <form action="." method="post" enctype="multipart/form-data">
+ 	{% csrf_token %}
+	{{student_form.errors}}
+	{{student_user_form.errors}}
+	<div class="row ">
+			<center>
+			<div class="col-md-8">
+				<div class="card profile-card-3">
+					<div class="background-block">
+						<img src="https://images.pexels.com/photos/459225/pexels-photo-459225.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" alt="profile-sample1" class="background"/>
+					</div>
+					<div class="profile-thumb-block">
+						<img src="https://images.pexels.com/photos/265076/pexels-photo-265076.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" alt="profile-image" class="profile"/>
+						
+					</div>
+					<div class="card-content">
+						<div class="input-group mb-3">
+						  <div class="input-group-prepend">
+							<span class="input-group-text" id="basic-addon1"><i class="fa fa-book-reader"></i></span>
+						  </div>
+						  <input type="text" class="form-control" value="{{user_form.first_name.value}}" id="id_first_name" name="first_name" placeholder="First Name" aria-label="First Name" aria-describedby="basic-addon1">
+						  <input type="text" class="form-control" value="{{user_form.last_name.value}}" id="id_last_name" name="last_name" placeholder="Last Name" aria-label="Last Name" aria-describedby="basic-addon1">
+						</div>
+						
+						<div class="input-group mb-3">
+							  <div class="input-group-prepend">
+								<span class="input-group-text" id="basic-addon2"><i class="fa fa-envelope"></i></span>
+							  </div>
+							  <input type="email" name="email" class="form-control" value="{{user_form.email.value}}" placeholder="Email" aria-label="Email" aria-describedby="basic-addon2">
+							</div>
+							
+						<div class="input-group mb-3">
+							  <div class="input-group-prepend">
+								<span class="input-group-text" id="basic-addon3"><i class="fas fa-at"></i></span>
+							  </div>
+							 
+							  <input type="text" name="username" maxlength=10 class="form-control" value="{{user_form.username.value}}" placeholder="Username" aria-label="Username" aria-describedby="basic-addon3">
+							</div>
+							
+						
+							<hr/>
+							
+							<div class="icon-block">
+									<button class="" style="background:transparent;border:none;" type="submit"><i class="fa fa-save "> </i></button>
+									
+								</div>
+							
+							</div>
+						</div>
+						
+					</div>
+					
+				</div>
+			</div>
+ 	
+   
+    
+     
+     
+  
+     
+ <p></p>
  </form>
+
  </div>
 {% endblock %}
