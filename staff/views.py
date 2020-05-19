@@ -213,6 +213,7 @@ def delete_institution_staff_student(request, username):
 def student_edit_by_staff(request,upk):
     student_data=Student.objects.get(pk=upk)
     if request.method == 'POST':
+        
         student_form = StudentEditForm(instance=Student.objects.get(id=upk),data=request.POST)
         student_user_form = StudentUserEditForm(instance=User.objects.get(id=student_data.studentuser.id),data=request.POST)
         if student_form.is_valid() and student_user_form.is_valid():
