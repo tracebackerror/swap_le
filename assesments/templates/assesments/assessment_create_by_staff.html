@@ -200,15 +200,21 @@
 	$.fn.selectpicker.Constructor.BootstrapVersion = '4';
 
 	$('#id_subscriber_users').selectpicker({
-		liveSearch: false,
+		liveSearch: true,
 		countSelectedText: 'Students {0}/{1}',
 		actionsBox: true,
 		selectedTextFormat: 'count > 1',
 		
 		style : 'btn-light',
 		styleBase : 'btn',
-		
+		{% if request.user_agent.is_mobile %}
+		size:3,
+		{% elif request.user_agent.is_tablet %}
 		size:5,
+		{% else %}
+		size:7,
+		{% endif %}
+		
 		container: 'body',
 		
 		
