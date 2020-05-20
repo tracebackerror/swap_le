@@ -3,7 +3,7 @@ from fees.models import FeesInstallment
 from datetime import datetime
 from students.models import Student
 from .models import Institutions
-
+from staff.models import Staff
 class ViewFeesInstallmentFilter(django_filters.FilterSet):
     curr_yr = datetime.now().year
     MONTH_NAMES_CHOICES = (
@@ -43,4 +43,15 @@ class ViewFeesInstallmentFilter(django_filters.FilterSet):
         super(ViewFeesInstallmentFilter, self).__init__(*args, **kwargs)
 
         
-    
+class StaffFilter(django_filters.FilterSet):
+    #first_name = django_filters.CharFilter(field_name='relationship__name', lookup_expr='contains')
+    class Meta:
+        model = Staff
+        fields = {
+            
+            'staffuser__first_name' : ['icontains'],
+            'staffuser__last_name' : ['icontains'],
+            'staffuser__email' : ['icontains'],
+            'staffuser__username' : ['icontains'],
+            
+            }    

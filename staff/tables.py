@@ -48,7 +48,7 @@ class StaffTable(ExportMixin, tables.Table):
         model = Staff
         # add class="paleblue" to <table> tag
         exclude = ('id', 'deleted', 'user_type', 'institute', 'created', 'updated', 'allowregistration', )
-        attrs = {'class': 'paleblue'}
+        #attrs = {'class': 'paleblue'}
         # fields = ( 'institute',)
         sequence = ( 'staffuser', 'first_name', 'last_name', 'email_student', 'user_type', 'deleted')
 
@@ -95,7 +95,7 @@ class StudentTable(ExportMixin, tables.Table):
         model = Student
         sequence = ( 'studentuser','first_name','last_name','email', 'staffuser',  )
         # add class="paleblue" to <table> tag 
-        attrs = {'class': 'paleblue'}
+        #attrs = {'class': 'paleblue'}
         # fields = ( 'institute',)
         exclude = ('id', 'deleted', 'last_login', 'created', 'updated', 'user_type', 'address')
-
+        

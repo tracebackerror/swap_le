@@ -106,7 +106,7 @@ class AssesmentTable(ExportMixin, tables.Table):
         model = Assesment
         sequence = ( 'header','brief','exam_start_date_time', 'expired_on', 'passing_marks','privilege', 'duration_hours', 'duration_minutes' ,'manage')
         # add class="paleblue" to <table> tag 
-        attrs = {'class': 'paleblue'}
+        #attrs = {'class': 'paleblue'}
         # fields = ( 'institute',)
         exclude = ('id', 'brief', 'slug', 'deleted_at','deleted_by','created', 'updated', 'created_by','updated_by','type','exam_start_type', 'is_exam_active')
         

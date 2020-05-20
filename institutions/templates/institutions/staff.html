@@ -359,9 +359,68 @@ h1 a{color:#131313; font-weight:bold;}
     border-color:#4E5E30;
 }
 </style>
- <h1>Manage Staff</h1>
- 
+ <h1></h1>
+
 <div class="container" style="min-height:50%"> 
+	<div class="row">
+	
+		<h5 type="button" class="col-sm-12 col-md-12 bg-secondary" data-toggle="collapse" data-target="#manage_all_assesment" aria-expanded="false" aria-controls="manage_all_assesment">
+			 <h5 class="bg-light ">Manage Staff   <span class="badge badge-dark pull-right"> Total  {{table.rows|length}}</span> 
+				{% if request.user_agent.is_pc %}
+					<a class="btn text-dark" style="" href="{% url 'institutions:create_institution_staff'%}">  <i class="fa fa-chalkboard-teacher" aria-hidden="true"></i> ADD  <i class="fa fa-plus" aria-hidden="true"></i></a>
+					<a class="btn btn-info"  role="button">
+						<code>Download Data <i class="fa fa-arrow-right" aria-hidden="true"></i></code>
+				
+					</a>
+					{% for format in table.export_formats %}
+				
+						<a class="btn btn-primary"  role="button" href="{% export_url format %}">
+							<code>.{{ format }}</code>
+						
+						</a>
+				
+					{% endfor %}
+				{% else %}	
+					<a class="btn text-dark" style="padding:0 auto;" href="{% url 'institutions:create_institution_staff'%}">  <i class="fa fa-chalkboard-teacher" aria-hidden="true"></i> ADD  <i class="fa fa-plus" aria-hidden="true"></i></a>
+					
+					{% for format in table.export_formats %}
+						{% if format == 'xls' %}
+						<a class="btn text-dark"   style="padding:0 auto;" role="button" href="{% export_url format %}">
+							<i class="fa fa-download" aria-hidden="true"></i>
+						</a>
+						{% endif %}
+					{% endfor %}
+				{% endif %}
+			</h5>
+			
+		
+		</h5>
+		<div class="collapse" id="manage_all_student">
+		  
+		</div>
+	</div>
+    <form method="get" class="form row  ">
+		
+		<div class="input-group mb-3 border-bottom border-top">
+		
+		 <div class="input-group-prepend ">
+			<input type="text" class="form-control" name="staffuser__first_name__icontains" placeholder="First Name " aria-label="First Name " aria-describedby="title_contain">
+			<input type="text" class="form-control" name="staffuser__username__icontains" placeholder="Username" aria-label="Username" aria-describedby="title_contain">
+			{% if request.user_agent.is_pc %}
+				<input type="text" class="form-control" name="staffuser__last_name__icontains" placeholder="Last Name " aria-label="Last Name " aria-describedby="title_contain">
+				<input type="text" class="form-control" name="staffuser__email__icontains" placeholder="Email" aria-label="Email" aria-describedby="title_contain">
+			
+			{% endif %}
+			
+			<span class="" id="title_contain" style=""><button class="btn btn-primary" style=""><i class="fas fa-search"></i> {% if request.user_agent.is_pc %}SEARCH{% endif %}</button></span>
+		</div>
+		<div class="input-group-append">
+		
+		</div>
+		
+		</div>
+	</form>
+	
 	<div id="user_message_display">
 		{% for message in messages %}
 				<div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -373,21 +432,7 @@ h1 a{color:#131313; font-weight:bold;}
 		{% endfor %}
 	</div>
 	
- <p>You can edit your staff using the following form:</p>
- <div class="row">
-			<a class="btn btn-info"  role="button">
-				 <code>Download Data <i class="fa fa-arrow-right" aria-hidden="true"></i></code>
-				
-			</a>
-			{% for format in table.export_formats %}
-			
-			<a class="btn btn-primary"  role="button" href="{% export_url format %}">
-				 <code>.{{ format }}</code>
-				
-			</a>
-			
-			{% endfor %}
-		</div>
+
 <div class="row">
 	{% if request.user_agent.is_mobile %}
 		{% render_table table  'institutions/tables_manage_all_staff.html' %}

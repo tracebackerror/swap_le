@@ -38,7 +38,7 @@ from django_tables2.export.views import ExportMixin
 
 from django.utils.decorators import method_decorator
 from fees.models import FeesInstallment
-from .filters import ViewFeesInstallmentFilter
+from .filters import ViewFeesInstallmentFilter, StaffFilter
 from django_filters.views import FilterView
 from students.models import Student
 from django.db.models import Count,Q
@@ -468,12 +468,13 @@ def people(request):
     return render(request, 'institutions/staff.html', {'table': table})
 
 
-class InstitutionStaffView(PermissionRequiredMixin, ExportMixin, SingleTableView, ListView):
+class InstitutionStaffView(PermissionRequiredMixin, ExportMixin, SingleTableMixin, FilterView):
     export_name =  "Staff Dataset"
     model = Staff
     context_object_name = 'table'
     paginate_by = 10
     template_name = 'institutions/staff.html'
+    filterset_class = StaffFilter
     table_class = StaffTable
     permission_required = 'institutions.is_institute'
 
