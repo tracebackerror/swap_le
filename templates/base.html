@@ -48,7 +48,92 @@
 
 			</style>
 			{% include "meta/meta.html" %}
-			
+			{% if request.user_agent.is_mobile %}
+<!-- Fire the plugin -->
+        <script>
+            document.addEventListener(
+                "DOMContentLoaded", () => {
+                    new Mmenu( "#my-menu", {
+						navbar: {
+							{% if request.user.is_authenticated %} 
+							
+								{% if request.user.is_authenticated and perms.staff.is_staff or request.user.is_authenticated and perms.institutions.is_institute %} 
+									title: '<small><i class="fas fa-university text-muted"></i> {{ request.user.institutions.institute_name|title|truncatechars:25}} </small>'
+								{% else %}
+									title: '<i class="far fa-user text-muted"></i> {{ request.user.get_full_name|title }}'
+								{% endif %}
+							{% else %}	
+								title: "SWAPLE"
+							{% endif %}  
+							
+							
+						  },
+						"extensions": [
+                          "theme-dark",
+						  "pagedim-black"
+                       ],
+						
+						"setSelected": {
+						  "hover": true,
+						  "parent": true
+					   },
+                       "counters": true,
+                       "iconbar": {
+                          "use": true,
+                          "top": [
+							 "<a href='#/'><i class='fa fa-twitter'></i></a>",
+                             "<a href='#/'><i class='fa fa-facebook'></i></a>",
+                             "<a href='{% url "staff:assesments:manage_open_assesment" %}'><i class='fas fa-globe-americas'></i></a>",
+							 {% if request.user.is_authenticated %} 
+                             "<a href='#dashboard'><i class='fa fa-tachometer'></i></a>",
+							 {% else %}
+								"<a href='#mobile_login_menu'><i class='fas fa-diagnoses'></i></a>",
+								"<a href='#register_menu'><i class='fas fa-person-booth'></i></a>",
+                             
+							 {%endif%}
+							 {% if request.user.is_authenticated and perms.institutions.is_institute %}
+                             "<a href='#manage_staff'><i class='fa fa-chalkboard-teacher'></i></a>",
+							 "<a href='#my_profile'><i class='far fa-user-circle'></i> </a>",
+							 {% endif %}
+							 {% if request.user.is_authenticated %} 
+                             
+                             "<a href='#manage_student_menu'><i class='fa fa-book-reader'></i> </a>",
+                             "<a href='#manage_assessment_menu'><i class='fab fa-battle-net'></i> </a>",
+                             "<a href='{% if  perms.institutions.is_institute %}{% url "institutions:logout" %}{% elif perms.staff.is_staff %}{% url "staff:logout" %}{% else %}{% url "student:logout" %}{% endif %}'><i class='fas fa-sign-out-alt text-muted'></i> </a>",
+							{% endif %}
+                          ],
+                          "bottom": [
+                             
+                             "<img  src='{% static "img/swaple_logo.svg" %}'/>",
+                          ]
+                       },
+                       "navbars": [
+                          {
+                             "position": "top",
+                             "content": [
+                                "searchfield"
+                             ]
+                          },
+                          {
+                             "position": "top",
+                             "content": [
+                                "prev",
+                                "title"
+                             ]
+                          },
+                          {
+                             "position": "bottom",
+                             "content": [
+                                '<a href="https://t.me/swapledigital" class="twitter"><i class="fa fa-telegram"></i></a>',
+								'<a href="http://www.instagram.com/swapledigital" class="instagram"><i class="fa fa-instagram"></i></a>'
+                             ]
+                          }
+                       ]
+                    });
+                }
+            );
+        </script>
+{% endif%}
 		</head> <body>
 
 
@@ -512,89 +597,3 @@
 
 </script>
 
-{% if request.user_agent.is_mobile %}
-<!-- Fire the plugin -->
-        <script>
-            document.addEventListener(
-                "DOMContentLoaded", () => {
-                    new Mmenu( "#my-menu", {
-						navbar: {
-							{% if request.user.is_authenticated %} 
-							
-								{% if request.user.is_authenticated and perms.staff.is_staff or request.user.is_authenticated and perms.institutions.is_institute %} 
-									title: '<small><i class="fas fa-university text-muted"></i> {{ request.user.institutions.institute_name|title|truncatechars:25}} </small>'
-								{% else %}
-									title: '<i class="far fa-user text-muted"></i> {{ request.user.get_full_name|title }}'
-								{% endif %}
-							{% else %}	
-								title: "SWAPLE"
-							{% endif %}  
-							
-							
-						  },
-						"extensions": [
-                          "theme-dark",
-						  "pagedim-black"
-                       ],
-						
-						"setSelected": {
-						  "hover": true,
-						  "parent": true
-					   },
-                       "counters": true,
-                       "iconbar": {
-                          "use": true,
-                          "top": [
-							 "<a href='#/'><i class='fa fa-twitter'></i></a>",
-                             "<a href='#/'><i class='fa fa-facebook'></i></a>",
-                             "<a href='{% url "staff:assesments:manage_open_assesment" %}'><i class='fas fa-globe-americas'></i></a>",
-							 {% if request.user.is_authenticated %} 
-                             "<a href='#dashboard'><i class='fa fa-tachometer'></i></a>",
-							 {% else %}
-								"<a href='#mobile_login_menu'><i class='fas fa-diagnoses'></i></a>",
-								"<a href='#register_menu'><i class='fas fa-person-booth'></i></a>",
-                             
-							 {%endif%}
-							 {% if request.user.is_authenticated and perms.institutions.is_institute %}
-                             "<a href='#manage_staff'><i class='fa fa-chalkboard-teacher'></i></a>",
-							 "<a href='#my_profile'><i class='far fa-user-circle'></i> </a>",
-							 {% endif %}
-							 {% if request.user.is_authenticated %} 
-                             
-                             "<a href='#manage_student_menu'><i class='fa fa-book-reader'></i> </a>",
-                             "<a href='#manage_assessment_menu'><i class='fab fa-battle-net'></i> </a>",
-                             "<a href='{% if  perms.institutions.is_institute %}{% url "institutions:logout" %}{% elif perms.staff.is_staff %}{% url "staff:logout" %}{% else %}{% url "student:logout" %}{% endif %}'><i class='fas fa-sign-out-alt text-muted'></i> </a>",
-							{% endif %}
-                          ],
-                          "bottom": [
-                             
-                             "<img  src='{% static "img/swaple_logo.svg" %}'/>",
-                          ]
-                       },
-                       "navbars": [
-                          {
-                             "position": "top",
-                             "content": [
-                                "searchfield"
-                             ]
-                          },
-                          {
-                             "position": "top",
-                             "content": [
-                                "prev",
-                                "title"
-                             ]
-                          },
-                          {
-                             "position": "bottom",
-                             "content": [
-                                '<a href="https://t.me/swapledigital" class="twitter"><i class="fa fa-telegram"></i></a>',
-								'<a href="http://www.instagram.com/swapledigital" class="instagram"><i class="fa fa-instagram"></i></a>'
-                             ]
-                          }
-                       ]
-                    });
-                }
-            );
-        </script>
-{% endif%}
