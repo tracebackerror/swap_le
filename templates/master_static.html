@@ -5,8 +5,8 @@
 <script data-ad-client="ca-pub-6390158646547677" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+   <meta name="viewport" content="width=device-width minimum-scale=1.0 maximum-scale=1.0 user-scalable=no" />
+       
 <link rel="icon" href="{% static 'img/swaple_logo.ico' %}" type="image/icon type">
 <!-- Font Awesome -->
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
@@ -63,8 +63,15 @@
 
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
-
 	
+{% if request.user_agent.is_mobile %}
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.mmenu/8.5.10/mmenu.min.js" ></script>
+        
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jQuery.mmenu/8.5.10/mmenu.min.css" />
+	<link rel="stylesheet" href="{% static 'css/mburger.css' %}">
+
+	<script src="{% static 'js/mburger.js' %}"></script>
+{% endif %}
 <style>
 .pink {
 	background: linear-gradient(55deg, #1de099, #1dc8cd);

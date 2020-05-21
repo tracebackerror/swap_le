@@ -4,6 +4,7 @@
 {% load render_table from django_tables2 %}
 
 {% load bootstrap4 %}
+{% load static %}
 
 
 {% block title %}   Manage All Assesments   {% endblock %}
@@ -44,7 +45,7 @@
   text-decoration:none;
 }
 </style>
- <h1></h1>
+ <h1><i class="fab fa-battle-net"></i> Manage</h1>
 
 <div class="container"> 
 
@@ -67,7 +68,7 @@
 <div class="row">
 	
 		<button type="button" class="col-sm-12 col-md-12 " data-toggle="collapse" data-target="#manage_all_assesment" aria-expanded="false" aria-controls="manage_all_assesment">
-			  <h5>Manage All Assesment   <span class="badge badge-dark pull-right"> Total  {{table.rows|length}} </h5></span>
+			  <h5>Assessment   <span class="badge badge-dark pull-right"> Total  {{table.rows|length}} </h5></span>
 			</button>
 		<div class="collapse" id="manage_all_assesment">
 		  <div class="card card-body">

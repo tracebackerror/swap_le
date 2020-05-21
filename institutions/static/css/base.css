@@ -18,10 +18,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-    background:#efefef;
+   background: linear-gradient(45deg, #1de099, #1dc8cd);
     width:100%;
     overflow:auto;
-    padding:68px 0 5px 40px;
+	
     margin:0;
 }
 

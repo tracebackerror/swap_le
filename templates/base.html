@@ -30,6 +30,21 @@
 				  background: url({% static "img/swaple_logo_png.png" %}) no-repeat top center;
 				  background-size: contain;
 				}
+				
+				#menu_n {
+					  position: fixed; /* Sit on top of the page content */
+					  color: #000;
+					  width:100%;
+					  float:right;
+				}
+				
+				h1 {
+					{% if  request.user_agent.is_mobile %}
+						padding:10px 2px 5px 5px!important;
+					{% else %}
+						padding: 60px 0 5px 4rem!important;
+					{% endif %}
+				}
 
 			</style>
 			{% include "meta/meta.html" %}
@@ -38,10 +53,132 @@
 
 
 			{% block menu %}
+			<div class="container-fluid row  ">
+				<a class="mburger mburger--collapse float-right  position-fixed" id="" href="#my-menu"  style="position: absolute;z-index:999; bottom:1; right:0;">
+					<b></b>
+					<b></b>
+					<b></b>
+				</a>
+				
+			</div>
 			<!--Main Navigation-->
 			<header>
+				{% if request.user_agent.is_mobile %}
+				
+					<nav  id="my-menu" style="z-index:99999;">
+					<ul>
+                        <li class="active"><a  id="open_test" href="{% url "staff:assesments:manage_open_assesment" %}"> Open Test/Assessment </a></li>
+                        {% if request.user.is_authenticated %} 
+							<li class="nav-item ">
+								<a id="dashboard" class="nav-link" href="{% url "institutions:dashboard" %}">Home</a>
+							</li>
+						{% endif %}
+						{% if not request.user.is_authenticated  %}
+						<li>
+							<span>Log In</span>
+								
+								<ul id="mobile_login_menu">
+									<li class="dropdown-item" > <a  href ={% url "institutions:login" %}><i class="fas fa-university text-muted"></i> Institute</a> </li>
+										<li class="dropdown-item" > <a  href ={% url "staff:login"  %}> <i class="fas fa-chalkboard-teacher text-muted"></i> Staff</a> </li>
+										<li class="dropdown-item" > <a  href ={% url "student:login"  %}><i class="fas fa-book-reader text-muted"></i> Student</a> </li>
+								</ul>
+						</li>
+						<li>
+							<span>Register</span>
+							<ul id="register_menu">
+									<li class="dropdown-item" > <a  href ={% url 'institutions:institution_registration' %}><i class="fas fa-university text-muted"></i> Institute</a> </li>
+									<!-- <li class="dropdown-item" > <a  href ={% url "staff:login"  %}>  Staff</a> </li> -->
+									<li class="dropdown-item" > <a  href ={% url "student:student_registration" %}><i class="fas fa-book-reader text-muted"></i> Student</a> </li>
+							</ul>
+						</li>
+						{% endif %}
+						{% if request.user.is_authenticated and perms.institutions.is_institute %}
+						<li >
+							<span>Staff</span>
+								
+								<ul id="manage_staff">
+									
+										<li > <a  href ={% url "staff:dashboard" %}><i class="fa fa-tachometer text-muted" aria-hidden="true"></i>&nbsp;Dashboard</a> </li>
+										<li> <a  href ={% url "institutions:manage_staff" %}><i class="fas fa-users-cog text-muted"></i>&nbsp;Manage Staff</a> </li>
+										<li  > <a  href ={% url "institutions:create_institution_staff" %}><i class="fa fa-user-plus text-muted" aria-hidden="true"></i>&nbsp;Add Staff</a> </li>
+									
+								</ul>
+							</li>
+							<li>
+								<span> My Profile</span>
+									
+								
+								<ul id="my_profile">
+									
+										<li > <a  href ={% url "institutions:password_change" %}><i class="fa fa-key text-muted" aria-hidden="true"></i>&nbsp;Change Password</a> </li>
+										<li > <a  href ={% url "institutions:edit" %}><i class="fa fa-user-edit text-muted" aria-hidden="true"></i>&nbsp;Edit Profile</a> </li>
+									
+								</ul>
+							</li>
+						{% endif %}
+						{% if request.user.is_authenticated %} 
+							<li >
+								<span >
+									Student
+								</span>
+								<ul id="manage_student_menu">
+									
+										{% if request.user.is_authenticated and perms.staff.is_staff or request.user.is_authenticated and perms.institutions.is_institute %} 
 
-				<nav class="navbar fixed-top navbar-expand-lg navbar-dark pink scrolling-navbar">
+										<li > <a  href ={% url "staff:manage_student" %}><i class="fa fa-users-cog text-muted" aria-hidden="true"></i>&nbsp;Manage Student</a> </li>
+										<li  > <a  href ={% url "staff:add_student" %}><i class="fa fa-user-plus text-muted" aria-hidden="true"></i>&nbsp;Add Student</a> </li>
+										{% else %}
+										<li > <a href="{% url "student:dashboard" %}"><i class="fa fa-tachometer text-muted" aria-hidden="true"></i>&nbsp;Dashboard</a></li>
+										{% endif %}
+										{% if request.user.is_authenticated and perms.institutions.is_institute %}
+											<li> <a href ={% url "student:result" %}><i class="fas fa-user-graduate text-muted"></i>&nbsp;My Results </a> </li>
+										
+										
+										{% endif %}
+
+								</ul>
+							</li>
+							<li >
+								<span>Test / Assessment</span>
+								<ul id="manage_assessment_menu">
+									{% if request.user.is_authenticated and perms.staff.is_staff or request.user.is_authenticated and perms.institutions.is_institute %}
+										<li> <a  href ={% url "staff:assesments:manage_all_assesment" %}><i class="fa fa-cog text-muted" aria-hidden="true"></i>&nbsp;Manage Assessment</a> </li>
+										<li> <a  href ={% url "staff:assesments:assessment_create_by_staff" %}><i class="fa fa-plus-square-o text-muted" aria-hidden="true"></i>&nbsp;Create Assessment</a> </li>
+										{% else %}
+										<li > <a href ={% url "student:assesments:manage_student_assesment" %}><i class="fa fa-unlock text-muted" aria-hidden="true"></i>&nbsp;Live Assessment </a> </li>
+										<li  > <a href ={% url "student:result" %}><i class="fas fa-user-graduate text-muted"></i>&nbsp;Results </a> </li>
+										{% endif %}	
+										{% if request.user.is_authenticated and perms.institutions.is_institute %}
+										<li> <a href ={% url "student:assesments:manage_student_assesment" %}><i class="fa fa-unlock text-muted" aria-hidden="true"></i>&nbsp;Public Live Assessment </a> </li>
+										{% endif %}
+
+
+									</div>
+								</ul>
+							</li>
+							<li >
+								{% if  perms.institutions.is_institute %}
+									<a  href="{% url "institutions:logout" %}">Log Out</a>
+								{% elif perms.staff.is_staff %}
+									<a href="{% url "staff:logout" %}">Log Out</a>
+								{% else %}
+									<a href="{% url "student:logout" %}">Log Out</a>
+								
+								{% endif %}
+							</li>
+							{% endif %}
+							
+							
+						</ul>
+                   
+                </nav>
+				
+				
+				
+				
+				{% else %}
+				
+				<nav class="navbar fixed-top navbar-expand-lg navbar-dark pink scrolling-navbar" >
 					<a href="{% url 'home:homeview'%}">
 					<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
 					 width="20px" height="auto" viewBox="0 0 299.000000 247.000000"
@@ -231,7 +368,7 @@
 						</ul>
 					</div>
 				</nav>
-
+				{% endif%}
 			</header>
 
 		</div>
@@ -266,7 +403,7 @@
 
 
 		<div id="content">  
-
+			
 			{% block content %}    {% endblock %}  
 
 		</div>
@@ -280,6 +417,7 @@
 				<li class="nav-item">
 					<a class="btn btn-white nav-link" href ={% url "staff:manage_student" %}><i class="fas fa-book-reader" aria-hidden="true"></i>&nbsp;</a>
 				</li>
+				
 				<li>
 					<a class="btn btn-white nav-link" href="{% url "institutions:dashboard" %}"><i class="fa fa-tachometer"></i></a>
 				</li>
@@ -341,3 +479,90 @@
 
 
 </script>
+
+{% if request.user_agent.is_mobile %}
+<!-- Fire the plugin -->
+        <script>
+            document.addEventListener(
+                "DOMContentLoaded", () => {
+                    new Mmenu( "#my-menu", {
+						navbar: {
+							{% if request.user.is_authenticated %} 
+							
+								{% if request.user.is_authenticated and perms.staff.is_staff or request.user.is_authenticated and perms.institutions.is_institute %} 
+									title: '<small><i class="fas fa-university text-muted"></i> {{ request.user.institutions.institute_name|title|truncatechars:25}} </small>'
+								{% else %}
+									title: '<i class="far fa-user text-muted"></i> {{ request.user.get_full_name|title }}'
+								{% endif %}
+							{% else %}	
+								title: "SWAPLE"
+							{% endif %}  
+							
+							
+						  },
+						"extensions": [
+                          "theme-dark",
+						  "pagedim-black"
+                       ],
+						
+						"setSelected": {
+						  "hover": true,
+						  "parent": true
+					   },
+                       "counters": true,
+                       "iconbar": {
+                          "use": true,
+                          "top": [
+							 "<a href='#/'><i class='fa fa-twitter'></i></a>",
+                             "<a href='#/'><i class='fa fa-facebook'></i></a>",
+                             "<a href='{% url "staff:assesments:manage_open_assesment" %}'><i class='fas fa-globe-americas'></i></a>",
+							 {% if request.user.is_authenticated %} 
+                             "<a href='#dashboard'><i class='fa fa-tachometer'></i></a>",
+							 {% else %}
+								"<a href='#mobile_login_menu'><i class='fas fa-diagnoses'></i></a>",
+								"<a href='#register_menu'><i class='fas fa-person-booth'></i></a>",
+                             
+							 {%endif%}
+							 {% if request.user.is_authenticated and perms.institutions.is_institute %}
+                             "<a href='#manage_staff'><i class='fa fa-chalkboard-teacher'></i></a>",
+							 "<a href='#my_profile'><i class='far fa-user-circle'></i> </a>",
+							 {% endif %}
+							 {% if request.user.is_authenticated %} 
+                             
+                             "<a href='#manage_student_menu'><i class='fa fa-book-reader'></i> </a>",
+                             "<a href='#manage_assessment_menu'><i class='fab fa-battle-net'></i> </a>",
+                             "<a href='{% if  perms.institutions.is_institute %}{% url "institutions:logout" %}{% elif perms.staff.is_staff %}{% url "staff:logout" %}{% else %}{% url "student:logout" %}{% endif %}'><i class='fas fa-sign-out-alt text-muted'></i> </a>",
+							{% endif %}
+                          ],
+                          "bottom": [
+                             
+                             "<img  src='{% static "img/swaple_logo.svg" %}'/>",
+                          ]
+                       },
+                       "navbars": [
+                          {
+                             "position": "top",
+                             "content": [
+                                "searchfield"
+                             ]
+                          },
+                          {
+                             "position": "top",
+                             "content": [
+                                "prev",
+                                "title"
+                             ]
+                          },
+                          {
+                             "position": "bottom",
+                             "content": [
+                                '<a href="https://t.me/swapledigital" class="twitter"><i class="fa fa-telegram"></i></a>',
+								'<a href="http://www.instagram.com/swapledigital" class="instagram"><i class="fa fa-instagram"></i></a>'
+                             ]
+                          }
+                       ]
+                    });
+                }
+            );
+        </script>
+{% endif%}
