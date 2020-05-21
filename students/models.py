@@ -66,8 +66,10 @@ class Student(models.Model):
         return "{} {} ({}) <- {}".format(self.studentuser.first_name, self.studentuser.last_name, self.studentuser.username, self.staffuser.staffuser.username)
     
     def get_name_registered_student(self):
-        if self.studentuser.first_name and self.studentuser.last_name:
-            return "{},{}-{}".format(self.studentuser.first_name.title(), self.studentuser.last_name.title(), self.standard.title())
+        if self.studentuser.first_name and self.studentuser.last_name and self.standard:
+            return "{},{}-{}".format(self.studentuser.first_name, self.studentuser.last_name, self.standard).title()
+        elif self.studentuser.first_name and self.studentuser.last_name:
+            return "{},{}-Empty".format(self.studentuser.first_name, self.studentuser.last_name).title()
         else:
             return "{}".format(self.studentuser)
         
