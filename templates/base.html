@@ -97,12 +97,13 @@
 							 {%endif%}
 							 {% if request.user.is_authenticated and perms.institutions.is_institute %}
                              "<a href='#manage_staff'><i class='fa fa-chalkboard-teacher'></i></a>",
-							 "<a href='#my_profile'><i class='far fa-user-circle'></i> </a>",
+							 
 							 {% endif %}
 							 {% if request.user.is_authenticated %} 
                              
                              "<a href='#manage_student_menu'><i class='fa fa-book-reader'></i> </a>",
                              "<a href='#manage_assessment_menu'><i class='fab fa-battle-net'></i> </a>",
+							 "<a href='#my_profile'><i class='far fa-user-circle'></i> </a>",
                              "<a href='{% if  perms.institutions.is_institute %}{% url "institutions:logout" %}{% elif perms.staff.is_staff %}{% url "staff:logout" %}{% else %}{% url "student:logout" %}{% endif %}'><i class='fas fa-sign-out-alt text-muted'></i> </a>",
 							{% endif %}
                           ],
@@ -192,17 +193,7 @@
 									
 								</ul>
 							</li>
-							<li>
-								<span> My Profile</span>
-									
-								
-								<ul id="my_profile">
-									
-										<li > <a  href ={% url "institutions:password_change" %}><i class="fa fa-key text-muted" aria-hidden="true"></i>&nbsp;Change Password</a> </li>
-										<li > <a  href ={% url "institutions:edit" %}><i class="fa fa-user-edit text-muted" aria-hidden="true"></i>&nbsp;Edit Profile</a> </li>
-									
-								</ul>
-							</li>
+							
 						{% endif %}
 						{% if request.user.is_authenticated %} 
 							<li >
@@ -242,6 +233,23 @@
 
 
 									</div>
+								</ul>
+							</li>
+							<li>
+								<span> My Profile</span>
+									
+								
+								<ul id="my_profile">
+										{% if request.user.is_authenticated and perms.institutions.is_institute %}
+										<li > <a  href ={% url "institutions:password_change" %}><i class="fa fa-key text-muted" aria-hidden="true"></i>&nbsp;Change Password</a> </li>
+										<li > <a  href ={% url "institutions:edit" %}><i class="fa fa-user-edit text-muted" aria-hidden="true"></i>&nbsp;Edit Profile</a> </li>
+										{% elif request.user.is_authenticated and perms.staff.is_staff %}
+										<li > <a  href ={% url "institutions:password_change" %}><i class="fa fa-key text-muted" aria-hidden="true"></i>&nbsp;Change Password</a> </li>
+										<li > <a  href ={% url "staff:edit" %}><i class="fa fa-user-edit text-muted" aria-hidden="true"></i>&nbsp;Edit Profile</a> </li>
+										{% elif request.user.is_authenticated  %}
+										<li > <a  href ={% url "institutions:password_change" %}><i class="fa fa-key text-muted" aria-hidden="true"></i>&nbsp;Change Password</a> </li>
+										<li > <a  href ={% url "student:edit" %}><i class="fa fa-user-edit text-muted" aria-hidden="true"></i>&nbsp;Edit Profile</a> </li>
+										{% endif %}
 								</ul>
 							</li>
 							<li >

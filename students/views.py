@@ -52,6 +52,9 @@ from django.utils.html import format_html
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.views import LogoutView   
 
+
+from staff.forms import StudentEditForm,StudentUserEditForm,CreateStudentEnquiryForm
+
 class StudentLogout(SuccessMessageMixin, LogoutView):
     next_page = reverse_lazy('student:login')
     success_message = 'You are succesfully logged out.'
@@ -169,20 +172,25 @@ class StudentPasswordResetCompleteView(PasswordResetCompleteView):
 
 @login_required(login_url="student:login")
 def edit(request):
+    student_data=Student.objects.get(studentuser=request.user)
     if request.method == 'POST':
         user_form = UserEditForm(instance = request.user, data=request.POST)
-
-        if user_form.is_valid():
-            user_form.save()
-            messages.add_message(request, messages.SUCCESS, 'Profile Updated Successfully')
-        else:
-            messages.add_message(request, messages.ERROR, 'Profile Failed To Update')
+        student_form = StudentEditForm(instance=student_data,data=request.POST)
+        student_user_form = StudentUserEditForm(instance=User.objects.get(id=student_data.studentuser.id),data=request.POST)
+        
+        if student_form.is_valid() and student_user_form.is_valid():
+            student_form.save()
+            student_user_form.save()
+            messages.add_message(request, messages.SUCCESS, 'Profile updated')
+            return HttpResponseRedirect(reverse_lazy('student:dashboard'))
+            
+        return render(request, 'staff/student_edit_by_staff.html', {'student_form':student_form,'student_user_form': student_user_form})
     else:
-        user_form = UserEditForm(instance=request.user)
-
-    return render(request, 'student/edit.html',{  'user_form': user_form})
-
-
+        student_form = StudentEditForm(instance=student_data)
+        student_user_form = StudentUserEditForm(instance=User.objects.get(id=student_data.studentuser.id))
+    return render(request, 'staff/student_edit_by_staff.html', {'student_form':student_form,'student_user_form': student_user_form})
+    #return render(request, 'student/edit.html',{  'user_form': user_form})
+    
 
 class PasswordChangeViewForStudent(PasswordChangeView):
     template_name = 'student/password_change.html'
