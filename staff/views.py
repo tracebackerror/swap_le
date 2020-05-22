@@ -226,7 +226,7 @@ def student_edit_by_staff(request,upk):
     else:
         student_form = StudentEditForm(instance=Student.objects.get(id=upk))
         student_user_form = StudentUserEditForm(instance=User.objects.get(id=student_data.studentuser.id))
-    return render(request, 'staff/student_edit_by_staff.html', {'student_form':student_form,'student_user_form': student_user_form})
+    return render(request, 'staff/student_edit_by_staff.html', {'student_form':student_form,'student_user_form': student_user_form, 'student_data':student_data})
 
 
 @permission_required('staff.is_staff',login_url=reverse_lazy('staff:login'))

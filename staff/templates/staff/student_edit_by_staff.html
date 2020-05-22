@@ -33,7 +33,7 @@ h1 a{color:#131313; font-weight:bold;}
   overflow: hidden;
   width: 100%;
   text-align: center;
-  height:668px;
+  height:768px;
   border:none;
   z-index:1;
 }
@@ -58,7 +58,7 @@ h1 a{color:#131313; font-weight:bold;}
   color:#232323;
   float:left;
   background:#efefef;
-  height:70%;
+  height:80%;
   border-radius:0 0 5px 5px;
   position: relative;
   z-index: 9999;
@@ -77,7 +77,7 @@ h1 a{color:#131313; font-weight:bold;}
 .profile-card-3 .profile {
   border-radius: 50%;
   position: absolute;
-  bottom: 70%;
+  bottom: 80%;
   left: 50%;
   max-width: 100px;
   opacity: 1;
@@ -168,8 +168,7 @@ input:focus {
 						<img src="https://randomuser.me/api/portraits/women/81.jpg" alt="profile-image" class="profile"/>
 
 						{%endif%}
-						<input type="hidden" name="standard" value="{{student_form.standard.value}}">
-						<input type="hidden" name="username" value="{{student_user_form.username.value}}">
+						
 						
 					</div>
 					<div class="card-content">
@@ -179,8 +178,15 @@ input:focus {
 						  </div>
 						  <input type="text" class="form-control" value="{{student_user_form.first_name.value}}" id="id_first_name" name="first_name" placeholder="First Name" aria-label="First Name" aria-describedby="basic-addon1">
 						  <input type="text" class="form-control" value="{{student_user_form.last_name.value}}" id="id_last_name" name="last_name" placeholder="Last Name" aria-label="Last Name" aria-describedby="basic-addon1">
-						</div>
 						
+						</div>
+						<div class="input-group mb-3">
+						  <div class="input-group-prepend">
+							<span class="input-group-text" id="basic-username"><i class="fa fa-at"></i></span>
+						  </div>
+						  <input type="text" class="form-control" value="{{student_user_form.username.value}}" id="id_username" name="username" placeholder="Username" aria-label="Username" aria-describedby="basic-username">
+						
+						</div>
 						<div class="input-group mb-3">
 							  <div class="input-group-prepend">
 								<span class="input-group-text" id="basic-addon2"><i class="fa fa-envelope"></i></span>
@@ -213,6 +219,21 @@ input:focus {
 							
 							
 							<hr/>
+						<div class="input-group mb-3">
+							  <div class="input-group-prepend">
+								<span class="input-group-text" id="basic-standard"><i class="fas fa-chess-bishop"></i></span>
+							  
+							  <select name="standard" class="form-control" placeholder="Standard" aria-label="Standard" aria-describedby="basic-standard">
+								{% for key, value in student_data.get_all_standard %}
+									<option value="{{key}}" {%if key == student_form.standard.value %}selected{%endif%} >{{value}}</option>
+								{% endfor %}
+							  </select>
+							   
+							  </div>
+							  
+							  
+							 </div>
+							
 							<div class="input-group">
 								  <div class="input-group-prepend">
 									<span class="input-group-text"><i class="fa fa-home"></i></span>

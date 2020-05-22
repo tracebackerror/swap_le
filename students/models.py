@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 # Create your models here.
 from staff.models import Staff
-
+from utility.swaple_constants import *
 
 class StudentManager(models.Manager):
     def get_queryset(self):
@@ -56,6 +56,8 @@ class Student(models.Model):
     parent_contact_no = models.CharField(null=True, blank=True, max_length=20)
     gender = models.CharField(max_length = 10,null=True)
     
+    def get_all_standard(self):
+        return COURSE_CHOICES
     def get_fields(self):
         return [(field.name, field.value_to_string(self)) for field in Student._meta.fields]
     

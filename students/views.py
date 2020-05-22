@@ -188,8 +188,7 @@ def edit(request):
     else:
         student_form = StudentEditForm(instance=student_data)
         student_user_form = StudentUserEditForm(instance=User.objects.get(id=student_data.studentuser.id))
-    return render(request, 'staff/student_edit_by_staff.html', {'student_form':student_form,'student_user_form': student_user_form})
-    #return render(request, 'student/edit.html',{  'user_form': user_form})
+    return render(request, 'staff/student_edit_by_staff.html', {'student_form':student_form,'student_user_form': student_user_form, 'student_data':student_data})
     
 
 class PasswordChangeViewForStudent(PasswordChangeView):
