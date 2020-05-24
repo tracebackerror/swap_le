@@ -489,29 +489,7 @@
 		<div id="content">  
 			
 			{% block content %}    {% endblock %} 
-			{% if request.user_agent.is_mobile %}			
-			<div id="166428875">
-					<script type="text/javascript">
-						try {
-							window._mNHandle.queue.push(function (){
-								window._mNDetails.loadTag("166428875", "300x250", "166428875");
-							});
-						}
-						catch (error) {}
-					</script>
-				</div>
-			{% else %}
-				<div id="166428875">
-					<script type="text/javascript">
-						try {
-							window._mNHandle.queue.push(function (){
-								window._mNDetails.loadTag("166428875", "300x250", "166428875");
-							});
-						}
-						catch (error) {}
-					</script>
-					</div>
-			{% endif %}
+			
 
 		</div>
 		{% if  perms.institutions.is_institute %}
