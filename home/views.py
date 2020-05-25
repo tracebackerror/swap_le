@@ -6,10 +6,16 @@ from django.views.decorators.csrf import csrf_exempt
 
 class HomePageView(TemplateView):
     template_name = "home/index.html"
+
+class TableForKidsView(TemplateView):
+    template_name = "home/tables_for_kids.html"
     
 class GoogleIndexViewVerification(TemplateView):
     template_name = "home/google0f6eb0891016c158.html"
-  
+    
+class AdsTextView(TemplateView):
+    template_name = "home/ads.txt"  
+    content_type="text/plain"
 class PropellerAds(TemplateView):
     template_name = "sw.js"  
     content_type='application/javascript'

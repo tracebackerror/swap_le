@@ -1,3 +1,4 @@
+num2words
 django-quill
 django_compressor
 django-import-export

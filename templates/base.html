@@ -3,6 +3,7 @@
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 {% load meta %}
+{% load tables_tags %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
  <head {% meta_namespaces %} > 
@@ -87,6 +88,7 @@
                           "top": [
 							 "<a href='#/'><i class='fa fa-twitter'></i></a>",
                              "<a href='#/'><i class='fa fa-facebook'></i></a>",
+                             "<a href='#resources_menu' %}'><i class='fas fa-parachute-box'></i></a>",
                              "<a href='{% url "staff:assesments:manage_open_assesment" %}'><i class='fas fa-globe-americas'></i></a>",
 							 {% if request.user.is_authenticated %} 
                              "<a href='#dashboard'><i class='fa fa-tachometer'></i></a>",
@@ -142,6 +144,7 @@
 
 
 			{% block menu %}
+			{% if request.user_agent.is_mobile %}
 			<div class="container-fluid row  ">
 				<a class="mburger mburger--collapse float-right  position-fixed" id="" href="#my-menu"  style="position: absolute;z-index:999; bottom:1; right:0;">
 					<b></b>
@@ -150,12 +153,28 @@
 				</a>
 				
 			</div>
+			{% endif %}
 			<!--Main Navigation-->
 			<header>
 				{% if request.user_agent.is_mobile %}
 				
 					<nav  id="my-menu" style="z-index:99999;">
 					<ul>
+						<li class="nav-item active">
+						<span>Resources</span>
+						<ul id="resources_menu">
+							
+							<li>
+							<span><i class="fas fa-table text-muted"></i> Tables</span>
+							<ul id="single_tables_menu">
+								{% for table_num in 100|times %}
+									<li class="dropdown-item" > <a  href ="{% url "home:school_kids_tables" %}#{% get_numeric_word table_num %}">{% get_numeric_word_label table_num %}</a> </li>
+								{% endfor %}	
+							</ul>
+							</li>
+						</ul>
+						</li>
+						
                         <li class="active"><a  id="open_test" href="{% url "staff:assesments:manage_open_assesment" %}"> Open Test/Assessment </a></li>
                         {% if request.user.is_authenticated %} 
 							<li class="nav-item ">
@@ -301,6 +320,7 @@
 					</button>
 					<div class="collapse navbar-collapse" id="navbarSupportedContent">
 						<ul class="navbar-nav mr-auto">
+							
 							<li class="nav-item active">
 								<a class="nav-link" href="{% url "staff:assesments:manage_open_assesment" %}"><i class="fas fa-globe-americas"></i> Open Test/Assessment <span class="sr-only"> </span></a>
 							</li>
@@ -521,6 +541,8 @@
 			var infolinks_wsid = 0;
 			</script>
 			<script type="text/javascript" src="http://resources.infolinks.com/js/infolinks_main.js"></script>
+			
+			
 		<div id="footer">
 			{% block footer %} 
 

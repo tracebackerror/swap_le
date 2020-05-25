@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% block title %}  Tables For Study {% endblock %}
+{% load tables_tags %}
+
+{% block content %} 
+<!------ Include the above in your HEAD tag ---------->
+
+<style>
+
+body {
+  font-family: "Marvel", sans-serif;
+  
+}
+
+#info {
+  background-color: yellow;
+  padding: 2rem 0;
+}
+
+.row {
+  width: 100%;
+  max-width: 45rem;
+  margin: 0 auto;
+  padding: 1.5rem;
+  
+}
+
+.card, .nope{
+  
+  padding: 4rem 1rem 7rem 1rem;
+  background-color: teal;
+  position: relative;
+  border:0px !important;
+}
+.card:after, .nope:after {
+  content: "";
+  display: block;
+  width: 0px;
+  height: 0px;
+  
+  top: 0px;
+  right: 0px;
+  border-bottom: 20px solid #006767;
+  border-left: 20px solid #006767;
+  border-right: 20px solid yellow;
+  border-top: 20px solid yellow;
+  position: absolute;
+  -webkit-filter: drop-shadow(-5px 5px 3px rgba(0, 0, 0, 0.5));
+          filter: drop-shadow(-5px 5px 3px rgba(0, 0, 0, 0.5));
+}
+.card:before, .nope:before{
+  content: "";
+  display: block;
+  width: 0px;
+  height: 0px;
+  border-top: 40px solid #006767;
+  border-right: 40px solid #006767;
+  border-left: 40px solid yellow;
+  border-bottom: 40px solid yellow;
+  bottom: 0px;
+  left: 0px;
+  position: absolute;
+  -webkit-filter: drop-shadow(7px -7px 5px rgba(0, 0, 0, 0.5));
+          filter: drop-shadow(7px -7px 5px rgba(0, 0, 0, 0.5));
+  margin-right: 10%;
+}
+.card:nth-of-type(1), .nope:nth-of-type(1) {
+  margin-right: 9%;
+}
+.card h2, .card h3 {
+  color: snow;
+  margin-bottom: 1rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.card p {
+  color: snow;
+  font-size: 1.1rem;
+  line-height: 140%;
+}
+
+.ftr{
+    text-align: center;
+}
+}
+
+@media screen and (min-width: 1200px) {
+  .bricklayer-column-sizer {
+    /* divide by 3. */
+    width: 50%;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .bricklayer-column-sizer {
+    /* divide by 2. */
+    width: 50%;
+  }
+}
+</style>
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bricklayer/0.4.2/bricklayer.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/bricklayer/0.4.2/bricklayer.min.js"></script>
+
+<div class="container  bricklayer">
+	{% for table_num in 100|times %}
+	
+	<div class="card col-sm-12 m-2" id="{% get_numeric_word table_num %}">
+		<p>Table </p>
+      <h3>{% get_numeric_word table_num %}</h3>
+      {% for num in 10|times %}
+		<h3 class="border-bottom"> {{table_num}} * {{num}} = {% multiply table_num num %}</h3>
+      {% endfor %}
+    </div>
+	
+	{% endfor %}
+  
+</div>
+<script>
+var bricklayer = new Bricklayer(document.querySelector('.bricklayer'))
+</script>
+{% endblock %}
