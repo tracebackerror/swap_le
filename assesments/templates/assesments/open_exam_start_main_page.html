@@ -87,11 +87,12 @@
   </div>
 </div>
 <div class="row col-sm-12">
+	<!--INFOLINKS_OFF-->
 	<div class="btn-group" role="group" aria-label="Basic example">
 	  <button type="button" class="col-sm-4 btn-sm btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Question </button>
 	&nbsp; 
 	 <input type="button" name="final_submit"  value="Final Submit" class=" col-sm-8 btn-sm btn-danger" data-toggle="modal" data-target="#modalForFinalExit"/>
-
+	<!--INFOLINKS_ON-->
 	 
 	</div>
 	
@@ -342,7 +343,7 @@ Local Time:  {{result_object.exam_taken_date_time|localtime }}
 										<i class="fa fa-step-backward" aria-hidden="true"></i> Previous</button>
 									</li>
     					{% endif %}
-																								 
+							<!--INFOLINKS_OFF-->																	 
 							{% if all_question_to_answer.has_next %}
 								<li class="nav-item">
 								<button type="button" class=" btn btn-default" id="nextquestion" name="page" value={{ all_question_to_answer.next_page_number }}> <i class="fa fa-step-forward" aria-hidden="true"></i> Next</button>
@@ -353,6 +354,7 @@ Local Time:  {{result_object.exam_taken_date_time|localtime }}
 								
 								</li>
 							{% endif %}
+							<!--INFOLINKS_ON-->
 							</ul>
 			</td>
 			</div>
