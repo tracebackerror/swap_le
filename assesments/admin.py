@@ -23,6 +23,9 @@ class AnswerInline(admin.TabularInline):
     
 class ResultAdmin(admin.ModelAdmin):
     #fieldsets = [ (None, {'fields': ['title'}) ]
+    
+    list_display = ('assesment', 'registered_user', 'exam_taken_date_time', 'total_question', 'total_attempted', 'total_marks', 'obtained_marks' , 'publish_result', 'result_passed', 'type', 'assesment_submitted' )
+    search_fields = ['assesment__header','registered_user__studentuser__email',]
     inlines = [ AnswerInline ]
     
     
