@@ -7,6 +7,8 @@ from django.views.decorators.csrf import csrf_exempt
 class HomePageView(TemplateView):
     template_name = "home/index.html"
 
+class ScientificCalcView(TemplateView):
+    template_name = "home/scientific_calculator.html"
 class TableForKidsView(TemplateView):
     template_name = "home/tables_for_kids.html"
     
