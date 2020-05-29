@@ -513,7 +513,7 @@
 
 		</div>
 		{% if  perms.institutions.is_institute %}
-		<nav style="padding:0;" class="navbar fixed-bottom navbar-light bg-light">
+		<nav style="padding:0;" id="bottom_shortcut" class="navbar fixed-bottom navbar-light bg-light">
 		  
 			<ul class="nav">
 				<li class="nav-item">
@@ -566,8 +566,15 @@
 			{% endblock %}
 		</div>
 	</body> </html> 
-<script type="text/javascript">
 
+
+	<script type="text/x-mathjax-config">
+		MathJax.Hub.Config({
+		  messageStyle: "none"
+		});
+</script>
+<script type="text/javascript">
+	
 	$(document).ready(function(){
 		$('.alert').alert();
 		$(".alert").fadeTo(15000, 500).slideUp(500, function(){
