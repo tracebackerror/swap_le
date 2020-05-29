@@ -45,6 +45,7 @@ urlpatterns = [
     
     #Result Publish
     url(r'^(?P<assesmentid>\w{0,15})/change/publish-all-results$', PublishAllResults, name='publish_all_results'),
+    url(r'^(?P<assesmentid>\w{0,15})/change/delete-all-results$', DeleteAllResult, name='assessment_clean_result_by_staff'),
     
     #Tag
     url(

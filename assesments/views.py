@@ -1393,7 +1393,8 @@ def assessment_question_delete(request, assesmentid, questionid ):
     return render(request, 'assesments/assesment_question_delete.html', {'information': [information]})
 
 
-@login_required(login_url="/staff/login/")
+@permission_required('staff.is_staff',login_url=reverse_lazy('staff:login'))
+@login_required(login_url=reverse_lazy('staff:login'))
 def PublishAllResults(request,assesmentid):
     result_obj = Result.objects.filter(assesment__id = assesmentid)
     flag = "published"
@@ -1415,8 +1416,22 @@ def PublishAllResults(request,assesmentid):
     messages.add_message(request, messages.SUCCESS,msg)
     success_url = reverse("staff:assesments:assessment_manage_by_staff", kwargs = {'assesmentid':assesmentid})
     return HttpResponseRedirect(success_url)
-
-
+    
+@permission_required('staff.is_staff',login_url=reverse_lazy('staff:login'))
+@login_required(login_url=reverse_lazy('staff:login'))
+def DeleteAllResult(request,assesmentid):
+    result_obj = Result.objects.filter(assesment__id = assesmentid)
+    assesment_obj = Assesment.objects.get(id = assesmentid)
+    if assesment_obj.created_by == request.user:
+        print("Created By me")
+        count_publish_result = result_obj.count()
+        result_obj.delete()
+        msg = "{} Result Deleted".format(count_publish_result)
+    else:
+        msg = "0 Result Deleted. Exam is not created by you."
+    messages.add_message(request, messages.SUCCESS, msg)
+    success_url = reverse("staff:assesments:assessment_manage_by_staff", kwargs = {'assesmentid':assesmentid})
+    return HttpResponseRedirect(success_url)
 
 
 

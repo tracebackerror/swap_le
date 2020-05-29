@@ -46,7 +46,35 @@
 		{% endfor %}
 	</div>
 
+<!-- Modal -->
 
+		<div id="modal_clear_result" class="modal fade" role="dialog">
+		  <div class="modal-dialog">
+		
+		    <!-- Modal content-->
+		    <div class="modal-content">
+		      <div class="modal-header">
+		      <h4 class="modal-title">Wipe All Result</h4>
+		        <button type="button" class="close" data-dismiss="modal">&times;</button>
+		      </div>
+		      
+		      
+		      <div class="modal-body">
+		        <p>Please Click on <b><i>"Confirm Submission"</i></b> button to delete all the result. This action is not reeversible.</p>
+		      </div>
+		      <div class="modal-footer">
+		      	
+			  		<form  method="post" id="clean_my_result" action= {% url 'staff:assesments:assessment_clean_result_by_staff' assesmentid=assesment.id %}>
+				 		{% csrf_token %}
+				      	<button type="submit" name="final_confirmed_submit"  class="btn btn-danger" ><i class="far fa-trash-alt"></i> Confirm</button>
+				      	<button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+		        	</form>
+		      </div>
+		    </div>
+		
+		  </div>
+		</div>
+<!-- End Modal -->		
 <div class="card row">
 	<div class="card-body text-white bg-danger ">
 		<p class="card-title "><i class="fab fa-battle-net" aria-hidden="true"></i> {{assesment.header|upper }}</p>
@@ -61,14 +89,16 @@
 	</div><div class="card-footer ">
 	{%endif%}
 	<a href="{% url "staff:assesments:publish_all_results"  assesment.id %}" class="card-link btn {% if flag %}btn-dark{% else %}btn-success{%endif%}"><i class="fas fa-file-contract"></i></a>
-		
+	<a href="#modal_clear_result"  name="delete_result" class="btn btn-success" data-toggle="modal" data-target="#modal_clear_result"/>	<i class="fas fa-file-contract"></i> <i class="far fa-trash-alt"></i></a>
+	
 	{% if assesment.privilege == 'open'%}
+		<div class="btn-group" role="group" aria-label="Open Exam Action">
 		<a href="{% url "staff:assesments:open_assesment_intro"  slug=assesment.slug  %}" class="card-link btn btn-success"><i class="fa fa-play" aria-hidden="true"></i></a>
 		{% if not request.user_agent.is_pc %}
 		<a class="card-link btn btn-success"  href="javascript:{window.location='https://wa.me/?text=https://www.swaple.in{% url 'staff:assesments:open_assesment_intro' slug=assesment.slug %}   {{assesment.brief}} {{ assesment.created_by.get_full_name|default:assesment.created_by }}'}"><i class="fa fa-whatsapp " aria-hidden="true"></i></a>
 		{% endif %}
 		<a class="card-link btn btn-success" target="_blank" href="javascript:{window.location='https://telegram.me/share/url?url=https://www.swaple.in{% url 'staff:assesments:open_assesment_intro' slug=assesment.slug %}&text={{assesment.brief}} {{ assesment.created_by.get_full_name|default:assesment.created_by }}'}"><i class="fa fa-telegram " aria-hidden="true"></i></a>
-										
+		</div>								
 	{% endif %}
 	
     
