@@ -3,6 +3,8 @@ from django.views.generic import TemplateView
 from .models import ContactUs
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
+from bs4 import BeautifulSoup
+import requests
 
 class HomePageView(TemplateView):
     template_name = "home/index.html"
@@ -23,6 +25,7 @@ class PropellerAds(TemplateView):
     content_type='application/javascript'
     
 
+    
 def contactus(request):
     if request.method=="GET":
         iname=request.GET['name']

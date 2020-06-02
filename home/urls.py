@@ -12,5 +12,7 @@ urlpatterns = [
     url(r'^ads\.txt$', AdsTextView.as_view(), name="ads_txt"),
     
     #url(r'^sw.js', PropellerAds.as_view(), name="propellerads"),
+    
     url(r'^', HomePageView.as_view(), name="homeview"),
+    
     ]
