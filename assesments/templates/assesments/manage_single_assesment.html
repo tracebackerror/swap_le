@@ -81,7 +81,10 @@
 	</div>
 	<div class="card-footer ">
 	<a href="{% url "staff:assesments:assessment_edit_by_staff"  assesmentid=assesment.id  %}" class="card-link btn btn-success"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;<i class="fab fa-battle-net"></i></a>
-	<a href="{% url 'staff:assesments:assesment_manage_add_question' assesment.id  %}" class="card-link btn btn-success"><i class="fa fa-plus-square-o" aria-hidden="true"></i>&nbsp;<i class="fa fa-question-circle" aria-hidden="true"></i></a>
+	<div class="btn-group" role="group" aria-label="Question Action">
+		<a href="{% url 'staff:assesments:assesment_manage_add_question' assesment.id  %}" class="card-link btn btn-success"><i class="fa fa-plus-square-o" aria-hidden="true"></i>&nbsp;<i class="fa fa-question-circle" aria-hidden="true"></i></a>
+		<a href="{% url 'staff:assesments:assessment_question_bulk_add' assesment.id  %}" class="card-link btn btn-success"><i class="fa fa-list" aria-hidden="true"></i>&nbsp;<i class="fa fa-question-circle" aria-hidden="true"></i></a>
+	</div>
 	<a href="{% url "staff:assesments:add_question_section"  assesment.id %}" class="card-link btn btn-success"><i class="fa fa-plus-square-o" aria-hidden="true"></i>&nbsp;<i class="fa fa-area-chart" aria-hidden="true"></i></a>
 	<a href="{% url "staff:assesments:assessment_print_by_staff_question"  assesment.id %}" class="btn btn-success"><i class="fa fa-print " aria-hidden="true"></i></a>
 										

@@ -18,6 +18,9 @@ from .models import Assesment, Answer, Result
 from .forms import AssessmentForm, AssessmentCreationForm, QuestionForm, ReviewSqaAnswerForm, ReviewSqaFormSet, ReviewSqaFormSetHelper
 from django.contrib import messages
 from django.shortcuts import *
+from bs4 import BeautifulSoup
+from django.forms.formsets import formset_factory
+import requests
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
@@ -63,6 +66,7 @@ from dal import autocomplete
 from taggit.models import Tag
 
 import uuid
+import json
 from django.contrib.auth.models import User
 class ReviewAllSqaView(TemplateView):
     model = Answer
@@ -335,7 +339,7 @@ class ManageSingleQuestionAddView(TemplateView):
             return HttpResponseForbidden()
         
         if question_form and question_form.is_valid():
-            #import pdb; pdb.set_trace();
+            
             if request.FILES:
                 file_extension = request.FILES['question_image'].content_type
                 
@@ -836,7 +840,7 @@ class ProcessOpenAssesmentView(DetailView):
                     pk_of_question = self.request.POST.get('question_id')
                     question_obj = Question.objects.filter(assesment_linked = assesment_to_undertake, pk = pk_of_question)
                     get_the_answer_obj = Answer.objects.filter(for_result = self.create_result_instance, for_question__in = question_obj)
-                    #import pdb; pdb.set_trace();
+                    
                     
                     if len(get_the_answer_obj) == 0:
                         get_the_answer_obj = Answer()
@@ -950,7 +954,6 @@ class ProcessOpenAssesmentView(DetailView):
                 pk_of_question = self.request.GET.get('question_id')
                 question_obj = Question.objects.filter(assesment_linked = assesment_to_undertake, pk = pk_of_question)
                 get_the_answer_obj = Answer.objects.filter(for_result = self.create_result_instance, for_question__in = question_obj)
-                #import pdb; pdb.set_trace();
                 
                 if len(get_the_answer_obj) == 0:
                     get_the_answer_obj = Answer()
@@ -1000,7 +1003,7 @@ class ProcessOpenAssesmentView(DetailView):
                 if self.request.GET.get('question_id'):
                     question_obj = Question.objects.filter(id= self.request.GET.get('question_id'))
                     if question_obj.assesment_linked.privilege.lower() == "open":
-                        import pdb; pdb.set_trace()
+                        
                         question_image_obj = {}
                         if (question_obj.question_image):
                             question_image_obj[question.id] = question_obj.question_image
@@ -1281,6 +1284,7 @@ def assessment_print_by_staff(request, assesmentid):
     section = Section.objects.filter(linked_assessment = asses_obj)
     
     return render(request, 'assesments/assessment_print_by_staff.html', {'object': asses_obj, 'section':section})
+    
 @login_required(login_url="/staff/login/")
 def assessment_edit_by_staff(request, assesmentid):
     messages.get_messages(request).used = True
@@ -1330,8 +1334,82 @@ def assessment_edit_by_staff(request, assesmentid):
         
     return render(request, 'assesments/assessment_create_by_staff.html', {'assessment_c_form': assesment_form})
     
-
-
+@permission_required('staff.is_staff',login_url=reverse_lazy('staff:login'))
+@login_required(login_url=reverse_lazy('staff:login'))
+def QuestionSet(request, pk):
+    
+    if request.method == 'POST':
+        assesment_to_add_question = Assesment.objects.get(id=pk) 
+        
+        question_formset=formset_factory(QuestionForm)
+        '''
+        formset = Question_formset(data = request.POST,
+                                         
+                                            initial={'created_by' :request.user,
+                                            'updated_by': request.user,
+                                            'assesment_linked': assesment_to_add_question'})
+        '''
+        posted_data = json.loads(request.POST.get('hidden_text'))    
+        initial_data_for_formset = []
+        count = 0
+        
+        for each_question in posted_data:
+            if 'multiple' in each_question['question_type'].lower():
+                question_type = 'mcq'
+            elif 'single' in each_question['question_type'].lower():
+                question_type = 'scq'
+            else:
+                question_type = 'sqa' 
+            
+            create_question_form = QuestionForm(
+                data ={
+                    'question_text':each_question['question_text'],
+                    'question_image': None,
+                    'option_one': each_question['option1'],
+                    'option_two': each_question['option2'],
+                    'option_three': each_question['option3'],
+                    'option_four': each_question['option4'],
+                    'option_five': None,
+                    'question_type': question_type,
+                    'brief_answer': None,
+                    'max_marks': 2,
+                    'correct_options': each_question['correct_option'],
+                    'created_by' : request.user,
+                    'updated_by' : request.user,
+                    'assesment_linked' : assesment_to_add_question
+                    
+                },
+                
+                instance= Question(
+                                         created_by = request.user,
+                                         updated_by = request.user,
+                                         assesment_linked = assesment_to_add_question
+                                         )
+            )
+            if create_question_form.is_valid():
+                create_question_form.save()
+                count += 1
+            
+            
+        messages.add_message(request, messages.SUCCESS, '{} Question Added'.format(count))
+        success_url = reverse_lazy("staff:assesments:assessment_manage_by_staff", kwargs ={ 'assesmentid' : assesment_to_add_question.id })
+        return HttpResponseRedirect(success_url)
+        
+        
+    link = "https://docs.google.com/spreadsheets/u/0/d/1ihnpK8R0MahpApLLT6n_D_ThbIMuFu4eC3r_ZoZl8yI/gviz/tq?tqx=out:html&tq&usp=drive_web#gid=2"
+    data = requests.get(link)
+    
+    soup = BeautifulSoup(data.text, "lxml")
+    
+    table =soup.find("table").find_all("tr") 
+    
+    
+    data_ = []
+    for row in table:
+        cols = row.find_all('td')
+        cols = [ele.text.strip() for ele in cols]
+        data_.append([ele for ele in cols]) # Get rid of empty values
+    return render(request, 'assesments/question_bank.html', {'question_table': data_})
 
 class TagAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
@@ -1361,7 +1439,7 @@ def assessment_create_by_staff(request):
             saved_new_assesment.updated_by = request.user
             saved_new_assesment.save()
             assesment_creation_form.save_m2m()
-            #import pdb;pdb.set_trace();
+            
             #messages.success(request, 'Assessment Updated Successfully')
             messages.add_message(request, messages.SUCCESS, 'Assessment Created Successfully')
             return redirect(reverse_lazy("staff:assesments:assessment_manage_by_staff", kwargs ={ 'assesmentid' : saved_new_assesment.id }))

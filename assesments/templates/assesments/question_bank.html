@@ -1,0 +1,317 @@
+{% extends "base.html" %}
+{% block title %} {% endblock %}
+
+
+{% block content %} 
+<link href="//cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
+<link href="//cdn.datatables.net/plug-ins/preview/searchPane/dataTables.searchPane.min.css" rel="stylesheet" type="text/css"/>
+<link href="//cdn.datatables.net/searchpanes/1.1.0/css/searchPanes.dataTables.min.css" rel="stylesheet" type="text/css"/>
+<link href="//cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css" rel="stylesheet" type="text/css"/>
+<link href="//cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.dataTables.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://cdn.datatables.net/buttons/1.6.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css"/>
+
+
+<script src="//cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="//cdn.datatables.net/plug-ins/preview/searchPane/dataTables.searchPane.min.js" type="text/javascript"></script>
+<script src="https://cdn.datatables.net/searchpanes/1.1.0/js/dataTables.searchPanes.min.js" type="text/javascript"></script>
+<script src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js" type="text/javascript"></script>
+<script src="https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js" type="text/javascript"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js" type="text/javascript"></script>
+
+
+
+
+<style>
+tfoot input {
+        width: 100%;
+        padding: 3px;
+        box-sizing: border-box;
+    }
+	
+thead input {
+        width: 100%;
+    }
+	
+td.details-control {
+    background: url('https://img.icons8.com/pastel-glyph/64/000000/plus.png') no-repeat center center;
+    cursor: pointer;
+	background-size: 20px 20px;
+}
+tr.shown td.details-control {
+    background: url('https://img.icons8.com/pastel-glyph/64/000000/minus.png') no-repeat center center;
+	background-size: 20px 20px;
+}
+</style>
+
+<h1><i class="fab fa-hubspot"></i> Question Bank</h1>
+
+<div class="container">
+
+<div class="progress">
+  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+</div>
+<form method="POST" id="q_bank_form">
+	{% csrf_token %}
+	<input type="hidden" id="hidden_text" name="hidden_text">
+	<input type="submit" id="submit" value="Add Selected Question" class="btn btn-success">
+</form>
+<table class="table" id="q_bank">
+{% for row in question_table %}
+	{% if forloop.first %}
+		<thead>
+			<tr>
+			{% for col in row %}
+			<th>{{col}}</th>
+			{% endfor %}
+			</tr>
+		</thead>
+		<tbody>
+	
+	{% elif forloop.last %}
+		<tr>
+			{% for col in row %}
+				<td>{{col}}</td>
+			{% endfor %}
+		</tr>
+        </tbody>  
+       
+	{% else%}
+		<tr>
+			{% for col in row %}
+				<td>{{col}}</td>
+			{% endfor %}
+		</tr>
+	{% endif %}
+{% endfor %}
+</table>
+</div>
+<script>
+	$('#q_bank_form').submit(function() {
+		$('#submit').prop('disabled', true);
+		
+		$("#hidden_text").val( JSON.stringify(table.rows({ selected: true }).data().toArray()) );
+		return true;
+	});
+
+	$('#q_bank thead tr').clone(true).appendTo( '#q_bank thead' );
+    $('#q_bank thead tr:eq(1) th').each( function (i) {
+        var title = $(this).text();
+        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+ 
+        $( 'input', this ).on( 'keyup change', function () {
+            if ( table.column(i).search() !== this.value ) {
+                table
+                    .column(i)
+                    .search( this.value )
+                    .draw();
+            }
+        } );
+    } );
+	var selected_data;
+    var table = $('#q_bank').DataTable({
+		dom: 'BPlfrtip',
+		lengthChange: true,
+		lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+		searchPanes: true,
+		info:     true,
+		orderCellsTop: true,
+        fixedHeader: true,
+		searching: true,
+        columnDefs:[
+			
+			{
+				orderable: false,
+				lengthChange: true,
+				className: 'select-checkbox ',
+				targets:   0,
+				searchPanes:{
+                    show: false,
+					
+                },
+				searchable: false,
+			} ,
+            {
+                searchPanes:{
+                    show: false,
+					
+                },
+                targets: [1],
+				data: "question_text",
+				
+				searchable: true,
+            },
+			{
+                searchPanes:{
+                    show: true,
+                },
+                targets: [2],
+				searchable: true,
+				data: "standard",
+            },
+            
+            {
+                searchPanes:{
+                    show: true,
+                },
+                targets: [3],
+				searchable: true,
+				data: "subject",
+            },
+            {
+                searchPanes:{
+                    show: true,
+                },
+                targets: [4],
+				searchable: true,
+				data: "chapter",
+				
+            },
+            {
+                searchPanes:{
+                    show: false,
+                },
+                targets: [5],
+				searchable: true,
+				data: "question_type",
+            },
+            {
+                searchPanes:{
+                    show: false,
+                },
+                targets: [6],
+				data: "option1",
+				visible: false
+            },
+            {
+                searchPanes:{
+                    show: false,
+                },
+                targets: [7],
+				searchable: true,
+				data: "option2",
+				visible: false
+            },
+            {
+                searchPanes:{
+                    show: false,
+                },
+                targets: [8],
+				searchable: true,
+				data: "option3",
+				visible: false
+            },
+            {
+                searchPanes:{
+                    show: false,
+                },
+                targets: [9],
+				searchable: true,
+				data: "option4",
+				visible: false
+            },
+            {
+                searchPanes:{
+                    show: false,
+                },
+                targets: [10],
+				searchable: true,
+				data: "correct_option",
+				visible: false
+            },
+			{
+				orderable: false,
+				
+				className: 'details-control',
+				targets: [11],
+				searchPanes:{
+                    show: false,
+					
+                },
+				searchable: false,
+				
+			} , 
+        ],
+		select: {
+            style:    'multi',
+            selector: 'td:first-child'
+        },
+		order: [[ 1, 'asc' ]],
+		columns: [
+			{ name: "id", targets: [0], },
+			{ name: "standard", targets: [1], },
+			{ "name": "platform" },
+			{ "name": "version" },
+			{ "name": "grade" }
+		  ],
+		buttons: [
+			
+			'selectNone',
+			
+            {
+                text: 'Selected Count',
+                action: function () {
+                    var count = table.rows( { selected: true } ).count();
+					
+
+					alert(count+' row(s) selected' );
+					//var valeur = 50;
+					//$('.progress-bar').css('width', valeur+'%').attr('aria-valuenow', valeur);
+                },
+				
+            }
+        ],
+		
+	});
+	
+	function format ( d ) {
+    // `d` is the original data object for the row
+    return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+        '<tr>'+
+            '<td>Option 1:</td>'+
+            '<td>'+d.option1+'</td>'+
+        '</tr>'+
+		'<tr>'+
+            '<td>Option 2:</td>'+
+            '<td>'+d.option2+'</td>'+
+        '</tr>'+
+		'<tr>'+
+            '<td>Option 3:</td>'+
+            '<td>'+d.option3+'</td>'+
+        '</tr>'+
+		'<tr>'+
+            '<td>Option 4:</td>'+
+            '<td>'+d.option4+'</td>'+
+        '</tr>'+
+        '<tr>'+
+            '<td>Correct Option:</td>'+
+            '<td>'+d.correct_option+'</td>'+
+        '</tr>'+
+        
+    '</table>';
+}
+	
+	 // Add event listener for opening and closing details
+    $('#q_bank tbody').on('click', 'td.details-control', function () {
+        var tr = $(this).closest('tr');
+        var row = table.row( tr );
+ 
+        if ( row.child.isShown() ) {
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+        }
+        else {
+            // Open this row
+            row.child( format(row.data()) ).show();
+            tr.addClass('shown');
+        }
+    } );
+	
+	// On each draw, loop over the `detailRows` array and show any child rows
+    
+	
+	table.searchPanes.rebuild();
+</script>
+
+{% endblock %}
