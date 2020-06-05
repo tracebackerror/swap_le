@@ -12,24 +12,33 @@ class ResultTable(ExportMixin, tables.Table):
     
     #review_sqa = tables.LinkColumn('reviewsqa', text='Review Descriptive Answer')
     review_sqa = tables.TemplateColumn('<a href="{% url "staff:assesments:assesment_manage_review_sqa_question"  assesmentid=self.request.GET.assesmentid %}"><span class="fas fa-comments"></span></a>', verbose_name="Validate Descriptive Answer")
-    result = tables.TemplateColumn('<a href="{% url "staff:assesments:assessment_result_by_staff" pk=record.pk %}"><center><span class="fas fa-file-contract"></span></center></a>')
+    result = tables.TemplateColumn('<a href="{% url "staff:assesments:assessment_result_by_staff" pk=record.pk %}"><center><span class="fas fa-file-contract"></span></center></a>', orderable=False)
     exam_taken_date_time = tables.DateTimeColumn(accessor='exam_taken_date_time', verbose_name='Taken At')
     total_question = tables.Column(accessor='total_question', verbose_name='Questions')
     total_attempted = tables.Column(accessor='total_attempted', verbose_name='Attempted')
     total_marks = tables.Column(accessor='total_marks', verbose_name='Total')
     obtained_marks = tables.Column(accessor='obtained_marks', verbose_name='Obtained')
     result_passed = tables.BooleanColumn(accessor='result_passed', verbose_name='Passed')
-    assesment_submitted = tables.BooleanColumn(accessor='assesment_submitted', verbose_name='Submitted')
+    assesment_submitted = tables.BooleanColumn(accessor='assesment_submitted', verbose_name='Status')
     publish_result = tables.BooleanColumn(accessor='publish_result', verbose_name='Published')
     registered_user = tables.Column(accessor='registered_user', verbose_name='Student')
+    delete = tables.TemplateColumn('<p>COl</p>', orderable=False, verbose_name="Delete")
     
+    def render_delete(self, record):
+        url = reverse('staff:assesments:assessment_result_single_delete',kwargs={'assesmentid': self.assesmentid, 'resultid': record.pk})
+        return format_html('<a href="{}"><span class="fas fa-trash-alt"></span></a>', url)
+        
     def render_result_passed(self, value):
         if value :
             return format_html('<center><i class="fa fa-graduation-cap" aria-hidden="true"></i></center>')
         return format_html('<center><i class="fa fa-window-minimize" aria-hidden="true"></i></center>')
     
+    def render_assesment_submitted(self, value):
+        if value :
+            return format_html('Exam Finished')
+        return format_html('In Progress')
     def render_review_sqa(self, record):
-        url = reverse('staff:assesments:assesment_manage_review_sqa_question',kwargs={'assesmentid': self.assesmentid})
+        url = reverse('staff:assesments:assesment_manage_review_sqa_question',kwargs={'assesmentid': self.assesmentid, 'resultid': record.pk})
         return format_html('<a href="{}"><span class="fas fa-comments">Validate Score</span></a>', url)
         
     def render_registered_user(self, record):

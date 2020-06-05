@@ -246,9 +246,7 @@ tr.shown td.details-control {
 		columns: [
 			{ name: "id", targets: [0], },
 			{ name: "standard", targets: [1], },
-			{ "name": "platform" },
-			{ "name": "version" },
-			{ "name": "grade" }
+			
 		  ],
 		buttons: [
 			
@@ -258,7 +256,8 @@ tr.shown td.details-control {
                 text: 'Add Selected Question',
                 action: function (e, dt, node, config ) {
                     var count = table.rows( { selected: true } ).count();
-					$(node).prop('disabled', true);
+					
+					table.buttons( 'Add Selected Question' ).disable();
 					$("#hidden_text").val( JSON.stringify(table.rows({ selected: true }).data().toArray()) );
 					//alert(count+' row(s) selected' );
 					$('#q_bank_form').submit();

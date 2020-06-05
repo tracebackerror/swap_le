@@ -71,7 +71,9 @@ class Student(models.Model):
         if self.studentuser.first_name and self.studentuser.last_name and self.standard:
             return "{},{}-{}".format(self.studentuser.first_name, self.studentuser.last_name, self.standard).title()
         elif self.studentuser.first_name and self.studentuser.last_name:
-            return "{},{}-Empty".format(self.studentuser.first_name, self.studentuser.last_name).title()
+            return "{},{}".format(self.studentuser.first_name, self.studentuser.last_name).title()
+        elif self.studentuser.first_name :
+            return "{}".format(self.studentuser.first_name).title()
         else:
             return "{}".format(self.studentuser)
         

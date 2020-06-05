@@ -68,8 +68,9 @@ from taggit.models import Tag
 import uuid
 import json
 from django.contrib.auth.models import User
+
 class ReviewAllSqaView(TemplateView):
-    model = Answer
+    
     template_name = 'assesments/review_all_sqa.html'
     login_decorator = login_required(login_url=reverse_lazy('staff:login'))
     
@@ -90,7 +91,7 @@ class ReviewAllSqaView(TemplateView):
         #messages.get_messages(request).used = True
         
         
-        associated_answer_obj = Answer.objects.filter(for_result__assesment__id = self.kwargs['assesmentid'], for_question__question_type = 'sqa')
+        associated_answer_obj = Answer.objects.filter(for_result__pk = self.kwargs['resultid'], for_result__assesment__id = self.kwargs['assesmentid'], for_question__question_type = 'sqa')
         answer_formset = ReviewSqaFormSet(queryset=associated_answer_obj)
         answer_formset_helper = ReviewSqaFormSetHelper()
         
@@ -116,15 +117,11 @@ class ReviewAllSqaView(TemplateView):
         
         answer_formset = ReviewSqaFormSet(request.POST or None)
         
-        answer_formset.save()
-        
-        associated_answer_obj = Answer.objects.filter(for_result__assesment__id = self.kwargs['assesmentid'], for_question__question_type = 'sqa')
-        answer_formset = ReviewSqaFormSet(initial = request.POST, queryset=associated_answer_obj)
-        answer_formset_helper = ReviewSqaFormSetHelper()
-        
+        for form in answer_formset:
+          form.save()
         
         assesment_to_submit = self.kwargs['assesmentid']
-        fetch_appropriate_result = Result.objects.filter(assesment__id = assesment_to_submit)
+        fetch_appropriate_result = Result.objects.filter(pk = self.kwargs['resultid'])
         
         if fetch_appropriate_result.exists():
             get_assesment_obj_to_update = fetch_appropriate_result[0]
@@ -1512,6 +1509,21 @@ def DeleteAllResult(request,assesmentid):
     return HttpResponseRedirect(success_url)
 
 
+@permission_required('staff.is_staff',login_url=reverse_lazy('staff:login'))
+@login_required(login_url=reverse_lazy('staff:login'))
+def DeleteSingleResult(request, assesmentid, resultid):
+    result_obj = Result.objects.get(id = resultid)
+    
+    if result_obj.assesment.created_by == request.user:
+        print("Created By me")
+        msg = "{} Result Deleted".format(result_obj.registered_user.get_name_registered_student())
+        result_obj.delete()
+        
+    else:
+        msg = "0 Result Deleted. Exam is not created by you."
+    messages.add_message(request, messages.SUCCESS, msg)
+    success_url = reverse("staff:assesments:assessment_manage_by_staff", kwargs = {'assesmentid':assesmentid})
+    return HttpResponseRedirect(success_url)
 
 
 

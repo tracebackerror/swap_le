@@ -38,7 +38,7 @@ urlpatterns = [
     url(r'^change/(?P<questionid>\w{0,15})/edit/$', ManageSingleQuestionUpdateView.as_view(), name='assesment_manage_update_question'),
     url(r'^(?P<assesmentid>\w{0,15})/change/question/add/$', ManageSingleQuestionAddView.as_view(), name='assesment_manage_add_question'),
     url(r'^(?P<assesmentid>\w{0,15})/change/question/clone/(?P<questionid>\w{0,15})$', ManageSingleQuestionAddView.as_view(), name='assesment_manage_add_question_clone'),
-    url(r'^(?P<assesmentid>\w{0,15})/change/question/review/$', ReviewAllSqaView.as_view(), name='assesment_manage_review_sqa_question'),
+    url(r'^(?P<assesmentid>\w{0,15})/change/question/review/(?P<resultid>\w{0,15})/$', ReviewAllSqaView.as_view(), name='assesment_manage_review_sqa_question'),
     
     #section
     url(r'^(?P<assesmentid>\w{0,15})/section/add/$',AddQuestionSection.as_view(),name="add_question_section"),
@@ -48,6 +48,7 @@ urlpatterns = [
     #Result Publish
     url(r'^(?P<assesmentid>\w{0,15})/change/publish-all-results$', PublishAllResults, name='publish_all_results'),
     url(r'^(?P<assesmentid>\w{0,15})/change/delete-all-results$', DeleteAllResult, name='assessment_clean_result_by_staff'),
+    url(r'^(?P<assesmentid>\w{0,15})/change/(?P<resultid>\w{0,15})/delete-single-result$', DeleteSingleResult, name='assessment_result_single_delete'),
     
     #Tag
     url(
