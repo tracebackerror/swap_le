@@ -11,6 +11,12 @@ class HomePageView(TemplateView):
 
 class ScientificCalcView(TemplateView):
     template_name = "home/scientific_calculator.html"
+    
+class PeriodicTableForKidsView(TemplateView):
+    template_name = "home/periodic_table_basic.html"
+
+class PeriodicTableForKidsAdvView(TemplateView):
+    template_name = "home/periodic_table.html"    
 class TableForKidsView(TemplateView):
     template_name = "home/tables_for_kids.html"
     

@@ -2,18 +2,18 @@
 {% extends "base.html" %}
 {% block title %}Scientifc Calculator{% endblock %}
 {% load tables_tags %}
+{% load static %}
 
 {% block content %} 
 
-    <link
-        rel="stylesheet"
-        href="https://unpkg.com/mathlive/dist/mathlive.core.css"/>
-    <link
-        rel="stylesheet"
-        href="https://unpkg.com/mathlive/dist/mathlive.css"
-    />
-	<script src="https://unpkg.com/mathlive"></script>
+    
+    <link href={% static "css/mathlive-static.css" %} rel="stylesheet "/>
+    <link href="https://cdn.jsdelivr.net/npm/mathlive@0.28.0/dist/mathlive.core.css" rel="stylesheet "/>
+    <link href="https://cdn.jsdelivr.net/npm/mathlive@0.28.0/dist/mathlive.css" rel="stylesheet "/>
 	
+	<script src="https://unpkg.com/mathlive"></script>
+	<script src="https://cdn.jsdelivr.net/npm/mathlive@0.28.0/dist/mathlive.js"></script>
+	 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/6.6.2/math.js"></script>
 	<style>
 	.output {
 		font-family: ibm plex mono,source code pro,Menlo,bitstream vera sans mono,Monaco,Courier,andale mono,monospace;
@@ -36,7 +36,7 @@
 
         <main class="container">
 			<h6 class="border-bottom p-2 ">Write Your Equation using Keyboard</h6>
-            <div id="mf" class="col-sm-12 border mathfield bg-light p-3">2\pi + 2</div>
+            <div id="mf" class="col-sm-12 border mathfield bg-light p-3 text-dark">2\pi + 2</div>
 			<h6 class="border-bottom p-2">Option</h6>
 			<div class="btn-group" role="group" aria-label="Basic example">
 				  <button type="button" id="speak" class="btn btn-secondary"><i class="fas fa-volume-up"></i> Speak</button>
@@ -48,7 +48,7 @@
 
         
 		
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/6.6.2/math.js"></script>
+       
         <script type="module">
              const mf = MathLive.makeMathField('mf', {
 					smartMode: true,
