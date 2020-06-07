@@ -6,6 +6,14 @@ from django.views.decorators.csrf import csrf_exempt
 from bs4 import BeautifulSoup
 import requests
 
+class SolarViewer(TemplateView):
+    template_name ="home/solar1.html"
+
+class SolarSysViewer(TemplateView):
+    template_name ="home/solar.html"
+    
+class DNAViewer(TemplateView):
+    template_name = "home/dna.html"
 class HomePageView(TemplateView):
     template_name = "home/index.html"
 

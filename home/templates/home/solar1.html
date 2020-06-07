@@ -1,0 +1,855 @@
+
+<style>
+@charset "UTF-8";
+@import url("https://fonts.googleapis.com/css?family=Montserrat:300,400");
+.star:nth-of-type(1) {
+  left: 27vw;
+  top: 31vw;
+}
+
+.star:nth-of-type(2) {
+  left: 2vw;
+  top: 4vw;
+}
+
+.star:nth-of-type(3) {
+  left: 91vw;
+  top: 40vw;
+}
+
+.star:nth-of-type(4) {
+  left: 89vw;
+  top: 21vw;
+}
+
+.star:nth-of-type(5) {
+  left: 100vw;
+  top: 12vw;
+}
+
+.star:nth-of-type(6) {
+  left: 10vw;
+  top: 47vw;
+}
+
+.star:nth-of-type(7) {
+  left: 7vw;
+  top: 11vw;
+}
+
+.star:nth-of-type(8) {
+  left: 17vw;
+  top: 9vw;
+}
+
+.star:nth-of-type(9) {
+  left: 45vw;
+  top: 30vw;
+}
+
+.star:nth-of-type(10) {
+  left: 52vw;
+  top: 30vw;
+}
+
+.star:nth-of-type(11) {
+  left: 10vw;
+  top: 32vw;
+}
+
+.star:nth-of-type(12) {
+  left: 22vw;
+  top: 26vw;
+}
+
+.star:nth-of-type(13) {
+  left: 60vw;
+  top: 39vw;
+}
+
+.star:nth-of-type(14) {
+  left: 89vw;
+  top: 27vw;
+}
+
+.star:nth-of-type(15) {
+  left: 76vw;
+  top: 38vw;
+}
+
+.star:nth-of-type(16) {
+  left: 85vw;
+  top: 20vw;
+}
+
+.star:nth-of-type(17) {
+  left: 29vw;
+  top: 18vw;
+}
+
+.star:nth-of-type(18) {
+  left: 96vw;
+  top: 49vw;
+}
+
+.star:nth-of-type(19) {
+  left: 9vw;
+  top: 27vw;
+}
+
+.star:nth-of-type(20) {
+  left: 6vw;
+  top: 6vw;
+}
+
+.star:nth-of-type(21) {
+  left: 30vw;
+  top: 40vw;
+}
+
+.star:nth-of-type(22) {
+  left: 41vw;
+  top: 9vw;
+}
+
+.star:nth-of-type(23) {
+  left: 66vw;
+  top: 38vw;
+}
+
+.star:nth-of-type(24) {
+  left: 87vw;
+  top: 39vw;
+}
+
+.star:nth-of-type(25) {
+  left: 25vw;
+  top: 48vw;
+}
+
+html,
+body {
+  margin: 0;
+  max-width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Montserrat', helvetica, arial, sans-serif;
+}
+
+.container {
+  display: -webkit-box;
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  flex-wrap: wrap;
+  background: -webkit-gradient(linear, left top, right top, from(rgba(204, 41, 0, 0.8)), color-stop(#003366), color-stop(#000d1a), color-stop(#000d1a), color-stop(#000d1a), to(#000d1a));
+  background: linear-gradient(to right, rgba(204, 41, 0, 0.8), #003366, #000d1a, #000d1a, #000d1a, #000d1a);
+}
+.container:before {
+  content: '';
+  display: block;
+  height: 0;
+  padding-bottom: 37%;
+  width: 37%;
+  background: #ff9933;
+  position: absolute;
+  left: -36%;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  border-radius: 50%;
+  box-shadow: 20px 0 150px 20px #ff8000;
+}
+.container .star {
+  background: #fff;
+  height: .3vh;
+  width: .3vh;
+  position: absolute;
+  opacity: 1;
+  z-index: 0;
+}
+.container .section {
+  -webkit-box-flex: 1;
+          flex-grow: 1;
+  position: relative;
+  height: 100%;
+  -webkit-transition: all 0.4s;
+  transition: all 0.4s;
+  text-align: center;
+  flex-shrink: 0;
+}
+.container .section .cplanet {
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  will-change: trasform;
+}
+.container .section .cplanet .planet {
+  overflow: hidden;
+  will-change: auto;
+  border-radius: 50%;
+  -webkit-transition: box-shadow 0.3s;
+  transition: box-shadow 0.3s;
+}
+.container .section .cplanet .planet:after, .container .section .cplanet .planet:before {
+  visibility: hidden;
+}
+.container .section .desc {
+  position: absolute;
+  width: 24vw;
+  height: 24vw;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  margin-left: 55%;
+  overflow: hidden;
+}
+.container .section .desc:after {
+  position: absolute;
+  width: 90%;
+  height: 100%;
+  color: white;
+  padding: 10px;
+  left: 0;
+  margin: 0;
+  text-align: justify;
+  font-size: 0.7vw;
+  padding-top: 100%;
+  z-index: 50;
+}
+.container .section .planetname {
+  position: absolute;
+  width: 90%;
+  height: 0;
+  padding-bottom: 90%;
+  margin: auto;
+  left: 0;
+  right: 0;
+  bottom: 80%;
+  visibility: hidden;
+}
+.container .section .planetname .line {
+  position: absolute;
+  width: 1px;
+  height: 10vh;
+  margin-left: -65%;
+  background: rgba(255, 255, 255, 0.5);
+  bottom: 0;
+  z-index: 20;
+}
+.container .section .planetname .line:after {
+  display: block;
+  color: white;
+  position: absolute;
+  width: 20%;
+  top: -45%;
+  padding-left: 0px;
+  font-size: 0.9vw;
+}
+.container .section:nth-child(1) .planet {
+  box-shadow: 1em 0em 0.22em 0 rgba(255, 255, 204, 0.64) inset;
+}
+.container .section:nth-child(2) .planet {
+  box-shadow: 1em 0em 0.44em 0 rgba(255, 255, 204, 0.56) inset;
+}
+.container .section:nth-child(3) .planet {
+  box-shadow: 1em 0em 0.66em 0 rgba(255, 255, 204, 0.48) inset;
+}
+.container .section:nth-child(4) .planet {
+  box-shadow: 1em 0em 0.88em 0 rgba(255, 255, 204, 0.4) inset;
+}
+.container .section:nth-child(5) .planet {
+  box-shadow: 1em 0em 1.1em 0 rgba(255, 255, 204, 0.32) inset;
+}
+.container .section:nth-child(6) .planet {
+  box-shadow: 1em 0em 1.32em 0 rgba(255, 255, 204, 0.24) inset;
+}
+.container .section:nth-child(7) .planet {
+  box-shadow: 1em 0em 1.54em 0 rgba(255, 255, 204, 0.16) inset;
+}
+.container .section:nth-child(8) .planet {
+  box-shadow: 1em 0em 1.76em 0 rgba(255, 255, 204, 0.08) inset;
+}
+.container .section:hover {
+  -webkit-box-flex: 9;
+          flex-grow: 9;
+  -webkit-transition: all 0.4s;
+  transition: all 0.4s;
+  background: rgba(255, 255, 255, 0.1);
+}
+.container .section:hover .cplanet {
+  -webkit-transform: translateX(-11vw) !important;
+          transform: translateX(-11vw) !important;
+  -webkit-transition: all 0.4s;
+  transition: all 0.4s;
+  -webkit-transition-delay: 0.5s;
+          transition-delay: 0.5s;
+}
+.container .section:hover .cplanet .planetname {
+  visibility: visible;
+}
+.container .section:hover .planet {
+  box-shadow: 0 0 1em -0.35em rgba(255, 255, 255, 0.2), 0 -1em 1.1em 0 rgba(68, 68, 68, 0.4) inset, 0 0 2.5em 0 rgba(0, 0, 0, 0.4) inset;
+  -webkit-transition: all 0.4s;
+  transition: all 0.4s;
+}
+.container .section:hover .planet:after, .container .section:hover .planet:before {
+  visibility: visible;
+}
+.container .section:hover .desc:after {
+  padding-top: 6%;
+  -webkit-transition: padding-top 4s ease-in;
+  transition: padding-top 4s ease-in;
+}
+.container .section:nth-child(1) .desc:after {
+  content: "Mercury is the smallest and innermost planet in the Solar System. Its orbital period (about 88 Earth days) is less than any other planet in the Solar System. Seen from Earth, it appears to move around its orbit in about 116 days. It has no known natural satellites. It is named after the Roman deity Mercury, the messenger to the gods.\a  \aLike Venus, Mercury orbits the Sun within Earths orbit as a inferior planet, so it can only be seen visually in the morning or the evening sky, and never exceeds 28° away from the Sun. Also, like Venus and the Moon, it displays the complete range of phases as it moves around its orbit relative to Earth. Although Mercury can appear as a bright star-like object when viewed from Earth, its proximity to the Sun often makes it more difficult to see than Venus.";
+  white-space: pre-wrap;
+}
+.container .section:nth-child(1) .cplanet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  width: 6%;
+  height: 0;
+  padding-bottom: 6%;
+  border-radius: 50%;
+  z-index: 1;
+}
+.container .section:nth-child(1) .cplanet .planetname .line:after {
+  content: 'Mercury';
+}
+.container .section:nth-child(1) .planet {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #82401f;
+}
+.container .section:nth-child(1) .planet:after {
+  content: '';
+  display: block;
+  border-radius: 10px;
+  box-shadow: 1em 0 0 6px #513021, 1.1em 2.2em 0px 2px rgba(81, 48, 33, 0.8), 2.5em 0.5em 1px 5px rgba(81, 48, 33, 0.8), 2.5em 3em 0 3px #513021, -0.5em 2em 0 2px #513021, 2.5em 3em 0 4px #513021, 0em 5em 0 2px rgba(81, 48, 33, 0.8), -5em 8em 0 5px rgba(81, 48, 33, 0.8), -6em 9em 0 1px #513021, 4em 5em 0 4px #513021;
+  content: " ";
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 6px;
+  height: 3px;
+  background: none;
+  z-index: 10;
+}
+.container .section:nth-child(2) .desc:after {
+  content: 'Venus is the second planet from the Sun, orbiting it every 224.7 Earth days. It has the longest rotation period (243 days) of any planet in the Solar System and rotates in the opposite direction to most other planets. It has no natural satellite. It is named after the Roman goddess of love and beauty. It is the second-brightest natural object in the night sky after the Moon, reaching an apparent magnitude of −4.6, bright enough to cast shadows. Because Venus orbits within Earths orbit it is an inferior planet and never appears to venture far from the Sun; its maximum angular distance from the Sun (elongation) is 47.8°.\a  \aVenus is a terrestrial planet and is sometimes called Earths "sister planet" because of their similar size, mass, proximity to the Sun, and bulk composition. It is radically different from Earth in other respects. It has the densest atmosphere of the four terrestrial planets, consisting of more than 96% carbon dioxide. The atmospheric pressure at the planets surface is 92 times that of Earth, or roughly the pressure found 900 m (3, 000 ft) underwater on Earth. Venus is by far the hottest planet in the Solar System, with a mean surface temperature of 735 K (462 °C;\a         863 °F),\a         even though Mercury is closer to the Sun. Venus is shrouded by an opaque layer of highly reflective clouds of sulfuric acid,\a         preventing its surface from being seen from space in visible light.';
+  white-space: pre-wrap;
+}
+.container .section:nth-child(2) .cplanet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  width: 18%;
+  height: 0;
+  padding-bottom: 18%;
+  border-radius: 50%;
+  z-index: 1;
+}
+.container .section:nth-child(2) .cplanet .planetname .line:after {
+  content: 'Venus';
+}
+.container .section:nth-child(2) .planet {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #AD946E;
+}
+.container .section:nth-child(2) .planet:after {
+  content: '';
+  display: block;
+  border-radius: 50% 10px 20% 10px;
+  box-shadow: 1em 0 0 5px #8c7046, 2.42em 4.84em 0px 6px rgba(255, 255, 255, 0.1), 5.5em 1.1em 1px 5px rgba(255, 255, 255, 0.1), 5.5em 6.6em 0 4px #8c7046, -1.1em 4.4em 0 6px #8c7046, 5.5em 6.6em 0 6px #8c7046, 0em 11em 0 3px rgba(255, 255, 255, 0.1), -11em 17.6em 0 3px rgba(255, 255, 255, 0.1), -13.2em 19.8em 0 6px #8c7046, 8.8em 11em 0 2px #8c7046;
+  content: " ";
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 10%;
+  background: none;
+  z-index: 10;
+}
+.container .section:nth-child(3) .desc:after {
+  content: "Earth, otherwise known as the world, is the third planet from the Sun and the only object in the Universe known to harbor life. It is the densest planet in the Solar System and the largest of the four terrestrial planets.\a  \a According to radiometric dating and other sources of evidence, Earth formed about 4.54 billion years ago. Earths gravity interacts with other objects in space, especially the Sun and the Moon, Earth s only natural satellite. During one orbit around the Sun, Earth rotates about its axis over 365 times, thus an Earth year is about 365.26 days long. Earths axis of rotation is tilted, producing seasonal variations on the planets surface. The gravitational interaction between the Earth and Moon causes ocean tides, stabilizes the Earth s orientation on its axis, and gradually slows its rotation. \a Earth s lithosphere is divided into several rigid tectonic plates that migrate across the surface over periods of many millions of years. About 71% of Earth s surface is covered with water, mostly by its oceans. The remaining 29% is land consisting of continents and islands that together have many lakes, rivers and other sources of water that contribute to the hydrosphere. The majority of Earth s polar regions are covered in ice, including the Antarctic ice sheet and the sea ice of the Arctic ice pack. Earth s interior remains active with a solid iron inner core, a liquid outer core that generates the Earth s magnetic field, and a convecting mantle that drives plate tectonics.";
+  white-space: pre-wrap;
+}
+.container .section:nth-child(3):hover .planet:after {
+  zoom: 2;
+}
+.container .section:nth-child(3):hover .ccmoon {
+  -webkit-transform: translateX(-11vw);
+          transform: translateX(-11vw);
+}
+.container .section:nth-child(3) .cplanet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  width: 18%;
+  height: 0;
+  padding-bottom: 18%;
+  border-radius: 50%;
+  z-index: 1;
+}
+.container .section:nth-child(3) .cplanet .planetname .line:after {
+  content: 'Earth';
+}
+.container .section:nth-child(3) .planet {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #6FC0E4;
+}
+.container .section:nth-child(3) .planet:after {
+  content: '';
+  display: block;
+  border-radius: 6px;
+  content: " ";
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 16px;
+  height: 10px;
+  background: none;
+  z-index: 10;
+  -webkit-animation: world-animation 14s linear 0s infinite;
+  animation: world-animation 14s linear 0s infinite;
+}
+.container .section:nth-child(3) .ccmoon {
+  position: absolute;
+  width: 37%;
+  height: 0;
+  padding-bottom: 37%;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.container .section:nth-child(3) .ccmoon .cmoon {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-transform-origin: center center;
+          transform-origin: center center;
+  -webkit-animation: moon 10s linear infinite;
+          animation: moon 10s linear infinite;
+}
+.container .section:nth-child(3) .ccmoon .cmoon .moon {
+  margin: 10px !important;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  width: 7%;
+  height: 0;
+  padding-bottom: 7%;
+  border-radius: 50%;
+  z-index: 1;
+  background: #777;
+  box-shadow: 1em 0em 1em 0 rgba(255, 255, 204, 0.5) inset;
+}
+.container .section:nth-child(4) .desc:after {
+  content: 'Mars is the fourth planet from the Sun and the second-smallest planet in the Solar System, after Mercury. Named after the Roman god of war, it is often referred to as the "Red Planet" because the iron oxide prevalent on its surface gives it a reddish appearance. Mars is a terrestrial planet with a thin atmosphere, having surface features reminiscent both of the impact craters of the Moon and the valleys, deserts, and polar ice caps of Earth.\a  \aThe rotational period and seasonal cycles of Mars are likewise similar to those of Earth, as is the tilt that produces the seasons. Mars is the site of Olympus Mons, the largest volcano and second-highest known mountain in the Solar System, and of Valles Marineris, one of the largest canyons in the Solar System. The smooth Borealis basin in the northern hemisphere covers 40% of the planet and may be a giant impact feature. Mars has two moons, Phobos and Deimos, which are small and irregularly shaped. These may be captured asteroids, similar to 5261 Eureka, a Mars trojan. \aThere are ongoing investigations assessing the past habitability potential of Mars, as well as the possibility of extant life. Future astrobiology missions are planned, including the Mars 2020 and ExoMars rovers.';
+  white-space: pre-wrap;
+}
+.container .section:nth-child(4) .cplanet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  width: 12%;
+  height: 0;
+  padding-bottom: 12%;
+  border-radius: 50%;
+  z-index: 1;
+}
+.container .section:nth-child(4) .cplanet .planetname .line:after {
+  content: 'Mars';
+}
+.container .section:nth-child(4) .planet {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #D34737;
+}
+.container .section:nth-child(4) .planet:after {
+  content: '';
+  display: block;
+  border-radius: 10px;
+  box-shadow: 1em 0 0 1px #8e2625, 1.1em 2.2em 0px 3px rgba(162, 44, 42, 0.8), 2.5em 0.5em 1px 5px rgba(162, 44, 42, 0.8), 2.5em 3em 0 6px #8e2625, -0.5em 2em 0 4px #8e2625, 2.5em 3em 0 1px #8e2625, 0em 5em 0 6px rgba(162, 44, 42, 0.8), -5em 8em 0 5px rgba(162, 44, 42, 0.8), -6em 9em 0 5px #8e2625, 4em 5em 0 2px #8e2625;
+  content: " ";
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 10px;
+  height: 7px;
+  background: none;
+  z-index: 10;
+}
+.container .section:nth-child(5):hover .cplanet {
+  width: 20vw;
+  padding-bottom: 20vw;
+}
+.container .section:nth-child(5) .cplanet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  width: 55%;
+  height: 0;
+  padding-bottom: 55%;
+  border-radius: 50%;
+  z-index: 1;
+}
+.container .section:nth-child(5) .cplanet .planetname .line:after {
+  content: 'Jupiter';
+}
+.container .section:nth-child(5) .desc:after {
+  content: "Jupiter is the fifth planet from the Sun and the largest in the Solar System. It is a giant planet with a mass one-thousandth that of the Sun, but two and a half times that of all the other planets in the Solar System combined. Jupiter is a gas giant, along with Saturn, with the other two giant planets, Uranus and Neptune, being ice giants. Jupiter was known to astronomers of ancient times. The Romans named it after their god Jupiter. When viewed from Earth, Jupiter can reach an apparent magnitude of −2.94, bright enough for its reflected light to cast shadows, and making it on average the third-brightest object in the night sky after the Moon and Venus.\a  \aJupiter is primarily composed of hydrogen with a quarter of its mass being helium, though helium comprises only about a tenth of the number of molecules. It may also have a rocky core of heavier elements, but like the other giant planets, Jupiter lacks a well-defined solid surface. Because of its rapid rotation, the planet s shape is that of an oblate spheroid (it has a slight but noticeable bulge around the equator). The outer atmosphere is visibly segregated into several bands at different latitudes, resulting in turbulence and storms along their interacting boundaries.";
+  white-space: pre-wrap;
+}
+.container .section:nth-child(5) .planet {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: -webkit-gradient(linear, left top, left bottom, from(#B2927B), color-stop(#b6512f), color-stop(#B2927B), color-stop(rgba(255, 255, 255, 0.8)), color-stop(#B2927B), to(#B2927B));
+  background: linear-gradient(#B2927B, #b6512f, #B2927B, rgba(255, 255, 255, 0.8), #B2927B, #B2927B);
+}
+.container .section:nth-child(6) .desc:after {
+  content: "Saturn is the sixth planet from the Sun and the second-largest in the Solar System, after Jupiter. It is a gas giant with an average radius about nine times that of Earth. Although it has only one-eighth the average density of Earth, with its larger volume Saturn is just over 95 times more massive. Saturn is named after the Roman god of agriculture; its astronomical symbol (♄) represents the god s sickle.\a  \aSaturn s interior is probably composed of a core of iron–nickel and rock (silicon and oxygen compounds). This core is surrounded by a deep layer of metallic hydrogen, an intermediate layer of liquid hydrogen and liquid helium, and finally outside the Frenkel line a gaseous outer layer. Saturn has a pale yellow hue due to ammonia crystals in its upper atmosphere. Electrical current within the metallic hydrogen layer is thought to give rise to Saturn s planetary magnetic field, which is weaker than Earth s, but has a magnetic moment 580 times that of Earth due to Saturn s larger size. Saturn s magnetic field strength is around one-twentieth of Jupiter s. The outer atmosphere is generally bland and lacking in contrast, although long-lived features can appear. Wind speeds on Saturn can reach 1, 800 km/h (500 m/s), higher than on Jupiter, but not as high as those on Neptune. \aSaturn has a prominent ring system that consists of nine continuous main rings and three discontinuous arcs and that is composed mostly of ice particles with a smaller amount of rocky debris and dust.";
+  white-space: pre-wrap;
+  z-index: 100;
+}
+.container .section:nth-child(6):hover .cplanet {
+  width: 20vw;
+  padding-bottom: 20vw;
+}
+.container .section:nth-child(6):hover:after, .container .section:nth-child(6):hover:before {
+  -webkit-transform: translateX(-11vw) rotateZ(-20deg) !important;
+          transform: translateX(-11vw) rotateZ(-20deg) !important;
+  width: 40vw;
+  -webkit-transition: all 0.4s;
+  transition: all 0.4s;
+  -webkit-transition-delay: 0.5s;
+          transition-delay: 0.5s;
+}
+.container .section:nth-child(6) .cplanet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  width: 41%;
+  height: 0;
+  padding-bottom: 41%;
+  border-radius: 50%;
+  z-index: 1;
+}
+.container .section:nth-child(6) .cplanet .planetname .line:after {
+  content: 'Saturn';
+}
+.container .section:nth-child(6) .planet {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-transform: rotateZ(-20deg);
+          transform: rotateZ(-20deg);
+  background: -webkit-gradient(linear, left top, left bottom, from(#F4C494), color-stop(#e09c85), color-stop(#F5D9A9), color-stop(#998b66), to(#9B897B));
+  background: linear-gradient(#F4C494, #e09c85, #F5D9A9, #998b66, #9B897B);
+}
+.container .section:nth-child(6):after {
+  content: '';
+  display: block;
+  -webkit-transform: rotateZ(-20deg) rotateX(40deg);
+          transform: rotateZ(-20deg) rotateX(40deg);
+  position: absolute;
+  border-radius: 50%;
+  border-bottom: 15px solid rgba(255, 255, 255, 0.7);
+  border-left: 13px solid rgba(255, 255, 255, 0.6);
+  border-right: 13px solid rgba(255, 255, 255, 0.55);
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  width: 76%;
+  height: 4.5vw;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  z-index: 2;
+}
+.container .section:nth-child(6):before {
+  content: '';
+  display: block;
+  position: absolute;
+  border-radius: 50%;
+  border: 15px solid rgba(255, 255, 255, 0.6);
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  -webkit-transform: rotateZ(-20deg) rotateX(40deg);
+          transform: rotateZ(-20deg) rotateX(40deg);
+  width: 80%;
+  height: 4.5vw;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+.container .section:nth-child(7) .desc:after {
+  content: 'Uranus is the seventh planet from the Sun. It has the third-largest planetary radius and fourth-largest planetary mass in the Solar System. Uranus is similar in composition to Neptune, and both have different bulk chemical composition from that of the larger gas giants Jupiter and Saturn. For this reason, scientists often classify Uranus and Neptune as "ice giants" to distinguish them from the gas giants. Uranus s atmosphere is similar to Jupiter s and Saturn s in its primary composition of hydrogen and helium, but it contains more "ices" such as water, ammonia, and methane, along with traces of other hydrocarbons. It is the coldest planetary atmosphere in the Solar System, with a minimum temperature of 49 K (−224.2 °C), and has a complex, layered cloud structure with water thought to make up the lowest clouds and methane the uppermost layer of clouds. The interior of Uranus is mainly composed of ices and rock.\a  \aThe Uranian system has a unique configuration among those of the planets because its axis of rotation is tilted sideways, nearly into the plane of its solar orbit. In 1986, images from Voyager 2 showed Uranus as an almost featureless planet in visible light, without the cloud bands or storms associated with the other giant planets. Observations from Earth have shown seasonal change and increased weather activity as Uranus approached its equinox in 2007. Wind speeds can reach 250 metres per second (900 km/h, 560 mph).';
+  white-space: pre-wrap;
+}
+.container .section:nth-child(7):hover:after, .container .section:nth-child(7):hover:before {
+  -webkit-transform: translateX(-11vw) rotateZ(-20deg) !important;
+          transform: translateX(-11vw) rotateZ(-20deg) !important;
+  -webkit-transition: all 0.4s;
+  transition: all 0.4s;
+  -webkit-transition-delay: 0.5s;
+          transition-delay: 0.5s;
+}
+.container .section:nth-child(7) .cplanet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  width: 25%;
+  height: 0;
+  padding-bottom: 25%;
+  border-radius: 50%;
+  z-index: 1;
+}
+.container .section:nth-child(7) .cplanet .planetname .line:after {
+  content: 'Uranus';
+}
+.container .section:nth-child(7) .planet {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-transform: rotateZ(-20deg) translateX(0vw);
+          transform: rotateZ(-20deg) translateX(0vw);
+  background: -webkit-gradient(linear, left top, left bottom, from(#99E8EC), color-stop(#19BDBA), color-stop(#99E8EC), color-stop(#19BDBA), to(#99E8EC));
+  background: linear-gradient(#99E8EC, #19BDBA, #99E8EC, #19BDBA, #99E8EC);
+}
+.container .section:nth-child(7):after {
+  content: '';
+  display: block;
+  -webkit-transform: rotateZ(-20deg) rotateX(40deg);
+          transform: rotateZ(-20deg) rotateX(40deg);
+  position: absolute;
+  border-radius: 50%;
+  border-bottom: 7px solid rgba(255, 255, 255, 0.7);
+  width: 40%;
+  height: 3.5vw;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  z-index: 2;
+}
+.container .section:nth-child(7):before {
+  content: '';
+  display: block;
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  -webkit-transform: rotateZ(-20deg) rotateX(40deg);
+          transform: rotateZ(-20deg) rotateX(40deg);
+  width: 40%;
+  height: 3.5vw;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+.container .section:nth-child(8) .desc:after {
+  content: "Neptune is the eighth and farthest known planet from the Sun in the Solar System. In the Solar System, it is the fourth-largest planet by diameter, the third-most-massive planet, and the densest giant planet. Neptune is 17 times the mass of Earth and is slightly more massive than its near-twin Uranus, which is 15 times the mass of Earth and slightly larger than Neptune. Neptune orbits the Sun once every 164.8 years at an average distance of 30.1 astronomical units (4.50×109 km). It is named after the Roman god of the sea and has the astronomical symbol ♆, a stylised version of the god Neptune s trident.\a  \aNeptune is not visible to the unaided eye and is the only planet in the Solar System found by mathematical prediction rather than by empirical observation. Unexpected changes in the orbit of Uranus led Alexis Bouvard to deduce that its orbit was subject to gravitational perturbation by an unknown planet. Neptune was subsequently observed with a telescope on 23 September 1846 by Johann Galle within a degree of the position predicted by Urbain Le Verrier. Its largest moon, Triton, was discovered shortly thereafter, though none of the planet s remaining known 14 moons were located telescopically until the 20th century. The planet s distance from Earth gives it a very small apparent size, making it challenging to study with Earth-based telescopes. Neptune was visited by Voyager 2, when it flew by the planet on 25 August 1989. The advent of the Hubble Space Telescope and large ground-based telescopes with adaptive optics has recently allowed for additional detailed observations from afar.";
+  white-space: pre-wrap;
+}
+.container .section:nth-child(8) .cplanet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  width: 22%;
+  height: 0;
+  padding-bottom: 22%;
+  border-radius: 50%;
+  z-index: 1;
+}
+.container .section:nth-child(8) .cplanet .planetname .line:after {
+  content: 'Neptune';
+}
+.container .section:nth-child(8) .planet {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-transform: rotateZ(20deg) translateX(0vw);
+          transform: rotateZ(20deg) translateX(0vw);
+  background: -webkit-gradient(linear, left top, left bottom, from(#384EC7), color-stop(#2F3893), color-stop(#384EC7), color-stop(#2F3893), to(#384EC7));
+  background: linear-gradient(#384EC7, #2F3893, #384EC7, #2F3893, #384EC7);
+}
+
+@-webkit-keyframes world-animation {
+  0% {
+    box-shadow: -253px 16px 0 0 rgba(255, 255, 255, 0.8), -213px 41px 0 1px rgba(255, 255, 255, 0.8), -191px -1px 0 0 rgba(255, 255, 255, 0.8), -160px 59px 0 -2px rgba(255, 255, 255, 0.8), -226px 83px 0 3px rgba(255, 255, 255, 0.8), -109px 32px 0 0 rgba(255, 255, 255, 0.8), -90px 89px 0 1px rgba(255, 255, 255, 0.8), -160px 110px 0 -2px rgba(255, 255, 255, 0.8), -53px 16px 0 0 rgba(255, 255, 255, 0.8), -13px 41px 0 1px rgba(255, 255, 255, 0.8), 9px -1px 0 0 rgba(255, 255, 255, 0.8), 40px 59px 0 -2px rgba(255, 255, 255, 0.8), -26px 83px 0 3px rgba(255, 255, 255, 0.8), 91px 32px 0 0 rgba(255, 255, 255, 0.8), 110px 89px 0 1px rgba(255, 255, 255, 0.8), 40px 110px 0 -2px rgba(255, 255, 255, 0.8), 0 10px 0 3px #81c763, 6px 10px 0 3px #81c763, 3px 20px 0 -4px #81c763, 3px 24px 0 -2px #81c763, 9px 24px 0 -2px #81c763, -20px 50px 0 -2px #81c763, 30px 78px 0 2px #81c763, 74px 108px 0 -2px #81c763, 60px 32px 0 -3px #81c763, 85px 69px 0 0 #81c763, 100px 0 0 0 #81c763, 140px 42px 0 0 #81c763, 143px 32px 0 -4px #81c763, 220px 10px 0 3px #81c763, 226px 10px 0 3px #81c763, 223px 20px 0 -4px #81c763, 223px 24px 0 -2px #81c763, 229px 24px 0 -2px #81c763, 200px 50px 0 -2px #81c763, 250px 78px 0 2px #81c763, 294px 108px 0 -2px #81c763, 280px 32px 0 -3px #81c763, 305px 69px 0 0 #81c763, 300px 0 0 0 #81c763, 360px 42px 0 0 #81c763, 363px 32px 0 -4px #81c763;
+  }
+  100% {
+    box-shadow: -53px 16px 0 0 rgba(255, 255, 255, 0.8), -13px 41px 0 1px rgba(255, 255, 255, 0.8), 9px -1px 0 0 rgba(255, 255, 255, 0.8), 40px 59px 0 -2px rgba(255, 255, 255, 0.8), -26px 83px 0 3px rgba(255, 255, 255, 0.8), 91px 32px 0 0 rgba(255, 255, 255, 0.8), 110px 89px 0 1px rgba(255, 255, 255, 0.8), 40px 110px 0 -2px rgba(255, 255, 255, 0.8), 147px 16px 0 0 rgba(255, 255, 255, 0.8), 187px 41px 0 1px rgba(255, 255, 255, 0.8), 209px -1px 0 0 rgba(255, 255, 255, 0.8), 240px 59px 0 -2px rgba(255, 255, 255, 0.8), 174px 83px 0 3px rgba(255, 255, 255, 0.8), 291px 32px 0 0 rgba(255, 255, 255, 0.8), 310px 89px 0 1px rgba(255, 255, 255, 0.8), 240px 110px 0 -2px rgba(255, 255, 255, 0.8), -220px 10px 0 3px #81c763, -214px 10px 0 3px #81c763, -217px 20px 0 -4px #81c763, -217px 24px 0 -2px #81c763, -211px 24px 0 -2px #81c763, -240px 50px 0 -2px #81c763, -190px 78px 0 2px #81c763, -146px 108px 0 -2px #81c763, -160px 32px 0 -3px #81c763, -135px 69px 0 0 #81c763, -120px 0 0 0 #81c763, -80px 42px 0 0 #81c763, -77px 32px 0 -4px #81c763, 0 10px 0 3px #81c763, 6px 10px 0 3px #81c763, 3px 20px 0 -4px #81c763, 3px 24px 0 -2px #81c763, 9px 24px 0 -2px #81c763, -20px 50px 0 -2px #81c763, 30px 78px 0 2px #81c763, 74px 108px 0 -2px #81c763, 60px 32px 0 -3px #81c763, 85px 69px 0 0 #81c763, 100px 0 0 0 #81c763, 140px 42px 0 0 #81c763, 143px 32px 0 -4px #81c763;
+  }
+}
+
+@keyframes world-animation {
+  0% {
+    box-shadow: -253px 16px 0 0 rgba(255, 255, 255, 0.8), -213px 41px 0 1px rgba(255, 255, 255, 0.8), -191px -1px 0 0 rgba(255, 255, 255, 0.8), -160px 59px 0 -2px rgba(255, 255, 255, 0.8), -226px 83px 0 3px rgba(255, 255, 255, 0.8), -109px 32px 0 0 rgba(255, 255, 255, 0.8), -90px 89px 0 1px rgba(255, 255, 255, 0.8), -160px 110px 0 -2px rgba(255, 255, 255, 0.8), -53px 16px 0 0 rgba(255, 255, 255, 0.8), -13px 41px 0 1px rgba(255, 255, 255, 0.8), 9px -1px 0 0 rgba(255, 255, 255, 0.8), 40px 59px 0 -2px rgba(255, 255, 255, 0.8), -26px 83px 0 3px rgba(255, 255, 255, 0.8), 91px 32px 0 0 rgba(255, 255, 255, 0.8), 110px 89px 0 1px rgba(255, 255, 255, 0.8), 40px 110px 0 -2px rgba(255, 255, 255, 0.8), 0 10px 0 3px #81c763, 6px 10px 0 3px #81c763, 3px 20px 0 -4px #81c763, 3px 24px 0 -2px #81c763, 9px 24px 0 -2px #81c763, -20px 50px 0 -2px #81c763, 30px 78px 0 2px #81c763, 74px 108px 0 -2px #81c763, 60px 32px 0 -3px #81c763, 85px 69px 0 0 #81c763, 100px 0 0 0 #81c763, 140px 42px 0 0 #81c763, 143px 32px 0 -4px #81c763, 220px 10px 0 3px #81c763, 226px 10px 0 3px #81c763, 223px 20px 0 -4px #81c763, 223px 24px 0 -2px #81c763, 229px 24px 0 -2px #81c763, 200px 50px 0 -2px #81c763, 250px 78px 0 2px #81c763, 294px 108px 0 -2px #81c763, 280px 32px 0 -3px #81c763, 305px 69px 0 0 #81c763, 300px 0 0 0 #81c763, 360px 42px 0 0 #81c763, 363px 32px 0 -4px #81c763;
+  }
+  100% {
+    box-shadow: -53px 16px 0 0 rgba(255, 255, 255, 0.8), -13px 41px 0 1px rgba(255, 255, 255, 0.8), 9px -1px 0 0 rgba(255, 255, 255, 0.8), 40px 59px 0 -2px rgba(255, 255, 255, 0.8), -26px 83px 0 3px rgba(255, 255, 255, 0.8), 91px 32px 0 0 rgba(255, 255, 255, 0.8), 110px 89px 0 1px rgba(255, 255, 255, 0.8), 40px 110px 0 -2px rgba(255, 255, 255, 0.8), 147px 16px 0 0 rgba(255, 255, 255, 0.8), 187px 41px 0 1px rgba(255, 255, 255, 0.8), 209px -1px 0 0 rgba(255, 255, 255, 0.8), 240px 59px 0 -2px rgba(255, 255, 255, 0.8), 174px 83px 0 3px rgba(255, 255, 255, 0.8), 291px 32px 0 0 rgba(255, 255, 255, 0.8), 310px 89px 0 1px rgba(255, 255, 255, 0.8), 240px 110px 0 -2px rgba(255, 255, 255, 0.8), -220px 10px 0 3px #81c763, -214px 10px 0 3px #81c763, -217px 20px 0 -4px #81c763, -217px 24px 0 -2px #81c763, -211px 24px 0 -2px #81c763, -240px 50px 0 -2px #81c763, -190px 78px 0 2px #81c763, -146px 108px 0 -2px #81c763, -160px 32px 0 -3px #81c763, -135px 69px 0 0 #81c763, -120px 0 0 0 #81c763, -80px 42px 0 0 #81c763, -77px 32px 0 -4px #81c763, 0 10px 0 3px #81c763, 6px 10px 0 3px #81c763, 3px 20px 0 -4px #81c763, 3px 24px 0 -2px #81c763, 9px 24px 0 -2px #81c763, -20px 50px 0 -2px #81c763, 30px 78px 0 2px #81c763, 74px 108px 0 -2px #81c763, 60px 32px 0 -3px #81c763, 85px 69px 0 0 #81c763, 100px 0 0 0 #81c763, 140px 42px 0 0 #81c763, 143px 32px 0 -4px #81c763;
+  }
+}
+@-webkit-keyframes moon {
+  to {
+    -webkit-transform: rotateZ(360deg);
+            transform: rotateZ(360deg);
+  }
+}
+@keyframes moon {
+  to {
+    -webkit-transform: rotateZ(360deg);
+            transform: rotateZ(360deg);
+  }
+}
+</style>
+
+<section class="container">
+    <div class="section">
+        <div class="cplanet">
+            <div class="planet"></div>
+            <div class="planetname"><span class="line"></span></div>
+        </div>
+        <div class="desc"></div>
+        <div class="ccmoon">
+            <div class="cmoon">
+                <div class="moon"></div>
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <div class="cplanet">
+            <div class="planet"></div>
+            <div class="planetname"><span class="line"></span></div>
+        </div>
+        <div class="desc"></div>
+        <div class="ccmoon">
+            <div class="cmoon">
+                <div class="moon"></div>
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <div class="cplanet">
+            <div class="planet"></div>
+            <div class="planetname"><span class="line"></span></div>
+        </div>
+        <div class="desc"></div>
+        <div class="ccmoon">
+            <div class="cmoon">
+                <div class="moon"></div>
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <div class="cplanet">
+            <div class="planet"></div>
+            <div class="planetname"><span class="line"></span></div>
+        </div>
+        <div class="desc"></div>
+        <div class="ccmoon">
+            <div class="cmoon">
+                <div class="moon"></div>
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <div class="cplanet">
+            <div class="planet"></div>
+            <div class="planetname"><span class="line"></span></div>
+        </div>
+        <div class="desc"></div>
+        <div class="ccmoon">
+            <div class="cmoon">
+                <div class="moon"></div>
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <div class="cplanet">
+            <div class="planet"></div>
+            <div class="planetname"><span class="line"></span></div>
+        </div>
+        <div class="desc"></div>
+        <div class="ccmoon">
+            <div class="cmoon">
+                <div class="moon"></div>
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <div class="cplanet">
+            <div class="planet"></div>
+            <div class="planetname"><span class="line"></span></div>
+        </div>
+        <div class="desc"></div>
+        <div class="ccmoon">
+            <div class="cmoon">
+                <div class="moon"></div>
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <div class="cplanet">
+            <div class="planet"></div>
+            <div class="planetname"><span class="line"></span></div>
+        </div>
+        <div class="desc"></div>
+        <div class="ccmoon">
+            <div class="cmoon">
+                <div class="moon"></div>
+            </div>
+        </div>
+    </div><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span>
+    <span
+        class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span>
+        <span
+            class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span>
+            <span
+                class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span></section>
+
+

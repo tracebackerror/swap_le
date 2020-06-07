@@ -1,0 +1,1135 @@
+<body>
+<!-- canvas with id="myCanvas" is made by zim Frame -->
+</body>
+<script src="https://zimjs.org/cdn/1.2.0/createjs_min.js"></script>
+<script src="https://zimjs.org/cdn/10.5.3/zim.js"></script>
+<script>
+/* BEGIN EARTH  */
+var earth_ss = new createjs.SpriteSheet({
+	images: ["https://i.imgur.com/pJF7hc8.png"], 
+	frames: [[729,0,136,129],[0,0,727,939]]
+}); //  Earth texture
+function earthShadow() {
+    this.super_constructor();
+
+    this.spriteSheet = earth_ss;
+	this.gotoAndStop(1);
+} // Optional shadow
+function earth_tween2() {
+    this.super_constructor();
+    var cjs = createjs;
+
+    // Layer 1
+	this.instance = new Sprite({spriteSheet: earth_ss});
+	this.instance.parent = this;
+	this.instance.setTransform(-195,-64);
+
+	this.instance_1 = new Sprite({spriteSheet: earth_ss});
+	this.instance_1.parent = this;
+	this.instance_1.setTransform(-69,-64);
+
+	this.instance_2 = new Sprite({spriteSheet: earth_ss});
+	this.instance_2.parent = this;
+	this.instance_2.setTransform(60,-64);
+
+	this.timeline.addTween(cjs.Tween.get({}).to({state:[{t:this.instance_2},{t:this.instance_1},{t:this.instance}]}).wait(1));
+
+} // Motion Tween
+function earth_tween1() {
+    this.super_constructor();
+    var cjs = createjs;
+
+    // Layer 1
+    // Layer 1
+	this.instance = new Sprite({spriteSheet: earth_ss});
+	this.instance.parent = this;
+	this.instance.setTransform(-191,-65);
+
+	this.instance_1 = new Sprite({spriteSheet: earth_ss});
+	this.instance_1.parent = this;
+	this.instance_1.setTransform(-66,-65);
+
+	this.instance_2 = new Sprite({spriteSheet: earth_ss});
+	this.instance_2.parent = this;
+	this.instance_2.setTransform(59,-65);
+
+	this.timeline.addTween(cjs.Tween.get({}).to({state:[{t:this.instance_2},{t:this.instance_1},{t:this.instance}]}).wait(1));
+
+} // Motion tween
+function worldMap() {
+    this.super_constructor();
+    var cjs = createjs;
+
+    // Layer 2 (mask)
+	var mask = new cjs.Shape();
+	mask._off = true;
+	mask.graphics.p("AkWKVQiBg3hjhjQhkhjg2iBQg5iFAAiSQAAiRA5iFQA2iBBkhjQBjhjCBg3QCFg4CRAAQEqAADSDSQBiBjA3CBQA4CFABCRQgBCSg4CFQg3CBhiBjQhkBjiBA3QiFA4iSAAQiRAAiFg4g");
+	mask.setTransform(64.5,64.5);
+
+	// Layer 1
+	this.instance = new earth_tween1("synched",0);
+	this.instance.parent = this;
+	this.instance.setTransform(195.5,64.3);
+
+	this.instance_1 = new earth_tween2("synched",0);
+	this.instance_1.parent = this;
+	this.instance_1.setTransform(-58.5,64.3);
+
+	var maskedShapeInstanceList = [this.instance,this.instance_1];
+
+	for(var shapedInstanceItr = 0; shapedInstanceItr < maskedShapeInstanceList.length; shapedInstanceItr++) {
+		maskedShapeInstanceList[shapedInstanceItr].mask = mask;
+	}
+
+	this.timeline.addTween(cjs.Tween.get({}).to({state:[{t:this.instance}]}).to({state:[{t:this.instance_1}]},89).wait(1));
+	this.timeline.addTween(cjs.Tween.get(this.instance).to({_off:true,x:-58.5},89).wait(1));
+    
+} // The spritesheet is used to create an animation
+function Earth() {
+
+    this.super_constructor();
+    var cjs = createjs;
+
+    	// Layer 1
+	this.shape = new cjs.Shape();
+	this.shape.graphics.lf(["rgba(26,23,27,0.498)","rgba(26,23,27,0.471)","rgba(26,23,27,0)"],[0,0.027,1],-35.8,0,35.9,0).s().p("ABPKVQh/g2hkhkQhjhjg2iBQg5iFAAiSQAAiRA5iFQA2iBBjhjQDRjSEqAAQhXA7hXB3QitDuAAEsQAAE5CtDpQBXB1BXA2QiSAAiGg4g");
+	this.shape.setTransform(66.2,149.6);
+
+	this.instance = new worldMap();
+	this.instance.parent = this;
+	this.instance.setTransform(106,149,1,1,0,0,0,68,64.3);
+
+	this.shape_1 = new cjs.Shape();
+	this.shape_1.graphics.f("#73D1D9").s().p("AkWKVQiBg3hjhjQhkhjg2iBQg4iFAAiSQAAiRA4iFQA2iBBkhjQBjhjCBg3QCFg4CRAAQEpAADTDSQBiBjA3CBQA4CFAACRQAACSg4CFQg3CBhiBjQhkBjiBA3QiFA4iSAAQiRAAiFg4g");
+	this.shape_1.setTransform(102.1,149.6);
+
+
+	this.timeline.addTween(cjs.Tween.get({}).to({state:[{t:this.shape_1},{t:this.instance},{t:this.shape}]}).wait(1));
+
+    
+} // Main Class that creates the 'Earth' object
+
+// zim.js allows us extend objects drawn on the canvas
+extend(earthShadow, zim.Sprite);
+extend(earth_tween2, zim.MovieClip);
+extend(earth_tween1, zim.MovieClip);
+extend(worldMap, zim.MovieClip);
+extend(Earth, zim.MovieClip);
+/* END EARTH  */
+
+/* BEGIN JUPITER  */
+var jupiter_ss = new createjs.SpriteSheet({
+	images: ["https://i.imgur.com/q0mccNc.png"],
+	frames: [[0,0,727,943],[729,0,292,291]]
+}); // Jupiter spritesheet
+function JupiterShadow() {
+    this.super_constructor();
+
+    this.spriteSheet = jupiter_ss;
+	this.gotoAndStop(0);
+}
+function JupiterTexture() {
+    this.super_constructor();
+
+    this.spriteSheet = jupiter_ss;
+	this.gotoAndStop(1);
+}
+function JupiterTween(){
+    this.super_constructor();
+    var cjs = createjs;
+
+    	// Layer 1
+	this.instance = new Sprite({spriteSheet: jupiter_ss});
+    this.instance.gotoAndStop(1);
+    this.instance.parent = this;
+	this.instance.setTransform(-405.3,-59.2);
+
+	this.instance_1 = new Sprite({spriteSheet: jupiter_ss});
+    this.instance_1.gotoAndStop(1);
+	this.instance_1.parent = this;
+	this.instance_1.setTransform(-138.9,-186.2);
+
+	this.instance_2 = new Sprite({spriteSheet: jupiter_ss});
+    this.instance_2.gotoAndStop(1);
+	this.instance_2.parent = this;
+	this.instance_2.setTransform(128,-306);
+
+	this.timeline.addTween(cjs.Tween.get({}).to({state:[{t:this.instance_2},{t:this.instance_1},{t:this.instance}]}).wait(1));
+
+}
+function JupiterShadow2() {
+    this.super_constructor(0,0);    
+
+	// Layer 1
+	this.shadow = new Sprite({spriteSheet: jupiter_ss});
+    this.shadow.gotoAndStop(0);
+	this.shadow.parent = this;
+	this.shadow.setTransform(0,0,0.379,0.379);
+
+	this.addChild(this.shadow);
+
+}
+function JupiterMap() {
+    this.super_constructor(0,-1); 
+    var cjs = createjs;   
+
+
+	// mask (mask)
+	var mask = new cjs.Shape();
+	mask._off = true;
+	mask.graphics.p("AgCQXQjMgBi+hOQi9hNiSiPQiXiThSjFQhTjEABjSQABjMBOi+QBNi9COiSQCUiXDEhSQDFhSDSAAQDMABC9BOQC+BNCSCPQCXCTBSDFQBTDEgBDSQgBDMhOC+QhNC9iPCSQiUCXjEBSQjDBSjRAAIgCAAg");
+	mask.setTransform(104.7,103.7);
+
+	// Layer 1
+	this.instance = new JupiterTween("synched",0);
+	this.instance.parent = this;
+	this.instance.setTransform(-235.9,294.2,1.17,1.17);
+
+	var maskedShapeInstanceList = [this.instance];
+
+	for(var shapedInstanceItr = 0; shapedInstanceItr < maskedShapeInstanceList.length; shapedInstanceItr++) {
+		maskedShapeInstanceList[shapedInstanceItr].mask = mask;
+	}
+
+	this.timeline.addTween(cjs.Tween.get(this.instance).to({x:402.2,y:-7.8},119).wait(1));
+
+}
+function Jupiter () {
+    this.super_constructor(-665.6); 
+    var cjs = createjs;   
+
+
+	// Layer 1
+	this.shape = new cjs.Shape();
+	this.shape.graphics.lf(["rgba(26,23,27,0.498)","rgba(26,23,27,0.471)","rgba(26,23,27,0)"],[0,0.027,1],-52.3,0,52.3,0).s().p("AB0PEQi7hPiRiRQiRiRhPi8QhSjCAAjVQAAjUBSjCQBPi8CRiRQCRiRC7hPQDChSDVAAQh+BWh/CtQj9FbAAG3QAAHID9FVQB/CqB+BPQjVAAjChSg");
+	this.shape.setTransform(96.6,219.3);
+
+	this.instance = new JupiterMap();
+	this.instance.parent = this;
+	this.instance.setTransform(149,220.1,1,1,0,0,0,104.5,104.1);
+
+	this.shape_1 = new cjs.Shape();
+	this.shape_1.graphics.f("#CE6F3E").s().p("AgCQXQjMgBi9hOQi+hNiSiPQiXiThSjFQhSjEABjSQAAjMBNi+QBOi9CPiSQCTiXDEhSQDFhSDSAAQDMABC9BOQC+BNCSCPQCXCTBSDFQBSDEgBDSQAADMhOC+QhOC9iOCSQiTCXjFBSQjDBSjRAAIgCAAg");
+	this.shape_1.setTransform(148.9,219.3);
+
+	this.instance_1 = new JupiterShadow2();
+	this.instance_1.parent = this;
+	this.instance_1.setTransform(137.8,178.8,1,1,0,0,0,137.8,178.8);
+	this.instance_1.alpha = 0.199;
+
+	this.timeline.addTween(cjs.Tween.get({}).to({state:[{t:this.instance_1},{t:this.shape_1},{t:this.instance},{t:this.shape}]}).wait(1));
+
+} // Main Jupiter class
+
+extend(JupiterShadow, zim.Sprite);
+extend(JupiterShadow2, zim.Container);
+extend(Jupiter, zim.MovieClip);
+extend(JupiterTexture, zim.Sprite);
+extend(JupiterTween, zim.MovieClip);
+extend(JupiterMap, zim.MovieClip);
+/* END JUPITER  */
+
+
+/* BEGIN MARS  */
+var mars_ss = new createjs.SpriteSheet({
+	images: ["https://i.imgur.com/iRpurIW.png"],
+	frames: [[729,0,130,130],[0,0,727,940]]
+});
+function Mars_Tween2() {
+    this.super_constructor();
+    var cjs = createjs;
+
+    // Layer 1
+	this.instance = new Sprite({spriteSheet: mars_ss});
+	this.instance.parent = this;
+	this.instance.setTransform(-66,58);
+
+	this.instance_1 = new Sprite({spriteSheet: mars_ss});
+	this.instance_1.parent = this;
+	this.instance_1.setTransform(-66,-66);
+
+	this.instance_2 = new Sprite({spriteSheet: mars_ss});
+	this.instance_2.parent = this;
+	this.instance_2.setTransform(-65,-191);
+
+	this.timeline.addTween(cjs.Tween.get({}).to({state:[{t:this.instance_2},{t:this.instance_1},{t:this.instance}]}).wait(1));
+
+
+}
+function Mars_Tween1() {
+    this.super_constructor();
+    var cjs = createjs;
+
+    // Layer 1
+    	// Layer 1
+	this.instance = new Sprite({spriteSheet: mars_ss});
+	this.instance.parent = this;
+	this.instance.setTransform(-65,65);
+
+	this.instance_1 = new Sprite({spriteSheet: mars_ss});
+	this.instance_1.parent = this;
+	this.instance_1.setTransform(-65,-61);
+
+	this.instance_2 = new Sprite({spriteSheet: mars_ss});
+	this.instance_2.parent = this;
+	this.instance_2.setTransform(-65,-191);
+
+	this.shape = new cjs.Shape();
+	this.shape.graphics.f("#D84443").s().p("Ag1ATQgWgIAAgLQAAgKAWgIQAXgIAeAAQAgAAAWAIQAWAIAAAKQAAALgWAIQgWAIggAAQgfAAgWgIg");
+	this.shape.setTransform(-30.4,-109.2);
+
+	this.timeline.addTween(cjs.Tween.get({}).to({state:[{t:this.shape},{t:this.instance_2},{t:this.instance_1},{t:this.instance}]}).wait(1));
+
+
+}
+function MarsMap() {
+    this.super_constructor();
+    var cjs = createjs;
+
+    // Layer 2 (mask)
+	var mask = new cjs.Shape();
+	mask._off = true;
+	mask.graphics.p("AnLHNQi+i/gBkOQABkMC+jAQC/i+EMAAQEOAAC/C+QC+DAABEMQgBEOi+C/Qi/C+kOAAQkMAAi/i+g");
+	mask.setTransform(65.2,64.9);
+
+	// Layer 1
+	this.instance = new Mars_Tween1("synched",0);
+	this.instance.parent = this;
+	this.instance.setTransform(64.8,-61.7);
+
+	this.instance_1 = new Mars_Tween2("synched",0);
+	this.instance_1.parent = this;
+	this.instance_1.setTransform(64.8,191.3);
+
+	var maskedShapeInstanceList = [this.instance,this.instance_1];
+
+	for(var shapedInstanceItr = 0; shapedInstanceItr < maskedShapeInstanceList.length; shapedInstanceItr++) {
+		maskedShapeInstanceList[shapedInstanceItr].mask = mask;
+	}
+
+	this.timeline.addTween(cjs.Tween.get({}).to({state:[{t:this.instance}]}).to({state:[{t:this.instance_1}]},89).wait(1));
+	this.timeline.addTween(cjs.Tween.get(this.instance).to({_off:true,y:191.3},89).wait(1));
+}
+function Mars() {
+
+    this.super_constructor();
+    var cjs = createjs;
+
+    // Layer 1
+	this.shape = new cjs.Shape();
+	this.shape.graphics.lf(["rgba(26,23,27,0.498)","rgba(26,23,27,0.471)","rgba(26,23,27,0)"],[0,0.027,1],-32.5,0,32.6,0).s().p("AiGHNQi+i/gBkOQABkNC+i+QC+i/EOAAQhPA1hPBsQidDYAAERQAAEcCdDUQBPBqBPAxQkOAAi+i+g");
+	this.shape.setTransform(60.1,135.9);
+
+	this.instance = new MarsMap();
+	this.instance.parent = this;
+	this.instance.setTransform(92.4,135.6,1,1,0,0,0,64.8,64.8);
+
+	this.shape_1 = new cjs.Shape();
+	this.shape_1.graphics.f("#E27F7F").s().p("AnMHMQi+i+AAkOQAAkNC+i/QDAi+EMAAQEOAAC/C+QC+C/AAENQAAEOi+C+Qi/C/kOAAQkMAAjAi/g");
+	this.shape_1.setTransform(92.7,136);
+
+	
+
+	this.timeline.addTween(cjs.Tween.get({}).to({state:[{t:this.shape_1},{t:this.instance},{t:this.shape}]}).wait(1));
+
+    
+}
+
+extend(Mars_Tween2, zim.MovieClip);
+extend(Mars_Tween1, zim.MovieClip);
+extend(MarsMap, zim.MovieClip);
+extend(Mars, zim.MovieClip);
+/* END MARS  */
+
+
+/* BEGIN MERCURY  */
+var mercury_ss = new createjs.SpriteSheet({
+	images: ["https://i.imgur.com/kMZkvsv.png"],
+	frames: [[758,0,83,88], [0,0,756,939]]
+});
+function Merc_Tween2() {
+    this.super_constructor();
+    var cjs = createjs;
+
+    // Layer 1
+	this.instance = new Sprite({spriteSheet: mercury_ss});
+	this.instance.parent = this;
+	this.instance.setTransform(-41,81);
+
+	this.instance_1 = new Sprite({spriteSheet: mercury_ss});
+	this.instance_1.parent = this;
+	this.instance_1.setTransform(-41,-7);
+
+	this.instance_2 = new Sprite({spriteSheet: mercury_ss});
+	this.instance_2.parent = this;
+	this.instance_2.setTransform(-41,-96);
+
+	this.instance_3 = new Sprite({spriteSheet: mercury_ss});
+	this.instance_3.parent = this;
+	this.instance_3.setTransform(-41,-186);
+
+	this.timeline.addTween(cjs.Tween.get({}).to({state:[{t:this.instance_3},{t:this.instance_2},{t:this.instance_1},{t:this.instance}]}).wait(1));
+
+}
+function Merc_Tween1() {
+    this.super_constructor();
+    var cjs = createjs;
+
+    // Layer 1
+	this.instance = new Sprite({spriteSheet: mercury_ss});
+	this.instance.parent = this;
+	this.instance.setTransform(-41,86);
+
+	this.instance_1 = new Sprite({spriteSheet: mercury_ss});
+	this.instance_1.parent = this;
+	this.instance_1.setTransform(-41,-4);
+
+	this.instance_2 = new Sprite({spriteSheet: mercury_ss});
+	this.instance_2.parent = this;
+	this.instance_2.setTransform(-41,-95);
+
+	this.instance_3 = new Sprite({spriteSheet: mercury_ss});
+	this.instance_3.parent = this;
+	this.instance_3.setTransform(-41,-186);
+
+	this.timeline.addTween(cjs.Tween.get({}).to({state:[{t:this.instance_3},{t:this.instance_2},{t:this.instance_1},{t:this.instance}]}).wait(1));
+
+}
+function MercMap() {
+    this.super_constructor();
+    var cjs = createjs;
+
+    // Layer 2 (mask)
+	var mask = new cjs.Shape();
+	mask._off = true;
+	mask.graphics.p("AmBGCQigigAAjiQAAjhCgifQCgihDhAAQDiAACgChQCgCgAADgQAADiigCgQigCfjiAAQjhAAigifg");
+	mask.setTransform(41.6,40.7);
+
+	// Layer 1
+	this.instance = new Merc_Tween1("synched",0);
+	this.instance.parent = this;
+	this.instance.setTransform(41.3,186.3);
+
+	this.instance_1 = new Merc_Tween2("synched",0);
+	this.instance_1.parent = this;
+	this.instance_1.setTransform(41.3,-97.6);
+
+	var maskedShapeInstanceList = [this.instance,this.instance_1];
+
+	for(var shapedInstanceItr = 0; shapedInstanceItr < maskedShapeInstanceList.length; shapedInstanceItr++) {
+		maskedShapeInstanceList[shapedInstanceItr].mask = mask;
+	}
+
+	this.timeline.addTween(cjs.Tween.get({}).to({state:[{t:this.instance}]}).to({state:[{t:this.instance_1}]},151).wait(1));
+	this.timeline.addTween(cjs.Tween.get(this.instance).to({_off:true,y:-97.6},151).wait(1));
+
+}
+function Mercury() {
+
+    this.super_constructor();
+    var cjs = createjs;
+
+    // Layer 1
+	this.shape = new cjs.Shape();
+	this.shape.graphics.lf(["rgba(26,23,27,0.498)","rgba(26,23,27,0.471)","rgba(26,23,27,0)"],[0,0.027,1],-27.2,0,27.3,0).s().p("AhwGCQigigAAjiQAAjhCgifQCfihDiAAIgpAiQgyAtgpA5QiEC1AADkQAADuCECyQBCBYBCApQjiAAififg");
+	this.shape.setTransform(50.4,113.7);
+
+	this.instance = new MercMap();
+	this.instance.parent = this;
+	this.instance.setTransform(75.6,115.2,1,1,0,0,0,41.3,43.8);
+
+	this.shape_1 = new cjs.Shape();
+	this.shape_1.graphics.f("#BA935C").s().p("AmBGCQigigAAjiQAAjhCgifQCgihDhAAQDiAACgChQCgCgAADgQAADiigCgQigCfjiAAQjhAAigifg");
+	this.shape_1.setTransform(77.6,113.7);
+
+
+	this.timeline.addTween(cjs.Tween.get({}).to({state:[{t:this.shape_1},{t:this.instance},{t:this.shape}]}).wait(1));
+
+    
+}
+
+extend(Merc_Tween2, zim.MovieClip);
+extend(Merc_Tween1, zim.MovieClip);
+extend(MercMap, zim.MovieClip);
+extend(Mercury, zim.MovieClip);
+/* END MERCURY  */
+
+
+/* BEGIN NEPTUNE  */
+var neptune_ss = new createjs.SpriteSheet({
+	images: ["https://i.imgur.com/8mKvRf3.png"],
+	frames: [[0,943,285,193], [287,943,285,185], [0,0,758,941]]
+});
+function Neptune_Tween2() {
+    this.super_constructor();
+    var cjs = createjs;
+
+    // Layer 1
+	this.instance = new Sprite({spriteSheet: neptune_ss});
+	this.instance.parent = this;
+	this.instance.setTransform(-143,-96);
+
+	this.timeline.addTween(cjs.Tween.get(this.instance).wait(1));
+
+}
+function Neptune_Tween1() {
+    this.super_constructor();
+    var cjs = createjs;
+
+    // Layer 1
+	this.instance = new Sprite({spriteSheet: neptune_ss});
+	this.instance.parent = this;
+	this.instance.setTransform(-143,-89);
+
+	this.timeline.addTween(cjs.Tween.get(this.instance).wait(1));
+}
+function NeptuneMap() {
+    this.super_constructor();
+    var cjs = createjs;
+
+    // map (mask)
+	var mask = new cjs.Shape();
+	mask._off = true;
+	mask.graphics.p("Ak3E4QiBiCAAi2QAAi2CBiBQCBiBC2AAQC3AACBCBQCBCBAAC2QAAC2iBCCQiBCBi3AAQi2AAiBiBg");
+	mask.setTransform(35.5,30.5);
+
+	// Layer 1
+	this.instance = new Neptune_Tween1("synched",0);
+	this.instance.parent = this;
+	this.instance.setTransform(142.6,-23);
+
+	this.instance_1 = new Neptune_Tween2("synched",0);
+	this.instance_1.parent = this;
+	this.instance_1.setTransform(-75.4,96.3);
+
+	var maskedShapeInstanceList = [this.instance,this.instance_1];
+
+	for(var shapedInstanceItr = 0; shapedInstanceItr < maskedShapeInstanceList.length; shapedInstanceItr++) {
+		maskedShapeInstanceList[shapedInstanceItr].mask = mask;
+	}
+
+	this.timeline.addTween(cjs.Tween.get({}).to({state:[{t:this.instance}]}).to({state:[{t:this.instance_1}]},89).wait(1));
+	this.timeline.addTween(cjs.Tween.get(this.instance).to({_off:true,x:-75.4,y:96.3},89).wait(1));
+
+}
+function Neptune() {
+
+    this.super_constructor();
+    var cjs = createjs;
+
+    // Layer 1
+	this.shape = new cjs.Shape();
+	this.shape.graphics.lf(["rgba(26,23,27,0.498)","rgba(26,23,27,0.471)","rgba(26,23,27,0)"],[0,0.027,1],-22,0,22.1,0).s().p("AhaE4QiCiBAAi3QAAi1CCiCQCAiBC2AAQg1Akg1BKQhqCSAAC4QAADABqCQQA1BIA1AhQi2AAiAiBg");
+	this.shape.setTransform(40.7,92.3);
+
+	this.instance = new NeptuneMap();
+	this.instance.parent = this;
+	this.instance.setTransform(59.1,95.2,1,1,0,0,0,33.3,36.6);
+
+	this.shape_1 = new cjs.Shape();
+	this.shape_1.graphics.f("#6C8EC1").s().p("Ak3E4QiBiBAAi3QAAi1CBiCQCBiBC2AAQC2AACCCBQCBCCAAC1QAAC3iBCBQiCCBi2AAQi2AAiBiBg");
+	this.shape_1.setTransform(62.8,92.3);
+
+
+	this.timeline.addTween(cjs.Tween.get({}).to({state:[{t:this.shape_1},{t:this.instance},{t:this.shape}]}).wait(1));
+
+}
+
+extend(Neptune_Tween2, zim.MovieClip);
+extend(Neptune_Tween1, zim.MovieClip);
+extend(NeptuneMap, zim.MovieClip);
+extend(Neptune, zim.MovieClip);
+/* END NEPTUNE  */
+
+
+/* BEGIN SATURN  */
+var saturn_ss = new createjs.SpriteSheet({
+	images: ["https://i.imgur.com/7NDJRkN.png"],
+	frames: [[0,945,170,133], [0,0,1131,943]]
+});
+function Saturn_Tween() {
+    this.super_constructor();
+    var cjs = createjs;
+
+    // Layer 1
+	this.instance = new Sprite({spriteSheet: saturn_ss});
+	this.instance.parent = this;
+	this.instance.setTransform(-197,-54);
+
+	this.instance_1 = new Sprite({spriteSheet: saturn_ss});
+	this.instance_1.parent = this;
+	this.instance_1.setTransform(-197,-169);
+
+	this.instance_2 = new Sprite({spriteSheet: saturn_ss});
+	this.instance_2.parent = this;
+	this.instance_2.setTransform(-197,-283);
+
+	this.timeline.addTween(cjs.Tween.get({}).to({state:[{t:this.instance_2},{t:this.instance_1},{t:this.instance}]}).wait(1));
+
+
+}
+function SaturnMap() {
+    this.super_constructor();
+    var cjs = createjs;
+
+    // Layer 2 (mask)
+	var mask = new cjs.Shape();
+	mask._off = true;
+	mask.graphics.p("AmRGSQiminAAjrQAAjqCmimQCnimDqgBQDrABCnCmQClCmAADqQAADrilCnQinCljrAAQjqAAinilg");
+	mask.setTransform(56.8,56.8);
+
+	// Layer 1
+	this.instance = new Saturn_Tween("synched",0);
+	this.instance.parent = this;
+	this.instance.setTransform(168.7,56.8);
+
+	var maskedShapeInstanceList = [this.instance];
+
+	for(var shapedInstanceItr = 0; shapedInstanceItr < maskedShapeInstanceList.length; shapedInstanceItr++) {
+		maskedShapeInstanceList[shapedInstanceItr].mask = mask;
+	}
+
+	this.timeline.addTween(cjs.Tween.get(this.instance).to({y:282.8},149).wait(1));
+}
+function Group() {
+    this.super_constructor();
+    var cjs = createjs;
+
+    // Layer 1
+	this.shape = new cjs.Shape();
+	this.shape.graphics.f("#FFFFFF").s().p("AG7GPQh4gPiKgoQiRgriShCQiJg9h6hLQhzhHhahKQhshagxhOQgzhQAWgwQAYg1BpgIQBlgJCcAiIgdAaQhMgMgtAGQgwAFgKAYQgTApBWBPQBHBBB7BLQCABMCaBFQCnBLCXAtQCTAsBdAEQBaAEAQgjQATgshghVIAAgpQB1BYA2BMQA4BPgWAyQgUAuhVAQQgqAIg1AAQg0AAg+gHg");
+    this.shape.setTransform(76.3,40.6);
+    
+    this.addChild(this.shape);
+
+}
+function Path() {
+    this.super_constructor();
+    var cjs = createjs;
+    // Layer 1
+	this.shape = new cjs.Shape();
+	this.shape.graphics.f("#FFFFFF").s().p("AECH4QjSgzjShfQjBhWiphxQjziih8inQh9ioAvhnQAshiC/gNQC7gMEMBHIgYAQQjRgziNAKQiQALghBIQgfBFBOBrQBLBnCgB0QDACKECB1QETB7D1AyQC1AkB2gOQB7gPAehCQAfhGhRhtQhOhqilh1IgEgeQDcCVBrCOQBuCSgrBfQgtBljGAUQgvAFgzAAQikAAjQgzg");
+    this.shape.setTransform(98.2,55.5);
+    
+    this.addChild(this.shape);
+}
+function Saturn() {
+
+    this.super_constructor();
+    var cjs = createjs;
+
+    // Layer 1
+	this.text = new cjs.Text("", "12px 'TimesNewRomanPSMT'", "#B0D236");
+	this.text.lineHeight = 15;
+	this.text.parent = this;
+	this.text.setTransform(11.2,447.2);
+
+	this.instance = new Group();
+	this.instance.parent = this;
+	this.instance.setTransform(125.4,112.9,1,1,0,0,0,76.3,40.6);
+	this.instance.alpha = 0.199;
+
+	this.instance_1 = new Path();
+	this.instance_1.parent = this;
+	this.instance_1.setTransform(122.3,120.2,1,1,0,0,0,98.3,55.5);
+	this.instance_1.alpha = 0.5;
+
+	this.shape = new cjs.Shape();
+	this.shape.graphics.lf(["rgba(26,23,27,0.498)","rgba(26,23,27,0.471)","rgba(26,23,27,0)"],[0,0.027,1],-28.3,0,28.4,0).s().p("Ah1GRQimimAAjrQAAjqCmimQCminDrABQhFAuhEBeQiKC9AADtQAAD3CKC6QBEBbBFAsQjrAAiming");
+	this.shape.setTransform(95.5,119.2);
+
+	this.instance_2 = new SaturnMap();
+	this.instance_2.parent = this;
+	this.instance_2.setTransform(124,119.2,1,1,0,0,0,56.8,56.8);
+
+	this.shape_1 = new cjs.Shape();
+	this.shape_1.graphics.f("#E2D6B1").s().p("AmRGRQilimAAjrQAAjqClimQCninDqABQDrgBCmCnQCnCmAADqQAADrinCmQimCnjrAAQjqAAining");
+	this.shape_1.setTransform(124,119.2);
+
+
+	this.timeline.addTween(cjs.Tween.get({}).to({state:[{t:this.shape_1},{t:this.instance_2},{t:this.shape},{t:this.instance_1},{t:this.instance},{t:this.text}]}).wait(1));
+
+    
+}
+
+extend(Saturn_Tween, zim.MovieClip);
+extend(SaturnMap, zim.MovieClip);
+extend(Saturn, zim.MovieClip);
+extend(Group, zim.Container);
+extend(Path, zim.Container);
+/* END SATURN  */
+
+
+/* BEGIN URANUS  */
+var uranus_ss = new createjs.SpriteSheet({
+	images: ["https://i.imgur.com/3UfKZWU.png"],
+	frames: [[733,0,113,101], [0,0,731,941]]
+});
+function Uranus_Tween() {
+    this.super_constructor();
+    var cjs = createjs;
+
+    // Layer 1
+	this.instance = new Sprite({spriteSheet: uranus_ss});
+	this.instance.parent = this;
+	this.instance.setTransform(54,155);
+
+	this.instance_1 = new Sprite({spriteSheet: uranus_ss});
+	this.instance_1.parent = this;
+	this.instance_1.setTransform(54,52);
+
+	this.instance_2 = new Sprite({spriteSheet: uranus_ss});
+	this.instance_2.parent = this;
+	this.instance_2.setTransform(54,-50);
+
+	this.timeline.addTween(cjs.Tween.get({}).to({state:[{t:this.instance_2},{t:this.instance_1},{t:this.instance}]}).wait(1));
+
+}
+function UranusMap() {
+    this.super_constructor();
+    var cjs = createjs;
+
+    // mask (mask)
+	var mask = new cjs.Shape();
+	mask._off = true;
+	mask.graphics.p("AmRGSQilinAAjrQAAjqClinQCnimDqAAQDrAACmCmQCnCnAADqQAADrinCnQimCljrAAQjqAAinilg");
+	mask.setTransform(55.7,50);
+
+	// Layer 1
+	this.instance = new Uranus_Tween("synched",0);
+	this.instance.parent = this;
+	this.instance.setTransform(-54.8,49.9);
+
+	var maskedShapeInstanceList = [this.instance];
+
+	for(var shapedInstanceItr = 0; shapedInstanceItr < maskedShapeInstanceList.length; shapedInstanceItr++) {
+		maskedShapeInstanceList[shapedInstanceItr].mask = mask;
+	}
+
+	this.timeline.addTween(cjs.Tween.get(this.instance).to({x:-53.8,y:-143.5},219).wait(1));
+
+}
+function Uranus() {
+
+    this.super_constructor();
+    var cjs = createjs;
+
+    // Layer 1
+	this.shape = new cjs.Shape();
+	this.shape.graphics.lf(["rgba(26,23,27,0.498)","rgba(26,23,27,0.471)","rgba(26,23,27,0)"],[0,0.027,1],-28.3,0,28.4,0).s().p("Ah1GRQimimAAjrQAAjqCmimQCmimDrgBQhFAvhEBeQiKC9AADtQAAD3CKC6QBEBbBFAsQjrgBimimg");
+	this.shape.setTransform(52.4,118.7);
+
+	this.instance = new UranusMap();
+	this.instance.parent = this;
+	this.instance.setTransform(81.7,118.5,1,1,0,0,0,56.7,49.9);
+
+	this.shape_1 = new cjs.Shape();
+	this.shape_1.graphics.f("#91C2AD").s().p("AmQGRQinimAAjrQAAjqCnimQCmimDqgBQDrABCmCmQCmCmAADqQAADrimCmQimCmjrABQjqgBimimg");
+	this.shape_1.setTransform(80.8,118.7);
+
+
+	this.timeline.addTween(cjs.Tween.get({}).to({state:[{t:this.shape_1},{t:this.instance},{t:this.shape}]}).wait(1));
+ 
+}
+
+extend(Uranus_Tween, zim.MovieClip);
+extend(UranusMap, zim.MovieClip);
+extend(Uranus, zim.MovieClip);
+/* END URANUS  */
+
+
+/* BEGIN VENUS  */
+var venus_ss = new createjs.SpriteSheet({
+	images: ["https://i.imgur.com/w7zSd1Y.png"],
+	frames: [[729,0,164,147], [0,0,727,939]]
+});
+function venus_shadow() {
+    this.super_constructor();
+
+    this.spriteSheet = venus_ss;
+	this.gotoAndStop(0);
+}
+function venus_bitmap() {
+    this.super_constructor();
+
+    this.spriteSheet = venus_ss;
+	this.gotoAndStop(1);
+}
+function Venus_Tween2() {
+    this.super_constructor();
+    var cjs = createjs;
+
+    // Layer 1
+	this.instance = new Sprite({spriteSheet: venus_ss});
+	this.instance.parent = this;
+	this.instance.setTransform(-81,147);
+
+	this.instance_1 = new Sprite({spriteSheet: venus_ss});
+	this.instance_1.parent = this;
+	this.instance_1.setTransform(-81,0);
+
+	this.instance_2 = new Sprite({spriteSheet: venus_ss});
+	this.instance_2.parent = this;
+	this.instance_2.setTransform(-81,-147);
+
+	this.instance_3 = new Sprite({spriteSheet: venus_ss});
+	this.instance_3.parent = this;
+	this.instance_3.setTransform(-81,-294);
+
+	this.timeline.addTween(cjs.Tween.get({}).to({state:[{t:this.instance_3},{t:this.instance_2},{t:this.instance_1},{t:this.instance}]}).wait(1));
+
+}
+function Venus_Tween1() {
+    this.super_constructor();
+    var cjs = createjs;
+
+    // Layer 1
+	this.instance = new Sprite({spriteSheet: venus_ss});
+	this.instance.parent = this;
+	this.instance.setTransform(-82,142);
+
+	this.instance_1 = new Sprite({spriteSheet: venus_ss});
+	this.instance_1.parent = this;
+	this.instance_1.setTransform(-82,-3);
+
+	this.instance_2 = new Sprite({spriteSheet: venus_ss});
+	this.instance_2.parent = this;
+	this.instance_2.setTransform(-82,-150);
+
+	this.instance_3 = new Sprite({spriteSheet: venus_ss});
+	this.instance_3.parent = this;
+	this.instance_3.setTransform(-82,-294);
+
+	this.timeline.addTween(cjs.Tween.get({}).to({state:[{t:this.instance_3},{t:this.instance_2},{t:this.instance_1},{t:this.instance}]}).wait(1));
+
+}
+function VenusMap() {
+    this.super_constructor();
+    var cjs = createjs;
+
+    // mask (mask)
+	var mask = new cjs.Shape();
+	mask._off = true;
+	var mask_graphics_0 = new cjs.Graphics().p("Ak+LzQiTg+hyhxQhxhyg+iTQhBiZAAimQAAimBBiYQA+iTBxhxQByhyCTg+QCYhBCmAAQCnAACYBBQCTA+ByByQBxBxA+CTQBBCYAACmQAACmhBCZQg+CThxByQhyBxiTA+QiYBBingBQimABiYhBg");
+	var mask_graphics_299 = new cjs.Graphics().p("Ak+LzQiTg+hyhxQhxhyg+iTQhBiZAAimQAAimBBiYQA+iTBxhxQByhyCTg+QCYhBCmAAQCnAACYBBQCTA+ByByQBxBxA+CTQBBCYAACmQAACmhBCZQg+CThxByQhyBxiTA+QiYBBingBQimABiYhBg");
+
+	this.timeline.addTween(cjs.Tween.get(mask).to({graphics:mask_graphics_0,x:81.8,y:76}).wait(299).to({graphics:mask_graphics_299,x:81.8,y:76}).wait(1));
+
+	// Layer 1
+	this.instance = new Venus_Tween1("synched",0);
+	this.instance.parent = this;
+	this.instance.setTransform(81.9,294.3);
+
+	this.instance_1 = new Venus_Tween2("synched",0);
+	this.instance_1.parent = this;
+	this.instance_1.setTransform(82,-148.1);
+
+	var maskedShapeInstanceList = [this.instance,this.instance_1];
+
+	for(var shapedInstanceItr = 0; shapedInstanceItr < maskedShapeInstanceList.length; shapedInstanceItr++) {
+		maskedShapeInstanceList[shapedInstanceItr].mask = mask;
+	}
+
+	this.timeline.addTween(cjs.Tween.get({}).to({state:[{t:this.instance}]}).to({state:[{t:this.instance_1}]},299).wait(1));
+	this.timeline.addTween(cjs.Tween.get(this.instance).to({_off:true,x:82,y:-148.1},299).wait(1));
+
+}
+function Venus() {
+
+    this.super_constructor();
+    var cjs = createjs;
+
+    // Layer 1
+	this.shape = new cjs.Shape();
+	this.shape.graphics.lf(["rgba(26,23,27,0.498)","rgba(26,23,27,0.471)","rgba(26,23,27,0)"],[0,0.027,1],-40.9,0,41,0).s().p("ABbLzQiSg+hyhxQhxhyg+iTQhBiYAAinQAAilBBiZQA+iTBxhyQByhxCSg+QCYhBCnAAQhjBEhjCIQjHEQAAFXQAAFlDHEMQBjCFBjA+QinAAiYhBg");
+	this.shape.setTransform(75.6,170.8);
+
+	this.instance = new VenusMap();
+	this.instance.parent = this;
+	this.instance.setTransform(116.7,168.8,1,1,0,0,0,81.9,73.7);
+
+	this.shape_1 = new cjs.Shape();
+	this.shape_1.graphics.f("#CBBA97").s().p("Ak+LzQiTg+hyhyQhxhxg+iTQhBiYAAinQAAimBBiYQA+iTBxhxQByhyCTg+QCYhBCmABQCngBCYBBQCTA+ByByQBxBxA+CTQBBCYAACmQAACnhBCYQg+CThxBxQhyByiTA+QiYBAinAAQimAAiYhAg");
+	this.shape_1.setTransform(116.6,170.9);
+
+
+	this.timeline.addTween(cjs.Tween.get({}).to({state:[{t:this.shape_1},{t:this.instance},{t:this.shape}]}).wait(1));
+
+    
+}
+
+// convert to zim classes
+extend(venus_bitmap, zim.Sprite);
+extend(venus_shadow, zim.Sprite);
+extend(Venus_Tween1, zim.MovieClip);
+extend(Venus_Tween2, zim.MovieClip);
+extend(VenusMap, zim.MovieClip);
+extend(Venus, zim.MovieClip); 
+/* END VENUS  */
+
+
+var fire_sheet = new createjs.SpriteSheet({
+	images: ["https://i.imgur.com/GrE12F2.png"],
+	frames: [
+		[1557,439,380,466],
+		[758,583,358,476],
+		[378,1206,362,499],
+		[1428,1312,360,428],
+		[1084,1312,342,452],
+		[742,1128,340,481],
+		[0,1206,376,565],
+		[412,0,373,581],
+		[787,0,372,560],
+		[397,624,359,502],
+		[1161,0,394,527],
+		[0,624,395,580],
+		[0,0,410,622],
+		[1118,947,428,363],
+		[1161,529,394,416],
+		[1557,907,349,403],
+		[1557,0,419,437]
+	]
+
+}); // spritesheet of fire animation made with createjs
+function FireClip(){
+    this.super_constructor();
+    // this.initialize();
+    var cjs = createjs;
+
+
+    // Layer_1
+    this.instance = new Sprite({spriteSheet: fire_sheet});
+    this.instance.parent = this;
+    this.instance.gotoAndStop(0);
+    this.instance.setTransform(152,194.6);
+
+    this.instance_1 = new Sprite({spriteSheet: fire_sheet});
+    this.instance_1.parent = this;
+    this.instance_1.gotoAndStop(1);
+    this.instance_1.setTransform(140,179.6);
+
+    this.instance_2 = new Sprite({spriteSheet: fire_sheet});
+    this.instance_2.parent = this;
+    this.instance_2.gotoAndStop(2);
+    this.instance_2.setTransform(136,156.6);
+
+    this.instance_3 = new Sprite({spriteSheet: fire_sheet});
+    this.instance_3.parent = this;
+    this.instance_3.gotoAndStop(3);
+    this.instance_3.setTransform(142,227.6);
+
+    this.instance_4 = new Sprite({spriteSheet: fire_sheet});
+    this.instance_4.parent = this;
+    this.instance_4.gotoAndStop(4);
+    this.instance_4.setTransform(135,206.6);
+
+    this.instance_5 = new Sprite({spriteSheet: fire_sheet});
+    this.instance_5.parent = this;
+    this.instance_5.gotoAndStop(5);
+    this.instance_5.setTransform(130,174.6);
+
+    this.instance_6 = new Sprite({spriteSheet: fire_sheet});
+    this.instance_6.parent = this;
+    this.instance_6.gotoAndStop(6);
+    this.instance_6.setTransform(105,93.6);
+
+    this.instance_7 = new Sprite({spriteSheet: fire_sheet});
+    this.instance_7.parent = this;
+    this.instance_7.gotoAndStop(7);
+    this.instance_7.setTransform(112,76.6);
+
+    this.instance_8 = new Sprite({spriteSheet: fire_sheet});
+    this.instance_8.parent = this;
+    this.instance_8.gotoAndStop(8);
+    this.instance_8.setTransform(103,96.6);
+
+    this.instance_9 = new Sprite({spriteSheet: fire_sheet});
+    this.instance_9.parent = this;
+    this.instance_9.gotoAndStop(9);
+    this.instance_9.setTransform(124,154.6);
+
+    this.instance_10 = new Sprite({spriteSheet: fire_sheet});
+    this.instance_10.parent = this;
+    this.instance_10.gotoAndStop(10);
+    this.instance_10.setTransform(84,129.6);
+
+    this.instance_11 = new Sprite({spriteSheet: fire_sheet});
+    this.instance_11.parent = this;
+    this.instance_11.gotoAndStop(11);
+    this.instance_11.setTransform(58,76.6);
+
+    this.instance_12 = new Sprite({spriteSheet: fire_sheet});
+    this.instance_12.parent = this;
+    this.instance_12.gotoAndStop(12);
+    this.instance_12.setTransform(35,33.6);
+
+    this.instance_13 = new Sprite({spriteSheet: fire_sheet});
+    this.instance_13.parent = this;
+    this.instance_13.gotoAndStop(13);
+    this.instance_13.setTransform(16,292.6);
+
+    this.instance_14 = new Sprite({spriteSheet: fire_sheet});
+    this.instance_14.parent = this;
+    this.instance_14.gotoAndStop(14);
+    this.instance_14.setTransform(48,239.6);
+
+    this.instance_15 = new Sprite({spriteSheet: fire_sheet});
+    this.instance_15.parent = this;
+    this.instance_15.gotoAndStop(15);
+    this.instance_15.setTransform(79,251.6);
+
+    this.instance_16 = new Sprite({spriteSheet: fire_sheet});
+    this.instance_16.parent = this;
+    this.instance_16.gotoAndStop(16);
+    this.instance_16.setTransform(59,217.6);
+
+    this.timeline.addTween(cjs.Tween.get({}).to({state:[{t:this.instance}]}).to({state:[{t:this.instance_1}]},1).to({state:[{t:this.instance_2}]},1).to({state:[{t:this.instance_3}]},1).to({state:[{t:this.instance_4}]},1).to({state:[{t:this.instance_5}]},1).to({state:[{t:this.instance_6}]},1).to({state:[{t:this.instance_7}]},1).to({state:[{t:this.instance_8}]},1).to({state:[{t:this.instance_9}]},1).to({state:[{t:this.instance_10}]},1).to({state:[{t:this.instance_11}]},1).to({state:[{t:this.instance_12}]},1).to({state:[{t:this.instance_13}]},1).to({state:[{t:this.instance_14}]},1).to({state:[{t:this.instance_15}]},1).to({state:[{t:this.instance_16}]},1).wait(1));
+
+} // The fire animation class
+extend(FireClip, zim.MovieClip); // use zimjs to make it a MovieClip
+
+
+/* FUNCTIONS FOR CREATING THE SUN AND PLANETS */
+function createTheSun(stage) {
+	var beam6 = new Circle(650,'#da9300').center(stage).pos({x: -520}).alp(0.3);
+	var beam5 = new Circle(550,'#da9300').center(stage).pos({x: -550}).alp(0.3);
+	var beam4 = new Circle(450,'#da9300').center(stage).pos({x: -520}).alp(0.3);
+	var beam3 = new Circle(350,'#da9300').center(stage).pos({x: -450}).alp(0.2);
+	var beam2 = new Circle(50, '#da9300').addTo(stage).scaleTo(stage).pos({x: -480, y: 6}).alp(0.2);
+	var flame2 = new FireClip().addTo(stage);
+	var beam1 = new Circle(20, '#da9300').addTo(stage).scaleTo(stage).pos({x: -550, y: 6});
+	var flame = new FireClip();
+	var flame3 = new FireClip();
+
+	flame.pos({x: 350, y: 400}).rot(100).sca(1.1);
+	flame3.pos({x: 300, y: -350}).rot(80).sca(1.3);
+	flame2.pos({x: 100, y: -400}).rot(45).sca(0.9);
+
+	stage.addChild(flame, flame3);
+}
+function createThePlanets(container, stage) {
+	var planetTip = new zim.Tip({
+		text:"Planet's name",
+		backgroundColor: '#01073E',
+		color:white,
+		outside:true, // outside the circle
+		target:stage,
+		align:"center",
+		valign:"bottom",
+		margin:14,
+		corner:10,
+		size:32
+	});
+
+	var jupiter = new Jupiter().addTo(container).setTransform(760,300,1,1,0,0,180,137.8,178.8)
+	.tap(function () {
+		planetTip.text = 'Jupiter';
+		planetTip.show();
+    zog('tapped');
+	});
+	
+	var earth = new Earth().addTo(container).setTransform(400,320,0.774,0.774,0,0,180,94.5,122.3)
+	.tap(function () {
+		planetTip.text = 'Earth';
+		planetTip.show();
+	});
+	var mars = new Mars().addTo(container).setTransform(550,330,0.7,0.7,0,0,180,85.6,111.1)
+	.tap(function () {
+		planetTip.text = 'Mars';
+		planetTip.show();
+	});
+	var venus = new Venus().addTo(container).setTransform(240,320,0.794,0.794,0,0,180,107.9,139.6)
+	.tap(function () {
+		planetTip.text = 'Venus';
+		planetTip.show();
+	});
+	var mercury = new Mercury().addTo(container).setTransform(90,350,0.674,0.674,0,0,180,74.5,93)
+	.tap(function () {
+		planetTip.text = 'Mercury';
+		planetTip.show();
+	});
+	var saturn = new Saturn().addTo(container).setTransform(1010,480,1.131,1.131,0,0,180,116.3,231.3)
+	.tap(function () {
+		planetTip.text = 'Saturn';
+		planetTip.show();
+	});
+	var uranus = new Uranus().addTo(container).setTransform(1210.3,335,1.131,1.131,0,0,180,75.2,96.9)
+	.tap(function () {
+		planetTip.text = 'Uranus';
+		planetTip.show();
+	});
+	var neptune = new Neptune().addTo(container).setTransform(1390.6,340,1.131,1.131,0,0,180,60.6,75.3)
+	.tap(function () {
+		planetTip.text = 'Neptune';
+		planetTip.show();
+	});
+}
+
+
+var scaling = "full"; // makes stage the window size but does not scale content
+var assets = ["LptvQuW.png", "space.jpg", "GrE12F2.png", ];
+var path = "https://i.imgur.com/";
+var frame_params = {
+	scaling: 'full',
+	assets: assets,
+	path: path
+};
+
+
+var frame = new Frame(frame_params); // see docs for more options and info
+frame.on("ready", function() {
+	zog("ready from ZIM Frame");
+
+	
+	var stage = frame.stage;
+	var stageW = frame.width;
+	var stageH = frame.height;
+	frame.color = '#01073E'; // ZIM colors now available globally
+	
+   var background = frame.asset("LptvQuW.png").center(stage).alp(0).animate({alpha:1}, 2000); // access asset (zim.Bitmap) // A Starry background image
+	var planets_container = new zim.Container(1250, 800); // The planets are grouped together here
+  var sun_container = new zim.Container(700, window.innerHeight).pos({x: -150});
+  planets_container.sca(0.8).pos({x: 120, y: 60}).addChild(sun_container); // scale and reposition the planets
+
+	createTheSun(sun_container);
+  createThePlanets(planets_container, stage);
+  
+  stage.addChild(planets_container); // Add to the stage
+  // make the Layout - more useful for FULL scale mode
+	var layout = new Layout({
+		holder:stage,
+		regions:[
+			{object:planets_container, marginTop:10, maxWidth:80, },
+			// {object:sun_container, marginTop:5, maxWidth:1680},
+		],
+		lastMargin:5,
+	});
+ 
+	// add to LayoutManager to resize or dispose all layouts together
+	// disposing only removes keyboard events to show boundaries
+	var manager = new LayoutManager();
+	manager.add(layout);
+
+
+	fnStartAnimation = function() {
+		createjs.Ticker.setFPS(30);
+		createjs.Ticker.addEventListener("tick", stage);
+	};
+
+	fnStartAnimation();
+
+
+	// put resizing code in here
+	// resize also gets called initially
+	frame.on("resize", resize);
+	function resize(e) {
+		stageW = frame.width;
+		stageH = frame.height;
+		// can redraw things at different sizes or use scaling here
+		manager.resize(); 
+		background.center().pos({y: -150}); // centers on stage - addTo() and others as well! */
+		stage.update();
+	}
+
+}); // end of ready
+</script>
