@@ -30,7 +30,7 @@ Major Contributors:
 - [V!Ru$](https://github.com/vinaykp2499 "V!Ru$")
 
 ##  Few Screen Shot
-![IMAGE](screenshot/01InstitutionHome.png)
+![IMAGE](screenshot/mobile_ui.jpg)
 ![IMAGE](screenshot/02ManageStaff.png)
 ![IMAGE](screenshot/03ManageFilterFees.png)
 ![IMAGE](screenshot/04StaffHome.png)
