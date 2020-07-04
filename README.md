@@ -39,7 +39,7 @@ Simply, a digital School where student can have there private circle, they can i
 ### PHASE 1 Product 
 1. Standalone Online Examination Platform
 
-### Future Roadmap
+### PHASE 2 Future Roadmap
 1. Social Media Platform Android & iOS application.
 2. Integrating current Online Examination Platform with our digital school.
 2. Loosely Coupled and Free.
@@ -47,6 +47,8 @@ Simply, a digital School where student can have there private circle, they can i
 
 ### PHASE 1 Product  Impact
 ![IMAGE](screenshot/covid_impact.png)
+
+
 
 ##  Few Mobile UI Demo Screens of PHASE 1:
 ![IMAGE](screenshot/mobile_ui.jpg)
