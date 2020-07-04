@@ -1,4 +1,4 @@
-# SWAPLE #
+# SWAPLE - NextGen Social Media Schooling #
 ![IMAGE](swaple_logo.jpg)
 
 ### Theme : COVID19 ###
