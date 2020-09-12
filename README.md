@@ -1,6 +1,8 @@
 # SWAPLE - NextGen Social Media Schooling #
 ![IMAGE](swaple_logo.jpg)
 
+[![Run on Repl.it](https://repl.it/badge/github/tracebackerror/swap_le)](https://repl.it/github/tracebackerror/swap_le)
+
 ### Theme : COVID19 ###
 
 ### Background
