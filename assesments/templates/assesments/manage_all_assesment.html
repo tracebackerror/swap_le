@@ -96,6 +96,9 @@
 	</form>
 	{% endif %}
 		<div class=" col-sm-12 ">
+			<a class="btn btn-info"  role="button" href="{% url "staff:assesments:assessment_create_by_staff" %}">
+					<i class="fa fa-plus-square-o" aria-hidden="true"></i>&nbsp;&nbsp;<code>Create</code>
+			</a>
 			<a class="btn btn-info"  role="button">
 				 <code>Download  <i class="fa fa-arrow-right" aria-hidden="true"></i></code>
 			</a>
@@ -104,9 +107,6 @@
 					 <code>.{{ format }}</code>
 				</a>
 			{% endfor %}
-			<a class="btn btn-info"  role="button" href="{% url "staff:assesments:assessment_create_by_staff" %}">
-					<i class="fa fa-plus-square-o" aria-hidden="true"></i>&nbsp;&nbsp;<code>Create Assessment</code>
-			</a>
 		</div>	
 	</div>
  <div class="container bg-mobile-nav">
