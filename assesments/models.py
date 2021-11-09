@@ -24,9 +24,9 @@ class Assesment(MetaInformationMixin, SoftDeletionModelMixin, ModelMeta):
         )
     
     ASSESMENT_PRIVILEGE_CHOICES = (
-        ('public', 'Public'),
-        ('private', 'Private'),
-        ('open', 'Open - Visible to Entire World'),
+        ('public', 'Visible to only registered Students of your class'),
+        ('private', 'Draft'),
+        ('open', 'Visible to Entire World'),
         )
     
     #objects = models.Manager()  # The Default Manager
