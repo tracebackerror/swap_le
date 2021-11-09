@@ -1,2 +1,2 @@
 release: python manage.py migrate
-web: gunicorn swaple.wsgi --log-file -
+web: newrelic-admin run-program gunicorn swaple.wsgi --log-file -
