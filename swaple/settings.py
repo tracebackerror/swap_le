@@ -11,7 +11,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get('SECRET_KEY','(!&6*!a9x(g#2tba@125a^$t_s+*1882+jd3$@k3=er)q!2id$')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG =  False
+DEBUG =  True
 
 DEBUG_PROPAGATE_EXCEPTIONS  = True
 DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap-responsive.html"
@@ -79,7 +79,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
     'django.contrib.sites',
-    'allauth.account', 
+    'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'guardian',
@@ -87,7 +87,7 @@ INSTALLED_APPS = [
     'django_filters',
     'bootstrap3',
     'crispy_forms',
-    'suit_ckeditor',
+    'ckeditor',
     'home',
     'licenses',
     'institutions',
@@ -107,9 +107,9 @@ INSTALLED_APPS = [
     'import_export',
     'meta',
     'taggit',
-   
-    #'tz_detect',
+    # 'tz_detect',  # Uncomment if needed
 ]
+
 
 GRAPH_MODELS = {
   'all_applications': True,
@@ -123,6 +123,8 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     
+    'allauth.account.middleware.AccountMiddleware',  # Add this line
+    
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -130,6 +132,7 @@ MIDDLEWARE = [
     'django_user_agents.middleware.UserAgentMiddleware',
     #'tz_detect.middleware.TimezoneMiddleware',
 ]
+
 #TZ_DETECT_COUNTRIES = ( 'US', 'IN', 'JP', 'BR', 'RU', 'DE', 'FR', 'GB', 'CN',)
 ROOT_URLCONF = 'swaple.urls'
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
@@ -159,9 +162,16 @@ WSGI_APPLICATION = 'swaple.wsgi.application'
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(conn_max_age=600,
-                                      default='sqlite:///'+os.path.join(BASE_DIR, 'db.sqlite3')),
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'swapple',
+        'USER': 'postgres',
+        'PASSWORD': 'Agilent@123',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
 }
+
 
 
 # Password validation

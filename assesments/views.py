@@ -24,6 +24,8 @@ import requests
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+from django.views.generic.edit import FormMixin
+
 
 from utility.swaple_constants import all_question_types
 from utility import swaple_constants
@@ -33,6 +35,7 @@ from django_tables2 import SingleTableView
 from django_tables2.export.export import TableExport
 from django_tables2 import RequestConfig
 from django.views.generic import ListView, DetailView, TemplateView, UpdateView
+from django.views.generic.edit import FormMixin
 
 from .models import Assesment, Question, Answer, Result
 from django.views import View
@@ -68,6 +71,23 @@ from taggit.models import Tag
 import uuid
 import json
 from django.contrib.auth.models import User
+
+
+class PostMixin:
+    def post(self, request, *args, **kwargs):
+        return self.handle_post(request, *args, **kwargs)
+
+    def handle_post(self, request, *args, **kwargs):
+        # This method should be overridden by the view to handle POST requests
+        raise NotImplementedError('Subclasses must implement handle_post method')
+
+
+
+
+
+
+
+
 
 class ReviewAllSqaView(TemplateView):
     
@@ -505,7 +525,7 @@ class AssessmentResultByStaff(LoginRequiredMixin, DetailView):
             **response_kwargs
         )
     
-class OpenIntroStudentAssesmentView( DetailView):
+class OpenIntroStudentAssesmentView(DetailView):
     model = Assesment
     
     slug_field = 'slug'
@@ -705,7 +725,224 @@ class ManageSingleAsessment(ExportMixin, SingleTableView):
         context['flag'] = flag
         
         return context
+
+
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
+def process_open_assessment(request, *args, **kwargs):
+    if request.method == 'POST':
+        return process_assessment_post(request, *args, **kwargs)
+    elif request.method == 'GET':
+        return process_assessment_get(request, *args, **kwargs)
+
+def process_assessment_post(request, *args, **kwargs):
+    get_the_answer_obj = None
+    page_question_obj = None
+    open_assessment_homepage = reverse("staff:assesments:manage_open_assesment")
+
+    assesment_initiate_flag = False
+
+    if 'start_assesment_boolean' in request.POST:
+        assesment_initiate_flag = eval(request.POST.get('start_assesment_boolean', 'False'))
+        time_obj = timezone.now()
+        request.session['exam_start_time'] = time_obj.strftime("%d/%m/%Y %H:%M")
+        request.session['exam_start_time_year'] = time_obj.year
+        request.session['exam_start_time_month'] = time_obj.month
+        request.session['exam_start_time_day'] = time_obj.day
+        request.session['exam_start_time_hour'] = time_obj.hour
+        request.session['exam_start_time_minute'] = time_obj.minute
+        user_name = uuid.uuid4().hex[:30]
+        
+        first_name = request.POST.get('open_exam_result_name', '...')
+        user_obj = User.objects.create_user(username=user_name,
+                                             first_name=first_name,
+                                             email='anonymoususer@swaple.in',
+                                             password='Test@19487d')
+        
+        student_obj = Student(studentuser=user_obj)
+        student_obj.save()
+        user_obj.save()
+        request.session['anonymous_student_id'] = user_name
+        
+    elif '_assesment_initiate_flag' in request.session:
+        assesment_initiate_flag = request.session.get('_assesment_initiate_flag')
+
+    if assesment_initiate_flag:
+        if 'assesment_obj' in request.POST:
+            request.session['assesment_to_undertake'] = request.POST['assesment_obj']
+        
+        request.session['_assesment_initiate_flag'] = assesment_initiate_flag
+        asses_unfiltered = request.session.get('assesment_to_undertake', None)
+        page_of_question = int(request.POST.get('nextpage', 1))
+        
+        if asses_unfiltered and eval(asses_unfiltered):
+            assesment_to_undertake = Assesment.objects.get(id=eval(asses_unfiltered))
+            fetch_all_linked_question = Question.objects.filter(assesment_linked=assesment_to_undertake).order_by('pk')
+            total_question_on_single_page = 1
+            
+            paginator = Paginator(fetch_all_linked_question, total_question_on_single_page)
+            
+            try:
+                page_question_obj = paginator.page(page_of_question)
+            except PageNotAnInteger:
+                page_question_obj = paginator.page(1)
+            except EmptyPage:
+                page_question_obj = paginator.page(paginator.num_pages)
+                
+            question_type = request.POST.get('question_type', None)
+            result_for_student_user = User.objects.get(username=request.session['anonymous_student_id'])
+            
+            result_of_assesment = Result.objects.filter(
+                assesment=assesment_to_undertake,
+                registered_user=result_for_student_user.student,
+                exam_taken_date_time__year=request.session['exam_start_time_year'],
+                exam_taken_date_time__month=request.session['exam_start_time_month'],
+                exam_taken_date_time__day=request.session['exam_start_time_day'],
+                exam_taken_date_time__hour=request.session['exam_start_time_hour'],
+                exam_taken_date_time__minute=request.session['exam_start_time_minute']
+            )
+            
+            if not result_of_assesment.exists():
+                create_result_instance = Result()
+                time_obj = timezone.now()
+                request.session['exam_start_time'] = time_obj.strftime("%d/%m/%Y %H:%M")
+                request.session['exam_start_time_year'] = time_obj.year
+                request.session['exam_start_time_month'] = time_obj.month
+                request.session['exam_start_time_day'] = time_obj.day
+                request.session['exam_start_time_hour'] = time_obj.hour
+                request.session['exam_start_time_minute'] = time_obj.minute
+                create_result_instance.exam_taken_date_time = time_obj
+                create_result_instance.assesment = assesment_to_undertake
+                create_result_instance.registered_user = result_for_student_user.student
+                create_result_instance.created_by = result_for_student_user
+                create_result_instance.updated_by = result_for_student_user
+                create_result_instance.save()
+            else:
+                create_result_instance = result_of_assesment.first()
+            
+            if question_type in all_question_types:
+                pk_of_question = request.POST.get('question_id')
+                question_obj = Question.objects.filter(assesment_linked=assesment_to_undertake, pk=pk_of_question)
+                get_the_answer_obj = Answer.objects.filter(for_result=create_result_instance, for_question__in=question_obj)
+                
+                if not get_the_answer_obj.exists():
+                    get_the_answer_obj = Answer()
+                    get_the_answer_obj.created_by = result_for_student_user
+                    get_the_answer_obj.updated_by = result_for_student_user
+                    get_the_answer_obj.for_result = create_result_instance
+                    get_the_answer_obj.for_question = question_obj.first()
+                else:
+                    get_the_answer_obj = get_the_answer_obj.first()
+                
+                if question_type == swaple_constants.SCQ or question_type == swaple_constants.MCQ:
+                    selected_answer = request.POST.getlist('answer')
+                    get_the_answer_obj.opted_choice = selected_answer
+                    option_selected = "-".join(selected_answer)
+                    if option_selected == question_obj.first().correct_options:
+                        get_the_answer_obj.alloted_marks = question_obj.first().max_marks
+                    else:
+                        get_the_answer_obj.alloted_marks = 0
+                    get_the_answer_obj.save()
+                elif question_type == swaple_constants.SQA:
+                    written_answer = request.POST.get('answer')
+                    get_the_answer_obj.opted_choice = ''
+                    get_the_answer_obj.written_answer = written_answer
+                    get_the_answer_obj.alloted_marks = 0
+                    get_the_answer_obj.save()
+                
+            if not page_question_obj:
+                messages.success(request, 'Assessment Test Is Not Having Any Single Question To Answer.')
+                return redirect(reverse("staff:assesments:manage_open_assesment"))
+            
+            get_the_current_answer_obj = Answer.objects.filter(for_result=create_result_instance, for_question=page_question_obj[0]).first()
+            
+            question_image_obj = {question.id: question.question_image for question in fetch_all_linked_question if question.question_image}
+            
+            return render(request, 'assesments/open_exam_start_main_page.html', {
+                'assesment_object': assesment_to_undertake,
+                'all_question_to_answer': page_question_obj,
+                'get_the_answer_obj': get_the_current_answer_obj,
+                'result_object': create_result_instance,
+                'question_image_obj': question_image_obj,
+            })
     
+    return redirect(reverse("staff:assesments:manage_open_assesment"))
+
+def process_assessment_get(request, *args, **kwargs):
+    try:
+        question_type = None
+        asses_unfiltered = request.session.get('assesment_to_undertake', None)
+        page_of_question = int(request.GET.get('nextpage', 1))
+        
+        if asses_unfiltered and eval(asses_unfiltered):
+            assesment_to_undertake = Assesment.objects.get(id=eval(asses_unfiltered))
+            fetch_all_linked_question = Question.objects.filter(assesment_linked=assesment_to_undertake).order_by('pk')
+            total_question_on_single_page = 1
+            
+            paginator = Paginator(fetch_all_linked_question, total_question_on_single_page)
+            
+            try:
+                page_question_obj = paginator.page(page_of_question)
+            except PageNotAnInteger:
+                page_question_obj = paginator.page(1)
+            except EmptyPage:
+                page_question_obj = paginator.page(paginator.num_pages)
+            
+            question_type = request.GET.get('question_type', None)
+            result_for_student_user = User.objects.get(username=request.session['anonymous_student_id'])
+            
+            result_of_assesment = Result.objects.filter(
+                assesment=assesment_to_undertake,
+                registered_user=result_for_student_user.student
+            )
+            
+            create_result_instance = result_of_assesment.first()
+            
+            if question_type and question_type in all_question_types:
+                pk_of_question = request.GET.get('question_id')
+                question_obj = Question.objects.filter(assesment_linked=assesment_to_undertake, pk=pk_of_question)
+                get_the_answer_obj = Answer.objects.filter(for_result=create_result_instance, for_question__in=question_obj)
+                
+                if not get_the_answer_obj.exists():
+                    get_the_answer_obj = Answer()
+                    get_the_answer_obj.created_by = result_for_student_user
+                    get_the_answer_obj.updated_by = result_for_student_user
+                    get_the_answer_obj.for_result = create_result_instance
+                    get_the_answer_obj.for_question = question_obj.first()
+                else:
+                    get_the_answer_obj = get_the_answer_obj.first()
+                
+                if question_type == swaple_constants.SCQ or question_type == swaple_constants.MCQ:
+                    selected_answer = request.GET.getlist('answer')
+                    get_the_answer_obj.opted_choice = selected_answer
+                    option_selected = "-".join(selected_answer)
+                    if option_selected == question_obj.first().correct_options:
+                        get_the_answer_obj.alloted_marks = question_obj.first().max_marks
+                    else:
+                        get_the_answer_obj.alloted_marks = 0
+                    get_the_answer_obj.save()
+                elif question_type == swaple_constants.SQA:
+                    written_answer = request.GET.get('answer')
+                    get_the_answer_obj.opted_choice = ''
+                    get_the_answer_obj.written_answer = written_answer
+                    get_the_answer_obj.alloted_marks = 0
+                    get_the_answer_obj.save()
+                
+            question_image_obj = {question.id: question.question_image for question in fetch_all_linked_question if question.question_image}
+            
+            return render(request, 'assesments/open_exam_start_main_page.html', {
+                'assesment_object': assesment_to_undertake,
+                'all_question_to_answer': page_question_obj,
+                'get_the_answer_obj': get_the_answer_obj,
+                'result_object': create_result_instance,
+                'question_image_obj': question_image_obj,
+            })
+    
+    except Exception as e:
+        logging.error(f"Error in process_assessment_get: {e}")
+        return HttpResponse("Error processing request", status=500)  
+
 class ProcessOpenAssesmentView(DetailView):
     model = Assesment
     context_object_name = "assesment_object"
@@ -717,6 +954,7 @@ class ProcessOpenAssesmentView(DetailView):
     def _process_assesment(self, *args, **kwargs):
         get_the_answer_obj = None
         page_question_obj = None
+        
         
         if 'start_assesment_boolean' in self.request.POST.keys():
             assesment_initiate_flag = eval(self.request.POST.get('start_assesment_boolean', None))
@@ -914,6 +1152,7 @@ class ProcessOpenAssesmentView(DetailView):
         return dictionary.get(key)
 
     def get(self, *args, **kwargs):
+        
         try:
             question_type = None
             asses_unfiltered = self.request.session.get('assesment_to_undertake', None)
@@ -1025,6 +1264,7 @@ class ProcessOpenAssesmentView(DetailView):
             self.request.session.flush()
             return redirect(self.open_assessment_homepage)
     def post(self, *args, **kwargs):
+      
         return self._process_assesment(self, *args, **kwargs)
 
     

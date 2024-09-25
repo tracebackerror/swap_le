@@ -28,8 +28,8 @@
 <h5>Please Read the Below Examination Instruction Carefully:</h5>
 
 {% if assesment_object.privilege == 'open' %}
-<form action={% url 'student:assesments:process_open_assesment'  %} method="POST">
-
+<form action='/student/open/process/' method="POST">
+	{% csrf_token %} 
 <div  class="card mb-3 text-center ""  style="max-width: 700px;">
 									<div class="card-header">
 										<h5 class="card-title">{{ assesment_object.header }} </h5>
@@ -55,7 +55,7 @@
 										
 										<input type="hidden" name="assesment_obj" value={{ assesment_object.pk }}>
 										<input type="hidden" name="start_assesment_boolean" value="True">
-										{%csrf_token%}
+										
 										<div class="input-group col-sm-12 col-md-12">
 										<label for="open_exam_name"><small >Name to display in Result</small></label>
 											</div>		

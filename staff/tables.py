@@ -5,7 +5,8 @@ from django.utils.html import format_html
 from students.models import Student
 from django_tables2 import A
 from django_tables2.export.views import ExportMixin
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
+
 
 class CustomTemplateColumnEscapeAdmin(tables.TemplateColumn):
     

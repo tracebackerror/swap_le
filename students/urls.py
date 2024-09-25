@@ -1,39 +1,42 @@
-from django.conf.urls import url, include
-from django.contrib.auth.views import LoginView, LogoutView, logout_then_login, PasswordChangeDoneView
-#from .views import InstitutionStudentLoginView, dashboard, edit, PasswordChangeViewForStudent, PasswordChangeDoneViewForStudent
-from .views import *
-from assesments.views import AssessmentResultByStaff
-
+from django.urls import path, include
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeDoneView
+from .views import (
+    InstitutionStudentLoginView, dashboard, edit, StudentLogout,
+    PasswordChangeViewForStudent, PasswordChangeDoneViewForStudent,
+    StudentPasswordResetDoneView, StudentPasswordResetCompleteView,
+    StudentPasswordResetConfirmView, MyIssuedLibraryAsset, ViewLibraryAsset,
+    StudentResult, ResultReport, StudentRegistration
+)
+from assesments.views import AssessmentResultByStaff, process_open_assessment, ProcessOpenAssesmentView
 from institutions.views import ResetPasswordRequestView
 
-
-app_name='student'
+app_name = 'student'
 
 urlpatterns = [
-    url(r'^login/',  InstitutionStudentLoginView.as_view(), name='login'),
-    url(r'^$', dashboard, name='dashboard'),
-    url(r'^edit/$', edit, name="edit"),
-    url(r'^logout/$',  StudentLogout.as_view(), name='logout'),
-    url(r'^password-change/$',PasswordChangeViewForStudent.as_view(), name='password_change'),
-    url(r'^password-change/done/$',PasswordChangeDoneViewForStudent.as_view(), name='password_change_done'),
-    url(r'^', include('assesments.urls', namespace='assesments', )),
-    
-    #password reset through email
-    url(r'^password_reset/$',ResetPasswordRequestView.as_view(success_url = reverse_lazy("student:login")),name='password_reset'),
-    url(r'^password_reset/done/$',StudentPasswordResetDoneView.as_view(),name='password_reset_done'),
-    url(r'^reset/done/$',StudentPasswordResetCompleteView.as_view(),name='password_reset_complete'),
-    url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
-        StudentPasswordResetConfirmView.as_view(),name='password_reset_confirm'),
-    
-    #library 
-    url(r'^library-asset/my-issued/$',MyIssuedLibraryAsset.as_view(),name='my_issued_library_asset'),
-    url(r'^library-asset/view/$',ViewLibraryAsset.as_view(),name='view_library_asset'),
-    
-    #result
-    url(r'^result/$',StudentResult.as_view(),name='result'),
-    url(r'^result/(?P<pk>\d+)/report.pdf/$',ResultReport.as_view(),name='result_report'),
-    url(r'^result/(?P<pk>\d+)/report/$',AssessmentResultByStaff.as_view(),name='result_report_detailed'),
-    
-    #student registration
-    url(r'^registration/$',StudentRegistration.as_view(),name='student_registration'),
-]   
+    path('login/', InstitutionStudentLoginView.as_view(), name='login'),
+    path('', dashboard, name='dashboard'),
+    path('edit/', edit, name='edit'),
+    path('open/process/', ProcessOpenAssesmentView.as_view(), name='process_new_assesment'),
+    path('logout/', StudentLogout.as_view(), name='logout'),
+    path('password-change/', PasswordChangeViewForStudent.as_view(), name='password_change'),
+    path('password-change/done/', PasswordChangeDoneViewForStudent.as_view(), name='password_change_done'),
+    path('', include('assesments.urls', namespace='assesments')),
+
+    # Password reset through email
+    path('password_reset/', ResetPasswordRequestView.as_view(success_url='student:login'), name='password_reset'),
+    path('password_reset/done/', StudentPasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('reset/done/', StudentPasswordResetCompleteView.as_view(), name='password_reset_complete'),
+    path('reset/<uidb64>/<token>/', StudentPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+
+    # Library
+    path('library-asset/my-issued/', MyIssuedLibraryAsset.as_view(), name='my_issued_library_asset'),
+    path('library-asset/view/', ViewLibraryAsset.as_view(), name='view_library_asset'),
+
+    # Result
+    path('result/', StudentResult.as_view(), name='result'),
+    path('result/<int:pk>/report.pdf/', ResultReport.as_view(), name='result_report'),
+    path('result/<int:pk>/report/', AssessmentResultByStaff.as_view(), name='result_report_detailed'),
+
+    # Student registration
+    path('registration/', StudentRegistration.as_view(), name='student_registration'),
+]
