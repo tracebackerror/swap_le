@@ -40,15 +40,21 @@ class QuestionForm(forms.ModelForm):
 
 class ReviewSqaAnswerForm(forms.ModelForm):
     written_answer = forms.CharField(label="Written Brief Answer: ", widget=forms.Textarea(attrs={'rows':7, 'cols':50}))
+    ref_field = forms.CharField(label="Ref Answer: ", widget=forms.Textarea(attrs={'rows':7, 'cols':50, 'readonly': 'readonly'}))
+
     def __init__(self, *args, **kwargs):
         super(ReviewSqaAnswerForm, self).__init__(*args, **kwargs)
         #self.fields['question_text']=forms.ModelChoiceField(queryset=Question.objects.filter(question_text="sdf"))
         
-        self.fields['written_answer'].required = False    
+        self.fields['written_answer'].required = False
+        if self.instance and self.instance.for_question:
+            brief_answer = self.instance.for_question.brief_answer
+            self.fields['ref_field'].initial = brief_answer
+
         
     class Meta:
         model   = Answer
-        fields  = ['for_question','written_answer', 'alloted_marks']
+        fields  = ['for_question','written_answer', 'ref_field', 'alloted_marks']
         exclude = ['deleted_by','deleted_at', 'created_by', 'updated_by','opted_choice','for_result']
         widgets = {
           'written_answer': forms.Textarea(attrs={'rows':14, 'cols':50}),
@@ -73,6 +79,8 @@ class ReviewSqaFormSetHelper(FormHelper):
         self.layout = Layout(
                                     Field('for_question',style="height: 34px;", title="Question text of the asked answer?", css_class="select", css_id="",readonly=True),
                                     Field('written_answer',style="", title="Question text of the asked answer?", css_class="select", css_id="", readonly=True),
+                                    
+                                    Field('brief_answer',style="", title="Reference answer", css_id="", readonly=True),
                                     Field('alloted_marks',style="height: 34px;", title="Question text of the asked answer?", css_class="select", css_id=""),
                                     
                                     #FormActions(Submit('submit', 'Update Marks'))
