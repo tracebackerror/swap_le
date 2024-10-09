@@ -42,19 +42,22 @@ class ReviewSqaAnswerForm(forms.ModelForm):
     written_answer = forms.CharField(label="Written Brief Answer: ", widget=forms.Textarea(attrs={'rows':7, 'cols':50}))
     ref_field = forms.CharField(label="Ref Answer: ", widget=forms.Textarea(attrs={'rows':7, 'cols':50, 'readonly': 'readonly'}))
 
+    total_marks = forms.CharField(label="total_marks: ",)
+
     def __init__(self, *args, **kwargs):
         super(ReviewSqaAnswerForm, self).__init__(*args, **kwargs)
-        #self.fields['question_text']=forms.ModelChoiceField(queryset=Question.objects.filter(question_text="sdf"))
+        #self.fields['question_text']=forms.ModelChoiceField(queryset=Question.objects.filter(question_text="sdf")) q
         
         self.fields['written_answer'].required = False
         if self.instance and self.instance.for_question:
             brief_answer = self.instance.for_question.brief_answer
             self.fields['ref_field'].initial = brief_answer
+            self.fields['total_marks'].initial = self.instance.for_question.max_marks
 
         
     class Meta:
         model   = Answer
-        fields  = ['for_question','written_answer', 'ref_field', 'alloted_marks']
+        fields  = ['for_question','written_answer', 'ref_field', 'total_marks', 'alloted_marks']
         exclude = ['deleted_by','deleted_at', 'created_by', 'updated_by','opted_choice','for_result']
         widgets = {
           'written_answer': forms.Textarea(attrs={'rows':14, 'cols':50}),
@@ -87,7 +90,82 @@ class ReviewSqaFormSetHelper(FormHelper):
             
                                 )
         self.add_input(Submit("submit", "Update Marks"))
+        self.add_input(Button("button", "Generate Score"))
         self.render_required_fields = True
+
+        self.layout.append(HTML("""
+           
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                function cosineSimilarity(vecA, vecB) {
+        let dotProduct = 0;
+        let magnitudeA = 0;
+        let magnitudeB = 0;
+        for (let i = 0; i < vecA.length; i++) {
+            dotProduct += vecA[i] * vecB[i];
+            magnitudeA += vecA[i] * vecA[i];
+            magnitudeB += vecB[i] * vecB[i];
+        }
+        magnitudeA = Math.sqrt(magnitudeA);
+        magnitudeB = Math.sqrt(magnitudeB);
+        if (magnitudeA && magnitudeB) {
+            return dotProduct / (magnitudeA * magnitudeB);
+        } else {
+            return 0;
+        }
+    }
+
+    // Function to convert text to a word frequency vector
+    function textToVector(text) {
+        const words = text.toLowerCase().split(/\W+/);
+        const wordFreq = {};
+        words.forEach(word => {
+            if (word) {
+                wordFreq[word] = (wordFreq[word] || 0) + 1;
+            }
+        });
+        return wordFreq;
+    }
+
+    // Function to generate a combined vector for cosine similarity calculation
+    function vectorizeText(text1, text2) {
+        const wordFreq1 = textToVector(text1);
+        const wordFreq2 = textToVector(text2);
+        const allWords = new Set([...Object.keys(wordFreq1), ...Object.keys(wordFreq2)]);
+        const vecA = [];
+        const vecB = [];
+        allWords.forEach(word => {
+            vecA.push(wordFreq1[word] || 0);
+            vecB.push(wordFreq2[word] || 0);
+        });
+        return [vecA, vecB];
+    }
+
+    // Function to calculate the score
+    function calculateScore() {
+        // Get the textarea values
+        const writtenAnswer = document.getElementById("id_form-0-written_answer").value;
+        const refAnswer = document.getElementById("id_form-0-ref_field").value;
+
+        // Get the max value from the input field
+        const maxMarks = parseFloat(document.getElementById("id_form-0-total_marks").value);
+
+        // Calculate cosine similarity
+        const [vecA, vecB] = vectorizeText(writtenAnswer, refAnswer);
+        const similarity = cosineSimilarity(vecA, vecB);
+
+        // Calculate the score based on cosine similarity and max marks
+        const generatedScore = similarity * maxMarks;
+
+        // Set the generated score back to the 'alloted_marks' field
+        document.getElementById("id_form-0-alloted_marks").value = generatedScore.toFixed(2);
+    }
+    document.getElementById("button-id-button").addEventListener("click", function() {
+        calculateScore();
+    }); 
+                                 });
+            </script>
+        """))
         
 class CustomOptionsForAssesment(forms.ModelMultipleChoiceField):
     def label_from_instance(self, obj):
